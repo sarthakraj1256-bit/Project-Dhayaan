@@ -11,6 +11,7 @@ const Index = () => {
   const [showMandala, setShowMandala] = useState(false);
   const [showParticles, setShowParticles] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [showTemple, setShowTemple] = useState(true);
 
   // Handle scroll progress for 3D scene
   useEffect(() => {
@@ -22,6 +23,9 @@ const Index = () => {
 
       // Show mandala when past hero section
       setShowMandala(scrollTop > window.innerHeight * 0.5);
+      
+      // Hide temple after scrolling past hero section (fade out)
+      setShowTemple(scrollTop < window.innerHeight * 0.8);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -38,20 +42,24 @@ const Index = () => {
 
   return (
     <div className="relative min-h-screen bg-background overflow-x-hidden">
-      {/* Fixed 3D Background */}
-      <Suspense fallback={
-        <div className="fixed inset-0 bg-background flex items-center justify-center">
-          <div className="text-primary font-display text-xl tracking-wider animate-pulse">
-            Loading Sacred Geometry...
+      {/* 3D Background - Only visible on hero section */}
+      <div 
+        className={`transition-opacity duration-700 ${showTemple ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+      >
+        <Suspense fallback={
+          <div className="fixed inset-0 bg-background flex items-center justify-center">
+            <div className="text-primary font-display text-xl tracking-wider animate-pulse">
+              Loading Sacred Geometry...
+            </div>
           </div>
-        </div>
-      }>
-        <TempleScene 
-          scrollProgress={scrollProgress} 
-          showMandala={showMandala}
-          showParticles={showParticles}
-        />
-      </Suspense>
+        }>
+          <TempleScene 
+            scrollProgress={scrollProgress} 
+            showMandala={showMandala}
+            showParticles={showParticles}
+          />
+        </Suspense>
+      </div>
 
       {/* Sacred Pattern Overlay */}
       <div className="fixed inset-0 sacred-pattern pointer-events-none opacity-30 z-[1]" />
