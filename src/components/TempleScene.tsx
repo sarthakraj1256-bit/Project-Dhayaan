@@ -90,7 +90,7 @@ function Shikhara({ scrollProgress }: { scrollProgress: number }) {
 
   return (
     <Float speed={1.2} rotationIntensity={0.15} floatIntensity={0.3}>
-      <group ref={groupRef} position={[0, 0, 0]} scale={1.3}>
+      <group ref={groupRef} position={[0, 0.5, 0]} scale={0.9}>
         {/* Inner glow effect */}
         <GlowSphere position={[0, 1, 0]} scale={1.2} />
         
