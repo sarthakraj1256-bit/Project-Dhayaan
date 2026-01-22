@@ -1,6 +1,8 @@
 import { useRef, useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { Slider } from '@/components/ui/slider';
 import { useOmSound } from '@/hooks/useOmSound';
+import { Volume2, VolumeX } from 'lucide-react';
 
 interface ScienceSectionProps {
   onToggleParticles: () => void;
@@ -46,7 +48,8 @@ function EnergyWave({ index, active }: { index: number; active: boolean }) {
 
 export default function ScienceSection({ onToggleParticles, particlesActive }: ScienceSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
-  const { startOm, stopOm } = useOmSound();
+  const { startOm, stopOm, setVolume } = useOmSound();
+  const [volume, setVolumeState] = useState(50);
   const [particles] = useState(() => 
     Array.from({ length: 20 }, (_, i) => ({
       id: i,
@@ -65,6 +68,13 @@ export default function ScienceSection({ onToggleParticles, particlesActive }: S
       stopOm();
     }
   }, [particlesActive, startOm, stopOm]);
+
+  // Handle volume changes
+  const handleVolumeChange = (value: number[]) => {
+    const newVolume = value[0];
+    setVolumeState(newVolume);
+    setVolume(newVolume / 100);
+  };
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -299,6 +309,26 @@ export default function ScienceSection({ onToggleParticles, particlesActive }: S
                   {particlesActive ? 'Visualizing Energy' : 'Visualize Sound Energy'}
                 </span>
               </Button>
+
+              {/* Volume Slider - only visible when active */}
+              <div className={`flex items-center gap-3 mt-4 transition-all duration-500 ${
+                particlesActive ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2 pointer-events-none'
+              }`}>
+                {volume === 0 ? (
+                  <VolumeX className="w-5 h-5 text-primary/70" />
+                ) : (
+                  <Volume2 className="w-5 h-5 text-primary" />
+                )}
+                <Slider
+                  value={[volume]}
+                  onValueChange={handleVolumeChange}
+                  max={100}
+                  min={0}
+                  step={1}
+                  className="w-32"
+                />
+                <span className="text-xs text-muted-foreground w-8">{volume}%</span>
+              </div>
             </div>
 
             {/* Stats */}
