@@ -6,6 +6,15 @@ export function useOmSound() {
   const oscillatorsRef = useRef<OscillatorNode[]>([]);
   const gainNodeRef = useRef<GainNode | null>(null);
   const isPlayingRef = useRef(false);
+  const volumeRef = useRef(0.5); // Default volume 50%
+
+  const setVolume = useCallback((volume: number) => {
+    volumeRef.current = Math.max(0, Math.min(1, volume));
+    if (gainNodeRef.current && isPlayingRef.current) {
+      // Scale the max gain (0.15) by volume
+      gainNodeRef.current.gain.setTargetAtTime(0.15 * volumeRef.current, audioContextRef.current!.currentTime, 0.1);
+    }
+  }, []);
 
   const startOm = useCallback(() => {
     if (isPlayingRef.current) return;
@@ -25,7 +34,7 @@ export function useOmSound() {
     // Create master gain for fade in/out
     const masterGain = ctx.createGain();
     masterGain.gain.setValueAtTime(0, ctx.currentTime);
-    masterGain.gain.linearRampToValueAtTime(0.15, ctx.currentTime + 2); // Fade in over 2 seconds
+    masterGain.gain.linearRampToValueAtTime(0.15 * volumeRef.current, ctx.currentTime + 2); // Fade in over 2 seconds
     masterGain.connect(ctx.destination);
     gainNodeRef.current = masterGain;
 
@@ -122,5 +131,5 @@ export function useOmSound() {
     };
   }, []);
 
-  return { startOm, stopOm };
+  return { startOm, stopOm, setVolume };
 }
