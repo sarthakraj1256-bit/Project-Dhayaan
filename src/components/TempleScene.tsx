@@ -83,21 +83,21 @@ function Shikhara({ scrollProgress }: { scrollProgress: number }) {
     }
   });
 
-  // Color transitions based on scroll
-  const goldColor = new THREE.Color().setHSL(0.11, 0.7, 0.5 + scrollProgress * 0.1);
+  // Color transitions based on scroll - more subtle for background
+  const goldColor = new THREE.Color().setHSL(0.11, 0.5, 0.35 + scrollProgress * 0.1);
 
   return (
-    <Float speed={1.5} rotationIntensity={0.3} floatIntensity={0.5}>
-      <group ref={groupRef}>
+    <Float speed={1} rotationIntensity={0.15} floatIntensity={0.3}>
+      <group ref={groupRef} position={[0, 0, -8]} scale={1.8}>
         {/* Horizontal rings */}
         {horizontalRings.map((ring, idx) => (
           <Line
             key={`ring-${idx}`}
             points={ring}
             color={goldColor}
-            lineWidth={1}
+            lineWidth={0.5}
             transparent
-            opacity={0.6 + (idx / horizontalRings.length) * 0.4}
+            opacity={0.25 + (idx / horizontalRings.length) * 0.2}
           />
         ))}
         
@@ -107,26 +107,26 @@ function Shikhara({ scrollProgress }: { scrollProgress: number }) {
             key={`vert-${idx}`}
             points={line}
             color={goldColor}
-            lineWidth={1.5}
+            lineWidth={0.8}
             transparent
-            opacity={0.8}
+            opacity={0.35}
           />
         ))}
 
         {/* Top finial (kalasha) */}
         <mesh position={[0, 2.8, 0]}>
           <sphereGeometry args={[0.15, 16, 16]} />
-          <meshBasicMaterial color={goldColor} wireframe />
+          <meshBasicMaterial color={goldColor} wireframe transparent opacity={0.4} />
         </mesh>
 
         {/* Base platform */}
         <mesh position={[0, -2.2, 0]}>
           <boxGeometry args={[3.5, 0.3, 3.5]} />
-          <meshBasicMaterial color={goldColor} wireframe transparent opacity={0.5} />
+          <meshBasicMaterial color={goldColor} wireframe transparent opacity={0.2} />
         </mesh>
         <mesh position={[0, -2.6, 0]}>
           <boxGeometry args={[4, 0.3, 4]} />
-          <meshBasicMaterial color={goldColor} wireframe transparent opacity={0.3} />
+          <meshBasicMaterial color={goldColor} wireframe transparent opacity={0.15} />
         </mesh>
       </group>
     </Float>
@@ -270,30 +270,24 @@ interface TempleSceneProps {
 
 export default function TempleScene({ scrollProgress, showMandala, showParticles }: TempleSceneProps) {
   return (
-    <div className="fixed inset-0 z-0">
+    <div className="fixed inset-0 z-0 opacity-60 pointer-events-none">
       <Canvas
-        camera={{ position: [0, 0, 8], fov: 50 }}
+        camera={{ position: [0, 2, 15], fov: 45 }}
         gl={{ antialias: true, alpha: true }}
       >
         <color attach="background" args={['#0a0a0c']} />
-        <fog attach="fog" args={['#0a0a0c', 10, 30]} />
+        <fog attach="fog" args={['#0a0a0c', 8, 25]} />
         
-        <ambientLight intensity={0.2} />
-        <pointLight position={[10, 10, 10]} intensity={0.5} color="#d4a84b" />
-        <pointLight position={[-10, -10, -10]} intensity={0.3} color="#d4a84b" />
+        <ambientLight intensity={0.15} />
+        <pointLight position={[10, 10, 10]} intensity={0.3} color="#d4a84b" />
+        <pointLight position={[-10, -10, -10]} intensity={0.2} color="#d4a84b" />
         
         <Shikhara scrollProgress={scrollProgress} />
         <MandalaGrid visible={showMandala} />
         <SoundParticles active={showParticles} />
         
-        <OrbitControls
-          enableZoom={false}
-          enablePan={false}
-          autoRotate
-          autoRotateSpeed={0.3}
-          maxPolarAngle={Math.PI / 1.8}
-          minPolarAngle={Math.PI / 3}
-        />
+        {/* Removed OrbitControls - background should auto-rotate only */}
+        <group rotation={[0, scrollProgress * Math.PI * 0.5, 0]} />
       </Canvas>
     </div>
   );
