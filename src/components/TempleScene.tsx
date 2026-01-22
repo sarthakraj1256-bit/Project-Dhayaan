@@ -1,33 +1,34 @@
 import { useRef, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Float, Line, OrbitControls } from '@react-three/drei';
+import { Float, Line } from '@react-three/drei';
 import * as THREE from 'three';
+
+// Glow Sphere for ethereal effect
+function GlowSphere({ position, scale }: { position: [number, number, number]; scale: number }) {
+  const meshRef = useRef<THREE.Mesh>(null);
+  
+  useFrame((state) => {
+    if (meshRef.current) {
+      meshRef.current.scale.setScalar(scale + Math.sin(state.clock.elapsedTime * 0.5) * 0.1);
+    }
+  });
+
+  return (
+    <mesh ref={meshRef} position={position}>
+      <sphereGeometry args={[2.5, 32, 32]} />
+      <meshBasicMaterial
+        color={new THREE.Color().setHSL(0.11, 0.6, 0.3)}
+        transparent
+        opacity={0.08}
+        side={THREE.BackSide}
+      />
+    </mesh>
+  );
+}
 
 // Shikhara (Temple Spire) Wireframe Component
 function Shikhara({ scrollProgress }: { scrollProgress: number }) {
   const groupRef = useRef<THREE.Group>(null);
-
-  // Create the temple spire geometry using primitives
-  const spirePoints = useMemo(() => {
-    const points: [number, number, number][] = [];
-    const segments = 8;
-    const levels = 12;
-    
-    for (let level = 0; level < levels; level++) {
-      const y = level * 0.4 - 2;
-      const radius = Math.max(0.1, 1.5 - level * 0.12);
-      
-      for (let i = 0; i <= segments; i++) {
-        const angle = (i / segments) * Math.PI * 2;
-        points.push([
-          Math.cos(angle) * radius,
-          y,
-          Math.sin(angle) * radius
-        ]);
-      }
-    }
-    return points;
-  }, []);
 
   // Create connecting lines for wireframe effect
   const verticalLines = useMemo(() => {
@@ -78,55 +79,80 @@ function Shikhara({ scrollProgress }: { scrollProgress: number }) {
 
   useFrame((state) => {
     if (groupRef.current) {
-      groupRef.current.rotation.y = state.clock.elapsedTime * 0.1;
-      groupRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.05) * 0.1;
+      groupRef.current.rotation.y = state.clock.elapsedTime * 0.08;
+      groupRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.04) * 0.08;
     }
   });
 
-  // Color transitions based on scroll - vibrant gold for visibility
-  const goldColor = new THREE.Color().setHSL(0.11, 0.75, 0.5 + scrollProgress * 0.15);
+  // Bright gold color for high visibility
+  const goldColor = new THREE.Color().setHSL(0.11, 0.85, 0.55 + scrollProgress * 0.1);
+  const glowColor = new THREE.Color().setHSL(0.11, 0.9, 0.65);
 
   return (
-    <Float speed={1.5} rotationIntensity={0.2} floatIntensity={0.4}>
-      <group ref={groupRef} position={[0, -0.5, -3]} scale={1.4}>
-        {/* Horizontal rings */}
+    <Float speed={1.2} rotationIntensity={0.15} floatIntensity={0.3}>
+      <group ref={groupRef} position={[0, 0, 0]} scale={1.3}>
+        {/* Inner glow effect */}
+        <GlowSphere position={[0, 1, 0]} scale={1.2} />
+        
+        {/* Outer glow halo */}
+        <mesh position={[0, 1, 0]}>
+          <sphereGeometry args={[3.5, 32, 32]} />
+          <meshBasicMaterial
+            color={glowColor}
+            transparent
+            opacity={0.03}
+            side={THREE.BackSide}
+          />
+        </mesh>
+
+        {/* Horizontal rings - high opacity */}
         {horizontalRings.map((ring, idx) => (
           <Line
             key={`ring-${idx}`}
             points={ring}
             color={goldColor}
-            lineWidth={1.2}
+            lineWidth={1.5}
             transparent
-            opacity={0.5 + (idx / horizontalRings.length) * 0.4}
+            opacity={0.7 + (idx / horizontalRings.length) * 0.3}
           />
         ))}
         
-        {/* Vertical lines */}
+        {/* Vertical lines - high opacity */}
         {verticalLines.map((line, idx) => (
           <Line
             key={`vert-${idx}`}
             points={line}
             color={goldColor}
-            lineWidth={1.5}
+            lineWidth={2}
             transparent
-            opacity={0.7}
+            opacity={0.85}
           />
         ))}
 
-        {/* Top finial (kalasha) */}
+        {/* Top finial (kalasha) with glow */}
         <mesh position={[0, 2.8, 0]}>
-          <sphereGeometry args={[0.18, 16, 16]} />
-          <meshBasicMaterial color={goldColor} wireframe transparent opacity={0.8} />
+          <sphereGeometry args={[0.2, 16, 16]} />
+          <meshBasicMaterial color={goldColor} wireframe transparent opacity={0.95} />
+        </mesh>
+        <mesh position={[0, 2.8, 0]}>
+          <sphereGeometry args={[0.35, 16, 16]} />
+          <meshBasicMaterial color={glowColor} transparent opacity={0.15} />
         </mesh>
 
-        {/* Base platform */}
+        {/* Base platform - solid */}
         <mesh position={[0, -2.2, 0]}>
           <boxGeometry args={[3.5, 0.3, 3.5]} />
-          <meshBasicMaterial color={goldColor} wireframe transparent opacity={0.5} />
+          <meshBasicMaterial color={goldColor} wireframe transparent opacity={0.7} />
         </mesh>
         <mesh position={[0, -2.6, 0]}>
           <boxGeometry args={[4, 0.3, 4]} />
-          <meshBasicMaterial color={goldColor} wireframe transparent opacity={0.35} />
+          <meshBasicMaterial color={goldColor} wireframe transparent opacity={0.55} />
+        </mesh>
+        
+        {/* Base glow */}
+        <mesh position={[0, -2.4, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+          <planeGeometry args={[6, 6]} />
+          <meshBasicMaterial color={glowColor} transparent opacity={0.06} side={THREE.DoubleSide} />
         </mesh>
       </group>
     </Float>
@@ -149,25 +175,16 @@ function MandalaGrid({ visible }: { visible: boolean }) {
     const divisions = 9;
     const step = size / divisions;
 
-    // Horizontal lines
     for (let i = 0; i <= divisions; i++) {
       const pos = -size / 2 + i * step;
-      lines.push([
-        [-size / 2, pos, 0],
-        [size / 2, pos, 0]
-      ]);
+      lines.push([[-size / 2, pos, 0], [size / 2, pos, 0]]);
     }
 
-    // Vertical lines
     for (let i = 0; i <= divisions; i++) {
       const pos = -size / 2 + i * step;
-      lines.push([
-        [pos, -size / 2, 0],
-        [pos, size / 2, 0]
-      ]);
+      lines.push([[pos, -size / 2, 0], [pos, size / 2, 0]]);
     }
 
-    // Diagonal lines
     lines.push([[-size / 2, -size / 2, 0], [size / 2, size / 2, 0]]);
     lines.push([[size / 2, -size / 2, 0], [-size / 2, size / 2, 0]]);
 
@@ -179,7 +196,7 @@ function MandalaGrid({ visible }: { visible: boolean }) {
   if (!visible) return null;
 
   return (
-    <group ref={gridRef} position={[0, 0, -5]}>
+    <group ref={gridRef} position={[0, 0, -10]}>
       {gridLines.map((line, idx) => (
         <Line
           key={`grid-${idx}`}
@@ -187,7 +204,7 @@ function MandalaGrid({ visible }: { visible: boolean }) {
           color={goldColor}
           lineWidth={0.5}
           transparent
-          opacity={0.15}
+          opacity={0.2}
         />
       ))}
     </group>
@@ -228,7 +245,6 @@ function SoundParticles({ active }: { active: boolean }) {
         positions[i * 3 + 1] += velocities[i * 3 + 1];
         positions[i * 3 + 2] += velocities[i * 3 + 2];
         
-        // Reset particles that go too far
         const y = positions[i * 3 + 1];
         if (y > 4 || y < -4) {
           positions[i * 3 + 1] = 0;
@@ -252,10 +268,10 @@ function SoundParticles({ active }: { active: boolean }) {
         />
       </bufferGeometry>
       <pointsMaterial
-        size={0.05}
-        color={new THREE.Color().setHSL(0.11, 0.8, 0.6)}
+        size={0.06}
+        color={new THREE.Color().setHSL(0.11, 0.85, 0.65)}
         transparent
-        opacity={0.8}
+        opacity={0.9}
         sizeAttenuation
       />
     </points>
@@ -272,16 +288,17 @@ export default function TempleScene({ scrollProgress, showMandala, showParticles
   return (
     <div className="fixed inset-0 z-0">
       <Canvas
-        camera={{ position: [0, 1, 10], fov: 50 }}
+        camera={{ position: [0, 1, 8], fov: 55 }}
         gl={{ antialias: true, alpha: true }}
       >
         <color attach="background" args={['#0a0a0c']} />
-        <fog attach="fog" args={['#0a0a0c', 12, 30]} />
         
-        <ambientLight intensity={0.25} />
-        <pointLight position={[10, 10, 10]} intensity={0.6} color="#d4a84b" />
-        <pointLight position={[-10, -10, -10]} intensity={0.4} color="#d4a84b" />
-        <pointLight position={[0, 5, 5]} intensity={0.3} color="#f0c060" />
+        {/* Enhanced lighting for glow effect */}
+        <ambientLight intensity={0.4} />
+        <pointLight position={[0, 5, 5]} intensity={1.2} color="#d4a84b" />
+        <pointLight position={[5, 0, 5]} intensity={0.8} color="#f0c060" />
+        <pointLight position={[-5, 0, 5]} intensity={0.8} color="#f0c060" />
+        <pointLight position={[0, -3, 3]} intensity={0.5} color="#d4a84b" />
         
         <Shikhara scrollProgress={scrollProgress} />
         <MandalaGrid visible={showMandala} />
