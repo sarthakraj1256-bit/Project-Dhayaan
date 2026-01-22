@@ -1,5 +1,6 @@
 import { useRef, useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { useOmSound } from '@/hooks/useOmSound';
 
 interface ScienceSectionProps {
   onToggleParticles: () => void;
@@ -45,6 +46,7 @@ function EnergyWave({ index, active }: { index: number; active: boolean }) {
 
 export default function ScienceSection({ onToggleParticles, particlesActive }: ScienceSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
+  const { startOm, stopOm } = useOmSound();
   const [particles] = useState(() => 
     Array.from({ length: 20 }, (_, i) => ({
       id: i,
@@ -54,6 +56,15 @@ export default function ScienceSection({ onToggleParticles, particlesActive }: S
       left: 10 + Math.random() * 80,
     }))
   );
+
+  // Handle Om sound based on particlesActive state
+  useEffect(() => {
+    if (particlesActive) {
+      startOm();
+    } else {
+      stopOm();
+    }
+  }, [particlesActive, startOm, stopOm]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
