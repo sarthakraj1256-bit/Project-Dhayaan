@@ -4,7 +4,7 @@ import HeroSection from '@/components/HeroSection';
 import VastuSection from '@/components/VastuSection';
 import ComparisonSection from '@/components/ComparisonSection';
 import ScienceSection from '@/components/ScienceSection';
-import Footer from '@/components/Footer';
+import DevoteeExperiences from '@/components/DevoteeExperiences';
 
 const Index = () => {
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -98,7 +98,12 @@ const Index = () => {
           particlesActive={showParticles}
         />
 
-        <Footer />
+        {/* Divider */}
+        <div className="temple-divider">
+          <span className="text-primary text-2xl">◆</span>
+        </div>
+
+        <DevoteeExperiences />
       </main>
 
       {/* Navigation Dots (Side) */}
