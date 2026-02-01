@@ -22,11 +22,16 @@ export default function HeroSection({ onMounted }: HeroSectionProps) {
           ॐ वास्तोष्पते प्रति जानीह्यस्मान्
         </p>
 
+        {/* Brand Logo */}
+        <p className="font-display text-lg tracking-[0.3em] text-gold-gradient gold-glow mb-4 animate-fade-in-up opacity-0" style={{ animationDelay: '0.3s', animationFillMode: 'forwards' }}>
+          DHYAAN
+        </p>
+
         {/* Main Headline */}
         <h1 className="font-display text-5xl md:text-7xl lg:text-8xl font-semibold tracking-wide mb-6 animate-fade-in-up opacity-0" style={{ animationDelay: '0.4s', animationFillMode: 'forwards' }}>
-          <span className="text-gold-gradient">Architecture</span>
+          <span className="text-gold-gradient">Resonate</span>
           <br />
-          <span className="text-foreground">as Prayer</span>
+          <span className="text-foreground">with the Cosmos</span>
         </h1>
 
         {/* Subheadline */}
