@@ -236,8 +236,8 @@ export default function DevoteeExperiences() {
             </svg>
           </div>
 
-          <h3 className="font-display text-2xl text-gold-gradient tracking-wider">
-            देवालय
+          <h3 className="font-display text-2xl text-gold-gradient gold-glow tracking-wider">
+            ध्यान
           </h3>
           <p className="font-body text-sm text-muted-foreground max-w-md mx-auto">
             Exploring the intersection of ancient wisdom, sacred geometry, 
@@ -246,10 +246,7 @@ export default function DevoteeExperiences() {
 
           <div className="pt-8 border-t border-border/10 mt-8">
             <p className="font-display text-sm text-foreground tracking-wider">
-              Developed by <span className="text-primary">Sarthak Raj</span>
-            </p>
-            <p className="text-xs text-muted-foreground mt-2 tracking-wider">
-              SOC-3 | IKS Project
+              © 2026 Team Sutradhara | Project Dhyaan
             </p>
           </div>
 
