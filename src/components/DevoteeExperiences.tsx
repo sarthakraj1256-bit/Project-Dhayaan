@@ -303,10 +303,10 @@ export default function DevoteeExperiences() {
           {/* Team Credits */}
           <div className="pt-8 border-t border-border/10 mt-8 space-y-4">
             <p className="font-display text-sm tracking-widest text-muted-foreground uppercase">
-              Crafted by
+              Crafted with devotion by
             </p>
             <p className="font-display text-xl text-gold-gradient tracking-wider">
-              Team Sutradhara
+              Team Dhyaan
             </p>
             <p className="font-display text-sm text-foreground tracking-wider">
               © 2026 Project Dhyaan
