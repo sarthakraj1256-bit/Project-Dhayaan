@@ -3,6 +3,11 @@ import { Star } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
+import IntentTagSelector, { type IntentTag } from './IntentTagSelector';
+import FinalStressModal from './FinalStressModal';
+import { getInitialStress } from './StressCheckInModal';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
 
 interface Review {
   id: string;
@@ -10,6 +15,8 @@ interface Review {
   message: string;
   rating: number;
   createdAt: string;
+  intentTag?: IntentTag | null;
+  stressReduction?: number | null;
 }
 
 const STORAGE_KEY = 'devalaya-devotee-reviews';
@@ -21,6 +28,10 @@ export default function DevoteeExperiences() {
   const [rating, setRating] = useState(0);
   const [hoveredRating, setHoveredRating] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [intentTag, setIntentTag] = useState<IntentTag | null>(null);
+  const [showFinalStressModal, setShowFinalStressModal] = useState(false);
+  const [pendingSubmission, setPendingSubmission] = useState(false);
+  const { toast } = useToast();
 
   // Load reviews from localStorage on mount
   useEffect(() => {
@@ -43,31 +54,77 @@ export default function DevoteeExperiences() {
     ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
     : 0;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim() || !message.trim() || rating === 0) return;
+    
+    // Show the final stress modal before submitting
+    setPendingSubmission(true);
+    setShowFinalStressModal(true);
+  };
 
+  const handleFinalStressSubmit = async (finalStress: number, stressReduction: number | null) => {
+    if (!pendingSubmission) return;
+    
     setIsSubmitting(true);
+    
+    const initialStress = getInitialStress();
+    const createdAt = new Date().toLocaleDateString('en-IN', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric'
+    });
 
-    setTimeout(() => {
-      const newReview: Review = {
-        id: Date.now().toString(),
-        name: name.trim(),
-        message: message.trim(),
-        rating,
-        createdAt: new Date().toLocaleDateString('en-IN', {
-          day: 'numeric',
-          month: 'short',
-          year: 'numeric'
-        })
-      };
+    const newReview: Review = {
+      id: Date.now().toString(),
+      name: name.trim(),
+      message: message.trim(),
+      rating,
+      createdAt,
+      intentTag,
+      stressReduction
+    };
 
-      setReviews(prev => [newReview, ...prev]);
-      setName('');
-      setMessage('');
-      setRating(0);
-      setIsSubmitting(false);
-    }, 600);
+    // Add to local state first for instant feedback
+    setReviews(prev => [newReview, ...prev]);
+
+    // Submit to backend
+    try {
+      const { error } = await supabase.functions.invoke('submit-review', {
+        body: {
+          name: newReview.name,
+          message: newReview.message,
+          rating: newReview.rating,
+          initialStress,
+          finalStress,
+          stressReduction,
+          intentTag,
+          createdAt
+        }
+      });
+
+      if (error) {
+        console.error('Error submitting to backend:', error);
+      }
+
+      toast({
+        title: "Experience Shared! 🙏",
+        description: stressReduction !== null && stressReduction > 0 
+          ? `Your stress reduced by ${stressReduction}%! Thank you for sharing.`
+          : "Thank you for sharing your spiritual journey.",
+      });
+    } catch (err) {
+      console.error('Error:', err);
+      // Review is still saved locally
+    }
+
+    // Reset form
+    setName('');
+    setMessage('');
+    setRating(0);
+    setIntentTag(null);
+    setIsSubmitting(false);
+    setPendingSubmission(false);
   };
 
   const renderStars = (count: number, interactive = false, size = 'w-5 h-5') => {
@@ -127,8 +184,18 @@ export default function DevoteeExperiences() {
           </div>
         )}
 
+        {/* Final Stress Modal */}
+        <FinalStressModal
+          isOpen={showFinalStressModal}
+          onClose={() => {
+            setShowFinalStressModal(false);
+            setPendingSubmission(false);
+          }}
+          onSubmit={handleFinalStressSubmit}
+        />
+
         {/* Submit Form */}
-        <form onSubmit={handleSubmit} className="glass-card p-8 mb-12">
+        <form onSubmit={handleFormSubmit} className="glass-card p-8 mb-12">
           <h3 className="font-display text-xl text-foreground tracking-wider mb-6">
             Share Your Experience
           </h3>
@@ -141,6 +208,12 @@ export default function DevoteeExperiences() {
               </label>
               {renderStars(rating, true, 'w-8 h-8')}
             </div>
+
+            {/* Intent Tag Selector */}
+            <IntentTagSelector
+              selectedTag={intentTag}
+              onChange={setIntentTag}
+            />
 
             {/* Name Input */}
             <div>

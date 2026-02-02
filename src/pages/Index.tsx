@@ -5,6 +5,7 @@ import VastuSection from '@/components/VastuSection';
 import ComparisonSection from '@/components/ComparisonSection';
 import ScienceSection from '@/components/ScienceSection';
 import DevoteeExperiences from '@/components/DevoteeExperiences';
+import StressCheckInModal from '@/components/StressCheckInModal';
 
 const Index = () => {
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -42,6 +43,8 @@ const Index = () => {
 
   return (
     <div className="relative min-h-screen bg-background overflow-x-hidden">
+      {/* Stress Check-In Modal - Shows on page load */}
+      <StressCheckInModal />
       {/* 3D Background - Only visible on hero section */}
       <div 
         className={`transition-opacity duration-700 ${showTemple ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
