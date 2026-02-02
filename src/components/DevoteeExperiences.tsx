@@ -308,7 +308,18 @@ export default function DevoteeExperiences() {
             <p className="font-display text-xl text-gold-gradient tracking-wider">
               Team Dhyaan
             </p>
-            <p className="font-display text-sm text-foreground tracking-wider">
+            
+            {/* Mentorship Credits */}
+            <div className="pt-4 mt-2">
+              <p className="font-display text-xs tracking-widest text-muted-foreground uppercase mb-2">
+                Under the guidance of
+              </p>
+              <p className="font-display text-sm text-foreground tracking-wider">
+                Manish Sir & Shashank Sir
+              </p>
+            </div>
+            
+            <p className="font-display text-sm text-foreground tracking-wider pt-4">
               © 2026 Project Dhyaan
             </p>
           </div>
