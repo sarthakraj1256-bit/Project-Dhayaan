@@ -1,21 +1,25 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version',
 };
 
-interface ReviewData {
-  name: string;
-  message: string;
-  rating: number;
-  initialStress: number | null;
-  finalStress: number | null;
-  stressReduction: number | null;
-  intentTag: string | null;
-  createdAt: string;
-}
+// Input validation schema
+const ReviewSchema = z.object({
+  name: z.string().min(1, "Name is required").max(100, "Name must be less than 100 characters").trim(),
+  message: z.string().min(1, "Message is required").max(1000, "Message must be less than 1000 characters").trim(),
+  rating: z.number().int().min(1, "Rating must be at least 1").max(5, "Rating must be at most 5"),
+  initialStress: z.number().int().min(1).max(10).nullable(),
+  finalStress: z.number().int().min(1).max(10).nullable(),
+  stressReduction: z.number().min(-100).max(100).nullable(),
+  intentTag: z.string().max(50).nullable(),
+  createdAt: z.string().max(100),
+});
+
+type ReviewData = z.infer<typeof ReviewSchema>;
 
 serve(async (req) => {
   // Handle CORS preflight requests
@@ -24,15 +28,37 @@ serve(async (req) => {
   }
 
   try {
-    const reviewData: ReviewData = await req.json();
+    // Parse and validate input
+    let rawData: unknown;
+    try {
+      rawData = await req.json();
+    } catch {
+      return new Response(
+        JSON.stringify({ success: false, error: 'Invalid JSON body' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    const parseResult = ReviewSchema.safeParse(rawData);
+    if (!parseResult.success) {
+      console.error('Validation error:', parseResult.error.flatten());
+      return new Response(
+        JSON.stringify({ 
+          success: false, 
+          error: 'Validation failed',
+          details: parseResult.error.flatten().fieldErrors 
+        }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    const reviewData: ReviewData = parseResult.data;
     
-    console.log('Processing review submission:', {
-      name: reviewData.name,
+    console.log('Processing validated review submission:', {
+      name: reviewData.name.substring(0, 20), // Log truncated for privacy
       rating: reviewData.rating,
       intentTag: reviewData.intentTag,
-      initialStress: reviewData.initialStress,
-      finalStress: reviewData.finalStress,
-      stressReduction: reviewData.stressReduction,
+      hasStressData: reviewData.initialStress !== null && reviewData.finalStress !== null,
     });
 
     // Save to Supabase database for statistics aggregation
@@ -117,12 +143,11 @@ serve(async (req) => {
     
     return new Response(
       JSON.stringify({ 
-        success: true, 
-        message: 'Review saved locally',
-        error: error instanceof Error ? error.message : 'Unknown error'
+        success: false, 
+        error: 'Internal server error'
       }),
       { 
-        status: 200, 
+        status: 500, 
         headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
       }
     );

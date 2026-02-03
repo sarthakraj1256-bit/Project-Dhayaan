@@ -31,16 +31,15 @@ export default function StressStatsDashboard() {
     try {
       const { supabase } = await import('@/integrations/supabase/client');
       
-      // Fetch all stress metrics
+      // Use the secure RPC function to get aggregated statistics only
       const { data, error: fetchError } = await supabase
-        .from('stress_metrics')
-        .select('*');
+        .rpc('get_stress_statistics');
 
       if (fetchError) {
         throw fetchError;
       }
 
-      if (!data || data.length === 0) {
+      if (!data || data.length === 0 || data[0].total_participants === 0) {
         setStats({
           totalSubmissions: 0,
           averageReduction: 0,
@@ -50,39 +49,22 @@ export default function StressStatsDashboard() {
         return;
       }
 
-      // Calculate overall stats
-      const validReductions = data.filter(d => d.stress_reduction !== null && d.stress_reduction > 0);
-      const totalSubmissions = data.length;
-      const averageReduction = validReductions.length > 0
-        ? Math.round(validReductions.reduce((sum, d) => sum + (d.stress_reduction || 0), 0) / validReductions.length)
-        : 0;
-
-      // Calculate by intent tag
-      const tagGroups: Record<string, { count: number; totalReduction: number }> = {};
+      const statsRow = data[0];
       
-      data.forEach(d => {
-        const tag = d.intent_tag || 'unspecified';
-        if (!tagGroups[tag]) {
-          tagGroups[tag] = { count: 0, totalReduction: 0 };
-        }
-        tagGroups[tag].count++;
-        if (d.stress_reduction !== null && d.stress_reduction > 0) {
-          tagGroups[tag].totalReduction += d.stress_reduction;
-        }
-      });
-
-      const byIntentTag = Object.entries(tagGroups)
-        .filter(([tag]) => tag !== 'unspecified')
-        .map(([tag, data]) => ({
-          tag,
-          count: data.count,
-          avgReduction: data.count > 0 ? Math.round(data.totalReduction / data.count) : 0,
-        }))
-        .sort((a, b) => b.avgReduction - a.avgReduction);
+      // Parse intent breakdown from the aggregated data
+      const intentBreakdown = statsRow.intent_breakdown || [];
+      const byIntentTag = Array.isArray(intentBreakdown) 
+        ? intentBreakdown.map((item: { intent_tag: string; count: number; avg_reduction: number }) => ({
+            tag: item.intent_tag,
+            count: Number(item.count),
+            avgReduction: Math.round(Number(item.avg_reduction) || 0),
+          }))
+          .sort((a: { avgReduction: number }, b: { avgReduction: number }) => b.avgReduction - a.avgReduction)
+        : [];
 
       setStats({
-        totalSubmissions,
-        averageReduction,
+        totalSubmissions: Number(statsRow.total_participants) || 0,
+        averageReduction: Math.round(Number(statsRow.average_stress_reduction) || 0),
         byIntentTag,
       });
     } catch (err) {
