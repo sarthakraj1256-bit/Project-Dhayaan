@@ -7,6 +7,10 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version',
 };
 
+// Rate limiting configuration
+const RATE_LIMIT_WINDOW_MS = 60000; // 1 minute
+const MAX_REQUESTS_PER_WINDOW = 5; // 5 requests per minute per IP
+
 // Input validation schema
 const ReviewSchema = z.object({
   name: z.string().min(1, "Name is required").max(100, "Name must be less than 100 characters").trim(),
@@ -21,10 +25,61 @@ const ReviewSchema = z.object({
 
 type ReviewData = z.infer<typeof ReviewSchema>;
 
+// Rate limiting using Deno KV
+async function checkRateLimit(ip: string): Promise<{ allowed: boolean; remaining: number }> {
+  try {
+    const kv = await Deno.openKv();
+    const key = ['rate_limit', 'submit_review', ip];
+    const result = await kv.get<number>(key);
+    
+    const currentCount = result.value || 0;
+    
+    if (currentCount >= MAX_REQUESTS_PER_WINDOW) {
+      return { allowed: false, remaining: 0 };
+    }
+    
+    // Increment counter with expiry
+    await kv.set(key, currentCount + 1, { expireIn: RATE_LIMIT_WINDOW_MS });
+    
+    return { allowed: true, remaining: MAX_REQUESTS_PER_WINDOW - currentCount - 1 };
+  } catch (err) {
+    // If KV fails, allow the request but log the error
+    console.error('Rate limit check failed:', err);
+    return { allowed: true, remaining: MAX_REQUESTS_PER_WINDOW };
+  }
+}
+
 serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
+  }
+
+  // Get client IP for rate limiting
+  const clientIp = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 
+                   req.headers.get('x-real-ip') || 
+                   'unknown';
+
+  // Check rate limit
+  const rateLimitResult = await checkRateLimit(clientIp);
+  
+  if (!rateLimitResult.allowed) {
+    console.log(`Rate limit exceeded for IP: ${clientIp.substring(0, 10)}...`);
+    return new Response(
+      JSON.stringify({ 
+        success: false, 
+        error: 'Too many submissions. Please wait a minute before trying again.' 
+      }),
+      { 
+        status: 429, 
+        headers: { 
+          ...corsHeaders, 
+          'Content-Type': 'application/json',
+          'Retry-After': '60',
+          'X-RateLimit-Remaining': '0'
+        } 
+      }
+    );
   }
 
   try {
@@ -134,7 +189,11 @@ serve(async (req) => {
       }),
       { 
         status: 200, 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+        headers: { 
+          ...corsHeaders, 
+          'Content-Type': 'application/json',
+          'X-RateLimit-Remaining': rateLimitResult.remaining.toString()
+        } 
       }
     );
 
