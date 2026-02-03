@@ -52,7 +52,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_stress_statistics: {
+        Args: never
+        Returns: {
+          average_stress_reduction: number
+          intent_breakdown: Json
+          total_participants: number
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never
