@@ -14,7 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      stress_metrics: {
+        Row: {
+          created_at: string
+          final_stress: number
+          id: string
+          initial_stress: number
+          intent_tag: string | null
+          name: string | null
+          rating: number | null
+          stress_reduction: number | null
+        }
+        Insert: {
+          created_at?: string
+          final_stress: number
+          id?: string
+          initial_stress: number
+          intent_tag?: string | null
+          name?: string | null
+          rating?: number | null
+          stress_reduction?: number | null
+        }
+        Update: {
+          created_at?: string
+          final_stress?: number
+          id?: string
+          initial_stress?: number
+          intent_tag?: string | null
+          name?: string | null
+          rating?: number | null
+          stress_reduction?: number | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

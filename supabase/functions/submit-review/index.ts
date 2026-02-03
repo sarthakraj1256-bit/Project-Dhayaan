@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -23,27 +24,9 @@ serve(async (req) => {
   }
 
   try {
-    const GOOGLE_SHEETS_SCRIPT_URL = Deno.env.get('GOOGLE_SHEETS_SCRIPT_URL');
-    
-    if (!GOOGLE_SHEETS_SCRIPT_URL) {
-      console.error('GOOGLE_SHEETS_SCRIPT_URL is not configured');
-      // Return success anyway - don't block the user experience
-      return new Response(
-        JSON.stringify({ 
-          success: true, 
-          message: 'Review saved locally (Google Sheets not configured)',
-          sheetsConfigured: false 
-        }),
-        { 
-          status: 200, 
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
-        }
-      );
-    }
-
     const reviewData: ReviewData = await req.json();
     
-    console.log('Submitting review to Google Sheets:', {
+    console.log('Processing review submission:', {
       name: reviewData.name,
       rating: reviewData.rating,
       intentTag: reviewData.intentTag,
@@ -52,56 +35,76 @@ serve(async (req) => {
       stressReduction: reviewData.stressReduction,
     });
 
-    // Prepare data for Google Sheets
-    const sheetData = {
-      name: reviewData.name,
-      message: reviewData.message,
-      rating: reviewData.rating,
-      initialStress: reviewData.initialStress ?? 'N/A',
-      finalStress: reviewData.finalStress ?? 'N/A',
-      stressReduction: reviewData.stressReduction !== null 
-        ? `${reviewData.stressReduction}%` 
-        : 'N/A',
-      intentTag: reviewData.intentTag ?? 'Not specified',
-      timestamp: reviewData.createdAt,
-    };
-
-    // Send to Google Apps Script
-    const response = await fetch(GOOGLE_SHEETS_SCRIPT_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(sheetData),
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error('Google Sheets API error:', response.status, errorText);
-      // Still return success - we don't want to block the user
-      return new Response(
-        JSON.stringify({ 
-          success: true, 
-          message: 'Review saved locally (Google Sheets sync pending)',
-          sheetsConfigured: true,
-          syncError: true
-        }),
-        { 
-          status: 200, 
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+    // Save to Supabase database for statistics aggregation
+    const supabaseUrl = Deno.env.get('SUPABASE_URL');
+    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+    
+    if (supabaseUrl && supabaseServiceKey) {
+      try {
+        const supabase = createClient(supabaseUrl, supabaseServiceKey);
+        
+        // Only save if we have stress data
+        if (reviewData.initialStress !== null && reviewData.finalStress !== null) {
+          const { error: dbError } = await supabase
+            .from('stress_metrics')
+            .insert({
+              name: reviewData.name,
+              initial_stress: reviewData.initialStress,
+              final_stress: reviewData.finalStress,
+              stress_reduction: reviewData.stressReduction,
+              intent_tag: reviewData.intentTag,
+              rating: reviewData.rating,
+            });
+          
+          if (dbError) {
+            console.error('Database insert error:', dbError);
+          } else {
+            console.log('Stress metrics saved to database');
+          }
         }
-      );
+      } catch (dbErr) {
+        console.error('Database error:', dbErr);
+      }
     }
 
-    const result = await response.text();
-    console.log('Google Sheets response:', result);
+    // Also send to Google Sheets if configured
+    const GOOGLE_SHEETS_SCRIPT_URL = Deno.env.get('GOOGLE_SHEETS_SCRIPT_URL');
+    
+    if (GOOGLE_SHEETS_SCRIPT_URL) {
+      try {
+        const sheetData = {
+          name: reviewData.name,
+          message: reviewData.message,
+          rating: reviewData.rating,
+          initialStress: reviewData.initialStress ?? 'N/A',
+          finalStress: reviewData.finalStress ?? 'N/A',
+          stressReduction: reviewData.stressReduction !== null 
+            ? `${reviewData.stressReduction}%` 
+            : 'N/A',
+          intentTag: reviewData.intentTag ?? 'Not specified',
+          timestamp: reviewData.createdAt,
+        };
+
+        const response = await fetch(GOOGLE_SHEETS_SCRIPT_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(sheetData),
+        });
+
+        if (!response.ok) {
+          console.error('Google Sheets error:', response.status);
+        } else {
+          console.log('Review synced to Google Sheets');
+        }
+      } catch (sheetErr) {
+        console.error('Google Sheets error:', sheetErr);
+      }
+    }
 
     return new Response(
       JSON.stringify({ 
         success: true, 
-        message: 'Review submitted successfully',
-        sheetsConfigured: true,
-        synced: true
+        message: 'Review submitted successfully'
       }),
       { 
         status: 200, 
@@ -112,7 +115,6 @@ serve(async (req) => {
   } catch (error) {
     console.error('Error in submit-review function:', error);
     
-    // Return success anyway - user experience is priority
     return new Response(
       JSON.stringify({ 
         success: true, 

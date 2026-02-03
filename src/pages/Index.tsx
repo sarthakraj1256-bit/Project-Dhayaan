@@ -4,6 +4,7 @@ import HeroSection from '@/components/HeroSection';
 import VastuSection from '@/components/VastuSection';
 import ComparisonSection from '@/components/ComparisonSection';
 import ScienceSection from '@/components/ScienceSection';
+import StressStatsDashboard from '@/components/StressStatsDashboard';
 import DevoteeExperiences from '@/components/DevoteeExperiences';
 import StressCheckInModal from '@/components/StressCheckInModal';
 
@@ -100,6 +101,13 @@ const Index = () => {
           onToggleParticles={toggleParticles}
           particlesActive={showParticles}
         />
+
+        {/* Divider */}
+        <div className="temple-divider">
+          <span className="text-primary text-2xl">◆</span>
+        </div>
+
+        <StressStatsDashboard />
 
         {/* Divider */}
         <div className="temple-divider">
