@@ -6,8 +6,18 @@ import { Button } from '@/components/ui/button';
 import IntentTagSelector, { type IntentTag } from './IntentTagSelector';
 import FinalStressModal from './FinalStressModal';
 import { getInitialStress } from './StressCheckInModal';
-import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+
+// Lazy load Supabase to prevent initialization errors
+const getSupabase = async () => {
+  try {
+    const { supabase } = await import('@/integrations/supabase/client');
+    return supabase;
+  } catch (e) {
+    console.warn('Supabase not available:', e);
+    return null;
+  }
+};
 
 interface Review {
   id: string;
@@ -88,23 +98,26 @@ export default function DevoteeExperiences() {
     // Add to local state first for instant feedback
     setReviews(prev => [newReview, ...prev]);
 
-    // Submit to backend
+    // Submit to backend (if available)
     try {
-      const { error } = await supabase.functions.invoke('submit-review', {
-        body: {
-          name: newReview.name,
-          message: newReview.message,
-          rating: newReview.rating,
-          initialStress,
-          finalStress,
-          stressReduction,
-          intentTag,
-          createdAt
-        }
-      });
+      const supabase = await getSupabase();
+      if (supabase) {
+        const { error } = await supabase.functions.invoke('submit-review', {
+          body: {
+            name: newReview.name,
+            message: newReview.message,
+            rating: newReview.rating,
+            initialStress,
+            finalStress,
+            stressReduction,
+            intentTag,
+            createdAt
+          }
+        });
 
-      if (error) {
-        console.error('Error submitting to backend:', error);
+        if (error) {
+          console.error('Error submitting to backend:', error);
+        }
       }
 
       toast({
@@ -116,6 +129,10 @@ export default function DevoteeExperiences() {
     } catch (err) {
       console.error('Error:', err);
       // Review is still saved locally
+      toast({
+        title: "Experience Saved Locally 🙏",
+        description: "Thank you for sharing your spiritual journey.",
+      });
     }
 
     // Reset form
