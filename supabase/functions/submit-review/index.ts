@@ -9,7 +9,8 @@ const corsHeaders = {
 
 // Rate limiting configuration
 const RATE_LIMIT_WINDOW_MS = 60000; // 1 minute
-const MAX_REQUESTS_PER_WINDOW = 5; // 5 requests per minute per IP
+const MAX_REQUESTS_PER_WINDOW = 5; // 5 requests per minute per fingerprint
+const UNKNOWN_IP_RATE_LIMIT = 2; // Stricter limit for unknown IPs
 
 // Input validation schema
 const ReviewSchema = z.object({
@@ -25,28 +26,76 @@ const ReviewSchema = z.object({
 
 type ReviewData = z.infer<typeof ReviewSchema>;
 
-// Rate limiting using Deno KV
-async function checkRateLimit(ip: string): Promise<{ allowed: boolean; remaining: number }> {
+// Generate a fingerprint from multiple request signals for better rate limiting
+function generateFingerprint(req: Request): { fingerprint: string; isUnknown: boolean } {
+  // Get IP from headers - use last IP in chain (closest to server, harder to spoof)
+  const forwardedFor = req.headers.get('x-forwarded-for');
+  const realIp = req.headers.get('x-real-ip');
+  
+  // Use last IP in forwarded chain (added by trusted proxies)
+  const ipFromChain = forwardedFor?.split(',').pop()?.trim();
+  const ip = ipFromChain || realIp || '';
+  
+  // Collect additional signals for fingerprinting
+  const userAgent = req.headers.get('user-agent') || '';
+  const acceptLanguage = req.headers.get('accept-language') || '';
+  const acceptEncoding = req.headers.get('accept-encoding') || '';
+  
+  // Create a composite fingerprint
+  const signals = [ip, userAgent.substring(0, 100), acceptLanguage.substring(0, 50)];
+  const fingerprint = signals.filter(Boolean).join('|');
+  
+  // If we have minimal signals, mark as unknown (stricter limits apply)
+  const isUnknown = !ip && !userAgent;
+  
+  return { 
+    fingerprint: fingerprint || 'unknown',
+    isUnknown 
+  };
+}
+
+// Rate limiting using Deno KV with fingerprinting
+async function checkRateLimit(fingerprint: string, isUnknown: boolean): Promise<{ allowed: boolean; remaining: number }> {
+  const limit = isUnknown ? UNKNOWN_IP_RATE_LIMIT : MAX_REQUESTS_PER_WINDOW;
+  
   try {
     const kv = await Deno.openKv();
-    const key = ['rate_limit', 'submit_review', ip];
+    const key = ['rate_limit', 'submit_review', fingerprint];
     const result = await kv.get<number>(key);
     
     const currentCount = result.value || 0;
     
-    if (currentCount >= MAX_REQUESTS_PER_WINDOW) {
+    if (currentCount >= limit) {
       return { allowed: false, remaining: 0 };
     }
     
     // Increment counter with expiry
     await kv.set(key, currentCount + 1, { expireIn: RATE_LIMIT_WINDOW_MS });
     
-    return { allowed: true, remaining: MAX_REQUESTS_PER_WINDOW - currentCount - 1 };
+    return { allowed: true, remaining: limit - currentCount - 1 };
   } catch (err) {
-    // If KV fails, allow the request but log the error
-    console.error('Rate limit check failed:', err);
-    return { allowed: true, remaining: MAX_REQUESTS_PER_WINDOW };
+    // If KV fails, use stricter fallback for unknown fingerprints
+    console.warn('RATE_LIMIT_KV_ERROR');
+    if (isUnknown) {
+      return { allowed: false, remaining: 0 };
+    }
+    return { allowed: true, remaining: limit };
   }
+}
+
+// Generate HMAC signature for Google Sheets authentication
+async function generateHmacSignature(payload: string, secret: string): Promise<string> {
+  const encoder = new TextEncoder();
+  const key = await crypto.subtle.importKey(
+    'raw',
+    encoder.encode(secret),
+    { name: 'HMAC', hash: 'SHA-256' },
+    false,
+    ['sign']
+  );
+  
+  const signature = await crypto.subtle.sign('HMAC', key, encoder.encode(payload));
+  return btoa(String.fromCharCode(...new Uint8Array(signature)));
 }
 
 serve(async (req) => {
@@ -55,16 +104,14 @@ serve(async (req) => {
     return new Response('ok', { headers: corsHeaders });
   }
 
-  // Get client IP for rate limiting
-  const clientIp = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 
-                   req.headers.get('x-real-ip') || 
-                   'unknown';
+  // Generate fingerprint for rate limiting (harder to spoof than single IP header)
+  const { fingerprint, isUnknown } = generateFingerprint(req);
 
-  // Check rate limit
-  const rateLimitResult = await checkRateLimit(clientIp);
+  // Check rate limit with stricter limits for unknown fingerprints
+  const rateLimitResult = await checkRateLimit(fingerprint, isUnknown);
   
   if (!rateLimitResult.allowed) {
-    console.log(`Rate limit exceeded for IP: ${clientIp.substring(0, 10)}...`);
+    console.warn('RATE_LIMIT_EXCEEDED', { timestamp: Date.now() });
     return new Response(
       JSON.stringify({ 
         success: false, 
@@ -96,7 +143,11 @@ serve(async (req) => {
 
     const parseResult = ReviewSchema.safeParse(rawData);
     if (!parseResult.success) {
-      console.error('Validation error:', parseResult.error.flatten());
+      // Log minimal info - just error count, not full schema details
+      console.warn('VALIDATION_ERROR', { 
+        timestamp: Date.now(),
+        errorCount: parseResult.error.errors.length 
+      });
       return new Response(
         JSON.stringify({ 
           success: false, 
@@ -109,10 +160,9 @@ serve(async (req) => {
 
     const reviewData: ReviewData = parseResult.data;
     
-    console.log('Processing validated review submission:', {
-      name: reviewData.name.substring(0, 20), // Log truncated for privacy
-      rating: reviewData.rating,
-      intentTag: reviewData.intentTag,
+    // Log only non-sensitive operational info
+    console.log('REVIEW_PROCESSING', {
+      timestamp: Date.now(),
       hasStressData: reviewData.initialStress !== null && reviewData.finalStress !== null,
     });
 
@@ -138,18 +188,20 @@ serve(async (req) => {
             });
           
           if (dbError) {
-            console.error('Database insert error:', dbError);
+            // Log error code only, not full error details
+            console.error('DB_INSERT_ERROR', { timestamp: Date.now() });
           } else {
-            console.log('Stress metrics saved to database');
+            console.log('DB_INSERT_SUCCESS');
           }
         }
       } catch (dbErr) {
-        console.error('Database error:', dbErr);
+        console.error('DB_CONNECTION_ERROR', { timestamp: Date.now() });
       }
     }
 
-    // Also send to Google Sheets if configured
+    // Send to Google Sheets if configured (with HMAC authentication)
     const GOOGLE_SHEETS_SCRIPT_URL = Deno.env.get('GOOGLE_SHEETS_SCRIPT_URL');
+    const GOOGLE_SHEETS_HMAC_SECRET = Deno.env.get('GOOGLE_SHEETS_HMAC_SECRET');
     
     if (GOOGLE_SHEETS_SCRIPT_URL) {
       try {
@@ -166,19 +218,28 @@ serve(async (req) => {
           timestamp: reviewData.createdAt,
         };
 
+        const payload = JSON.stringify(sheetData);
+        const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+        
+        // Add HMAC signature if secret is configured
+        if (GOOGLE_SHEETS_HMAC_SECRET) {
+          const signature = await generateHmacSignature(payload, GOOGLE_SHEETS_HMAC_SECRET);
+          headers['X-Signature'] = signature;
+        }
+
         const response = await fetch(GOOGLE_SHEETS_SCRIPT_URL, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(sheetData),
+          headers,
+          body: payload,
         });
 
         if (!response.ok) {
-          console.error('Google Sheets error:', response.status);
+          console.warn('SHEETS_SYNC_ERROR', { status: response.status });
         } else {
-          console.log('Review synced to Google Sheets');
+          console.log('SHEETS_SYNC_SUCCESS');
         }
       } catch (sheetErr) {
-        console.error('Google Sheets error:', sheetErr);
+        console.warn('SHEETS_CONNECTION_ERROR', { timestamp: Date.now() });
       }
     }
 
@@ -198,7 +259,8 @@ serve(async (req) => {
     );
 
   } catch (error) {
-    console.error('Error in submit-review function:', error);
+    // Log generic error code, not full error details
+    console.error('FUNCTION_ERROR', { timestamp: Date.now() });
     
     return new Response(
       JSON.stringify({ 
