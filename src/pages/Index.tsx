@@ -1,4 +1,6 @@
 import { useState, useEffect, useCallback, Suspense } from 'react';
+import { Link } from 'react-router-dom';
+import { LogIn } from 'lucide-react';
 import TempleScene from '@/components/TempleScene';
 import HeroSection from '@/components/HeroSection';
 import VastuSection from '@/components/VastuSection';
@@ -114,6 +116,28 @@ const Index = () => {
 
         <DevoteeExperiences />
       </main>
+
+      {/* Login Button - Fixed Top Right */}
+      <Link
+        to="/auth"
+        className="fixed top-6 right-6 z-50 group"
+      >
+        <div 
+          className="flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 hover:scale-105"
+          style={{
+            background: 'hsl(var(--void-light) / 0.6)',
+            backdropFilter: 'blur(12px)',
+            WebkitBackdropFilter: 'blur(12px)',
+            border: '1px solid hsl(var(--gold) / 0.3)',
+            boxShadow: '0 0 20px hsl(var(--gold) / 0.1)',
+          }}
+        >
+          <LogIn className="w-4 h-4 text-gold transition-transform duration-300 group-hover:translate-x-0.5" />
+          <span className="font-body text-sm tracking-wider text-gold">
+            Enter Sanctum
+          </span>
+        </div>
+      </Link>
 
       {/* Navigation Dots (Side) */}
       <nav className="fixed right-6 top-1/2 -translate-y-1/2 z-50 hidden lg:flex flex-col gap-4">
