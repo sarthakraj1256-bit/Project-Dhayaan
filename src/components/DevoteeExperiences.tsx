@@ -11,7 +11,7 @@ import { useToast } from '@/hooks/use-toast';
 // Lazy load Supabase to prevent initialization errors
 const getSupabase = async () => {
   try {
-    const { supabase } = await import('@/integrations/supabase/client');
+    const { supabase } = await import('@/integrations/backend/client');
     return supabase;
   } catch (e) {
     console.warn('Supabase not available:', e);

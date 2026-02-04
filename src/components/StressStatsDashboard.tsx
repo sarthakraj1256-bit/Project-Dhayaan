@@ -29,7 +29,7 @@ export default function StressStatsDashboard() {
 
   const fetchStats = async () => {
     try {
-      const { supabase } = await import('@/integrations/supabase/client');
+      const { supabase } = await import('@/integrations/backend/client');
       
       // Use the secure RPC function to get aggregated statistics only
       const { data, error: fetchError } = await supabase

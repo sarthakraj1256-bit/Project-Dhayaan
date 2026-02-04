@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, Suspense } from 'react';
 import { Link } from 'react-router-dom';
 import { LogIn, LayoutDashboard } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from '@/integrations/backend/client';
 import { User } from '@supabase/supabase-js';
 import TempleScene from '@/components/TempleScene';
 import HeroSection from '@/components/HeroSection';
