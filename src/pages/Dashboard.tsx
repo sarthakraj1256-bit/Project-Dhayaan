@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/integrations/backend/client";
 import { User } from "@supabase/supabase-js";
 import { Button } from "@/components/ui/button";
 import { LogOut, User as UserIcon, Mail, Calendar } from "lucide-react";
