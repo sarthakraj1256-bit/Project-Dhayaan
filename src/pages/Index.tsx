@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback, Suspense } from 'react';
 import { Link } from 'react-router-dom';
-import { LogIn } from 'lucide-react';
+import { LogIn, LayoutDashboard } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import { User } from '@supabase/supabase-js';
 import TempleScene from '@/components/TempleScene';
 import HeroSection from '@/components/HeroSection';
 import VastuSection from '@/components/VastuSection';
@@ -9,13 +11,28 @@ import ScienceSection from '@/components/ScienceSection';
 import StressStatsDashboard from '@/components/StressStatsDashboard';
 import DevoteeExperiences from '@/components/DevoteeExperiences';
 
-
 const Index = () => {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [showMandala, setShowMandala] = useState(false);
   const [showParticles, setShowParticles] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const [showTemple, setShowTemple] = useState(true);
+  const [user, setUser] = useState<User | null>(null);
+
+  // Check auth state
+  useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        setUser(session?.user ?? null);
+      }
+    );
+
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   // Handle scroll progress for 3D scene
   useEffect(() => {
@@ -119,25 +136,28 @@ const Index = () => {
 
       {/* Navigation - Fixed Top Right */}
       <div className="fixed top-6 right-6 z-50 flex items-center gap-3">
-        <Link
-          to="/dashboard"
-          className="group"
-        >
-          <div
-            className="flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 hover:scale-105"
-            style={{
-              background: 'hsl(var(--void-light) / 0.6)',
-              backdropFilter: 'blur(12px)',
-              WebkitBackdropFilter: 'blur(12px)',
-              border: '1px solid hsl(var(--gold) / 0.3)',
-              boxShadow: '0 0 20px hsl(var(--gold) / 0.1)',
-            }}
+        {user && (
+          <Link
+            to="/dashboard"
+            className="group"
           >
-            <span className="font-body text-sm tracking-wider text-gold">
-              Dashboard
-            </span>
-          </div>
-        </Link>
+            <div
+              className="flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 hover:scale-105"
+              style={{
+                background: 'hsl(var(--void-light) / 0.6)',
+                backdropFilter: 'blur(12px)',
+                WebkitBackdropFilter: 'blur(12px)',
+                border: '1px solid hsl(var(--gold) / 0.3)',
+                boxShadow: '0 0 20px hsl(var(--gold) / 0.1)',
+              }}
+            >
+              <LayoutDashboard className="w-4 h-4 text-gold" />
+              <span className="font-body text-sm tracking-wider text-gold">
+                Dashboard
+              </span>
+            </div>
+          </Link>
+        )}
 
         <Link
           to="/auth"
