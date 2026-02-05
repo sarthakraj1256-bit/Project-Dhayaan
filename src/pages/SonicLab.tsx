@@ -119,6 +119,9 @@
              frequencyVolume={audioState.frequencyVolume}
              atmosphereVolume={audioState.atmosphereVolume}
              currentAtmosphere={audioState.currentAtmosphere}
+             atmosphereLoading={audioState.atmosphereLoading}
+             atmosphereCached={audioState.atmosphereCached}
+             atmosphereError={audioState.atmosphereError}
              onFrequencyVolumeChange={setFrequencyVolume}
              onAtmosphereVolumeChange={setAtmosphereVolume}
              onAtmosphereChange={setAtmosphere}
