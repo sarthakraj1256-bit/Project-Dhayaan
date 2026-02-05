@@ -1,48 +1,29 @@
- import { useState, useRef, useCallback, useEffect } from 'react';
- 
- interface SessionTimerState {
-   elapsedSeconds: number;
-   isRunning: boolean;
-   startTime: number | null;
- }
- 
- export const useSessionTimer = (isPlaying: boolean) => {
-   const [state, setState] = useState<SessionTimerState>({
-     elapsedSeconds: 0,
-     isRunning: false,
-     startTime: null,
-   });
- 
+import { useState, useRef, useCallback, useEffect } from 'react';
+
+export const useSessionTimer = (isPlaying: boolean) => {
+  const [elapsedSeconds, setElapsedSeconds] = useState(0);
    const intervalRef = useRef<number | null>(null);
+  const startTimeRef = useRef<number | null>(null);
  
-   // Start timer when playing starts
+  // Handle timer start/stop based on isPlaying
    useEffect(() => {
-     if (isPlaying && !state.isRunning) {
-       const startTime = Date.now();
-       setState({
-         elapsedSeconds: 0,
-         isRunning: true,
-         startTime,
-       });
- 
-       intervalRef.current = window.setInterval(() => {
-         setState((prev) => ({
-           ...prev,
-           elapsedSeconds: Math.floor((Date.now() - startTime) / 1000),
-         }));
+    if (isPlaying) {
+      // Start timer
+      startTimeRef.current = Date.now();
+      setElapsedSeconds(0);
+      
+      intervalRef.current = window.setInterval(() => {
+        if (startTimeRef.current) {
+          setElapsedSeconds(Math.floor((Date.now() - startTimeRef.current) / 1000));
+        }
        }, 1000);
-     }
- 
-     // Stop timer when playing stops
-     if (!isPlaying && state.isRunning) {
+    } else {
+      // Stop timer
        if (intervalRef.current) {
          clearInterval(intervalRef.current);
          intervalRef.current = null;
        }
-       setState((prev) => ({
-         ...prev,
-         isRunning: false,
-       }));
+      startTimeRef.current = null;
      }
  
      return () => {
@@ -50,18 +31,15 @@
          clearInterval(intervalRef.current);
        }
      };
-   }, [isPlaying, state.isRunning]);
+  }, [isPlaying]);
  
    const reset = useCallback(() => {
      if (intervalRef.current) {
        clearInterval(intervalRef.current);
        intervalRef.current = null;
      }
-     setState({
-       elapsedSeconds: 0,
-       isRunning: false,
-       startTime: null,
-     });
+    startTimeRef.current = null;
+    setElapsedSeconds(0);
    }, []);
  
    // Format time as MM:SS or HH:MM:SS
@@ -77,9 +55,9 @@
    }, []);
  
    return {
-     elapsedSeconds: state.elapsedSeconds,
-     formattedTime: formatTime(state.elapsedSeconds),
-     isRunning: state.isRunning,
+    elapsedSeconds,
+    formattedTime: formatTime(elapsedSeconds),
+    isRunning: isPlaying,
      reset,
    };
  };
