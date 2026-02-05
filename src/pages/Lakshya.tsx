@@ -1,14 +1,16 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Sparkles, Wind, Gamepad2, Trophy, Star, Zap, Puzzle } from 'lucide-react';
 import { useSpiritualProgress, LEVEL_THRESHOLDS, getNextLevelThreshold, CHAKRA_THRESHOLDS } from '@/hooks/useSpiritualProgress';
+import { useKarmaMultiplier } from '@/hooks/useKarmaMultiplier';
 import BreathFlowGame from '@/components/lakshya/BreathFlowGame';
 import ChakraAlignmentGame from '@/components/lakshya/ChakraAlignmentGame';
 import KarmaDisplay from '@/components/lakshya/KarmaDisplay';
 import LevelProgressBar from '@/components/lakshya/LevelProgressBar';
 import ChakraProgress from '@/components/lakshya/ChakraProgress';
 import CosmicBackground from '@/components/lakshya/CosmicBackground';
+import MultiplierDisplay from '@/components/lakshya/MultiplierDisplay';
 
 const Lakshya = () => {
   const navigate = useNavigate();
@@ -16,12 +18,25 @@ const Lakshya = () => {
   const [activeGame, setActiveGame] = useState<string | null>(null);
   const [showKarmaAnimation, setShowKarmaAnimation] = useState(false);
   const [karmaGained, setKarmaGained] = useState(0);
+  const [multiplierApplied, setMultiplierApplied] = useState(1);
 
-  const handleKarmaEarned = (points: number) => {
-    setKarmaGained(points);
+  const {
+    sessionGamesCompleted,
+    sessionMultiplier,
+    streakMultiplier,
+    totalMultiplier,
+    incrementSessionGames,
+    applyMultiplier,
+  } = useKarmaMultiplier(progress?.current_streak || 0);
+
+  const handleKarmaEarned = useCallback((basePoints: number) => {
+    const multipliedPoints = applyMultiplier(basePoints);
+    setKarmaGained(multipliedPoints);
+    setMultiplierApplied(totalMultiplier);
     setShowKarmaAnimation(true);
-    setTimeout(() => setShowKarmaAnimation(false), 2000);
-  };
+    incrementSessionGames();
+    setTimeout(() => setShowKarmaAnimation(false), 2500);
+  }, [applyMultiplier, totalMultiplier, incrementSessionGames]);
 
   if (!userId) {
     return (
@@ -65,6 +80,16 @@ const Lakshya = () => {
                 +{karmaGained}
               </motion.div>
               <p className="text-xl text-primary/80">Karma Points</p>
+              {multiplierApplied > 1 && (
+                <motion.p
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                  className="text-sm text-amber-400 mt-2"
+                >
+                  ✨ {multiplierApplied.toFixed(2)}x Multiplier Applied!
+                </motion.p>
+              )}
             </div>
           </motion.div>
         )}
@@ -149,8 +174,19 @@ const Lakshya = () => {
               </div>
 
               {/* Karma Display */}
-              <div className="rounded-2xl p-6 bg-gradient-to-br from-amber-500/10 via-orange-500/5 to-yellow-500/10 border border-amber-500/20 backdrop-blur-sm">
-                {progress && <KarmaDisplay progress={progress} />}
+              <div className="space-y-4">
+                <div className="rounded-2xl p-6 bg-gradient-to-br from-amber-500/10 via-orange-500/5 to-yellow-500/10 border border-amber-500/20 backdrop-blur-sm">
+                  {progress && <KarmaDisplay progress={progress} />}
+                </div>
+                
+                {/* Multiplier Display */}
+                <MultiplierDisplay
+                  sessionGamesCompleted={sessionGamesCompleted}
+                  currentStreak={progress?.current_streak || 0}
+                  totalMultiplier={totalMultiplier}
+                  sessionMultiplier={sessionMultiplier}
+                  streakMultiplier={streakMultiplier}
+                />
               </div>
             </div>
 
