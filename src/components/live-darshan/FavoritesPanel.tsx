@@ -15,6 +15,7 @@ import {
 import { temples, Temple, deityLabels } from '@/data/templeStreams';
 import { useTempleFavorites } from '@/hooks/useTempleFavorites';
 import { useFavoriteAartiNotifications } from '@/hooks/useFavoriteAartiNotifications';
+import ShareFavoritesButton from './ShareFavoritesButton';
 
 interface FavoritesPanelProps {
   onSelectTemple: (temple: Temple) => void;
@@ -88,10 +89,15 @@ const FavoritesPanel = ({ onSelectTemple }: FavoritesPanelProps) => {
       
       <SheetContent className="w-full sm:max-w-md">
         <SheetHeader>
-          <SheetTitle className="flex items-center gap-2">
-            <Heart className="w-5 h-5 text-destructive fill-destructive" />
-            Favorite Temples
-          </SheetTitle>
+          <div className="flex items-center justify-between">
+            <SheetTitle className="flex items-center gap-2">
+              <Heart className="w-5 h-5 text-destructive fill-destructive" />
+              Favorite Temples
+            </SheetTitle>
+            <ShareFavoritesButton 
+              favoriteTemples={favoriteTemples.filter(f => f.temple) as { temple: Temple }[]} 
+            />
+          </div>
         </SheetHeader>
 
         <div className="mt-6 space-y-4">
