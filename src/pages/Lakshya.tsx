@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Sparkles, Wind, Gamepad2, Trophy, Star, Zap } from 'lucide-react';
+import { ArrowLeft, Sparkles, Wind, Gamepad2, Trophy, Star, Zap, Puzzle } from 'lucide-react';
 import { useSpiritualProgress, LEVEL_THRESHOLDS, getNextLevelThreshold, CHAKRA_THRESHOLDS } from '@/hooks/useSpiritualProgress';
 import BreathFlowGame from '@/components/lakshya/BreathFlowGame';
+import ChakraAlignmentGame from '@/components/lakshya/ChakraAlignmentGame';
 import KarmaDisplay from '@/components/lakshya/KarmaDisplay';
 import LevelProgressBar from '@/components/lakshya/LevelProgressBar';
 import ChakraProgress from '@/components/lakshya/ChakraProgress';
@@ -90,6 +91,11 @@ const Lakshya = () => {
         {/* Active Game View */}
         {activeGame === 'breath-flow' ? (
           <BreathFlowGame 
+            onClose={() => setActiveGame(null)} 
+            onKarmaEarned={handleKarmaEarned}
+          />
+        ) : activeGame === 'chakra-alignment' ? (
+          <ChakraAlignmentGame 
             onClose={() => setActiveGame(null)} 
             onKarmaEarned={handleKarmaEarned}
           />
@@ -204,17 +210,29 @@ const Lakshya = () => {
                   </div>
                 </motion.button>
 
-                {/* Coming Soon Games */}
-                <div className="p-6 rounded-2xl bg-white/5 border border-white/10 opacity-60">
-                  <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center mb-4">
-                    <Sparkles className="w-6 h-6 text-muted-foreground" />
+                {/* Chakra Alignment Game */}
+                <motion.button
+                  onClick={() => setActiveGame('chakra-alignment')}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="group relative p-6 rounded-2xl bg-gradient-to-br from-indigo-500/10 via-purple-500/10 to-violet-500/10 border border-indigo-500/20 hover:border-indigo-500/40 transition-all text-left overflow-hidden"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                  
+                  <div className="relative z-10">
+                    <div className="w-12 h-12 rounded-full bg-indigo-500/20 flex items-center justify-center mb-4">
+                      <Puzzle className="w-6 h-6 text-indigo-400" />
+                    </div>
+                    <h3 className="font-display text-lg text-foreground mb-2">Chakra Alignment</h3>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      Align glowing chakra symbols into harmony
+                    </p>
+                    <div className="flex items-center gap-2 text-xs text-indigo-400">
+                      <Star className="w-3 h-3" />
+                      <span>+15-50 Karma per puzzle</span>
+                    </div>
                   </div>
-                  <h3 className="font-display text-lg text-foreground mb-2">Chakra Alignment</h3>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    Align glowing chakra symbols into harmony
-                  </p>
-                  <span className="text-xs text-muted-foreground">Coming Soon</span>
-                </div>
+                </motion.button>
 
                 <div className="p-6 rounded-2xl bg-white/5 border border-white/10 opacity-60">
                   <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center mb-4">
