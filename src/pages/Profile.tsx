@@ -9,7 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { logError } from '@/lib/logger';
-import { clearTTSCache, clearAudioCache } from '@/lib/audioCache';
+import { clearTTSCache, clearAudioCache, getCacheSize, formatBytes } from '@/lib/audioCache';
 
 interface Profile {
   id: string;
@@ -28,6 +28,12 @@ const Profile = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [isClearingCache, setIsClearingCache] = useState(false);
+  const [cacheSize, setCacheSize] = useState<{ tts: number; atmosphere: number; total: number } | null>(null);
+
+  const fetchCacheSize = async () => {
+    const size = await getCacheSize();
+    setCacheSize(size);
+  };
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -38,6 +44,7 @@ const Profile = () => {
       }
       setUser(session.user);
       await fetchProfile(session.user.id);
+      await fetchCacheSize();
     };
     checkAuth();
   }, [navigate]);
@@ -140,6 +147,7 @@ const Profile = () => {
     try {
       await Promise.all([clearTTSCache(), clearAudioCache()]);
       toast.success('Audio cache cleared successfully');
+      await fetchCacheSize(); // Refresh size after clearing
     } catch (error) {
       toast.error('Failed to clear audio cache');
       logError('Cache clear error', error);
@@ -313,14 +321,35 @@ const Profile = () => {
 
           <div className="p-4 rounded-xl bg-white/5 border border-white/10 mb-4">
             <div className="flex items-start justify-between gap-4">
-              <div>
-                <p className="text-sm font-medium text-foreground mb-1">
-                  Audio Cache
-                </p>
-                <p className="text-xs text-muted-foreground">
+              <div className="flex-1">
+                <div className="flex items-center justify-between mb-2">
+                  <p className="text-sm font-medium text-foreground">
+                    Audio Cache
+                  </p>
+                  {cacheSize && (
+                    <span className={`text-sm font-mono ${cacheSize.total > 0 ? 'text-primary' : 'text-muted-foreground'}`}>
+                      {formatBytes(cacheSize.total)}
+                    </span>
+                  )}
+                </div>
+                <p className="text-xs text-muted-foreground mb-3">
                   TTS voice audio and atmosphere sounds are cached locally for instant playback. 
                   Clearing this will require regenerating audio on next play.
                 </p>
+                
+                {/* Detailed breakdown */}
+                {cacheSize && cacheSize.total > 0 && (
+                  <div className="grid grid-cols-2 gap-3 pt-3 border-t border-white/10">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-muted-foreground">Guru Voice (TTS)</span>
+                      <span className="text-xs font-mono text-foreground">{formatBytes(cacheSize.tts)}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-muted-foreground">Atmosphere</span>
+                      <span className="text-xs font-mono text-foreground">{formatBytes(cacheSize.atmosphere)}</span>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
