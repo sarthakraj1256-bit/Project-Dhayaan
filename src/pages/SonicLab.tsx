@@ -8,12 +8,14 @@ import { useState, useCallback, useRef } from 'react';
  import { useFavorites, Favorite } from '@/hooks/useFavorites';
 import { useSessionHistory } from '@/hooks/useSessionHistory';
 import { useMeditationGoals } from '@/hooks/useMeditationGoals';
+import { useAchievements } from '@/hooks/useAchievements';
  import CategorySection from '@/components/sonic-lab/CategorySection';
  import AudioControls from '@/components/sonic-lab/AudioControls';
  import WaveformVisualizer from '@/components/sonic-lab/WaveformVisualizer';
  import FavoritesPanel from '@/components/sonic-lab/FavoritesPanel';
 import SessionStats from '@/components/sonic-lab/SessionStats';
 import GoalsPanel from '@/components/sonic-lab/GoalsPanel';
+import AchievementsPanel from '@/components/sonic-lab/AchievementsPanel';
  
  const SonicLab = () => {
    const [showFavorites, setShowFavorites] = useState(false);
@@ -64,6 +66,15 @@ import GoalsPanel from '@/components/sonic-lab/GoalsPanel';
     refetch: refetchGoals,
   } = useMeditationGoals();
 
+  const {
+    achievements,
+    unlockedCount,
+    totalCount: achievementTotal,
+    isLoading: achievementsLoading,
+    isAuthenticated: achievementsAuthenticated,
+    checkAndUnlockAchievements,
+  } = useAchievements();
+
    // Wrap playFrequency to also track metadata
    const handlePlayFrequency = useCallback((frequency: number, name?: string, category?: string) => {
      playFrequency(frequency);
@@ -95,11 +106,13 @@ import GoalsPanel from '@/components/sonic-lab/GoalsPanel';
       ).then(() => {
         // Refresh goals progress after saving a session
         refetchGoals();
+        // Check for new achievements
+        checkAndUnlockAchievements();
       });
     }
     sessionStartRef.current = null;
     stopFrequency();
-  }, [audioState.currentFrequency, audioState.currentAtmosphere, currentFrequencyMeta, saveSession, stopFrequency, refetchGoals]);
+  }, [audioState.currentFrequency, audioState.currentAtmosphere, currentFrequencyMeta, saveSession, stopFrequency, refetchGoals, checkAndUnlockAchievements]);
 
    const handleSaveFavorite = useCallback(() => {
      if (audioState.currentFrequency && currentFrequencyMeta) {
@@ -233,6 +246,20 @@ import GoalsPanel from '@/components/sonic-lab/GoalsPanel';
                   isAuthenticated={goalsAuthenticated}
                   onSetGoal={setGoal}
                   onRemoveGoal={removeGoal}
+                />
+              </div>
+
+              {/* Achievements Section */}
+              <div className="mt-6">
+                <h3 className="font-display text-sm tracking-widest text-muted-foreground mb-3">
+                  ACHIEVEMENTS
+                </h3>
+                <AchievementsPanel
+                  achievements={achievements}
+                  unlockedCount={unlockedCount}
+                  totalCount={achievementTotal}
+                  isLoading={achievementsLoading}
+                  isAuthenticated={achievementsAuthenticated}
                 />
               </div>
               </div>
