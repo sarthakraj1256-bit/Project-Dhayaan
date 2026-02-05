@@ -10,6 +10,7 @@ import FloatingInput from "@/components/auth/FloatingInput";
 import SanctumButton from "@/components/auth/SanctumButton";
 import GoogleButton from "@/components/auth/GoogleButton";
 import { ArrowLeft } from "lucide-react";
+ import { logError } from "@/lib/logger";
 
 // Validation schemas
 const emailSchema = z.string().email("Please enter a valid email address");
@@ -66,7 +67,7 @@ const Auth = () => {
 
       return () => subscription.unsubscribe();
     } catch (error) {
-      console.error("Auth initialization error:", error);
+       logError("Auth initialization error", error);
     }
   }, [navigate, mode]);
 

@@ -26,6 +26,17 @@ const ReviewSchema = z.object({
 
 type ReviewData = z.infer<typeof ReviewSchema>;
 
+ // Sanitize text input to remove HTML/script tags
+ function sanitizeText(input: string): string {
+   // Remove HTML tags and script content
+   return input
+     .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+     .replace(/<[^>]*>/g, '')
+     .replace(/javascript:/gi, '')
+     .replace(/on\w+=/gi, '')
+     .trim();
+ }
+ 
 // Generate a fingerprint from multiple request signals for better rate limiting
 function generateFingerprint(req: Request): { fingerprint: string; isUnknown: boolean } {
   // Get IP from headers - use last IP in chain (closest to server, harder to spoof)
@@ -159,11 +170,18 @@ serve(async (req) => {
     }
 
     const reviewData: ReviewData = parseResult.data;
+     
+     // Sanitize text fields to prevent XSS in stored data
+     const sanitizedData = {
+       ...reviewData,
+       name: sanitizeText(reviewData.name),
+       message: sanitizeText(reviewData.message),
+     };
     
     // Log only non-sensitive operational info
     console.log('REVIEW_PROCESSING', {
       timestamp: Date.now(),
-      hasStressData: reviewData.initialStress !== null && reviewData.finalStress !== null,
+       hasStressData: sanitizedData.initialStress !== null && sanitizedData.finalStress !== null,
     });
 
     // Save to Supabase database for statistics aggregation
@@ -175,16 +193,16 @@ serve(async (req) => {
         const supabase = createClient(supabaseUrl, supabaseServiceKey);
         
         // Only save if we have stress data
-        if (reviewData.initialStress !== null && reviewData.finalStress !== null) {
+         if (sanitizedData.initialStress !== null && sanitizedData.finalStress !== null) {
           const { error: dbError } = await supabase
             .from('stress_metrics')
             .insert({
-              name: reviewData.name,
-              initial_stress: reviewData.initialStress,
-              final_stress: reviewData.finalStress,
-              stress_reduction: reviewData.stressReduction,
-              intent_tag: reviewData.intentTag,
-              rating: reviewData.rating,
+               name: sanitizedData.name,
+               initial_stress: sanitizedData.initialStress,
+               final_stress: sanitizedData.finalStress,
+               stress_reduction: sanitizedData.stressReduction,
+               intent_tag: sanitizedData.intentTag,
+               rating: sanitizedData.rating,
             });
           
           if (dbError) {
@@ -206,16 +224,16 @@ serve(async (req) => {
     if (GOOGLE_SHEETS_SCRIPT_URL) {
       try {
         const sheetData = {
-          name: reviewData.name,
-          message: reviewData.message,
-          rating: reviewData.rating,
-          initialStress: reviewData.initialStress ?? 'N/A',
-          finalStress: reviewData.finalStress ?? 'N/A',
-          stressReduction: reviewData.stressReduction !== null 
-            ? `${reviewData.stressReduction}%` 
+           name: sanitizedData.name,
+           message: sanitizedData.message,
+           rating: sanitizedData.rating,
+           initialStress: sanitizedData.initialStress ?? 'N/A',
+           finalStress: sanitizedData.finalStress ?? 'N/A',
+           stressReduction: sanitizedData.stressReduction !== null 
+             ? `${sanitizedData.stressReduction}%` 
             : 'N/A',
-          intentTag: reviewData.intentTag ?? 'Not specified',
-          timestamp: reviewData.createdAt,
+           intentTag: sanitizedData.intentTag ?? 'Not specified',
+           timestamp: sanitizedData.createdAt,
         };
 
         const payload = JSON.stringify(sheetData);
