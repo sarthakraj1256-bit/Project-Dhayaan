@@ -1,0 +1,245 @@
+ import { useState } from 'react';
+ import { motion } from 'framer-motion';
+ import { Link } from 'react-router-dom';
+ import { ArrowLeft, BookOpen, Radio, Flame, Trophy, GraduationCap } from 'lucide-react';
+ import { mantras, categories, getMantrasByDifficulty, type Mantra } from '@/data/mantraLibrary';
+ import MantraCard from '@/components/mantrochar/MantraCard';
+ import MantraLesson from '@/components/mantrochar/MantraLesson';
+ import { toast } from 'sonner';
+ 
+ const difficultyOrder = ['beginner', 'intermediate', 'advanced', 'mastery'] as const;
+ 
+ const Mantrochar = () => {
+   const [selectedMantra, setSelectedMantra] = useState<Mantra | null>(null);
+   const [completedMantras, setCompletedMantras] = useState<string[]>([]);
+   const [activeFilter, setActiveFilter] = useState<'all' | 'beginner' | 'intermediate' | 'advanced'>('all');
+ 
+   const handleMantraComplete = () => {
+     if (selectedMantra && !completedMantras.includes(selectedMantra.id)) {
+       setCompletedMantras(prev => [...prev, selectedMantra.id]);
+       toast.success(`${selectedMantra.name} completed! 🙏`);
+     }
+   };
+ 
+   const filteredMantras = activeFilter === 'all' 
+     ? mantras 
+     : getMantrasByDifficulty(activeFilter);
+ 
+   // If a mantra is selected, show the lesson view
+   if (selectedMantra) {
+     return (
+       <div className="min-h-screen bg-void relative overflow-hidden">
+         {/* Background */}
+         <div className="fixed inset-0 z-0">
+           <div className="absolute inset-0 bg-gradient-to-b from-void via-void-light/20 to-void" />
+           <div 
+             className="absolute inset-0 opacity-[0.02]"
+             style={{
+               backgroundImage: `radial-gradient(circle at center, rgba(212, 175, 55, 0.3) 1px, transparent 1px)`,
+               backgroundSize: '30px 30px',
+             }}
+           />
+           <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[150px]" />
+         </div>
+ 
+         <div className="relative z-10 max-w-3xl mx-auto px-6 py-8">
+           <MantraLesson
+             mantra={selectedMantra}
+             onBack={() => setSelectedMantra(null)}
+             onComplete={handleMantraComplete}
+           />
+         </div>
+       </div>
+     );
+   }
+ 
+   return (
+     <div className="min-h-screen bg-void relative overflow-hidden">
+       {/* Background */}
+       <div className="fixed inset-0 z-0">
+         <div className="absolute inset-0 bg-gradient-to-b from-void via-void-light/20 to-void" />
+         <div 
+           className="absolute inset-0 opacity-[0.02]"
+           style={{
+             backgroundImage: `radial-gradient(circle at center, rgba(212, 175, 55, 0.3) 1px, transparent 1px)`,
+             backgroundSize: '30px 30px',
+           }}
+         />
+         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-primary/5 rounded-full blur-[150px]" />
+       </div>
+ 
+       {/* Content */}
+       <div className="relative z-10">
+         {/* Header */}
+         <header className="sticky top-0 z-40 px-6 py-4 bg-void/80 backdrop-blur-xl border-b border-white/5">
+           <div className="max-w-5xl mx-auto flex items-center justify-between">
+             <Link
+               to="/"
+               className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
+             >
+               <ArrowLeft className="w-4 h-4" />
+               <span className="text-sm tracking-wider">Back</span>
+             </Link>
+ 
+             <div className="flex items-center gap-3">
+               <BookOpen className="w-5 h-5 text-primary" />
+               <h1 className="font-display text-xl tracking-[0.2em] text-gold-gradient">
+                 MANTROCHAR
+               </h1>
+             </div>
+ 
+             {/* Link to Sonic Lab */}
+             <Link
+               to="/sonic-lab"
+               className="flex items-center gap-2 px-3 py-2 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 transition-colors"
+             >
+               <Radio className="w-4 h-4 text-primary" />
+               <span className="text-sm text-foreground/80 hidden sm:inline">Sonic Lab</span>
+             </Link>
+           </div>
+         </header>
+ 
+         {/* Hero */}
+         <section className="px-6 py-12 text-center">
+           <motion.div
+             initial={{ opacity: 0, y: 20 }}
+             animate={{ opacity: 1, y: 0 }}
+             className="max-w-2xl mx-auto"
+           >
+             <h2 className="font-display text-3xl md:text-4xl tracking-wider text-foreground mb-4">
+               Learn to <span className="text-gold-gradient">Chant</span> Correctly
+             </h2>
+             <p className="text-muted-foreground font-body leading-relaxed">
+               Master mantras step by step — from listening to understanding to perfect repetition.
+               Like Duolingo, but for ancient wisdom.
+             </p>
+           </motion.div>
+ 
+           {/* Stats */}
+           <motion.div
+             initial={{ opacity: 0, y: 20 }}
+             animate={{ opacity: 1, y: 0 }}
+             transition={{ delay: 0.2 }}
+             className="flex items-center justify-center gap-6 mt-8"
+           >
+             <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20">
+               <GraduationCap className="w-4 h-4 text-primary" />
+               <span className="text-sm text-foreground">
+                 {completedMantras.length} / {mantras.length} Learned
+               </span>
+             </div>
+             {completedMantras.length > 0 && (
+               <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-amber-500/10 border border-amber-500/20">
+                 <Flame className="w-4 h-4 text-amber-400" />
+                 <span className="text-sm text-foreground">
+                   {completedMantras.length} day streak
+                 </span>
+               </div>
+             )}
+           </motion.div>
+         </section>
+ 
+         {/* Filter Tabs */}
+         <div className="px-6 mb-6">
+           <div className="max-w-5xl mx-auto flex items-center gap-2 overflow-x-auto pb-2">
+             {(['all', 'beginner', 'intermediate', 'advanced'] as const).map((filter) => (
+               <button
+                 key={filter}
+                 onClick={() => setActiveFilter(filter)}
+                 className={`
+                   px-4 py-2 rounded-full text-sm whitespace-nowrap transition-all
+                   ${activeFilter === filter 
+                     ? 'bg-primary/20 border border-primary/50 text-primary' 
+                     : 'bg-white/5 border border-white/10 text-muted-foreground hover:bg-white/10'
+                   }
+                 `}
+               >
+                 {filter === 'all' ? 'All Mantras' : filter.charAt(0).toUpperCase() + filter.slice(1)}
+               </button>
+             ))}
+           </div>
+         </div>
+ 
+         {/* Mantra Library */}
+         <main className="px-6 pb-16 max-w-5xl mx-auto">
+           {/* Group by difficulty */}
+           {difficultyOrder.map((difficulty) => {
+             const mantrasInDifficulty = filteredMantras.filter(m => m.difficulty === difficulty);
+             if (mantrasInDifficulty.length === 0) return null;
+ 
+             return (
+               <motion.section
+                 key={difficulty}
+                 initial={{ opacity: 0, y: 20 }}
+                 animate={{ opacity: 1, y: 0 }}
+                 className="mb-10"
+               >
+                 <div className="flex items-center gap-3 mb-4">
+                   <h3 className="font-display text-sm tracking-widest text-muted-foreground uppercase">
+                     {difficulty}
+                   </h3>
+                   <div className="h-px flex-1 bg-white/10" />
+                   <span className="text-xs text-muted-foreground">
+                     {mantrasInDifficulty.length} mantras
+                   </span>
+                 </div>
+ 
+                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                   {mantrasInDifficulty.map((mantra) => (
+                     <MantraCard
+                       key={mantra.id}
+                       mantra={mantra}
+                       progress={completedMantras.includes(mantra.id) ? 100 : 0}
+                       onClick={() => setSelectedMantra(mantra)}
+                     />
+                   ))}
+                 </div>
+               </motion.section>
+             );
+           })}
+         </main>
+ 
+         {/* Connection to Sonic Lab */}
+         <section className="px-6 pb-16">
+           <div className="max-w-5xl mx-auto">
+             <motion.div
+               initial={{ opacity: 0, y: 20 }}
+               animate={{ opacity: 1, y: 0 }}
+               className="p-6 rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20"
+             >
+               <div className="flex flex-col md:flex-row items-center gap-6">
+                 <div className="w-16 h-16 rounded-2xl bg-primary/20 flex items-center justify-center">
+                   <Radio className="w-8 h-8 text-primary" />
+                 </div>
+                 <div className="flex-1 text-center md:text-left">
+                   <h3 className="font-display text-lg text-foreground mb-2">
+                     Enhance with Frequencies
+                   </h3>
+                   <p className="text-sm text-muted-foreground">
+                     Combine your mantra practice with healing frequencies from the Sonic Lab.
+                     Try chanting with 432Hz or 528Hz background for deeper resonance.
+                   </p>
+                 </div>
+                 <Link
+                   to="/sonic-lab"
+                   className="px-6 py-3 rounded-full bg-primary/20 border border-primary/50 text-primary font-display text-sm tracking-wider hover:bg-primary/30 transition-colors"
+                 >
+                   Open Sonic Lab
+                 </Link>
+               </div>
+             </motion.div>
+           </div>
+         </section>
+ 
+         {/* Footer */}
+         <footer className="border-t border-white/5 px-6 py-8 text-center">
+           <p className="text-xs text-muted-foreground/50">
+             "मन्त्र साधना" — The Practice of Sacred Sound
+           </p>
+         </footer>
+       </div>
+     </div>
+   );
+ };
+ 
+ export default Mantrochar;
