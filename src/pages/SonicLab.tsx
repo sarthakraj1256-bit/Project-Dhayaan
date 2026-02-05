@@ -3,6 +3,7 @@
  import { ArrowLeft, Radio } from 'lucide-react';
  import { categories, getFrequenciesByCategory } from '@/data/soundLibrary';
  import { useFrequencyAudio } from '@/hooks/useFrequencyAudio';
+ import { useSessionTimer } from '@/hooks/useSessionTimer';
  import CategorySection from '@/components/sonic-lab/CategorySection';
  import AudioControls from '@/components/sonic-lab/AudioControls';
  import WaveformVisualizer from '@/components/sonic-lab/WaveformVisualizer';
@@ -17,6 +18,8 @@
      setAtmosphereVolume,
      getFrequencyData,
    } = useFrequencyAudio();
+ 
+   const { formattedTime } = useSessionTimer(audioState.isPlaying);
  
    return (
      <div className="min-h-screen bg-void relative overflow-hidden">
@@ -122,6 +125,7 @@
              atmosphereLoading={audioState.atmosphereLoading}
              atmosphereCached={audioState.atmosphereCached}
              atmosphereError={audioState.atmosphereError}
+             sessionTime={formattedTime}
              onFrequencyVolumeChange={setFrequencyVolume}
              onAtmosphereVolumeChange={setAtmosphereVolume}
              onAtmosphereChange={setAtmosphere}
