@@ -31,6 +31,7 @@ import VideoPlayer from '@/components/live-darshan/VideoPlayer';
 import SpiritualContentCard from '@/components/live-darshan/SpiritualContentCard';
 import ContentVideoModal from '@/components/live-darshan/ContentVideoModal';
 import BottomNav from '@/components/BottomNav';
+import AartiReminderSettings from '@/components/live-darshan/AartiReminderSettings';
 
 const LiveDarshan = () => {
   const [selectedTemple, setSelectedTemple] = useState<Temple | null>(null);
@@ -107,12 +108,18 @@ const LiveDarshan = () => {
               </div>
             </div>
             
-            {/* Live Counter */}
-            <div className="flex items-center gap-2 px-3 py-1.5 bg-red-600/20 rounded-full">
-              <Radio className="w-4 h-4 text-red-500 animate-pulse" />
-              <span className="text-sm text-red-400">
-                {temples.filter(t => t.isLive).length} Live Now
-              </span>
+            {/* Right side controls */}
+            <div className="flex items-center gap-3">
+              {/* Reminder Settings */}
+              <AartiReminderSettings />
+              
+              {/* Live Counter */}
+              <div className="flex items-center gap-2 px-3 py-1.5 bg-destructive/20 rounded-full">
+                <Radio className="w-4 h-4 text-destructive animate-pulse" />
+                <span className="text-sm text-destructive">
+                  {temples.filter(t => t.isLive).length} Live Now
+                </span>
+              </div>
             </div>
           </div>
         </div>
