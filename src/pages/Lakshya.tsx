@@ -1,8 +1,8 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Sparkles, Wind, Gamepad2, Trophy, Star, Zap, Puzzle } from 'lucide-react';
-import { useSpiritualProgress, LEVEL_THRESHOLDS, getNextLevelThreshold, CHAKRA_THRESHOLDS } from '@/hooks/useSpiritualProgress';
+import { useSpiritualProgress, LEVEL_THRESHOLDS, getNextLevelThreshold, CHAKRA_THRESHOLDS, type SpiritualLevel } from '@/hooks/useSpiritualProgress';
 import { useKarmaMultiplier } from '@/hooks/useKarmaMultiplier';
 import BreathFlowGame from '@/components/lakshya/BreathFlowGame';
 import ChakraAlignmentGame from '@/components/lakshya/ChakraAlignmentGame';
@@ -11,6 +11,9 @@ import LevelProgressBar from '@/components/lakshya/LevelProgressBar';
 import ChakraProgress from '@/components/lakshya/ChakraProgress';
 import CosmicBackground from '@/components/lakshya/CosmicBackground';
 import MultiplierDisplay from '@/components/lakshya/MultiplierDisplay';
+import KarmaGainAnimation from '@/components/lakshya/KarmaGainAnimation';
+import LevelUpCelebration from '@/components/lakshya/LevelUpCelebration';
+import HiddenRewards from '@/components/lakshya/HiddenRewards';
 
 const Lakshya = () => {
   const navigate = useNavigate();
@@ -19,6 +22,12 @@ const Lakshya = () => {
   const [showKarmaAnimation, setShowKarmaAnimation] = useState(false);
   const [karmaGained, setKarmaGained] = useState(0);
   const [multiplierApplied, setMultiplierApplied] = useState(1);
+  const [bonusMessage, setBonusMessage] = useState<string | undefined>();
+  
+  // Level up celebration state
+  const [showLevelUp, setShowLevelUp] = useState(false);
+  const [newLevel, setNewLevel] = useState<SpiritualLevel>('novice');
+  const previousLevelRef = useRef<SpiritualLevel | null>(null);
 
   const {
     sessionGamesCompleted,
@@ -29,14 +38,39 @@ const Lakshya = () => {
     applyMultiplier,
   } = useKarmaMultiplier(progress?.current_streak || 0);
 
+  // Detect level up
+  useEffect(() => {
+    if (!progress) return;
+    
+    const currentLevel = progress.current_level as SpiritualLevel;
+    
+    if (previousLevelRef.current && previousLevelRef.current !== currentLevel) {
+      // Level up detected!
+      setNewLevel(currentLevel);
+      setShowLevelUp(true);
+    }
+    
+    previousLevelRef.current = currentLevel;
+  }, [progress?.current_level]);
+
   const handleKarmaEarned = useCallback((basePoints: number) => {
     const multipliedPoints = applyMultiplier(basePoints);
     setKarmaGained(multipliedPoints);
     setMultiplierApplied(totalMultiplier);
+    
+    // Set bonus message based on conditions
+    if (sessionGamesCompleted >= 3) {
+      setBonusMessage('🔥 Session streak bonus!');
+    } else if (totalMultiplier >= 2) {
+      setBonusMessage('⚡ Maximum multiplier achieved!');
+    } else {
+      setBonusMessage(undefined);
+    }
+    
     setShowKarmaAnimation(true);
     incrementSessionGames();
     setTimeout(() => setShowKarmaAnimation(false), 2500);
-  }, [applyMultiplier, totalMultiplier, incrementSessionGames]);
+  }, [applyMultiplier, totalMultiplier, incrementSessionGames, sessionGamesCompleted]);
 
   if (!userId) {
     return (
@@ -62,38 +96,20 @@ const Lakshya = () => {
     <div className="min-h-screen bg-background relative overflow-hidden">
       <CosmicBackground />
       
-      {/* Karma Animation Overlay */}
-      <AnimatePresence>
-        {showKarmaAnimation && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.5, y: 50 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, y: -100 }}
-            className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none"
-          >
-            <div className="text-center">
-              <motion.div
-                animate={{ scale: [1, 1.2, 1] }}
-                transition={{ duration: 0.5, repeat: 2 }}
-                className="text-6xl font-display text-primary mb-2"
-              >
-                +{karmaGained}
-              </motion.div>
-              <p className="text-xl text-primary/80">Karma Points</p>
-              {multiplierApplied > 1 && (
-                <motion.p
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3 }}
-                  className="text-sm text-amber-400 mt-2"
-                >
-                  ✨ {multiplierApplied.toFixed(2)}x Multiplier Applied!
-                </motion.p>
-              )}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Enhanced Karma Animation */}
+      <KarmaGainAnimation
+        isVisible={showKarmaAnimation}
+        karmaGained={karmaGained}
+        multiplier={multiplierApplied}
+        bonusMessage={bonusMessage}
+      />
+
+      {/* Level Up Celebration */}
+      <LevelUpCelebration
+        isVisible={showLevelUp}
+        newLevel={newLevel}
+        onComplete={() => setShowLevelUp(false)}
+      />
 
       <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 py-8">
         {/* Header */}
@@ -283,7 +299,15 @@ const Lakshya = () => {
               </div>
             </div>
 
-            {/* Quick Links */}
+            {/* Hidden Rewards Section */}
+            <div className="mb-8">
+              {progress && (
+                <HiddenRewards 
+                  currentKarma={progress.karma_points} 
+                  unlockedRewards={progress.unlocked_environments || []}
+                />
+              )}
+            </div>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               <button
                 onClick={() => navigate('/sonic-lab')}
