@@ -14,6 +14,45 @@ export type Database = {
   }
   public: {
     Tables: {
+      meditation_sessions: {
+        Row: {
+          atmosphere_id: string
+          created_at: string
+          duration_seconds: number
+          ended_at: string
+          frequency_category: string
+          frequency_name: string
+          frequency_value: number
+          id: string
+          started_at: string
+          user_id: string
+        }
+        Insert: {
+          atmosphere_id?: string
+          created_at?: string
+          duration_seconds: number
+          ended_at?: string
+          frequency_category: string
+          frequency_name: string
+          frequency_value: number
+          id?: string
+          started_at: string
+          user_id: string
+        }
+        Update: {
+          atmosphere_id?: string
+          created_at?: string
+          duration_seconds?: number
+          ended_at?: string
+          frequency_category?: string
+          frequency_name?: string
+          frequency_value?: number
+          id?: string
+          started_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
