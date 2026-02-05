@@ -12,6 +12,7 @@ import Mantrochar from "./pages/Mantrochar";
 import Lakshya from "./pages/Lakshya";
 import LiveDarshan from "./pages/LiveDarshan";
 import AartiSchedule from "./pages/AartiSchedule";
+import ImmersiveDarshan from "./pages/ImmersiveDarshan";
 import SharedGarden from "./pages/SharedGarden";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
@@ -36,6 +37,7 @@ const App = () => (
           <Route path="/lakshya" element={<Lakshya />} />
           <Route path="/live-darshan" element={<LiveDarshan />} />
           <Route path="/aarti-schedule" element={<AartiSchedule />} />
+          <Route path="/immersive-darshan" element={<ImmersiveDarshan />} />
           <Route path="/garden/:id" element={<SharedGarden />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
