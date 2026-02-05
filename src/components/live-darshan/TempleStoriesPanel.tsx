@@ -1,6 +1,6 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageSquare, Star, Calendar, Trash2, Send, User, ImagePlus, X, Loader2 } from 'lucide-react';
+import { MessageSquare, Star, Calendar, Trash2, Send, User, ImagePlus, X, Loader2, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
@@ -24,6 +24,7 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog';
 import { useTempleStories, TempleStory } from '@/hooks/useTempleStories';
+import { useStoryReactions } from '@/hooks/useStoryReactions';
 import { temples } from '@/data/templeStreams';
 import { format, formatDistanceToNow } from 'date-fns';
 import { toast } from 'sonner';
@@ -71,11 +72,17 @@ const StarRating = ({
 const StoryCard = ({ 
   story, 
   onDelete, 
-  canDelete 
+  canDelete,
+  likeCount,
+  hasLiked,
+  onToggleLike
 }: { 
   story: TempleStory; 
   onDelete: () => void;
   canDelete: boolean;
+  likeCount: number;
+  hasLiked: boolean;
+  onToggleLike: () => void;
 }) => {
   const temple = temples.find(t => t.id === story.temple_id);
   const initials = story.profile?.display_name
@@ -160,13 +167,37 @@ const StoryCard = ({
                 </div>
               )}
               
-              <div className="flex items-center justify-between mt-2">
-                {story.visit_date && (
-                  <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                    <Calendar className="w-3 h-3" />
-                    <span>Visited {format(new Date(story.visit_date), 'MMM d, yyyy')}</span>
-                  </div>
-                )}
+              <div className="flex items-center justify-between mt-3 pt-2 border-t border-border/30">
+                <div className="flex items-center gap-3">
+                  {/* Like Button */}
+                  <button
+                    onClick={onToggleLike}
+                    className="flex items-center gap-1.5 text-sm group"
+                  >
+                    <motion.div
+                      whileTap={{ scale: 1.3 }}
+                      transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                    >
+                      <Heart 
+                        className={`w-4 h-4 transition-colors ${
+                          hasLiked 
+                            ? 'fill-destructive text-destructive' 
+                            : 'text-muted-foreground group-hover:text-destructive'
+                        }`} 
+                      />
+                    </motion.div>
+                    <span className={`${hasLiked ? 'text-destructive' : 'text-muted-foreground'}`}>
+                      {likeCount > 0 ? likeCount : ''}
+                    </span>
+                  </button>
+                  
+                  {story.visit_date && (
+                    <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                      <Calendar className="w-3 h-3" />
+                      <span>Visited {format(new Date(story.visit_date), 'MMM d, yyyy')}</span>
+                    </div>
+                  )}
+                </div>
                 
                 {canDelete && (
                   <Button
@@ -422,6 +453,14 @@ const TempleStoriesPanel = ({ templeId }: TempleStoriesPanelProps) => {
     userId 
   } = useTempleStories(templeId);
   
+  // Get story IDs for reactions hook
+  const storyIds = useMemo(() => stories.map(s => s.id), [stories]);
+  const { 
+    toggleReaction, 
+    getReactionCount, 
+    hasUserReacted 
+  } = useStoryReactions(storyIds);
+  
   const [dialogOpen, setDialogOpen] = useState(false);
 
   const temple = templeId ? temples.find(t => t.id === templeId) : null;
@@ -508,6 +547,9 @@ const TempleStoriesPanel = ({ templeId }: TempleStoriesPanelProps) => {
                       story={story}
                       canDelete={userId === story.user_id}
                       onDelete={() => deleteStory(story.id)}
+                      likeCount={getReactionCount(story.id)}
+                      hasLiked={hasUserReacted(story.id)}
+                      onToggleLike={() => toggleReaction(story.id)}
                     />
                   ))}
                 </div>
