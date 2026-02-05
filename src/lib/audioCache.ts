@@ -198,3 +198,62 @@ export function formatBytes(bytes: number): string {
   const i = Math.floor(Math.log(bytes) / Math.log(k));
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
 }
+
+// Cache expiry - remove entries older than specified days
+const CACHE_EXPIRY_DAYS = 30;
+const CACHE_EXPIRY_MS = CACHE_EXPIRY_DAYS * 24 * 60 * 60 * 1000;
+
+async function cleanupExpiredFromStore(storeName: string): Promise<number> {
+  try {
+    const db = await openDB();
+    const now = Date.now();
+    let removedCount = 0;
+
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction(storeName, 'readwrite');
+      const store = transaction.objectStore(storeName);
+      const request = store.openCursor();
+
+      request.onerror = () => reject(request.error);
+      request.onsuccess = (event) => {
+        const cursor = (event.target as IDBRequest<IDBCursorWithValue>).result;
+        if (cursor) {
+          const record = cursor.value as CachedAudio;
+          if (record.timestamp && (now - record.timestamp) > CACHE_EXPIRY_MS) {
+            cursor.delete();
+            removedCount++;
+          }
+          cursor.continue();
+        } else {
+          resolve(removedCount);
+        }
+      };
+    });
+  } catch (error) {
+    console.error(`Error cleaning up ${storeName}:`, error);
+    return 0;
+  }
+}
+
+/**
+ * Clean up expired cache entries (older than 30 days)
+ * Call this on app startup to maintain cache hygiene
+ */
+export async function cleanupExpiredCache(): Promise<{ tts: number; atmosphere: number }> {
+  try {
+    const [ttsRemoved, atmosphereRemoved] = await Promise.all([
+      cleanupExpiredFromStore(TTS_STORE),
+      cleanupExpiredFromStore(ATMOSPHERE_STORE),
+    ]);
+
+    const total = ttsRemoved + atmosphereRemoved;
+    if (total > 0) {
+      console.log(`Cache cleanup: removed ${ttsRemoved} TTS and ${atmosphereRemoved} atmosphere entries (older than ${CACHE_EXPIRY_DAYS} days)`);
+    }
+
+    return { tts: ttsRemoved, atmosphere: atmosphereRemoved };
+  } catch (error) {
+    console.error('Error during cache cleanup:', error);
+    return { tts: 0, atmosphere: 0 };
+  }
+}
