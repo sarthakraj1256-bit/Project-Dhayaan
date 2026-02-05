@@ -356,6 +356,42 @@ export type Database = {
         }
         Relationships: []
       }
+      temple_stories: {
+        Row: {
+          created_at: string
+          id: string
+          is_approved: boolean
+          rating: number | null
+          story: string
+          temple_id: string
+          updated_at: string
+          user_id: string
+          visit_date: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_approved?: boolean
+          rating?: number | null
+          story: string
+          temple_id: string
+          updated_at?: string
+          user_id: string
+          visit_date?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_approved?: boolean
+          rating?: number | null
+          story?: string
+          temple_id?: string
+          updated_at?: string
+          user_id?: string
+          visit_date?: string | null
+        }
+        Relationships: []
+      }
       user_achievements: {
         Row: {
           achievement_id: string

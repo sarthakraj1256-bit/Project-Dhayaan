@@ -32,6 +32,7 @@ import VideoPlayer from '@/components/live-darshan/VideoPlayer';
 import SpiritualContentCard from '@/components/live-darshan/SpiritualContentCard';
 import ContentVideoModal from '@/components/live-darshan/ContentVideoModal';
 import FavoritesPanel from '@/components/live-darshan/FavoritesPanel';
+import TempleStoriesPanel from '@/components/live-darshan/TempleStoriesPanel';
 import BottomNav from '@/components/BottomNav';
 import AartiReminderSettings from '@/components/live-darshan/AartiReminderSettings';
 import { useFavoriteAartiNotifications } from '@/hooks/useFavoriteAartiNotifications';
@@ -115,6 +116,9 @@ const LiveDarshan = () => {
             
             {/* Right side controls */}
             <div className="flex items-center gap-2 md:gap-3">
+              {/* Stories Panel */}
+              <TempleStoriesPanel />
+              
               {/* Favorites Panel */}
               <FavoritesPanel onSelectTemple={setSelectedTemple} />
               
