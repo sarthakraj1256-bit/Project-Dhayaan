@@ -14,6 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      meditation_goals: {
+        Row: {
+          created_at: string
+          goal_type: string
+          id: string
+          target_minutes: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          goal_type: string
+          id?: string
+          target_minutes: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          goal_type?: string
+          id?: string
+          target_minutes?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       meditation_sessions: {
         Row: {
           atmosphere_id: string

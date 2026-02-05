@@ -7,11 +7,13 @@ import { useState, useCallback, useRef } from 'react';
  import { useSessionTimer } from '@/hooks/useSessionTimer';
  import { useFavorites, Favorite } from '@/hooks/useFavorites';
 import { useSessionHistory } from '@/hooks/useSessionHistory';
+import { useMeditationGoals } from '@/hooks/useMeditationGoals';
  import CategorySection from '@/components/sonic-lab/CategorySection';
  import AudioControls from '@/components/sonic-lab/AudioControls';
  import WaveformVisualizer from '@/components/sonic-lab/WaveformVisualizer';
  import FavoritesPanel from '@/components/sonic-lab/FavoritesPanel';
 import SessionStats from '@/components/sonic-lab/SessionStats';
+import GoalsPanel from '@/components/sonic-lab/GoalsPanel';
  
  const SonicLab = () => {
    const [showFavorites, setShowFavorites] = useState(false);
@@ -52,6 +54,16 @@ import SessionStats from '@/components/sonic-lab/SessionStats';
     saveSession,
   } = useSessionHistory();
 
+  const {
+    weeklyProgress,
+    monthlyProgress,
+    isLoading: goalsLoading,
+    isAuthenticated: goalsAuthenticated,
+    setGoal,
+    removeGoal,
+    refetch: refetchGoals,
+  } = useMeditationGoals();
+
    // Wrap playFrequency to also track metadata
    const handlePlayFrequency = useCallback((frequency: number, name?: string, category?: string) => {
      playFrequency(frequency);
@@ -80,11 +92,14 @@ import SessionStats from '@/components/sonic-lab/SessionStats';
         audioState.currentAtmosphere,
         durationSeconds,
         sessionStartRef.current
-      );
+      ).then(() => {
+        // Refresh goals progress after saving a session
+        refetchGoals();
+      });
     }
     sessionStartRef.current = null;
     stopFrequency();
-  }, [audioState.currentFrequency, audioState.currentAtmosphere, currentFrequencyMeta, saveSession, stopFrequency]);
+  }, [audioState.currentFrequency, audioState.currentAtmosphere, currentFrequencyMeta, saveSession, stopFrequency, refetchGoals]);
 
    const handleSaveFavorite = useCallback(() => {
      if (audioState.currentFrequency && currentFrequencyMeta) {
@@ -205,6 +220,21 @@ import SessionStats from '@/components/sonic-lab/SessionStats';
                   isLoading={statsLoading}
                   isAuthenticated={statsAuthenticated}
                 />
+              
+              {/* Goals Section */}
+              <div className="mt-6">
+                <h3 className="font-display text-sm tracking-widest text-muted-foreground mb-3">
+                  MEDITATION GOALS
+                </h3>
+                <GoalsPanel
+                  weeklyProgress={weeklyProgress}
+                  monthlyProgress={monthlyProgress}
+                  isLoading={goalsLoading}
+                  isAuthenticated={goalsAuthenticated}
+                  onSetGoal={setGoal}
+                  onRemoveGoal={removeGoal}
+                />
+              </div>
               </div>
             </motion.div>
           )}
