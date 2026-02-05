@@ -7,6 +7,7 @@ import IntentTagSelector, { type IntentTag } from './IntentTagSelector';
 import FinalStressModal from './FinalStressModal';
 import { getInitialStress } from './StressCheckInModal';
 import { useToast } from '@/hooks/use-toast';
+ import { logError, logWarn } from '@/lib/logger';
 
 // Lazy load Supabase to prevent initialization errors
 const getSupabase = async () => {
@@ -14,7 +15,7 @@ const getSupabase = async () => {
     const { supabase } = await import('@/integrations/backend/client');
     return supabase;
   } catch (e) {
-    console.warn('Supabase not available:', e);
+     logWarn('Supabase not available', e);
     return null;
   }
 };
@@ -50,7 +51,7 @@ export default function DevoteeExperiences() {
       try {
         setReviews(JSON.parse(stored));
       } catch (e) {
-        console.error('Failed to parse reviews:', e);
+         logError('Failed to parse reviews', e);
       }
     }
   }, []);
@@ -116,7 +117,7 @@ export default function DevoteeExperiences() {
         });
 
         if (error) {
-          console.error('Error submitting to backend:', error);
+           logError('Error submitting to backend', error);
         }
       }
 
@@ -127,7 +128,7 @@ export default function DevoteeExperiences() {
           : "Thank you for sharing your spiritual journey.",
       });
     } catch (err) {
-      console.error('Error:', err);
+       logError('Review submission error', err);
       // Review is still saved locally
       toast({
         title: "Experience Saved Locally 🙏",

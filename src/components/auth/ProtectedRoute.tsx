@@ -3,6 +3,7 @@ import { Navigate, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/backend/client";
 import { User } from "@supabase/supabase-js";
 import { motion } from "framer-motion";
+ import { logError } from "@/lib/logger";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -39,7 +40,7 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
           subscription.unsubscribe();
         };
       } catch (error) {
-        console.error("Auth check failed:", error);
+         logError("Auth check failed", error);
         if (mounted) {
           setUser(null);
           setIsLoading(false);

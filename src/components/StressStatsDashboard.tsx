@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { TrendingDown, Users, Target, Brain, Moon, Sparkles, BarChart3 } from 'lucide-react';
+ import { logError } from '@/lib/logger';
 
 interface StressStats {
   totalSubmissions: number;
@@ -68,7 +69,7 @@ export default function StressStatsDashboard() {
         byIntentTag,
       });
     } catch (err) {
-      console.error('Error fetching stats:', err);
+       logError('Error fetching stats', err);
       setError('Unable to load statistics');
     } finally {
       setLoading(false);

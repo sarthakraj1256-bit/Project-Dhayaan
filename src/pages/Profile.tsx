@@ -8,6 +8,7 @@
  import { Input } from '@/components/ui/input';
  import { Label } from '@/components/ui/label';
  import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+ import { logError } from '@/lib/logger';
  
  interface Profile {
    id: string;
@@ -49,7 +50,7 @@
  
      if (error) {
        toast.error('Failed to load profile');
-       console.error(error);
+       logError('Profile load error', error);
      } else if (data) {
        setProfile(data);
        setDisplayName(data.display_name || '');
@@ -68,7 +69,7 @@
  
      if (error) {
        toast.error('Failed to update profile');
-       console.error(error);
+       logError('Profile update error', error);
      } else {
        toast.success('Profile updated successfully');
        setProfile(prev => prev ? { ...prev, display_name: displayName.trim() || null } : null);
@@ -104,7 +105,7 @@
  
      if (uploadError) {
        toast.error('Failed to upload avatar');
-       console.error(uploadError);
+       logError('Avatar upload error', uploadError);
        setIsUploading(false);
        return;
      }
@@ -123,7 +124,7 @@
  
      if (updateError) {
        toast.error('Failed to update profile');
-       console.error(updateError);
+       logError('Avatar URL update error', updateError);
      } else {
        toast.success('Avatar updated successfully');
        setProfile(prev => prev ? { ...prev, avatar_url: avatarUrlWithTimestamp } : null);
