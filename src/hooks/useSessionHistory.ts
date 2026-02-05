@@ -1,4 +1,5 @@
  import { useState, useEffect, useCallback } from 'react';
+ import { format, differenceInDays, parseISO, startOfDay } from 'date-fns';
  import { supabase } from '@/integrations/backend/client';
  import { toast } from 'sonner';
  import { logError } from '@/lib/logger';
@@ -23,6 +24,9 @@
    averageSessionMinutes: number;
    longestSessionMinutes: number;
    mostUsedFrequency: { value: number; name: string; count: number } | null;
+  currentStreak: number;
+  longestStreak: number;
+  lastSessionDate: string | null;
  }
  
  export const useSessionHistory = () => {
@@ -65,6 +69,9 @@
          averageSessionMinutes: 0,
          longestSessionMinutes: 0,
          mostUsedFrequency: null,
+        currentStreak: 0,
+        longestStreak: 0,
+        lastSessionDate: null,
        };
      }
  
@@ -84,6 +91,59 @@
      });
      const mostUsed = Object.values(frequencyCount).sort((a, b) => b.count - a.count)[0] || null;
  
+    // Calculate streaks
+    const uniqueDates = [...new Set(
+      sessionData.map(s => format(startOfDay(parseISO(s.started_at)), 'yyyy-MM-dd'))
+    )].sort().reverse(); // Most recent first
+
+    let currentStreak = 0;
+    let longestStreak = 0;
+    let tempStreak = 0;
+    const today = startOfDay(new Date());
+
+    // Check if user meditated today or yesterday to start current streak
+    if (uniqueDates.length > 0) {
+      const mostRecentDate = startOfDay(parseISO(uniqueDates[0]));
+      const daysSinceLastSession = differenceInDays(today, mostRecentDate);
+      
+      // Current streak only counts if last session was today or yesterday
+      if (daysSinceLastSession <= 1) {
+        currentStreak = 1;
+        tempStreak = 1;
+        
+        for (let i = 1; i < uniqueDates.length; i++) {
+          const currentDate = startOfDay(parseISO(uniqueDates[i - 1]));
+          const prevDate = startOfDay(parseISO(uniqueDates[i]));
+          const diff = differenceInDays(currentDate, prevDate);
+          
+          if (diff === 1) {
+            currentStreak++;
+            tempStreak++;
+          } else {
+            break;
+          }
+        }
+      }
+    }
+
+    // Calculate longest streak (check all dates)
+    if (uniqueDates.length > 0) {
+      tempStreak = 1;
+      longestStreak = 1;
+      for (let i = 1; i < uniqueDates.length; i++) {
+        const currentDate = startOfDay(parseISO(uniqueDates[i - 1]));
+        const prevDate = startOfDay(parseISO(uniqueDates[i]));
+        const diff = differenceInDays(currentDate, prevDate);
+        
+        if (diff === 1) {
+          tempStreak++;
+          longestStreak = Math.max(longestStreak, tempStreak);
+        } else {
+          tempStreak = 1;
+        }
+      }
+    }
+
      return {
        totalSessions: sessionData.length,
        totalMinutes,
@@ -91,6 +151,9 @@
        averageSessionMinutes: Math.round(totalMinutes / sessionData.length),
        longestSessionMinutes: Math.round(longestSession / 60),
        mostUsedFrequency: mostUsed,
+      currentStreak,
+      longestStreak: Math.max(longestStreak, currentStreak),
+      lastSessionDate: uniqueDates[0] || null,
      };
    }, []);
  

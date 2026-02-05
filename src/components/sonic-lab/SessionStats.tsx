@@ -1,5 +1,5 @@
  import { motion } from 'framer-motion';
- import { Clock, Target, TrendingUp, Award, History } from 'lucide-react';
+ import { Clock, Target, TrendingUp, Award, History, Flame, Trophy } from 'lucide-react';
  import { SessionStats as SessionStatsType } from '@/hooks/useSessionHistory';
  
  interface SessionStatsProps {
@@ -48,7 +48,7 @@
      <motion.div
        initial={{ opacity: 0, y: 10 }}
        animate={{ opacity: 1, y: 0 }}
-       className="grid grid-cols-2 sm:grid-cols-4 gap-3"
+    className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3"
      >
        {/* Total Time */}
        <div className="p-3 rounded-xl bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20">
@@ -87,6 +87,34 @@
            {stats.mostUsedFrequency ? `${stats.mostUsedFrequency.value}Hz` : '-'}
          </p>
        </div>
+
+      {/* Current Streak */}
+      <div className="p-3 rounded-xl bg-gradient-to-br from-orange-500/10 to-orange-500/5 border border-orange-500/20">
+        <div className="flex items-center gap-2 mb-1">
+          <Flame className="w-4 h-4 text-orange-500" />
+          <span className="text-xs text-muted-foreground">Streak</span>
+        </div>
+        <div className="flex items-baseline gap-1">
+          <p className="font-display text-xl text-foreground">{stats.currentStreak}</p>
+          <span className="text-xs text-muted-foreground">
+            {stats.currentStreak === 1 ? 'day' : 'days'}
+          </span>
+        </div>
+      </div>
+
+      {/* Longest Streak */}
+      <div className="p-3 rounded-xl bg-gradient-to-br from-rose-500/10 to-rose-500/5 border border-rose-500/20">
+        <div className="flex items-center gap-2 mb-1">
+          <Trophy className="w-4 h-4 text-rose-500" />
+          <span className="text-xs text-muted-foreground">Best Streak</span>
+        </div>
+        <div className="flex items-baseline gap-1">
+          <p className="font-display text-xl text-foreground">{stats.longestStreak}</p>
+          <span className="text-xs text-muted-foreground">
+            {stats.longestStreak === 1 ? 'day' : 'days'}
+          </span>
+        </div>
+      </div>
      </motion.div>
    );
  };
