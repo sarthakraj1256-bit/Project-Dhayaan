@@ -17,6 +17,7 @@ import SessionStats from '@/components/sonic-lab/SessionStats';
 import GoalsPanel from '@/components/sonic-lab/GoalsPanel';
 import AchievementsPanel from '@/components/sonic-lab/AchievementsPanel';
  import MeditationCalendar from '@/components/sonic-lab/MeditationCalendar';
+ import SessionHistoryList from '@/components/sonic-lab/SessionHistoryList';
  
  const SonicLab = () => {
    const [showFavorites, setShowFavorites] = useState(false);
@@ -56,6 +57,7 @@ import AchievementsPanel from '@/components/sonic-lab/AchievementsPanel';
     isAuthenticated: statsAuthenticated,
     saveSession,
     sessions,
+    deleteSession,
   } = useSessionHistory();
 
   const {
@@ -274,6 +276,19 @@ import AchievementsPanel from '@/components/sonic-lab/AchievementsPanel';
                   sessions={sessions}
                   isLoading={statsLoading}
                   isAuthenticated={statsAuthenticated}
+                />
+              </div>
+
+              {/* Session History List */}
+              <div className="mt-6">
+                <h3 className="font-display text-sm tracking-widest text-muted-foreground mb-3">
+                  RECENT SESSIONS
+                </h3>
+                <SessionHistoryList
+                  sessions={sessions}
+                  isLoading={statsLoading}
+                  isAuthenticated={statsAuthenticated}
+                  onDeleteSession={deleteSession}
                 />
               </div>
               </div>
