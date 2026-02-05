@@ -82,38 +82,58 @@ const MantraLesson = ({ mantra, onBack, onComplete, onSyllableProgress }: Mantra
                  {mantra.transliteration}
                </p>
                
-               <motion.button
-                 onClick={handlePlayFullMantra}
+              <div className="flex flex-col items-center gap-2">
+                <motion.button
+                  onClick={handlePlayFullMantra}
                   disabled={guruVoice.isLoading || guruVoice.isPlaying}
-                 whileHover={{ scale: 1.05 }}
-                 whileTap={{ scale: 0.95 }}
-                 className={`
-                   px-8 py-4 rounded-full border-2 transition-all
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className={`
+                    px-8 py-4 rounded-full border-2 transition-all
                     ${guruVoice.isPlaying 
-                     ? 'bg-primary/20 border-primary text-primary' 
-                     : 'bg-white/10 border-white/20 hover:border-primary/50 text-foreground'
-                   }
-                 `}
-               >
-                 <span className="flex items-center gap-3">
+                      ? 'bg-primary/20 border-primary text-primary' 
+                      : 'bg-white/10 border-white/20 hover:border-primary/50 text-foreground'
+                    }
+                  `}
+                >
+                  <span className="flex items-center gap-3">
                     {guruVoice.isLoading ? (
                       <Loader2 className="w-5 h-5 animate-spin" />
                     ) : (
                       <Volume2 className={`w-5 h-5 ${guruVoice.isPlaying ? 'animate-pulse' : ''}`} />
                     )}
                     {guruVoice.isLoading ? 'Generating...' : guruVoice.isPlaying ? 'Playing...' : 'Listen to Guru Voice'}
-                 </span>
-               </motion.button>
-             </div>
- 
-             <div className="p-4 rounded-xl bg-primary/10 border border-primary/20">
-               <p className="text-sm text-foreground/80">
+                  </span>
+                </motion.button>
+                
+                {/* Cache status indicator */}
+                {guruVoice.isPlaying && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -5 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className={`
+                      flex items-center gap-1.5 px-3 py-1 rounded-full text-xs
+                      ${guruVoice.isCached 
+                        ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' 
+                        : 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
+                      }
+                    `}
+                  >
+                    <span className={`w-1.5 h-1.5 rounded-full ${guruVoice.isCached ? 'bg-emerald-400' : 'bg-amber-400'}`} />
+                    {guruVoice.isCached ? 'Playing from cache' : 'Freshly generated'}
+                  </motion.div>
+                )}
+              </div>
+              </div>
+
+              <div className="p-4 rounded-xl bg-primary/10 border border-primary/20">
+                <p className="text-sm text-foreground/80">
                   <strong>Tip:</strong> Close your eyes and focus on the authentic pronunciation.
-                  The Guru voice uses AI to deliver authentic mantra pronunciation.
-               </p>
-             </div>
-           </div>
-         );
+                  {guruVoice.isCached && ' Audio is cached for instant replay.'}
+                </p>
+              </div>
+            </div>
+          );
  
        case 'breakdown':
          return (
