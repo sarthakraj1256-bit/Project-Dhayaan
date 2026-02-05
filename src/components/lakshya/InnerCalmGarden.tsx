@@ -12,6 +12,7 @@ import NotificationSettingsModal from './NotificationSettingsModal';
 import GardenAchievementsPanel from './GardenAchievementsPanel';
 import GardenLeaderboardPanel from './GardenLeaderboardPanel';
 import AchievementUnlockToast from './AchievementUnlockToast';
+import GardenWeatherEffects from './GardenWeatherEffects';
 
 interface InnerCalmGardenProps {
   onClose: () => void;
@@ -592,18 +593,19 @@ const InnerCalmGarden = ({ onClose, onKarmaEarned }: InnerCalmGardenProps) => {
           background: 'linear-gradient(180deg, transparent 0%, rgba(34, 197, 94, 0.1) 100%)',
         }}
       >
+        {/* Weather Effects Layer */}
+        <GardenWeatherEffects 
+          meditationMinutes={progress?.total_meditation_minutes || 0}
+          flourishingPlants={flourishingPlants}
+        />
+
         {/* Ground gradient */}
         <div 
-          className="absolute bottom-0 left-0 right-0 h-1/3"
+          className="absolute bottom-0 left-0 right-0 h-1/3 z-[1]"
           style={{
             background: 'linear-gradient(180deg, transparent 0%, rgba(34, 197, 94, 0.15) 50%, rgba(34, 197, 94, 0.25) 100%)',
           }}
         />
-
-        {/* Decorative elements */}
-        <div className="absolute top-4 right-4 text-4xl opacity-30">🌙</div>
-        <div className="absolute top-8 left-8 text-2xl opacity-20">✨</div>
-        <div className="absolute top-16 right-16 text-xl opacity-20">✨</div>
 
         {/* Plants */}
         <AnimatePresence>
