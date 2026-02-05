@@ -14,6 +14,45 @@ export type Database = {
   }
   public: {
     Tables: {
+      mantra_progress: {
+        Row: {
+          completed: boolean
+          completed_at: string | null
+          completed_syllables: number[]
+          created_at: string
+          id: string
+          last_practiced_at: string
+          mantra_id: string
+          total_repetitions: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          completed?: boolean
+          completed_at?: string | null
+          completed_syllables?: number[]
+          created_at?: string
+          id?: string
+          last_practiced_at?: string
+          mantra_id: string
+          total_repetitions?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          completed?: boolean
+          completed_at?: string | null
+          completed_syllables?: number[]
+          created_at?: string
+          id?: string
+          last_practiced_at?: string
+          mantra_id?: string
+          total_repetitions?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       meditation_goals: {
         Row: {
           created_at: string
