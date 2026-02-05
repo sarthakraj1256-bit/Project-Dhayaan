@@ -1,22 +1,28 @@
 import { motion } from 'framer-motion';
  import { Link } from 'react-router-dom';
- import { ArrowLeft, Radio, Star } from 'lucide-react';
- import { useState, useCallback } from 'react';
+import { ArrowLeft, Radio, Star, BarChart3 } from 'lucide-react';
+import { useState, useCallback, useRef } from 'react';
  import { categories, getFrequenciesByCategory } from '@/data/soundLibrary';
  import { useFrequencyAudio } from '@/hooks/useFrequencyAudio';
  import { useSessionTimer } from '@/hooks/useSessionTimer';
  import { useFavorites, Favorite } from '@/hooks/useFavorites';
+import { useSessionHistory } from '@/hooks/useSessionHistory';
  import CategorySection from '@/components/sonic-lab/CategorySection';
  import AudioControls from '@/components/sonic-lab/AudioControls';
  import WaveformVisualizer from '@/components/sonic-lab/WaveformVisualizer';
  import FavoritesPanel from '@/components/sonic-lab/FavoritesPanel';
+import SessionStats from '@/components/sonic-lab/SessionStats';
  
  const SonicLab = () => {
    const [showFavorites, setShowFavorites] = useState(false);
+  const [showStats, setShowStats] = useState(false);
    const [currentFrequencyMeta, setCurrentFrequencyMeta] = useState<{
      name: string;
      category: string;
    } | null>(null);
+  
+  // Track session start time
+  const sessionStartRef = useRef<Date | null>(null);
  
    const {
      audioState,
@@ -39,14 +45,47 @@ import { motion } from 'framer-motion';
      isFavorited,
    } = useFavorites();
  
+  const {
+    stats: sessionStats,
+    isLoading: statsLoading,
+    isAuthenticated: statsAuthenticated,
+    saveSession,
+  } = useSessionHistory();
+
    // Wrap playFrequency to also track metadata
    const handlePlayFrequency = useCallback((frequency: number, name?: string, category?: string) => {
      playFrequency(frequency);
      if (name && category) {
        setCurrentFrequencyMeta({ name, category });
      }
+    // Track session start time
+    sessionStartRef.current = new Date();
    }, [playFrequency]);
  
+  // Handle stop and save session
+  const handleStop = useCallback(() => {
+    // Save session if authenticated and session was meaningful
+    if (
+      sessionStartRef.current &&
+      audioState.currentFrequency &&
+      currentFrequencyMeta
+    ) {
+      const durationSeconds = Math.floor(
+        (Date.now() - sessionStartRef.current.getTime()) / 1000
+      );
+      saveSession(
+        audioState.currentFrequency,
+        currentFrequencyMeta.name,
+        currentFrequencyMeta.category,
+        audioState.currentAtmosphere,
+        durationSeconds,
+        sessionStartRef.current
+      );
+    }
+    sessionStartRef.current = null;
+    stopFrequency();
+  }, [audioState.currentFrequency, audioState.currentAtmosphere, currentFrequencyMeta, saveSession, stopFrequency]);
+
    const handleSaveFavorite = useCallback(() => {
      if (audioState.currentFrequency && currentFrequencyMeta) {
        addFavorite(
@@ -119,7 +158,10 @@ import { motion } from 'framer-motion';
  
              {/* Favorites Button */}
              <button
-               onClick={() => setShowFavorites(true)}
+                onClick={() => {
+                  setShowFavorites(true);
+                  setShowStats(false);
+                }}
                className="flex items-center gap-2 px-3 py-2 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 transition-colors"
              >
                <Star className="w-4 h-4 text-primary" />
@@ -130,9 +172,43 @@ import { motion } from 'framer-motion';
                  </span>
                )}
              </button>
+
+              {/* Stats Toggle */}
+              <button
+                onClick={() => setShowStats(!showStats)}
+                className={`p-2 rounded-full transition-colors ${
+                  showStats 
+                    ? 'bg-primary/20 text-primary' 
+                    : 'bg-white/5 border border-white/10 hover:bg-white/10 text-foreground/80'
+                }`}
+                title="Session Stats"
+              >
+                <BarChart3 className="w-4 h-4" />
+              </button>
            </div>
          </header>
  
+          {/* Session Stats Panel */}
+          {showStats && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="px-6 py-4 border-b border-white/5 bg-void/50"
+            >
+              <div className="max-w-4xl mx-auto">
+                <h3 className="font-display text-sm tracking-widest text-muted-foreground mb-3">
+                  YOUR MEDITATION JOURNEY
+                </h3>
+                <SessionStats
+                  stats={sessionStats}
+                  isLoading={statsLoading}
+                  isAuthenticated={statsAuthenticated}
+                />
+              </div>
+            </motion.div>
+          )}
+
          {/* Hero Section */}
          <section className="px-6 py-16 text-center">
            <motion.div
@@ -198,7 +274,7 @@ import { motion } from 'framer-motion';
           onFrequencyVolumeChange={setFrequencyVolume}
           onAtmosphereVolumeChange={setAtmosphereVolume}
           onAtmosphereChange={setAtmosphere}
-          onStop={stopFrequency}
+            onStop={handleStop}
         />
        </div>
  
