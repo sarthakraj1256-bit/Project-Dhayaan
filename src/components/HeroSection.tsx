@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
  import { Link } from 'react-router-dom';
-  import { Radio, BookOpen } from 'lucide-react';
+  import { Radio, BookOpen, Sparkles } from 'lucide-react';
 
 interface HeroSectionProps {
   onMounted: () => void;
@@ -76,10 +76,27 @@ export default function HeroSection({ onMounted }: HeroSectionProps) {
              >
                <BookOpen className="w-4 h-4 text-primary/80 group-hover:text-primary transition-colors" />
                <span className="font-display text-sm tracking-wider text-foreground/80 group-hover:text-foreground transition-colors">
-                 Learn Mantras
-               </span>
-             </Link>
-           </div>
+                  Learn Mantras
+                </span>
+              </Link>
+
+              {/* Lakshya CTA */}
+              <Link
+                to="/lakshya"
+                className="group inline-flex items-center gap-3 px-6 py-3 rounded-full transition-all duration-500 hover:scale-105"
+                style={{
+                  background: 'linear-gradient(135deg, hsl(270, 60%, 20% / 0.6), hsl(280, 50%, 15% / 0.4))',
+                  backdropFilter: 'blur(12px)',
+                  WebkitBackdropFilter: 'blur(12px)',
+                  border: '1px solid hsl(270, 60%, 50% / 0.3)',
+                }}
+              >
+                <Sparkles className="w-4 h-4 text-violet-400 group-hover:animate-pulse" />
+                <span className="font-display text-sm tracking-wider text-violet-300 group-hover:text-violet-200 transition-colors">
+                  Lakshya Journey
+                </span>
+              </Link>
+            </div>
  
           <div className="flex flex-col items-center gap-2">
             <span className="text-muted-foreground text-sm tracking-widest uppercase">Explore</span>

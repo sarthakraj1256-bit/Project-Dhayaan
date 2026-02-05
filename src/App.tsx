@@ -6,12 +6,13 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
- import Profile from "./pages/Profile";
- import SonicLab from "./pages/SonicLab";
- import Mantrochar from "./pages/Mantrochar";
+import Profile from "./pages/Profile";
+import SonicLab from "./pages/SonicLab";
+import Mantrochar from "./pages/Mantrochar";
+import Lakshya from "./pages/Lakshya";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
- import EnvHealthCheck from "./components/EnvHealthCheck";
+import EnvHealthCheck from "./components/EnvHealthCheck";
 
 const queryClient = new QueryClient();
 
@@ -20,15 +21,16 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-       <EnvHealthCheck />
+      <EnvHealthCheck />
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-           <Route path="/sonic-lab" element={<SonicLab />} />
-           <Route path="/mantrochar" element={<Mantrochar />} />
+          <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+          <Route path="/sonic-lab" element={<SonicLab />} />
+          <Route path="/mantrochar" element={<Mantrochar />} />
+          <Route path="/lakshya" element={<Lakshya />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

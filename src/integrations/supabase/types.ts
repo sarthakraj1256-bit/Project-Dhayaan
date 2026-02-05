@@ -14,6 +14,42 @@ export type Database = {
   }
   public: {
     Tables: {
+      breath_flow_sessions: {
+        Row: {
+          breath_consistency_score: number
+          chakra_fragments_earned: number
+          completed_at: string
+          created_at: string
+          duration_seconds: number
+          id: string
+          karma_earned: number
+          max_distance_reached: number
+          user_id: string
+        }
+        Insert: {
+          breath_consistency_score?: number
+          chakra_fragments_earned?: number
+          completed_at?: string
+          created_at?: string
+          duration_seconds: number
+          id?: string
+          karma_earned?: number
+          max_distance_reached?: number
+          user_id: string
+        }
+        Update: {
+          breath_consistency_score?: number
+          chakra_fragments_earned?: number
+          completed_at?: string
+          created_at?: string
+          duration_seconds?: number
+          id?: string
+          karma_earned?: number
+          max_distance_reached?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
       mantra_progress: {
         Row: {
           completed: boolean
@@ -229,6 +265,63 @@ export type Database = {
           achievement_id?: string
           id?: string
           unlocked_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_spiritual_progress: {
+        Row: {
+          created_at: string
+          current_level: string
+          current_streak: number
+          id: string
+          karma_points: number
+          last_activity_date: string | null
+          longest_streak: number
+          total_chanting_sessions: number
+          total_games_played: number
+          total_mantra_lessons: number
+          total_meditation_minutes: number
+          unlocked_chakras: string[] | null
+          unlocked_environments: string[] | null
+          unlocked_wallpapers: string[] | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          current_level?: string
+          current_streak?: number
+          id?: string
+          karma_points?: number
+          last_activity_date?: string | null
+          longest_streak?: number
+          total_chanting_sessions?: number
+          total_games_played?: number
+          total_mantra_lessons?: number
+          total_meditation_minutes?: number
+          unlocked_chakras?: string[] | null
+          unlocked_environments?: string[] | null
+          unlocked_wallpapers?: string[] | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          current_level?: string
+          current_streak?: number
+          id?: string
+          karma_points?: number
+          last_activity_date?: string | null
+          longest_streak?: number
+          total_chanting_sessions?: number
+          total_games_played?: number
+          total_mantra_lessons?: number
+          total_meditation_minutes?: number
+          unlocked_chakras?: string[] | null
+          unlocked_environments?: string[] | null
+          unlocked_wallpapers?: string[] | null
+          updated_at?: string
           user_id?: string
         }
         Relationships: []
