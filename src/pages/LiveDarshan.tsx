@@ -11,7 +11,8 @@ import {
   Video,
   Music,
   BookOpen,
-  Zap
+  Zap,
+  Calendar
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -110,6 +111,17 @@ const LiveDarshan = () => {
             
             {/* Right side controls */}
             <div className="flex items-center gap-3">
+              {/* Schedule Link */}
+              <Link to="/aarti-schedule">
+                <Button variant="outline" size="sm" className="gap-2 hidden md:flex">
+                  <Calendar className="w-4 h-4" />
+                  Aarti Schedule
+                </Button>
+                <Button variant="outline" size="icon" className="md:hidden">
+                  <Calendar className="w-4 h-4" />
+                </Button>
+              </Link>
+              
               {/* Reminder Settings */}
               <AartiReminderSettings />
               
