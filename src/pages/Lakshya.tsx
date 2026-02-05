@@ -1,12 +1,13 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Sparkles, Wind, Gamepad2, Trophy, Star, Zap, Puzzle, Flower2 } from 'lucide-react';
+import { ArrowLeft, Sparkles, Wind, Gamepad2, Trophy, Star, Zap, Puzzle, Flower2, Grid3X3 } from 'lucide-react';
 import { useSpiritualProgress, LEVEL_THRESHOLDS, getNextLevelThreshold, CHAKRA_THRESHOLDS, type SpiritualLevel } from '@/hooks/useSpiritualProgress';
 import { useKarmaMultiplier } from '@/hooks/useKarmaMultiplier';
 import BreathFlowGame from '@/components/lakshya/BreathFlowGame';
 import ChakraAlignmentGame from '@/components/lakshya/ChakraAlignmentGame';
 import InnerCalmGarden from '@/components/lakshya/InnerCalmGarden';
+import DivineMatchGame from '@/components/lakshya/DivineMatchGame';
 import KarmaDisplay from '@/components/lakshya/KarmaDisplay';
 import LevelProgressBar from '@/components/lakshya/LevelProgressBar';
 import ChakraProgress from '@/components/lakshya/ChakraProgress';
@@ -146,6 +147,11 @@ const Lakshya = () => {
             onClose={() => setActiveGame(null)} 
             onKarmaEarned={handleKarmaEarned}
           />
+        ) : activeGame === 'divine-match' ? (
+          <DivineMatchGame 
+            onClose={() => setActiveGame(null)} 
+            onKarmaEarned={handleKarmaEarned}
+          />
         ) : (
           <>
             {/* Progress Dashboard */}
@@ -243,7 +249,7 @@ const Lakshya = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 {/* Breath Flow Game */}
                 <motion.button
                   onClick={() => setActiveGame('breath-flow')}
@@ -288,6 +294,35 @@ const Lakshya = () => {
                     <div className="flex items-center gap-2 text-xs text-indigo-400">
                       <Star className="w-3 h-3" />
                       <span>+15-50 Karma per puzzle</span>
+                    </div>
+                  </div>
+                </motion.button>
+
+                {/* Divine Match Game - NEW */}
+                <motion.button
+                  onClick={() => setActiveGame('divine-match')}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="group relative p-6 rounded-2xl bg-gradient-to-br from-purple-500/10 via-fuchsia-500/10 to-pink-500/10 border border-purple-500/20 hover:border-purple-500/40 transition-all text-left overflow-hidden"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                  
+                  {/* NEW badge */}
+                  <div className="absolute top-3 right-3 px-2 py-0.5 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 text-white text-[10px] font-bold">
+                    NEW
+                  </div>
+                  
+                  <div className="relative z-10">
+                    <div className="w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center mb-4">
+                      <Grid3X3 className="w-6 h-6 text-purple-400" />
+                    </div>
+                    <h3 className="font-display text-lg text-foreground mb-2">Divine Match</h3>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      Match spiritual symbols to clear obstacles
+                    </p>
+                    <div className="flex items-center gap-2 text-xs text-purple-400">
+                      <Star className="w-3 h-3" />
+                      <span>+25-70 Karma per level</span>
                     </div>
                   </div>
                 </motion.button>
