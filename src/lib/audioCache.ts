@@ -145,3 +145,56 @@ export async function isTTSCached(text: string): Promise<boolean> {
   const cached = await getCachedTTS(text);
   return cached !== null;
 }
+
+// Get estimated cache size in bytes
+export async function getCacheSize(): Promise<{ tts: number; atmosphere: number; total: number }> {
+  try {
+    const db = await openDB();
+    
+    const getStoreSize = (storeName: string): Promise<number> => {
+      return new Promise((resolve, reject) => {
+        const transaction = db.transaction(storeName, 'readonly');
+        const store = transaction.objectStore(storeName);
+        const request = store.openCursor();
+        let totalSize = 0;
+
+        request.onerror = () => reject(request.error);
+        request.onsuccess = (event) => {
+          const cursor = (event.target as IDBRequest<IDBCursorWithValue>).result;
+          if (cursor) {
+            const record = cursor.value as { blob?: Blob };
+            if (record.blob) {
+              totalSize += record.blob.size;
+            }
+            cursor.continue();
+          } else {
+            resolve(totalSize);
+          }
+        };
+      });
+    };
+
+    const [ttsSize, atmosphereSize] = await Promise.all([
+      getStoreSize(TTS_STORE),
+      getStoreSize(ATMOSPHERE_STORE),
+    ]);
+
+    return {
+      tts: ttsSize,
+      atmosphere: atmosphereSize,
+      total: ttsSize + atmosphereSize,
+    };
+  } catch (error) {
+    console.error('Error calculating cache size:', error);
+    return { tts: 0, atmosphere: 0, total: 0 };
+  }
+}
+
+// Format bytes to human readable string
+export function formatBytes(bytes: number): string {
+  if (bytes === 0) return '0 B';
+  const k = 1024;
+  const sizes = ['B', 'KB', 'MB', 'GB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
+}
