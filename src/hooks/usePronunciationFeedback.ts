@@ -14,6 +14,7 @@
    partialTranscript: string;
    lastResult: PronunciationResult | null;
    error: string | null;
+  analyserNode: AnalyserNode | null;
    startListening: (expectedText: string) => Promise<void>;
    stopListening: () => void;
    resetResult: () => void;
@@ -77,12 +78,14 @@
    const [partialTranscript, setPartialTranscript] = useState('');
    const [lastResult, setLastResult] = useState<PronunciationResult | null>(null);
    const [error, setError] = useState<string | null>(null);
+  const [analyserNode, setAnalyserNode] = useState<AnalyserNode | null>(null);
    
    const expectedTextRef = useRef<string>('');
    const wsRef = useRef<WebSocket | null>(null);
    const mediaRecorderRef = useRef<MediaRecorder | null>(null);
    const audioContextRef = useRef<AudioContext | null>(null);
    const streamRef = useRef<MediaStream | null>(null);
+  const analyserRef = useRef<AnalyserNode | null>(null);
    
    const cleanup = useCallback(() => {
      if (wsRef.current) {
@@ -100,6 +103,8 @@
        audioContextRef.current.close();
        audioContextRef.current = null;
      }
+    analyserRef.current = null;
+    setAnalyserNode(null);
      setIsListening(false);
      setIsConnecting(false);
    }, []);
@@ -192,6 +197,15 @@
      audioContextRef.current = audioContext;
      
      const source = audioContext.createMediaStreamSource(stream);
+    
+    // Create analyser for visualization
+    const analyser = audioContext.createAnalyser();
+    analyser.fftSize = 2048;
+    analyser.smoothingTimeConstant = 0.8;
+    source.connect(analyser);
+    analyserRef.current = analyser;
+    setAnalyserNode(analyser);
+    
      const processor = audioContext.createScriptProcessor(4096, 1, 1);
      
      processor.onaudioprocess = (e) => {
@@ -247,6 +261,7 @@
      partialTranscript,
      lastResult,
      error,
+    analyserNode,
      startListening,
      stopListening,
      resetResult,

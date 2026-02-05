@@ -3,6 +3,7 @@
  import { Mic, MicOff, Check, X, Loader2, Volume2, AlertCircle } from 'lucide-react';
  import { usePronunciationFeedback } from '@/hooks/usePronunciationFeedback';
  import { Progress } from '@/components/ui/progress';
+import VoiceWaveformComparison from './VoiceWaveformComparison';
  
  interface PronunciationFeedbackProps {
    expectedText: string;
@@ -23,12 +24,48 @@
      partialTranscript,
      lastResult,
      error,
+    analyserNode,
      startListening,
      stopListening,
      resetResult,
    } = usePronunciationFeedback();
    
    const [showSuccess, setShowSuccess] = useState(false);
+  const [referenceWaveform, setReferenceWaveform] = useState<number[] | null>(null);
+  const [isReferenceReady, setIsReferenceReady] = useState(false);
+  
+  // Generate a synthetic reference waveform pattern based on syllable
+  useEffect(() => {
+    // Create a visually representative waveform for the reference
+    const generateReferenceWaveform = () => {
+      const length = 128;
+      const data: number[] = [];
+      const syllableLength = expectedTransliteration.length;
+      
+      for (let i = 0; i < length; i++) {
+        // Create a multi-frequency pattern that looks like speech
+        const t = i / length;
+        const envelope = Math.sin(t * Math.PI); // Amplitude envelope
+        const freq1 = Math.sin(t * Math.PI * 8) * 0.3;
+        const freq2 = Math.sin(t * Math.PI * 16 + syllableLength) * 0.2;
+        const freq3 = Math.sin(t * Math.PI * 32) * 0.1;
+        const noise = (Math.random() - 0.5) * 0.1;
+        
+        const value = 128 + (freq1 + freq2 + freq3 + noise) * envelope * 60;
+        data.push(Math.max(0, Math.min(255, value)));
+      }
+      
+      return data;
+    };
+    
+    setReferenceWaveform(generateReferenceWaveform());
+  }, [expectedTransliteration]);
+  
+  // Mark reference as ready when user plays it
+  const handlePlayReference = () => {
+    setIsReferenceReady(true);
+    onPlayReference?.();
+  };
    
    // Handle successful pronunciation
    useEffect(() => {
@@ -62,11 +99,21 @@
          <p className="text-3xl font-sanskrit text-foreground mb-1">{expectedText}</p>
          <p className="text-lg text-primary/80 font-mono">{expectedTransliteration}</p>
        </div>
+      
+      {/* Waveform Visualization */}
+      <div className="p-4 rounded-xl bg-white/5 border border-white/10">
+        <VoiceWaveformComparison
+          userAnalyser={analyserNode}
+          referenceData={referenceWaveform}
+          isListening={isListening}
+          isReferenceReady={isReferenceReady}
+        />
+      </div>
        
        {/* Mic Button */}
        <div className="flex items-center justify-center gap-4">
          <button
-           onClick={onPlayReference}
+          onClick={handlePlayReference}
            className="p-3 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 transition-colors"
            title="Hear reference"
          >
