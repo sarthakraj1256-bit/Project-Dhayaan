@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, Suspense } from 'react';
 import { Link } from 'react-router-dom';
- import { LogIn } from 'lucide-react';
+import { LogIn } from 'lucide-react';
 import { supabase } from '@/integrations/backend/client';
 import { User } from '@supabase/supabase-js';
 import TempleScene from '@/components/TempleScene';
@@ -10,7 +10,8 @@ import ComparisonSection from '@/components/ComparisonSection';
 import ScienceSection from '@/components/ScienceSection';
 import StressStatsDashboard from '@/components/StressStatsDashboard';
 import DevoteeExperiences from '@/components/DevoteeExperiences';
- import UserMenu from '@/components/UserMenu';
+import UserMenu from '@/components/UserMenu';
+import BottomNav from '@/components/BottomNav';
 
 const Index = () => {
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -193,6 +194,9 @@ const Index = () => {
           </a>
         ))}
       </nav>
+
+      {/* Mobile Bottom Navigation */}
+      <BottomNav />
     </div>
   );
 };

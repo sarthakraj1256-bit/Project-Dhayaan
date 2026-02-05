@@ -1,13 +1,13 @@
- import { useState } from 'react';
- import { motion } from 'framer-motion';
- import { Link } from 'react-router-dom';
- import { ArrowLeft, BookOpen, Radio, Flame, GraduationCap, Loader2, LogIn } from 'lucide-react';
- import { mantras, categories, getMantrasByDifficulty, type Mantra } from '@/data/mantraLibrary';
- import MantraCard from '@/components/mantrochar/MantraCard';
- import MantraLesson from '@/components/mantrochar/MantraLesson';
- import { toast } from 'sonner';
- import { useMantraProgress } from '@/hooks/useMantraProgress';
- 
+import { useState } from 'react';
+import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
+import { ArrowLeft, BookOpen, Radio, Flame, GraduationCap, Loader2, LogIn } from 'lucide-react';
+import { mantras, categories, getMantrasByDifficulty, type Mantra } from '@/data/mantraLibrary';
+import MantraCard from '@/components/mantrochar/MantraCard';
+import MantraLesson from '@/components/mantrochar/MantraLesson';
+import { toast } from 'sonner';
+import { useMantraProgress } from '@/hooks/useMantraProgress';
+import BottomNav from '@/components/BottomNav';
  const difficultyOrder = ['beginner', 'intermediate', 'advanced', 'mastery'] as const;
  
  const Mantrochar = () => {
@@ -272,14 +272,17 @@
          </section>
  
          {/* Footer */}
-         <footer className="border-t border-white/5 px-6 py-8 text-center">
-           <p className="text-xs text-muted-foreground/50">
-             "मन्त्र साधना" — The Practice of Sacred Sound
-           </p>
-         </footer>
-       </div>
-     </div>
-   );
- };
- 
- export default Mantrochar;
+        <footer className="border-t border-white/5 px-6 py-8 text-center">
+          <p className="text-xs text-muted-foreground/50">
+            "मन्त्र साधना" — The Practice of Sacred Sound
+          </p>
+        </footer>
+
+        {/* Mobile Bottom Navigation */}
+        <BottomNav />
+      </div>
+    </div>
+  );
+};
+
+export default Mantrochar;

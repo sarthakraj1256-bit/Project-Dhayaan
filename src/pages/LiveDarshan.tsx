@@ -30,6 +30,7 @@ import TempleFilters from '@/components/live-darshan/TempleFilters';
 import VideoPlayer from '@/components/live-darshan/VideoPlayer';
 import SpiritualContentCard from '@/components/live-darshan/SpiritualContentCard';
 import ContentVideoModal from '@/components/live-darshan/ContentVideoModal';
+import BottomNav from '@/components/BottomNav';
 
 const LiveDarshan = () => {
   const [selectedTemple, setSelectedTemple] = useState<Temple | null>(null);
@@ -298,6 +299,9 @@ const LiveDarshan = () => {
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
         <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-primary/5 rounded-full blur-3xl" />
       </div>
+
+      {/* Mobile Bottom Navigation */}
+      <BottomNav />
     </div>
   );
 };

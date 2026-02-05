@@ -16,6 +16,7 @@ import MultiplierDisplay from '@/components/lakshya/MultiplierDisplay';
 import KarmaGainAnimation from '@/components/lakshya/KarmaGainAnimation';
 import LevelUpCelebration from '@/components/lakshya/LevelUpCelebration';
 import HiddenRewards from '@/components/lakshya/HiddenRewards';
+import BottomNav from '@/components/BottomNav';
 
 const Lakshya = () => {
   const navigate = useNavigate();
@@ -401,6 +402,9 @@ const Lakshya = () => {
             </div>
           </>
         )}
+
+        {/* Mobile Bottom Navigation */}
+        <BottomNav />
       </div>
     </div>
   );
