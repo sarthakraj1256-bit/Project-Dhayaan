@@ -1,5 +1,5 @@
  import { useState, useCallback, useRef, useEffect } from 'react';
- import { supabase } from '@/integrations/supabase/client';
+ import { supabase } from '@/integrations/backend/client';
  
  interface PronunciationResult {
    expected: string;
