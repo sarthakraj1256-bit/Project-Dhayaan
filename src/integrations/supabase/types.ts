@@ -215,6 +215,42 @@ export type Database = {
         }
         Relationships: []
       }
+      shared_gardens: {
+        Row: {
+          created_at: string
+          flourishing_count: number | null
+          garden_level: number | null
+          id: string
+          plant_count: number | null
+          screenshot_url: string
+          share_message: string | null
+          total_karma_earned: number | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          flourishing_count?: number | null
+          garden_level?: number | null
+          id?: string
+          plant_count?: number | null
+          screenshot_url: string
+          share_message?: string | null
+          total_karma_earned?: number | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          flourishing_count?: number | null
+          garden_level?: number | null
+          id?: string
+          plant_count?: number | null
+          screenshot_url?: string
+          share_message?: string | null
+          total_karma_earned?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       stress_metrics: {
         Row: {
           created_at: string

@@ -1,9 +1,10 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Droplets, Sun, Sparkles, Flower2, TreeDeciduous, Heart, Volume2, VolumeX, Calendar } from 'lucide-react';
+import { X, Droplets, Sun, Sparkles, Flower2, TreeDeciduous, Heart, Volume2, VolumeX, Calendar, Share2 } from 'lucide-react';
 import { useSpiritualProgress } from '@/hooks/useSpiritualProgress';
 import { subscribeToGardenEvents } from '@/hooks/useGardenResources';
 import SeasonalEvents, { ExclusivePlant, BonusReward, getActiveEvents } from './SeasonalEvents';
+import ShareGardenModal from './ShareGardenModal';
 
 interface InnerCalmGardenProps {
   onClose: () => void;
@@ -97,9 +98,11 @@ const InnerCalmGarden = ({ onClose, onKarmaEarned }: InnerCalmGardenProps) => {
   const [message, setMessage] = useState<string | null>(null);
   const [activeEvents] = useState(getActiveEvents());
   const [karmaEarned, setKarmaEarned] = useState(0);
+  const [showShareModal, setShowShareModal] = useState(false);
   
   const audioContextRef = useRef<AudioContext | null>(null);
   const gardenRef = useRef<HTMLDivElement>(null);
+  const gardenAreaRef = useRef<HTMLDivElement>(null);
 
   // Load garden state from localStorage
   useEffect(() => {
@@ -411,6 +414,13 @@ const InnerCalmGarden = ({ onClose, onKarmaEarned }: InnerCalmGardenProps) => {
         </div>
         <div className="flex items-center gap-2">
           <button
+            onClick={() => setShowShareModal(true)}
+            className="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors"
+            title="Share Garden"
+          >
+            <Share2 className="w-4 h-4 text-cyan-400" />
+          </button>
+          <button
             onClick={() => setSoundEnabled(!soundEnabled)}
             className="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors"
           >
@@ -455,7 +465,10 @@ const InnerCalmGarden = ({ onClose, onKarmaEarned }: InnerCalmGardenProps) => {
 
       {/* Garden Area */}
       <div
-        ref={gardenRef}
+        ref={(el) => {
+          gardenRef.current = el;
+          gardenAreaRef.current = el;
+        }}
         onClick={handleGardenClick}
         className={`relative h-80 sm:h-96 overflow-hidden ${isPlanting ? 'cursor-crosshair' : ''}`}
         style={{
@@ -772,6 +785,19 @@ const InnerCalmGarden = ({ onClose, onKarmaEarned }: InnerCalmGardenProps) => {
           </p>
         </div>
       </div>
+      {/* Share Modal */}
+      <ShareGardenModal
+        isOpen={showShareModal}
+        onClose={() => setShowShareModal(false)}
+        gardenRef={gardenAreaRef}
+        gardenStats={{
+          plantCount: totalPlants,
+          flourishingCount: flourishingPlants,
+          gardenLevel: gardenState.gardenLevel,
+          totalKarmaEarned: karmaEarned,
+        }}
+        userId={userId}
+      />
     </motion.div>
   );
 };
