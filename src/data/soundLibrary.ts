@@ -81,7 +81,7 @@
    { freq: '528Hz', value: 528, name: 'Positive Energy', purpose: 'Positive energy, inner balance', category: 'refresh' },
  
    // Healing & Recovery
-   { freq: '174Hz', value: 174, name: 'Comfort', purpose: 'Physical comfort and grounding', category: 'healing' },
+  { freq: '174Hz', value: 174, name: 'Soothing', purpose: 'Pain relief and body ease', category: 'healing' },
    { freq: '285Hz', value: 285, name: 'Regeneration', purpose: 'Tissue and energy regeneration', category: 'healing' },
    { freq: '396Hz', value: 396, name: 'Emotional Release', purpose: 'Emotional release', category: 'healing' },
    { freq: '417Hz', value: 417, name: 'Trauma Healing', purpose: 'Healing from past trauma', category: 'healing' },
