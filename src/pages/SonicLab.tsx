@@ -1,24 +1,24 @@
 import { motion } from 'framer-motion';
- import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { ArrowLeft, Radio, Star, BarChart3 } from 'lucide-react';
 import { useState, useCallback, useRef } from 'react';
- import { categories, getFrequenciesByCategory } from '@/data/soundLibrary';
- import { useFrequencyAudio } from '@/hooks/useFrequencyAudio';
- import { useSessionTimer } from '@/hooks/useSessionTimer';
- import { useFavorites, Favorite } from '@/hooks/useFavorites';
+import { categories, getFrequenciesByCategory } from '@/data/soundLibrary';
+import { useFrequencyAudio } from '@/hooks/useFrequencyAudio';
+import { useSessionTimer } from '@/hooks/useSessionTimer';
+import { useFavorites, Favorite } from '@/hooks/useFavorites';
 import { useSessionHistory } from '@/hooks/useSessionHistory';
 import { useMeditationGoals } from '@/hooks/useMeditationGoals';
 import { useAchievements } from '@/hooks/useAchievements';
- import CategorySection from '@/components/sonic-lab/CategorySection';
- import AudioControls from '@/components/sonic-lab/AudioControls';
- import WaveformVisualizer from '@/components/sonic-lab/WaveformVisualizer';
- import FavoritesPanel from '@/components/sonic-lab/FavoritesPanel';
+import CategorySection from '@/components/sonic-lab/CategorySection';
+import AudioControls from '@/components/sonic-lab/AudioControls';
+import WaveformVisualizer from '@/components/sonic-lab/WaveformVisualizer';
+import FavoritesPanel from '@/components/sonic-lab/FavoritesPanel';
 import SessionStats from '@/components/sonic-lab/SessionStats';
 import GoalsPanel from '@/components/sonic-lab/GoalsPanel';
 import AchievementsPanel from '@/components/sonic-lab/AchievementsPanel';
- import MeditationCalendar from '@/components/sonic-lab/MeditationCalendar';
- import SessionHistoryList from '@/components/sonic-lab/SessionHistoryList';
- 
+import MeditationCalendar from '@/components/sonic-lab/MeditationCalendar';
+import SessionHistoryList from '@/components/sonic-lab/SessionHistoryList';
+import BottomNav from '@/components/BottomNav';
  const SonicLab = () => {
    const [showFavorites, setShowFavorites] = useState(false);
   const [showStats, setShowStats] = useState(false);
@@ -377,12 +377,15 @@ import AchievementsPanel from '@/components/sonic-lab/AchievementsPanel';
  
        {/* Footer */}
        <footer className="relative z-10 border-t border-white/5 px-6 py-8 text-center">
-         <p className="text-xs text-muted-foreground/50">
-           "नाद ब्रह्म" — Sound is the Divine
-         </p>
-       </footer>
-     </div>
-   );
- };
- 
- export default SonicLab;
+        <p className="text-xs text-muted-foreground/50">
+          "नाद ब्रह्म" — Sound is the Divine
+        </p>
+      </footer>
+
+      {/* Mobile Bottom Navigation */}
+      <BottomNav />
+    </div>
+  );
+};
+
+export default SonicLab;
