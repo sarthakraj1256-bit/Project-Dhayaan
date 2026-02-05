@@ -361,6 +361,7 @@ export type Database = {
           created_at: string
           id: string
           is_approved: boolean
+          photos: string[] | null
           rating: number | null
           story: string
           temple_id: string
@@ -372,6 +373,7 @@ export type Database = {
           created_at?: string
           id?: string
           is_approved?: boolean
+          photos?: string[] | null
           rating?: number | null
           story: string
           temple_id: string
@@ -383,6 +385,7 @@ export type Database = {
           created_at?: string
           id?: string
           is_approved?: boolean
+          photos?: string[] | null
           rating?: number | null
           story?: string
           temple_id?: string

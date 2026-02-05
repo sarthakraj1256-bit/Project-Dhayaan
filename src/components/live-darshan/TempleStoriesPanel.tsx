@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageSquare, Star, Calendar, Trash2, Send, User } from 'lucide-react';
+import { MessageSquare, Star, Calendar, Trash2, Send, User, ImagePlus, X, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
@@ -24,8 +24,9 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog';
 import { useTempleStories, TempleStory } from '@/hooks/useTempleStories';
-import { temples, deityLabels } from '@/data/templeStreams';
+import { temples } from '@/data/templeStreams';
 import { format, formatDistanceToNow } from 'date-fns';
+import { toast } from 'sonner';
 
 interface TempleStoriesPanelProps {
   templeId?: string;
@@ -128,6 +129,37 @@ const StoryCard = ({
                 {story.story}
               </p>
               
+              {/* Photo Gallery */}
+              {story.photos && story.photos.length > 0 && (
+                <div className="mt-3 grid grid-cols-3 gap-2">
+                  {story.photos.slice(0, 3).map((photo, i) => (
+                    <Dialog key={i}>
+                      <DialogTrigger asChild>
+                        <button className="relative aspect-square rounded-lg overflow-hidden hover:opacity-90 transition-opacity">
+                          <img 
+                            src={photo} 
+                            alt={`Visit photo ${i + 1}`}
+                            className="w-full h-full object-cover"
+                          />
+                          {i === 2 && story.photos && story.photos.length > 3 && (
+                            <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
+                              <span className="text-white font-medium">+{story.photos.length - 3}</span>
+                            </div>
+                          )}
+                        </button>
+                      </DialogTrigger>
+                      <DialogContent className="max-w-3xl p-2">
+                        <img 
+                          src={photo} 
+                          alt={`Visit photo ${i + 1}`}
+                          className="w-full h-auto rounded-lg"
+                        />
+                      </DialogContent>
+                    </Dialog>
+                  ))}
+                </div>
+              )}
+              
               <div className="flex items-center justify-between mt-2">
                 {story.visit_date && (
                   <div className="flex items-center gap-1 text-xs text-muted-foreground">
@@ -157,33 +189,94 @@ const StoryCard = ({
 
 const AddStoryForm = ({ 
   templeId,
-  onSubmit, 
+  onSubmit,
+  onUploadPhotos,
   onCancel 
 }: { 
   templeId?: string;
-  onSubmit: (templeId: string, story: string, rating?: number, visitDate?: string) => Promise<boolean>;
+  onSubmit: (templeId: string, story: string, rating?: number, visitDate?: string, photos?: string[]) => Promise<boolean>;
+  onUploadPhotos: (files: File[]) => Promise<string[]>;
   onCancel: () => void;
 }) => {
   const [selectedTemple, setSelectedTemple] = useState(templeId || '');
   const [story, setStory] = useState('');
   const [rating, setRating] = useState(0);
   const [visitDate, setVisitDate] = useState('');
+  const [photos, setPhotos] = useState<File[]>([]);
+  const [photoPreviewUrls, setPhotoPreviewUrls] = useState<string[]>([]);
   const [submitting, setSubmitting] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handlePhotoSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    if (files.length + photos.length > 5) {
+      toast.error('Maximum 5 photos allowed');
+      return;
+    }
+    
+    const validFiles = files.filter(file => {
+      if (!file.type.startsWith('image/')) {
+        toast.error(`${file.name} is not an image`);
+        return false;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error(`${file.name} is larger than 5MB`);
+        return false;
+      }
+      return true;
+    });
+
+    setPhotos(prev => [...prev, ...validFiles]);
+    
+    // Create preview URLs
+    validFiles.forEach(file => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setPhotoPreviewUrls(prev => [...prev, reader.result as string]);
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const removePhoto = (index: number) => {
+    setPhotos(prev => prev.filter((_, i) => i !== index));
+    setPhotoPreviewUrls(prev => prev.filter((_, i) => i !== index));
+  };
 
   const handleSubmit = async () => {
     if (!selectedTemple || !story.trim()) return;
     
     setSubmitting(true);
-    const success = await onSubmit(
-      selectedTemple, 
-      story, 
-      rating > 0 ? rating : undefined,
-      visitDate || undefined
-    );
-    setSubmitting(false);
     
-    if (success) {
-      onCancel();
+    try {
+      let uploadedPhotoUrls: string[] = [];
+      
+      if (photos.length > 0) {
+        setUploading(true);
+        uploadedPhotoUrls = await onUploadPhotos(photos);
+        setUploading(false);
+        
+        if (uploadedPhotoUrls.length === 0 && photos.length > 0) {
+          toast.error('Failed to upload photos');
+          setSubmitting(false);
+          return;
+        }
+      }
+      
+      const success = await onSubmit(
+        selectedTemple, 
+        story, 
+        rating > 0 ? rating : undefined,
+        visitDate || undefined,
+        uploadedPhotoUrls.length > 0 ? uploadedPhotoUrls : undefined
+      );
+      
+      if (success) {
+        onCancel();
+      }
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -217,12 +310,58 @@ const AddStoryForm = ({
           value={story}
           onChange={(e) => setStory(e.target.value)}
           placeholder="Share your divine experience at this temple..."
-          className="min-h-[120px] resize-none"
+          className="min-h-[100px] resize-none"
           maxLength={1000}
         />
         <p className="text-xs text-muted-foreground mt-1 text-right">
           {story.length}/1000
         </p>
+      </div>
+
+      {/* Photo Upload Section */}
+      <div>
+        <label className="text-sm font-medium text-foreground mb-2 block">
+          Photos (optional, max 5)
+        </label>
+        
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          multiple
+          className="hidden"
+          onChange={handlePhotoSelect}
+        />
+        
+        <div className="flex flex-wrap gap-2">
+          {photoPreviewUrls.map((url, index) => (
+            <div key={index} className="relative w-20 h-20 group">
+              <img 
+                src={url} 
+                alt={`Preview ${index + 1}`}
+                className="w-full h-full object-cover rounded-lg border border-border"
+              />
+              <button
+                type="button"
+                onClick={() => removePhoto(index)}
+                className="absolute -top-2 -right-2 w-5 h-5 bg-destructive text-destructive-foreground rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+              >
+                <X className="w-3 h-3" />
+              </button>
+            </div>
+          ))}
+          
+          {photos.length < 5 && (
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              className="w-20 h-20 border-2 border-dashed border-border rounded-lg flex flex-col items-center justify-center gap-1 text-muted-foreground hover:border-primary hover:text-primary transition-colors"
+            >
+              <ImagePlus className="w-5 h-5" />
+              <span className="text-xs">Add</span>
+            </button>
+          )}
+        </div>
       </div>
       
       <div className="flex flex-col sm:flex-row gap-4">
@@ -247,7 +386,7 @@ const AddStoryForm = ({
       </div>
       
       <DialogFooter className="gap-2 sm:gap-0">
-        <Button variant="outline" onClick={onCancel}>
+        <Button variant="outline" onClick={onCancel} disabled={submitting}>
           Cancel
         </Button>
         <Button 
@@ -255,8 +394,17 @@ const AddStoryForm = ({
           disabled={!selectedTemple || !story.trim() || submitting}
           className="gap-2"
         >
-          <Send className="w-4 h-4" />
-          {submitting ? 'Sharing...' : 'Share Experience'}
+          {submitting ? (
+            <>
+              <Loader2 className="w-4 h-4 animate-spin" />
+              {uploading ? 'Uploading...' : 'Sharing...'}
+            </>
+          ) : (
+            <>
+              <Send className="w-4 h-4" />
+              Share Experience
+            </>
+          )}
         </Button>
       </DialogFooter>
     </div>
@@ -268,7 +416,8 @@ const TempleStoriesPanel = ({ templeId }: TempleStoriesPanelProps) => {
     stories, 
     loading, 
     addStory, 
-    deleteStory, 
+    deleteStory,
+    uploadPhotos,
     isAuthenticated,
     userId 
   } = useTempleStories(templeId);
@@ -316,6 +465,7 @@ const TempleStoriesPanel = ({ templeId }: TempleStoriesPanelProps) => {
                 <AddStoryForm 
                   templeId={templeId}
                   onSubmit={addStory}
+                  onUploadPhotos={uploadPhotos}
                   onCancel={() => setDialogOpen(false)}
                 />
               </DialogContent>

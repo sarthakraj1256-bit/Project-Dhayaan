@@ -9,6 +9,7 @@ export interface TempleStory {
   story: string;
   visit_date: string | null;
   rating: number | null;
+  photos: string[] | null;
   created_at: string;
   profile?: {
     display_name: string | null;
@@ -78,11 +79,40 @@ export const useTempleStories = (templeId?: string) => {
     fetchStories();
   }, [fetchStories]);
 
+  const uploadPhotos = useCallback(async (files: File[]): Promise<string[]> => {
+    if (!userId) return [];
+    
+    const uploadedUrls: string[] = [];
+    
+    for (const file of files) {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${userId}/${crypto.randomUUID()}.${fileExt}`;
+      
+      const { error } = await supabase.storage
+        .from('temple-story-photos')
+        .upload(fileName, file);
+      
+      if (error) {
+        console.error('Upload error:', error);
+        continue;
+      }
+      
+      const { data: { publicUrl } } = supabase.storage
+        .from('temple-story-photos')
+        .getPublicUrl(fileName);
+      
+      uploadedUrls.push(publicUrl);
+    }
+    
+    return uploadedUrls;
+  }, [userId]);
+
   const addStory = useCallback(async (
     templeId: string,
     story: string,
     rating?: number,
-    visitDate?: string
+    visitDate?: string,
+    photos?: string[]
   ) => {
     if (!userId) {
       toast.error('Please sign in to share your experience');
@@ -97,7 +127,8 @@ export const useTempleStories = (templeId?: string) => {
           temple_id: templeId,
           story: story.trim(),
           rating: rating || null,
-          visit_date: visitDate || null
+          visit_date: visitDate || null,
+          photos: photos || []
         });
 
       if (error) throw error;
@@ -136,6 +167,7 @@ export const useTempleStories = (templeId?: string) => {
     loading,
     addStory,
     deleteStory,
+    uploadPhotos,
     refreshStories: fetchStories,
     isAuthenticated: !!userId,
     userId
