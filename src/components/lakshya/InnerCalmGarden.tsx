@@ -1,12 +1,15 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Droplets, Sun, Sparkles, Flower2, TreeDeciduous, Heart, Volume2, VolumeX, Calendar, Share2, Bell, BellOff } from 'lucide-react';
+import { X, Droplets, Sun, Sparkles, Flower2, TreeDeciduous, Heart, Volume2, VolumeX, Calendar, Share2, Bell, BellOff, Trophy } from 'lucide-react';
 import { useSpiritualProgress } from '@/hooks/useSpiritualProgress';
 import { subscribeToGardenEvents } from '@/hooks/useGardenResources';
 import { useGardenNotifications } from '@/hooks/useGardenNotifications';
+import { useGardenAchievements } from '@/hooks/useGardenAchievements';
 import SeasonalEvents, { ExclusivePlant, BonusReward, getActiveEvents } from './SeasonalEvents';
 import ShareGardenModal from './ShareGardenModal';
 import NotificationSettingsModal from './NotificationSettingsModal';
+import GardenAchievementsPanel from './GardenAchievementsPanel';
+import AchievementUnlockToast from './AchievementUnlockToast';
 
 interface InnerCalmGardenProps {
   onClose: () => void;
@@ -84,6 +87,15 @@ const STAGE_NAMES = ['Seed', 'Sprout', 'Growing', 'Blooming', 'Flourishing'];
 const InnerCalmGarden = ({ onClose, onKarmaEarned }: InnerCalmGardenProps) => {
   const { progress, addKarma, userId } = useSpiritualProgress();
   const { settings: notificationSettings, checkPlantsHealth, startHealthChecks } = useGardenNotifications();
+  const { 
+    achievements, 
+    newUnlock, 
+    stats: achievementStats, 
+    checkAchievements, 
+    trackWaterUsed, 
+    trackKarmaEarned,
+    clearNewUnlock 
+  } = useGardenAchievements();
   const [gardenState, setGardenState] = useState<GardenState>({
     plants: [],
     waterDrops: 5,
@@ -103,6 +115,7 @@ const InnerCalmGarden = ({ onClose, onKarmaEarned }: InnerCalmGardenProps) => {
   const [karmaEarned, setKarmaEarned] = useState(0);
   const [showShareModal, setShowShareModal] = useState(false);
   const [showNotificationSettings, setShowNotificationSettings] = useState(false);
+  const [showAchievements, setShowAchievements] = useState(false);
   
   const audioContextRef = useRef<AudioContext | null>(null);
   const gardenRef = useRef<HTMLDivElement>(null);
@@ -338,6 +351,9 @@ const InnerCalmGarden = ({ onClose, onKarmaEarned }: InnerCalmGardenProps) => {
       return;
     }
 
+    // Track water usage for achievements
+    trackWaterUsed(1);
+
     setGardenState(prev => ({
       ...prev,
       waterDrops: prev.waterDrops - 1,
@@ -350,7 +366,10 @@ const InnerCalmGarden = ({ onClose, onKarmaEarned }: InnerCalmGardenProps) => {
             playSound('grow');
             const karma = (p.stage + 1) * 5;
             setKarmaEarned(k => k + karma);
-            showMessage(`${PLANT_TYPES[p.type].name} is growing! +${karma} Karma ✨`);
+            const plantInfo = p.isExclusive 
+              ? { name: p.type } 
+              : PLANT_TYPES[p.type as keyof typeof PLANT_TYPES] || { name: p.type };
+            showMessage(`${plantInfo.name} is growing! +${karma} Karma ✨`);
           } else {
             playSound('water');
             showMessage('Plant watered 💧');
@@ -367,7 +386,7 @@ const InnerCalmGarden = ({ onClose, onKarmaEarned }: InnerCalmGardenProps) => {
       }),
       totalGrowth: prev.totalGrowth + 1,
     }));
-  }, [gardenState.waterDrops, playSound, showMessage]);
+  }, [gardenState.waterDrops, playSound, showMessage, trackWaterUsed]);
 
   // Handle garden click for planting
   const handleGardenClick = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
@@ -396,9 +415,30 @@ const InnerCalmGarden = ({ onClose, onKarmaEarned }: InnerCalmGardenProps) => {
   // Calculate garden stats
   const flourishingPlants = gardenState.plants.filter(p => p.stage === 4).length;
   const totalPlants = gardenState.plants.length;
+  const exclusivePlants = gardenState.plants.filter(p => p.isExclusive).length;
+  const uniquePlantTypes = new Set(gardenState.plants.map(p => p.type)).size;
   const gardenHealth = totalPlants > 0 
     ? Math.round(gardenState.plants.reduce((sum, p) => sum + p.health, 0) / totalPlants)
     : 100;
+
+  // Check achievements when garden state changes
+  useEffect(() => {
+    checkAchievements({
+      plantsTotal: totalPlants,
+      plantsFlourishing: flourishingPlants,
+      waterUsed: 0, // Tracked separately in hook
+      karmaEarned: 0, // Tracked separately in hook
+      exclusivePlants,
+      plantTypes: uniquePlantTypes,
+    });
+  }, [totalPlants, flourishingPlants, exclusivePlants, uniquePlantTypes, checkAchievements]);
+
+  // Track karma for achievements
+  useEffect(() => {
+    if (karmaEarned > 0) {
+      trackKarmaEarned(karmaEarned);
+    }
+  }, [karmaEarned, trackKarmaEarned]);
 
   // Cleanup
   useEffect(() => {
@@ -440,6 +480,18 @@ const InnerCalmGarden = ({ onClose, onKarmaEarned }: InnerCalmGardenProps) => {
               <Bell className="w-4 h-4 text-amber-400" />
             ) : (
               <BellOff className="w-4 h-4 text-muted-foreground" />
+            )}
+          </button>
+          <button
+            onClick={() => setShowAchievements(true)}
+            className="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors relative"
+            title="Achievements"
+          >
+            <Trophy className="w-4 h-4 text-amber-400" />
+            {achievementStats.unlocked > 0 && (
+              <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-amber-500 text-[10px] text-white flex items-center justify-center">
+                {achievementStats.unlocked}
+              </span>
             )}
           </button>
           <button
@@ -832,6 +884,20 @@ const InnerCalmGarden = ({ onClose, onKarmaEarned }: InnerCalmGardenProps) => {
       <NotificationSettingsModal
         isOpen={showNotificationSettings}
         onClose={() => setShowNotificationSettings(false)}
+      />
+
+      {/* Achievements Panel */}
+      <GardenAchievementsPanel
+        isOpen={showAchievements}
+        onClose={() => setShowAchievements(false)}
+        achievements={achievements}
+        stats={achievementStats}
+      />
+
+      {/* Achievement Unlock Toast */}
+      <AchievementUnlockToast
+        achievement={newUnlock}
+        onClose={clearNewUnlock}
       />
     </motion.div>
   );
