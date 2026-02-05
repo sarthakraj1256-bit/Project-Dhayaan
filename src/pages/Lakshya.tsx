@@ -1,11 +1,12 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Sparkles, Wind, Gamepad2, Trophy, Star, Zap, Puzzle } from 'lucide-react';
+import { ArrowLeft, Sparkles, Wind, Gamepad2, Trophy, Star, Zap, Puzzle, Flower2 } from 'lucide-react';
 import { useSpiritualProgress, LEVEL_THRESHOLDS, getNextLevelThreshold, CHAKRA_THRESHOLDS, type SpiritualLevel } from '@/hooks/useSpiritualProgress';
 import { useKarmaMultiplier } from '@/hooks/useKarmaMultiplier';
 import BreathFlowGame from '@/components/lakshya/BreathFlowGame';
 import ChakraAlignmentGame from '@/components/lakshya/ChakraAlignmentGame';
+import InnerCalmGarden from '@/components/lakshya/InnerCalmGarden';
 import KarmaDisplay from '@/components/lakshya/KarmaDisplay';
 import LevelProgressBar from '@/components/lakshya/LevelProgressBar';
 import ChakraProgress from '@/components/lakshya/ChakraProgress';
@@ -137,6 +138,11 @@ const Lakshya = () => {
           />
         ) : activeGame === 'chakra-alignment' ? (
           <ChakraAlignmentGame 
+            onClose={() => setActiveGame(null)} 
+            onKarmaEarned={handleKarmaEarned}
+          />
+        ) : activeGame === 'inner-garden' ? (
+          <InnerCalmGarden 
             onClose={() => setActiveGame(null)} 
             onKarmaEarned={handleKarmaEarned}
           />
@@ -286,16 +292,29 @@ const Lakshya = () => {
                   </div>
                 </motion.button>
 
-                <div className="p-6 rounded-2xl bg-white/5 border border-white/10 opacity-60">
-                  <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center mb-4">
-                    <Sparkles className="w-6 h-6 text-muted-foreground" />
+                {/* Inner Calm Garden */}
+                <motion.button
+                  onClick={() => setActiveGame('inner-garden')}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="group relative p-6 rounded-2xl bg-gradient-to-br from-emerald-500/10 via-green-500/10 to-teal-500/10 border border-emerald-500/20 hover:border-emerald-500/40 transition-all text-left overflow-hidden"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                  
+                  <div className="relative z-10">
+                    <div className="w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center mb-4">
+                      <Flower2 className="w-6 h-6 text-emerald-400" />
+                    </div>
+                    <h3 className="font-display text-lg text-foreground mb-2">Inner Calm Garden</h3>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      Grow a peaceful digital garden through practice
+                    </p>
+                    <div className="flex items-center gap-2 text-xs text-emerald-400">
+                      <Star className="w-3 h-3" />
+                      <span>+5-25 Karma per growth</span>
+                    </div>
                   </div>
-                  <h3 className="font-display text-lg text-foreground mb-2">Inner Calm Garden</h3>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    Grow a peaceful digital garden through practice
-                  </p>
-                  <span className="text-xs text-muted-foreground">Coming Soon</span>
-                </div>
+                </motion.button>
               </div>
             </div>
 
