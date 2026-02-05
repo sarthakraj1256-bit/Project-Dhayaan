@@ -1,8 +1,9 @@
  import { useState } from 'react';
  import { motion, AnimatePresence } from 'framer-motion';
  import { format } from 'date-fns';
- import { Clock, Radio, Trash2, ChevronDown, ChevronUp } from 'lucide-react';
+ import { Clock, Radio, Trash2, ChevronDown, ChevronUp, Download } from 'lucide-react';
  import type { MeditationSession } from '@/hooks/useSessionHistory';
+ import { toast } from 'sonner';
  
  interface SessionHistoryListProps {
    sessions: MeditationSession[];
@@ -19,9 +20,70 @@
  }: SessionHistoryListProps) => {
    const [expanded, setExpanded] = useState(false);
    const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [exporting, setExporting] = useState(false);
  
    const displayCount = expanded ? sessions.length : 5;
    const displayedSessions = sessions.slice(0, displayCount);
+  const exportToCSV = () => {
+    if (sessions.length === 0) {
+      toast.error('No sessions to export');
+      return;
+    }
+
+    setExporting(true);
+
+    try {
+      // CSV headers
+      const headers = [
+        'Date',
+        'Start Time',
+        'End Time',
+        'Duration (minutes)',
+        'Duration (seconds)',
+        'Frequency Name',
+        'Frequency (Hz)',
+        'Category',
+        'Atmosphere',
+      ];
+
+      // Convert sessions to CSV rows
+      const rows = sessions.map((session) => {
+        const startDate = new Date(session.started_at);
+        const endDate = new Date(session.ended_at);
+        return [
+          format(startDate, 'yyyy-MM-dd'),
+          format(startDate, 'HH:mm:ss'),
+          format(endDate, 'HH:mm:ss'),
+          Math.round(session.duration_seconds / 60),
+          session.duration_seconds,
+          `"${session.frequency_name}"`,
+          session.frequency_value,
+          `"${session.frequency_category}"`,
+          `"${session.atmosphere_id}"`,
+        ].join(',');
+      });
+
+      // Combine headers and rows
+      const csvContent = [headers.join(','), ...rows].join('\n');
+
+      // Create blob and download
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.setAttribute('href', url);
+      link.setAttribute('download', `dhyaan-meditation-history-${format(new Date(), 'yyyy-MM-dd')}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+
+      toast.success('Meditation history exported successfully');
+    } catch (error) {
+      toast.error('Failed to export history');
+    } finally {
+      setExporting(false);
+    }
+  };
  
    const handleDelete = async (id: string) => {
      if (!onDeleteSession) return;
@@ -85,6 +147,22 @@
  
    return (
      <div className="space-y-4">
+      {/* Export Button */}
+      <div className="flex justify-end">
+        <button
+          onClick={exportToCSV}
+          disabled={exporting || sessions.length === 0}
+          className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 transition-colors text-sm text-muted-foreground hover:text-foreground disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {exporting ? (
+            <div className="w-4 h-4 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
+          ) : (
+            <Download className="w-4 h-4" />
+          )}
+          <span className="hidden sm:inline">Export CSV</span>
+        </button>
+      </div>
+
        {dateGroups.map(([dateKey, dateSessions]) => (
          <div key={dateKey}>
            {/* Date Header */}
