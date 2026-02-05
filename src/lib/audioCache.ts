@@ -235,6 +235,28 @@ async function cleanupExpiredFromStore(storeName: string): Promise<number> {
   }
 }
 
+// Cleanup stats storage key
+const CLEANUP_STATS_KEY = 'dhyaan-cache-cleanup-stats';
+
+export interface CleanupStats {
+  lastCleanupDate: string;
+  ttsRemoved: number;
+  atmosphereRemoved: number;
+  totalRemoved: number;
+}
+
+/**
+ * Get the last cleanup statistics
+ */
+export function getLastCleanupStats(): CleanupStats | null {
+  try {
+    const stats = localStorage.getItem(CLEANUP_STATS_KEY);
+    return stats ? JSON.parse(stats) : null;
+  } catch {
+    return null;
+  }
+}
+
 /**
  * Clean up expired cache entries (older than 30 days)
  * Call this on app startup to maintain cache hygiene
@@ -247,6 +269,16 @@ export async function cleanupExpiredCache(): Promise<{ tts: number; atmosphere: 
     ]);
 
     const total = ttsRemoved + atmosphereRemoved;
+    
+    // Save cleanup stats
+    const stats: CleanupStats = {
+      lastCleanupDate: new Date().toISOString(),
+      ttsRemoved,
+      atmosphereRemoved,
+      totalRemoved: total,
+    };
+    localStorage.setItem(CLEANUP_STATS_KEY, JSON.stringify(stats));
+    
     if (total > 0) {
       console.log(`Cache cleanup: removed ${ttsRemoved} TTS and ${atmosphereRemoved} atmosphere entries (older than ${CACHE_EXPIRY_DAYS} days)`);
     }

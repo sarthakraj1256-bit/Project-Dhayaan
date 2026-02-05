@@ -9,7 +9,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { logError } from '@/lib/logger';
-import { clearTTSCache, clearAudioCache, getCacheSize, formatBytes } from '@/lib/audioCache';
+import { clearTTSCache, clearAudioCache, getCacheSize, formatBytes, getLastCleanupStats, type CleanupStats } from '@/lib/audioCache';
+import { formatDistanceToNow } from 'date-fns';
 
 interface Profile {
   id: string;
@@ -29,10 +30,16 @@ const Profile = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [isClearingCache, setIsClearingCache] = useState(false);
   const [cacheSize, setCacheSize] = useState<{ tts: number; atmosphere: number; total: number } | null>(null);
+  const [cleanupStats, setCleanupStats] = useState<CleanupStats | null>(null);
 
   const fetchCacheSize = async () => {
     const size = await getCacheSize();
     setCacheSize(size);
+  };
+
+  const fetchCleanupStats = () => {
+    const stats = getLastCleanupStats();
+    setCleanupStats(stats);
   };
 
   useEffect(() => {
@@ -45,6 +52,7 @@ const Profile = () => {
       setUser(session.user);
       await fetchProfile(session.user.id);
       await fetchCacheSize();
+      fetchCleanupStats();
     };
     checkAuth();
   }, [navigate]);
@@ -348,6 +356,23 @@ const Profile = () => {
                       <span className="text-xs text-muted-foreground">Atmosphere</span>
                       <span className="text-xs font-mono text-foreground">{formatBytes(cacheSize.atmosphere)}</span>
                     </div>
+                  </div>
+                )}
+                
+                {/* Last cleanup stats */}
+                {cleanupStats && (
+                  <div className="pt-3 mt-3 border-t border-white/10">
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="text-muted-foreground">Last auto-cleanup</span>
+                      <span className="text-foreground/70">
+                        {formatDistanceToNow(new Date(cleanupStats.lastCleanupDate), { addSuffix: true })}
+                      </span>
+                    </div>
+                    {cleanupStats.totalRemoved > 0 && (
+                      <p className="text-xs text-emerald-400/80 mt-1">
+                        Removed {cleanupStats.totalRemoved} expired {cleanupStats.totalRemoved === 1 ? 'entry' : 'entries'}
+                      </p>
+                    )}
                   </div>
                 )}
               </div>
