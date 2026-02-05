@@ -16,6 +16,7 @@ import { useAchievements } from '@/hooks/useAchievements';
 import SessionStats from '@/components/sonic-lab/SessionStats';
 import GoalsPanel from '@/components/sonic-lab/GoalsPanel';
 import AchievementsPanel from '@/components/sonic-lab/AchievementsPanel';
+ import MeditationCalendar from '@/components/sonic-lab/MeditationCalendar';
  
  const SonicLab = () => {
    const [showFavorites, setShowFavorites] = useState(false);
@@ -54,6 +55,7 @@ import AchievementsPanel from '@/components/sonic-lab/AchievementsPanel';
     isLoading: statsLoading,
     isAuthenticated: statsAuthenticated,
     saveSession,
+    sessions,
   } = useSessionHistory();
 
   const {
@@ -260,6 +262,18 @@ import AchievementsPanel from '@/components/sonic-lab/AchievementsPanel';
                   totalCount={achievementTotal}
                   isLoading={achievementsLoading}
                   isAuthenticated={achievementsAuthenticated}
+                />
+              </div>
+
+              {/* Meditation Calendar */}
+              <div className="mt-6">
+                <h3 className="font-display text-sm tracking-widest text-muted-foreground mb-3">
+                  MEDITATION CALENDAR
+                </h3>
+                <MeditationCalendar
+                  sessions={sessions}
+                  isLoading={statsLoading}
+                  isAuthenticated={statsAuthenticated}
                 />
               </div>
               </div>
