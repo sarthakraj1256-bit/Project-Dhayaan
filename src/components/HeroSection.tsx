@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
- import { Link } from 'react-router-dom';
-  import { Radio, BookOpen, Sparkles } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Radio, BookOpen, Sparkles, Play } from 'lucide-react';
 
 interface HeroSectionProps {
   onMounted: () => void;
@@ -94,6 +94,23 @@ export default function HeroSection({ onMounted }: HeroSectionProps) {
                 <Sparkles className="w-4 h-4 text-violet-400 group-hover:animate-pulse" />
                 <span className="font-display text-sm tracking-wider text-violet-300 group-hover:text-violet-200 transition-colors">
                   Lakshya Journey
+                </span>
+              </Link>
+
+              {/* Live Darshan CTA */}
+              <Link
+                to="/live-darshan"
+                className="group inline-flex items-center gap-3 px-6 py-3 rounded-full transition-all duration-500 hover:scale-105"
+                style={{
+                  background: 'linear-gradient(135deg, hsl(0, 70%, 25% / 0.6), hsl(25, 80%, 20% / 0.4))',
+                  backdropFilter: 'blur(12px)',
+                  WebkitBackdropFilter: 'blur(12px)',
+                  border: '1px solid hsl(25, 80%, 50% / 0.3)',
+                }}
+              >
+                <Play className="w-4 h-4 text-orange-400 group-hover:animate-pulse" />
+                <span className="font-display text-sm tracking-wider text-orange-300 group-hover:text-orange-200 transition-colors">
+                  Live Darshan
                 </span>
               </Link>
             </div>
