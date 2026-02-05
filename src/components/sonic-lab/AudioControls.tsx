@@ -1,5 +1,5 @@
  import { motion } from 'framer-motion';
- import { Volume2, VolumeX, Layers } from 'lucide-react';
+ import { Volume2, VolumeX, Layers, Loader2, Check, Cloud } from 'lucide-react';
  import { Slider } from '@/components/ui/slider';
  import { atmospheres, AtmosphereItem } from '@/data/soundLibrary';
  
@@ -9,6 +9,9 @@
    frequencyVolume: number;
    atmosphereVolume: number;
    currentAtmosphere: string;
+   atmosphereLoading?: boolean;
+   atmosphereCached?: boolean;
+   atmosphereError?: string | null;
    onFrequencyVolumeChange: (volume: number) => void;
    onAtmosphereVolumeChange: (volume: number) => void;
    onAtmosphereChange: (atmosphereId: string) => void;
@@ -21,6 +24,9 @@
    frequencyVolume,
    atmosphereVolume,
    currentAtmosphere,
+   atmosphereLoading = false,
+   atmosphereCached = false,
+   atmosphereError = null,
    onFrequencyVolumeChange,
    onAtmosphereVolumeChange,
    onAtmosphereChange,
@@ -103,23 +109,48 @@
                {atmospheres.map((atm) => (
                  <button
                    key={atm.id}
-                   onClick={() => onAtmosphereChange(atm.id)}
+                   onClick={() => !atmosphereLoading && onAtmosphereChange(atm.id)}
+                   disabled={atmosphereLoading && currentAtmosphere !== atm.id}
                    className={`
-                     px-3 py-1.5 rounded-full text-xs transition-all duration-300
+                     px-3 py-1.5 rounded-full text-xs transition-all duration-300 flex items-center gap-1.5
                      ${currentAtmosphere === atm.id
                        ? 'bg-primary/20 border border-primary/50 text-primary'
                        : 'bg-white/5 border border-white/10 text-foreground/70 hover:bg-white/10'
                      }
+                     ${atmosphereLoading && currentAtmosphere !== atm.id ? 'opacity-50 cursor-not-allowed' : ''}
                    `}
                  >
                    <span className="mr-1">{atm.icon}</span>
                    {atm.name}
+                   {/* Loading indicator for the active atmosphere */}
+                   {atmosphereLoading && currentAtmosphere === atm.id && (
+                     <Loader2 className="w-3 h-3 animate-spin" />
+                   )}
+                   {/* Cached indicator */}
+                   {!atmosphereLoading && atmosphereCached && currentAtmosphere === atm.id && (
+                     <Check className="w-3 h-3" />
+                   )}
                  </button>
                ))}
              </div>
  
+             {/* Loading/Status Message */}
+             {atmosphereLoading && currentAtmosphere !== 'none' && (
+               <div className="flex items-center gap-2 mb-3 text-xs text-primary">
+                 <Cloud className="w-4 h-4 animate-pulse" />
+                 <span>Generating atmosphere sound... (first time only)</span>
+               </div>
+             )}
+ 
+             {/* Error Message */}
+             {atmosphereError && (
+               <div className="mb-3 text-xs text-destructive">
+                 {atmosphereError}
+               </div>
+             )}
+ 
              {/* Atmosphere Volume */}
-             {currentAtmosphere !== 'none' && (
+             {currentAtmosphere !== 'none' && !atmosphereLoading && (
                <div className="flex items-center gap-4">
                  <VolumeX className="w-4 h-4 text-muted-foreground shrink-0" />
                  <Slider

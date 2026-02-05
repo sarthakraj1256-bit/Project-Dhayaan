@@ -1,11 +1,10 @@
  import { useState, useRef, useCallback, useEffect } from 'react';
+ import { useAtmosphereAudio } from './useAtmosphereAudio';
  
  interface AudioState {
    isPlaying: boolean;
    currentFrequency: number | null;
    frequencyVolume: number;
-   atmosphereVolume: number;
-   currentAtmosphere: string;
  }
  
  export const useFrequencyAudio = () => {
@@ -13,9 +12,15 @@
      isPlaying: false,
      currentFrequency: null,
      frequencyVolume: 0.3,
-     atmosphereVolume: 0.2,
-     currentAtmosphere: 'none',
    });
+ 
+   // Use the dedicated atmosphere audio hook
+   const {
+     atmosphereState,
+     setAtmosphere,
+     setAtmosphereVolume,
+     stopAtmosphere,
+   } = useAtmosphereAudio();
  
    const audioContextRef = useRef<AudioContext | null>(null);
    const oscillatorRef = useRef<OscillatorNode | null>(null);
@@ -23,9 +28,6 @@
    const lfoRef = useRef<OscillatorNode | null>(null);
    const lfoGainRef = useRef<GainNode | null>(null);
    const analyserRef = useRef<AnalyserNode | null>(null);
- 
-   // Atmosphere audio elements
-   const atmosphereAudioRef = useRef<HTMLAudioElement | null>(null);
  
    // Initialize audio context
    const initAudioContext = useCallback(() => {
@@ -125,7 +127,8 @@
        isPlaying: false,
        currentFrequency: null,
      }));
-   }, []);
+     stopAtmosphere();
+   }, [stopAtmosphere]);
  
    // Update frequency volume
    const setFrequencyVolume = useCallback((volume: number) => {
@@ -136,31 +139,6 @@
        );
      }
      setAudioState((prev) => ({ ...prev, frequencyVolume: volume }));
-   }, []);
- 
-   // Set atmosphere
-   const setAtmosphere = useCallback((atmosphereId: string) => {
-     // Stop current atmosphere
-     if (atmosphereAudioRef.current) {
-       atmosphereAudioRef.current.pause();
-       atmosphereAudioRef.current = null;
-     }
- 
-     setAudioState((prev) => ({ ...prev, currentAtmosphere: atmosphereId }));
- 
-     if (atmosphereId === 'none') return;
- 
-     // In a real implementation, you would load actual audio files
-     // For now, we'll use synthesized sounds
-     // This could be expanded to load actual ambient audio files
-   }, []);
- 
-   // Update atmosphere volume
-   const setAtmosphereVolume = useCallback((volume: number) => {
-     if (atmosphereAudioRef.current) {
-       atmosphereAudioRef.current.volume = volume;
-     }
-     setAudioState((prev) => ({ ...prev, atmosphereVolume: volume }));
    }, []);
  
    // Get analyser for visualizations
@@ -187,17 +165,24 @@
          lfoRef.current.stop();
          lfoRef.current.disconnect();
        }
-       if (atmosphereAudioRef.current) {
-         atmosphereAudioRef.current.pause();
-       }
        if (audioContextRef.current) {
          audioContextRef.current.close();
        }
      };
    }, []);
  
+   // Combine audio state with atmosphere state for components
+   const combinedState = {
+     ...audioState,
+     atmosphereVolume: atmosphereState.atmosphereVolume,
+     currentAtmosphere: atmosphereState.currentAtmosphere,
+     atmosphereLoading: atmosphereState.isLoading,
+     atmosphereCached: atmosphereState.isCached,
+     atmosphereError: atmosphereState.error,
+   };
+ 
    return {
-     audioState,
+     audioState: combinedState,
      playFrequency,
      stopFrequency,
      setFrequencyVolume,
