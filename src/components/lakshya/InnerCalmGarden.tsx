@@ -1,16 +1,18 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Droplets, Sun, Sparkles, Flower2, TreeDeciduous, Heart, Volume2, VolumeX, Calendar, Share2, Bell, BellOff, Trophy, Users } from 'lucide-react';
+import { X, Droplets, Sun, Sparkles, Flower2, TreeDeciduous, Heart, Volume2, VolumeX, Calendar, Share2, Bell, BellOff, Trophy, Users, Target } from 'lucide-react';
 import { useSpiritualProgress } from '@/hooks/useSpiritualProgress';
 import { subscribeToGardenEvents } from '@/hooks/useGardenResources';
 import { useGardenNotifications } from '@/hooks/useGardenNotifications';
 import { useGardenAchievements } from '@/hooks/useGardenAchievements';
 import { useGardenLeaderboard } from '@/hooks/useGardenLeaderboard';
+import { useGardenChallenges } from '@/hooks/useGardenChallenges';
 import SeasonalEvents, { ExclusivePlant, BonusReward, getActiveEvents } from './SeasonalEvents';
 import ShareGardenModal from './ShareGardenModal';
 import NotificationSettingsModal from './NotificationSettingsModal';
 import GardenAchievementsPanel from './GardenAchievementsPanel';
 import GardenLeaderboardPanel from './GardenLeaderboardPanel';
+import GardenChallengesPanel from './GardenChallengesPanel';
 import AchievementUnlockToast from './AchievementUnlockToast';
 import GardenWeatherEffects from './GardenWeatherEffects';
 
@@ -106,6 +108,17 @@ const InnerCalmGarden = ({ onClose, onKarmaEarned }: InnerCalmGardenProps) => {
     refreshLeaderboard,
     updateUserStats,
   } = useGardenLeaderboard(userId || undefined);
+  const {
+    challenges,
+    timeUntilRefresh,
+    completedCount: challengesCompleted,
+    trackWater: trackChallengeWater,
+    trackPlant: trackChallengePlant,
+    trackGrow: trackChallengeGrow,
+    trackKarma: trackChallengeKarma,
+    updateFlourishProgress,
+    claimReward: claimChallengeReward,
+  } = useGardenChallenges();
   const [gardenState, setGardenState] = useState<GardenState>({
     plants: [],
     waterDrops: 5,
@@ -127,6 +140,7 @@ const InnerCalmGarden = ({ onClose, onKarmaEarned }: InnerCalmGardenProps) => {
   const [showNotificationSettings, setShowNotificationSettings] = useState(false);
   const [showAchievements, setShowAchievements] = useState(false);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
+  const [showChallenges, setShowChallenges] = useState(false);
   
   const audioContextRef = useRef<AudioContext | null>(null);
   const gardenRef = useRef<HTMLDivElement>(null);
@@ -275,8 +289,12 @@ const InnerCalmGarden = ({ onClose, onKarmaEarned }: InnerCalmGardenProps) => {
       setSelectedExclusivePlant(null);
       setIsPlanting(false);
       
+      // Track for challenges
+      trackChallengePlant(true);
+      
       const karma = 10 + (selectedExclusivePlant.rarity === 'legendary' ? 20 : selectedExclusivePlant.rarity === 'epic' ? 10 : 5);
       setKarmaEarned(prev => prev + karma);
+      trackChallengeKarma(karma);
       return;
     }
 
@@ -307,9 +325,13 @@ const InnerCalmGarden = ({ onClose, onKarmaEarned }: InnerCalmGardenProps) => {
     setSelectedPlantType(null);
     setIsPlanting(false);
     
+    // Track for challenges
+    trackChallengePlant(false);
+    
     const karma = 5;
     setKarmaEarned(prev => prev + karma);
-  }, [selectedPlantType, selectedExclusivePlant, gardenState.waterDrops, playSound, showMessage]);
+    trackChallengeKarma(karma);
+  }, [selectedPlantType, selectedExclusivePlant, gardenState.waterDrops, playSound, showMessage, trackChallengePlant, trackChallengeKarma]);
 
   // Handle exclusive plant selection from seasonal events
   const handleExclusivePlantSelect = useCallback((plant: ExclusivePlant) => {
@@ -362,8 +384,9 @@ const InnerCalmGarden = ({ onClose, onKarmaEarned }: InnerCalmGardenProps) => {
       return;
     }
 
-    // Track water usage for achievements
+    // Track water usage for achievements and challenges
     trackWaterUsed(1);
+    trackChallengeWater();
 
     setGardenState(prev => ({
       ...prev,
@@ -377,6 +400,8 @@ const InnerCalmGarden = ({ onClose, onKarmaEarned }: InnerCalmGardenProps) => {
             playSound('grow');
             const karma = (p.stage + 1) * 5;
             setKarmaEarned(k => k + karma);
+            trackChallengeKarma(karma);
+            trackChallengeGrow();
             const plantInfo = p.isExclusive 
               ? { name: p.type } 
               : PLANT_TYPES[p.type as keyof typeof PLANT_TYPES] || { name: p.type };
@@ -397,7 +422,7 @@ const InnerCalmGarden = ({ onClose, onKarmaEarned }: InnerCalmGardenProps) => {
       }),
       totalGrowth: prev.totalGrowth + 1,
     }));
-  }, [gardenState.waterDrops, playSound, showMessage, trackWaterUsed]);
+  }, [gardenState.waterDrops, playSound, showMessage, trackWaterUsed, trackChallengeWater, trackChallengeKarma, trackChallengeGrow]);
 
   // Handle garden click for planting
   const handleGardenClick = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
@@ -450,6 +475,31 @@ const InnerCalmGarden = ({ onClose, onKarmaEarned }: InnerCalmGardenProps) => {
       trackKarmaEarned(karmaEarned);
     }
   }, [karmaEarned, trackKarmaEarned]);
+
+  // Update flourishing progress for challenges
+  useEffect(() => {
+    updateFlourishProgress(flourishingPlants);
+  }, [flourishingPlants, updateFlourishProgress]);
+
+  // Handle claiming challenge rewards
+  const handleClaimChallengeReward = useCallback((challengeId: string) => {
+    const reward = claimChallengeReward(challengeId);
+    if (reward) {
+      if (reward.type === 'water_drops') {
+        setGardenState(prev => ({
+          ...prev,
+          waterDrops: Math.min(prev.waterDrops + reward.value, 30),
+        }));
+        showMessage(`Claimed ${reward.value} water drops! 💧`);
+      } else if (reward.type === 'karma_bonus') {
+        setKarmaEarned(prev => prev + reward.value);
+        showMessage(`Claimed ${reward.value} bonus Karma! ✨`);
+      } else if (reward.type === 'karma_multiplier') {
+        showMessage(`${reward.value}x Karma multiplier activated! 🌟`);
+      }
+      playSound('bloom');
+    }
+  }, [claimChallengeReward, showMessage, playSound]);
 
   // Update leaderboard stats when garden state changes significantly
   useEffect(() => {
@@ -529,6 +579,27 @@ const InnerCalmGarden = ({ onClose, onKarmaEarned }: InnerCalmGardenProps) => {
               <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-cyan-500 text-[10px] text-white flex items-center justify-center">
                 {userRank}
               </span>
+            )}
+          </button>
+          <button
+            onClick={() => setShowChallenges(true)}
+            className="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors relative"
+            title="Daily Challenges"
+          >
+            <Target className="w-4 h-4 text-emerald-400" />
+            {challengesCompleted > 0 && challengesCompleted < 3 && (
+              <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-emerald-500 text-[10px] text-white flex items-center justify-center">
+                {challengesCompleted}
+              </span>
+            )}
+            {challengesCompleted === 3 && (
+              <motion.span
+                animate={{ scale: [1, 1.2, 1] }}
+                transition={{ duration: 1, repeat: Infinity }}
+                className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-amber-500 text-[10px] flex items-center justify-center"
+              >
+                ✓
+              </motion.span>
             )}
           </button>
           <button
@@ -941,6 +1012,16 @@ const InnerCalmGarden = ({ onClose, onKarmaEarned }: InnerCalmGardenProps) => {
         currentUserId={userId || undefined}
         isLoading={leaderboardLoading}
         onRefresh={refreshLeaderboard}
+      />
+
+      {/* Challenges Panel */}
+      <GardenChallengesPanel
+        isOpen={showChallenges}
+        onClose={() => setShowChallenges(false)}
+        challenges={challenges}
+        timeUntilRefresh={timeUntilRefresh}
+        completedCount={challengesCompleted}
+        onClaimReward={handleClaimChallengeReward}
       />
 
       {/* Achievement Unlock Toast */}
