@@ -3,6 +3,7 @@
  import { supabase } from '@/integrations/backend/client';
  import { toast } from 'sonner';
  import { logError } from '@/lib/logger';
+ import { emitGardenWaterEarned } from '@/hooks/useGardenResources';
  
  export interface MeditationSession {
    id: string;
@@ -212,16 +213,25 @@
            ended_at: new Date().toISOString(),
          });
  
-       if (error) throw error;
- 
-       // Refresh sessions after saving
-       await fetchSessions();
-       return true;
-     } catch (error) {
-       logError('Error saving session', error);
-       return false;
-     }
-   }, [isAuthenticated, fetchSessions]);
+        if (error) throw error;
+
+        // Grant garden water drops based on meditation duration
+        const minutes = Math.floor(durationSeconds / 60);
+        const dropsEarned = Math.floor(minutes / 10);
+        if (dropsEarned > 0) {
+          // Emit event for garden to receive drops
+          emitGardenWaterEarned(dropsEarned);
+          toast.success(`🌱 Earned ${dropsEarned} water drop${dropsEarned > 1 ? 's' : ''} for your garden!`);
+        }
+
+        // Refresh sessions after saving
+        await fetchSessions();
+        return true;
+      } catch (error) {
+        logError('Error saving session', error);
+        return false;
+      }
+    }, [isAuthenticated, fetchSessions]);
  
    const deleteSession = useCallback(async (id: string) => {
      try {

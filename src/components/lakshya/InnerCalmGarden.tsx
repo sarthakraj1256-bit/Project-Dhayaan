@@ -1,7 +1,8 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Droplets, Sun, Sparkles, Flower2, TreeDeciduous, Heart, Volume2, VolumeX } from 'lucide-react';
+import { X, Droplets, Sun, Sparkles, Flower2, TreeDeciduous, Heart, Volume2, VolumeX, Music } from 'lucide-react';
 import { useSpiritualProgress } from '@/hooks/useSpiritualProgress';
+import { subscribeToGardenEvents } from '@/hooks/useGardenResources';
 
 interface InnerCalmGardenProps {
   onClose: () => void;
@@ -119,6 +120,8 @@ const InnerCalmGarden = ({ onClose, onKarmaEarned }: InnerCalmGardenProps) => {
     }));
   }, [progress?.total_meditation_minutes]);
 
+  // Note: Subscribe to garden water events after showMessage is defined (see below)
+
   // Play nature sound
   const playSound = useCallback((type: 'water' | 'grow' | 'bloom' | 'plant') => {
     if (!soundEnabled) return;
@@ -164,7 +167,20 @@ const InnerCalmGarden = ({ onClose, onKarmaEarned }: InnerCalmGardenProps) => {
     setTimeout(() => setMessage(null), 2000);
   }, []);
 
-  // Plant a new seed
+  // Subscribe to real-time water drop events from Sonic Lab meditation sessions
+  useEffect(() => {
+    const unsubscribe = subscribeToGardenEvents((dropsEarned) => {
+      setGardenState(prev => ({
+        ...prev,
+        waterDrops: Math.min(prev.waterDrops + dropsEarned, 30), // Max 30 drops
+      }));
+      setMessage(`🧘 Meditation complete! +${dropsEarned} water drop${dropsEarned > 1 ? 's' : ''} 💧`);
+      setTimeout(() => setMessage(null), 3000);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
   const plantSeed = useCallback((x: number, y: number) => {
     if (!selectedPlantType || gardenState.waterDrops < 1) {
       showMessage('Need water to plant!');
