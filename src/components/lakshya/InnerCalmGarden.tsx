@@ -1,14 +1,16 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Droplets, Sun, Sparkles, Flower2, TreeDeciduous, Heart, Volume2, VolumeX, Calendar, Share2, Bell, BellOff, Trophy } from 'lucide-react';
+import { X, Droplets, Sun, Sparkles, Flower2, TreeDeciduous, Heart, Volume2, VolumeX, Calendar, Share2, Bell, BellOff, Trophy, Users } from 'lucide-react';
 import { useSpiritualProgress } from '@/hooks/useSpiritualProgress';
 import { subscribeToGardenEvents } from '@/hooks/useGardenResources';
 import { useGardenNotifications } from '@/hooks/useGardenNotifications';
 import { useGardenAchievements } from '@/hooks/useGardenAchievements';
+import { useGardenLeaderboard } from '@/hooks/useGardenLeaderboard';
 import SeasonalEvents, { ExclusivePlant, BonusReward, getActiveEvents } from './SeasonalEvents';
 import ShareGardenModal from './ShareGardenModal';
 import NotificationSettingsModal from './NotificationSettingsModal';
 import GardenAchievementsPanel from './GardenAchievementsPanel';
+import GardenLeaderboardPanel from './GardenLeaderboardPanel';
 import AchievementUnlockToast from './AchievementUnlockToast';
 
 interface InnerCalmGardenProps {
@@ -96,6 +98,13 @@ const InnerCalmGarden = ({ onClose, onKarmaEarned }: InnerCalmGardenProps) => {
     trackKarmaEarned,
     clearNewUnlock 
   } = useGardenAchievements();
+  const {
+    leaderboard,
+    userRank,
+    isLoading: leaderboardLoading,
+    refreshLeaderboard,
+    updateUserStats,
+  } = useGardenLeaderboard(userId || undefined);
   const [gardenState, setGardenState] = useState<GardenState>({
     plants: [],
     waterDrops: 5,
@@ -116,6 +125,7 @@ const InnerCalmGarden = ({ onClose, onKarmaEarned }: InnerCalmGardenProps) => {
   const [showShareModal, setShowShareModal] = useState(false);
   const [showNotificationSettings, setShowNotificationSettings] = useState(false);
   const [showAchievements, setShowAchievements] = useState(false);
+  const [showLeaderboard, setShowLeaderboard] = useState(false);
   
   const audioContextRef = useRef<AudioContext | null>(null);
   const gardenRef = useRef<HTMLDivElement>(null);
@@ -440,6 +450,20 @@ const InnerCalmGarden = ({ onClose, onKarmaEarned }: InnerCalmGardenProps) => {
     }
   }, [karmaEarned, trackKarmaEarned]);
 
+  // Update leaderboard stats when garden state changes significantly
+  useEffect(() => {
+    if (userId && totalPlants > 0) {
+      updateUserStats({
+        total_plants: totalPlants,
+        flourishing_plants: flourishingPlants,
+        total_karma_earned: achievementStats.totalKarmaEarned,
+        achievements_unlocked: achievementStats.unlocked,
+        garden_level: gardenState.gardenLevel,
+        total_water_used: achievementStats.totalWaterUsed,
+      });
+    }
+  }, [userId, totalPlants, flourishingPlants, achievementStats.totalKarmaEarned, achievementStats.unlocked, gardenState.gardenLevel, achievementStats.totalWaterUsed, updateUserStats]);
+
   // Cleanup
   useEffect(() => {
     return () => {
@@ -491,6 +515,18 @@ const InnerCalmGarden = ({ onClose, onKarmaEarned }: InnerCalmGardenProps) => {
             {achievementStats.unlocked > 0 && (
               <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-amber-500 text-[10px] text-white flex items-center justify-center">
                 {achievementStats.unlocked}
+              </span>
+            )}
+          </button>
+          <button
+            onClick={() => setShowLeaderboard(true)}
+            className="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors relative"
+            title="Leaderboard"
+          >
+            <Users className="w-4 h-4 text-cyan-400" />
+            {userRank && userRank <= 10 && (
+              <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-cyan-500 text-[10px] text-white flex items-center justify-center">
+                {userRank}
               </span>
             )}
           </button>
@@ -892,6 +928,17 @@ const InnerCalmGarden = ({ onClose, onKarmaEarned }: InnerCalmGardenProps) => {
         onClose={() => setShowAchievements(false)}
         achievements={achievements}
         stats={achievementStats}
+      />
+
+      {/* Leaderboard Panel */}
+      <GardenLeaderboardPanel
+        isOpen={showLeaderboard}
+        onClose={() => setShowLeaderboard(false)}
+        leaderboard={leaderboard}
+        userRank={userRank}
+        currentUserId={userId || undefined}
+        isLoading={leaderboardLoading}
+        onRefresh={refreshLeaderboard}
       />
 
       {/* Achievement Unlock Toast */}

@@ -50,6 +50,54 @@ export type Database = {
         }
         Relationships: []
       }
+      garden_stats: {
+        Row: {
+          achievements_unlocked: number
+          avatar_url: string | null
+          created_at: string
+          display_name: string | null
+          flourishing_plants: number
+          garden_level: number
+          id: string
+          last_active_at: string
+          total_karma_earned: number
+          total_plants: number
+          total_water_used: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          achievements_unlocked?: number
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          flourishing_plants?: number
+          garden_level?: number
+          id?: string
+          last_active_at?: string
+          total_karma_earned?: number
+          total_plants?: number
+          total_water_used?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          achievements_unlocked?: number
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          flourishing_plants?: number
+          garden_level?: number
+          id?: string
+          last_active_at?: string
+          total_karma_earned?: number
+          total_plants?: number
+          total_water_used?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       mantra_progress: {
         Row: {
           completed: boolean
