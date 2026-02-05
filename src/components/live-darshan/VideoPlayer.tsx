@@ -19,6 +19,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { toast } from 'sonner';
+import TempleSchedule from './TempleSchedule';
 
 interface VideoPlayerProps {
   temple: Temple;
@@ -220,6 +221,13 @@ const VideoPlayer = ({ temple, onClose }: VideoPlayerProps) => {
                   ))}
                 </div>
               </div>
+
+              {/* Aarti Schedule */}
+              {temple.aartiSchedule && temple.aartiSchedule.length > 0 && (
+                <div className="pt-4 border-t border-border/50">
+                  <TempleSchedule schedule={temple.aartiSchedule} />
+                </div>
+              )}
 
               {/* Open in YouTube */}
               <Button
