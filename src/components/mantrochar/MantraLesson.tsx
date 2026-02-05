@@ -1,11 +1,12 @@
  import { useState, useCallback } from 'react';
  import { motion, AnimatePresence } from 'framer-motion';
- import { ArrowLeft, ArrowRight, Volume2, Headphones, BookOpen, Repeat, Brain, Target } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Volume2, Headphones, BookOpen, Repeat, Brain, Target, Loader2 } from 'lucide-react';
  import type { Mantra, MantraSyllable } from '@/data/mantraLibrary';
  import LearningStep from './LearningStep';
  import SyllableBreakdown from './SyllableBreakdown';
  import RepetitionCounter from './RepetitionCounter';
  import PronunciationFeedback from './PronunciationFeedback';
+import { useGuruVoice } from '@/hooks/useGuruVoice';
  
  interface MantraLessonProps {
    mantra: Mantra;
@@ -28,27 +29,17 @@ const MantraLesson = ({ mantra, onBack, onComplete, onSyllableProgress }: Mantra
    const [completedSyllables, setCompletedSyllables] = useState<number[]>([]);
    const [selectedReps, setSelectedReps] = useState(mantra.recommendedReps[0]);
    const [currentReps, setCurrentReps] = useState(0);
-   const [isPlayingFull, setIsPlayingFull] = useState(false);
  
-   // Simple TTS using browser speech synthesis as fallback
-   const speakText = useCallback((text: string) => {
-     if ('speechSynthesis' in window) {
-       const utterance = new SpeechSynthesisUtterance(text);
-       utterance.rate = 0.7;
-       utterance.pitch = 0.9;
-       speechSynthesis.speak(utterance);
-     }
-   }, []);
+  // ElevenLabs Guru Voice with fallback to browser TTS
+  const guruVoice = useGuruVoice();
  
    const handlePlayFullMantra = useCallback(() => {
-     setIsPlayingFull(true);
-     speakText(mantra.transliteration);
-     setTimeout(() => setIsPlayingFull(false), 3000);
-   }, [mantra.transliteration, speakText]);
+    guruVoice.speak(mantra.transliteration);
+  }, [mantra.transliteration, guruVoice]);
  
    const handlePlaySyllable = useCallback((syllable: MantraSyllable) => {
-     speakText(syllable.transliteration);
-   }, [speakText]);
+    guruVoice.speak(syllable.transliteration);
+  }, [guruVoice]);
  
    const handleSyllableComplete = useCallback((index: number) => {
      if (!completedSyllables.includes(index)) {
@@ -93,28 +84,32 @@ const MantraLesson = ({ mantra, onBack, onComplete, onSyllableProgress }: Mantra
                
                <motion.button
                  onClick={handlePlayFullMantra}
-                 disabled={isPlayingFull}
+                  disabled={guruVoice.isLoading || guruVoice.isPlaying}
                  whileHover={{ scale: 1.05 }}
                  whileTap={{ scale: 0.95 }}
                  className={`
                    px-8 py-4 rounded-full border-2 transition-all
-                   ${isPlayingFull 
+                    ${guruVoice.isPlaying 
                      ? 'bg-primary/20 border-primary text-primary' 
                      : 'bg-white/10 border-white/20 hover:border-primary/50 text-foreground'
                    }
                  `}
                >
                  <span className="flex items-center gap-3">
-                   <Volume2 className={`w-5 h-5 ${isPlayingFull ? 'animate-pulse' : ''}`} />
-                   {isPlayingFull ? 'Playing...' : 'Listen to Guru Voice'}
+                    {guruVoice.isLoading ? (
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                    ) : (
+                      <Volume2 className={`w-5 h-5 ${guruVoice.isPlaying ? 'animate-pulse' : ''}`} />
+                    )}
+                    {guruVoice.isLoading ? 'Generating...' : guruVoice.isPlaying ? 'Playing...' : 'Listen to Guru Voice'}
                  </span>
                </motion.button>
              </div>
  
              <div className="p-4 rounded-xl bg-primary/10 border border-primary/20">
                <p className="text-sm text-foreground/80">
-                 <strong>Tip:</strong> Close your eyes and focus on the sound, flow, and pace.
-                 Train your ear before your mouth.
+                  <strong>Tip:</strong> Close your eyes and focus on the authentic pronunciation.
+                  The Guru voice uses AI to deliver authentic mantra pronunciation.
                </p>
              </div>
            </div>
