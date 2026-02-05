@@ -1,10 +1,12 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Droplets, Sun, Sparkles, Flower2, TreeDeciduous, Heart, Volume2, VolumeX, Calendar, Share2 } from 'lucide-react';
+import { X, Droplets, Sun, Sparkles, Flower2, TreeDeciduous, Heart, Volume2, VolumeX, Calendar, Share2, Bell, BellOff } from 'lucide-react';
 import { useSpiritualProgress } from '@/hooks/useSpiritualProgress';
 import { subscribeToGardenEvents } from '@/hooks/useGardenResources';
+import { useGardenNotifications } from '@/hooks/useGardenNotifications';
 import SeasonalEvents, { ExclusivePlant, BonusReward, getActiveEvents } from './SeasonalEvents';
 import ShareGardenModal from './ShareGardenModal';
+import NotificationSettingsModal from './NotificationSettingsModal';
 
 interface InnerCalmGardenProps {
   onClose: () => void;
@@ -81,6 +83,7 @@ const STAGE_NAMES = ['Seed', 'Sprout', 'Growing', 'Blooming', 'Flourishing'];
 
 const InnerCalmGarden = ({ onClose, onKarmaEarned }: InnerCalmGardenProps) => {
   const { progress, addKarma, userId } = useSpiritualProgress();
+  const { settings: notificationSettings, checkPlantsHealth, startHealthChecks } = useGardenNotifications();
   const [gardenState, setGardenState] = useState<GardenState>({
     plants: [],
     waterDrops: 5,
@@ -99,10 +102,25 @@ const InnerCalmGarden = ({ onClose, onKarmaEarned }: InnerCalmGardenProps) => {
   const [activeEvents] = useState(getActiveEvents());
   const [karmaEarned, setKarmaEarned] = useState(0);
   const [showShareModal, setShowShareModal] = useState(false);
+  const [showNotificationSettings, setShowNotificationSettings] = useState(false);
   
   const audioContextRef = useRef<AudioContext | null>(null);
   const gardenRef = useRef<HTMLDivElement>(null);
   const gardenAreaRef = useRef<HTMLDivElement>(null);
+
+  // Start notification health checks when garden opens
+  useEffect(() => {
+    if (notificationSettings.enabled && gardenState.plants.length > 0) {
+      startHealthChecks(() => gardenState.plants);
+    }
+  }, [notificationSettings.enabled, gardenState.plants, startHealthChecks]);
+
+  // Check plant health when garden state changes
+  useEffect(() => {
+    if (notificationSettings.enabled && gardenState.plants.length > 0) {
+      checkPlantsHealth(gardenState.plants);
+    }
+  }, [gardenState.plants, notificationSettings.enabled, checkPlantsHealth]);
 
   // Load garden state from localStorage
   useEffect(() => {
@@ -413,6 +431,17 @@ const InnerCalmGarden = ({ onClose, onKarmaEarned }: InnerCalmGardenProps) => {
           </div>
         </div>
         <div className="flex items-center gap-2">
+          <button
+            onClick={() => setShowNotificationSettings(true)}
+            className="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors"
+            title="Notification Settings"
+          >
+            {notificationSettings.enabled ? (
+              <Bell className="w-4 h-4 text-amber-400" />
+            ) : (
+              <BellOff className="w-4 h-4 text-muted-foreground" />
+            )}
+          </button>
           <button
             onClick={() => setShowShareModal(true)}
             className="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors"
@@ -797,6 +826,12 @@ const InnerCalmGarden = ({ onClose, onKarmaEarned }: InnerCalmGardenProps) => {
           totalKarmaEarned: karmaEarned,
         }}
         userId={userId}
+      />
+
+      {/* Notification Settings Modal */}
+      <NotificationSettingsModal
+        isOpen={showNotificationSettings}
+        onClose={() => setShowNotificationSettings(false)}
       />
     </motion.div>
   );
