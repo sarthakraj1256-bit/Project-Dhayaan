@@ -1,6 +1,7 @@
  import { motion } from 'framer-motion';
  import { Clock, Target, TrendingUp, Award, History, Flame, Trophy } from 'lucide-react';
  import { SessionStats as SessionStatsType } from '@/hooks/useSessionHistory';
+ import ShareButton from './ShareButton';
  
  interface SessionStatsProps {
    stats: SessionStatsType | null;
@@ -8,7 +9,25 @@
    isAuthenticated: boolean;
  }
  
- const SessionStats = ({ stats, isLoading, isAuthenticated }: SessionStatsProps) => {
+const SessionStats = ({ stats, isLoading, isAuthenticated }: SessionStatsProps) => {
+  const getShareText = () => {
+    if (!stats) return '';
+    const parts = [];
+    if (stats.totalHours >= 1) {
+      parts.push(`🧘 ${stats.totalHours} hours of meditation`);
+    } else {
+      parts.push(`🧘 ${stats.totalMinutes} minutes of meditation`);
+    }
+    if (stats.currentStreak > 0) {
+      parts.push(`🔥 ${stats.currentStreak} day streak`);
+    }
+    if (stats.longestStreak > 1) {
+      parts.push(`🏆 Best streak: ${stats.longestStreak} days`);
+    }
+    parts.push('\nDiscover the science of silence with Dhyaan');
+    return parts.join('\n');
+  };
+
    if (!isAuthenticated) {
      return (
        <div className="text-center py-4 text-muted-foreground text-sm">
@@ -48,8 +67,17 @@
      <motion.div
        initial={{ opacity: 0, y: 10 }}
        animate={{ opacity: 1, y: 0 }}
-    className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3"
      >
+        {/* Share Button */}
+        <div className="flex justify-end mb-3">
+          <ShareButton
+            title="Share your journey"
+            text={getShareText()}
+            hashtags={['meditation', 'mindfulness', 'dhyaan', 'wellness']}
+          />
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
        {/* Total Time */}
        <div className="p-3 rounded-xl bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20">
          <div className="flex items-center gap-2 mb-1">
@@ -115,7 +143,8 @@
           </span>
         </div>
       </div>
-     </motion.div>
+        </div>
+      </motion.div>
    );
  };
  

@@ -1,6 +1,7 @@
  import { motion } from 'framer-motion';
  import { Trophy, Lock } from 'lucide-react';
  import { AchievementWithStatus } from '@/hooks/useAchievements';
+ import ShareButton from './ShareButton';
  
  interface AchievementsPanelProps {
    achievements: AchievementWithStatus[];
@@ -113,6 +114,18 @@
    isLoading,
    isAuthenticated,
  }: AchievementsPanelProps) => {
+  const getShareText = () => {
+    const unlocked = achievements.filter(a => a.unlocked);
+    if (unlocked.length === 0) return 'Starting my meditation journey with Dhyaan!';
+    
+    const recentUnlock = unlocked.sort((a, b) => {
+      if (!a.unlockedAt || !b.unlockedAt) return 0;
+      return new Date(b.unlockedAt).getTime() - new Date(a.unlockedAt).getTime();
+    })[0];
+    
+    return `🏅 Just unlocked "${recentUnlock.name}" achievement!\n\n${recentUnlock.description}\n\n${unlockedCount}/${totalCount} achievements unlocked on my meditation journey`;
+  };
+
    if (!isAuthenticated) {
      return (
        <div className="text-center py-4 text-muted-foreground text-sm">
@@ -139,7 +152,7 @@
    return (
      <div>
        {/* Header Stats */}
-       <div className="flex items-center gap-3 mb-4">
+      <div className="flex items-center gap-3 mb-4 flex-wrap">
          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20">
            <Trophy className="w-4 h-4 text-primary" />
            <span className="text-sm font-display text-foreground">
@@ -152,6 +165,13 @@
              style={{ width: `${(unlockedCount / totalCount) * 100}%` }}
            />
          </div>
+        {unlockedCount > 0 && (
+          <ShareButton
+            title="Share achievements"
+            text={getShareText()}
+            hashtags={['meditation', 'achievement', 'dhyaan', 'mindfulness']}
+          />
+        )}
        </div>
  
        {/* Achievements Grid */}
