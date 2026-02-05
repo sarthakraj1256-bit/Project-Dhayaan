@@ -5,6 +5,7 @@
  import LearningStep from './LearningStep';
  import SyllableBreakdown from './SyllableBreakdown';
  import RepetitionCounter from './RepetitionCounter';
+ import PronunciationFeedback from './PronunciationFeedback';
  
  interface MantraLessonProps {
    mantra: Mantra;
@@ -15,7 +16,7 @@
  const STEPS = [
    { id: 'listen', label: 'Listen', icon: <Headphones className="w-4 h-4" /> },
    { id: 'breakdown', label: 'Break Down', icon: <BookOpen className="w-4 h-4" /> },
-   { id: 'practice', label: 'Practice', icon: <Volume2 className="w-4 h-4" /> },
+  { id: 'practice', label: 'Practice', icon: <Repeat className="w-4 h-4" /> },
    { id: 'understand', label: 'Understand', icon: <Brain className="w-4 h-4" /> },
    { id: 'repetition', label: 'Repeat', icon: <Target className="w-4 h-4" /> },
  ];
@@ -139,44 +140,22 @@
        case 'practice':
          return (
            <div className="space-y-6">
-             <div className="text-center">
-               <p className="text-muted-foreground text-sm mb-6">
-                 Practice speaking each syllable. Tap when you've mastered it.
-               </p>
+            <div className="text-center mb-4">
+              <p className="text-muted-foreground text-sm">
+                Practice speaking each syllable with microphone feedback.
+              </p>
+              <p className="text-xs text-muted-foreground/70 mt-1">
+                Syllable {currentSyllableIndex + 1} of {mantra.syllables.length}
+              </p>
              </div>
  
-             {/* Current Syllable Focus */}
-             <div className="p-8 rounded-2xl bg-white/5 border border-white/10 text-center">
-               <p className="text-xs text-muted-foreground mb-2">
-                 Syllable {currentSyllableIndex + 1} of {mantra.syllables.length}
-               </p>
-               <p className="text-5xl font-sanskrit text-foreground mb-3">
-                 {mantra.syllables[currentSyllableIndex]?.text}
-               </p>
-               <p className="text-xl text-primary font-mono mb-2">
-                 {mantra.syllables[currentSyllableIndex]?.transliteration}
-               </p>
-               <p className="text-sm text-muted-foreground">
-                 Say: "{mantra.syllables[currentSyllableIndex]?.pronunciation}"
-               </p>
- 
-               <div className="flex items-center justify-center gap-4 mt-6">
-                 <button
-                   onClick={() => handlePlaySyllable(mantra.syllables[currentSyllableIndex])}
-                   className="px-4 py-2 rounded-full bg-white/10 border border-white/20 text-sm hover:bg-white/20 transition-colors flex items-center gap-2"
-                 >
-                   <Volume2 className="w-4 h-4" />
-                   Hear Again
-                 </button>
-                 <button
-                   onClick={() => handleSyllableComplete(currentSyllableIndex)}
-                   className="px-4 py-2 rounded-full bg-primary/20 border border-primary/50 text-primary text-sm hover:bg-primary/30 transition-colors"
-                 >
-                   I've Got It ✓
-                 </button>
-               </div>
-             </div>
- 
+            <PronunciationFeedback
+              expectedText={mantra.syllables[currentSyllableIndex]?.text || ''}
+              expectedTransliteration={mantra.syllables[currentSyllableIndex]?.transliteration || ''}
+              onSuccess={() => handleSyllableComplete(currentSyllableIndex)}
+              onPlayReference={() => handlePlaySyllable(mantra.syllables[currentSyllableIndex])}
+            />
+
              {/* Progress */}
              <div className="flex gap-1 justify-center">
                {mantra.syllables.map((_, i) => (
@@ -187,13 +166,34 @@
                      ${completedSyllables.includes(i) 
                        ? 'bg-emerald-500' 
                        : i === currentSyllableIndex 
-                         ? 'bg-primary' 
+                        ? 'bg-primary w-4' 
                          : 'bg-white/20'
                      }
                    `}
                  />
                ))}
              </div>
+
+            {/* Skip / Manual Complete */}
+            <div className="flex items-center justify-center gap-4 pt-4">
+              <button
+                onClick={() => {
+                  if (currentSyllableIndex > 0) {
+                    setCurrentSyllableIndex(currentSyllableIndex - 1);
+                  }
+                }}
+                disabled={currentSyllableIndex === 0}
+                className="text-xs text-muted-foreground hover:text-foreground transition-colors disabled:opacity-50"
+              >
+                ← Previous syllable
+              </button>
+              <button
+                onClick={() => handleSyllableComplete(currentSyllableIndex)}
+                className="text-xs text-primary/70 hover:text-primary transition-colors"
+              >
+                Skip this syllable →
+              </button>
+            </div>
            </div>
          );
  
