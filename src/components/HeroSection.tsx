@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
  import { Link } from 'react-router-dom';
- import { Radio } from 'lucide-react';
+  import { Radio, BookOpen } from 'lucide-react';
 
 interface HeroSectionProps {
   onMounted: () => void;
@@ -43,23 +43,43 @@ export default function HeroSection({ onMounted }: HeroSectionProps) {
 
         {/* Scroll Indicator */}
          <div className="animate-fade-in-up opacity-0 space-y-6" style={{ animationDelay: '1s', animationFillMode: 'forwards' }}>
-           {/* Sonic Lab CTA */}
-           <Link
-             to="/sonic-lab"
-             className="group inline-flex items-center gap-3 px-6 py-3 rounded-full transition-all duration-500 hover:scale-105"
-             style={{
-               background: 'linear-gradient(135deg, hsl(var(--void-light) / 0.6), hsl(var(--void) / 0.4))',
-               backdropFilter: 'blur(12px)',
-               WebkitBackdropFilter: 'blur(12px)',
-               border: '1px solid hsl(var(--gold) / 0.3)',
-               boxShadow: '0 0 30px hsl(var(--gold) / 0.1)',
-             }}
-           >
-             <Radio className="w-4 h-4 text-primary group-hover:animate-pulse" />
-             <span className="font-display text-sm tracking-wider text-gold-gradient">
-               Enter The Sonic Lab
-             </span>
-           </Link>
+           {/* CTAs */}
+           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+             {/* Sonic Lab CTA */}
+             <Link
+               to="/sonic-lab"
+               className="group inline-flex items-center gap-3 px-6 py-3 rounded-full transition-all duration-500 hover:scale-105"
+               style={{
+                 background: 'linear-gradient(135deg, hsl(var(--void-light) / 0.6), hsl(var(--void) / 0.4))',
+                 backdropFilter: 'blur(12px)',
+                 WebkitBackdropFilter: 'blur(12px)',
+                 border: '1px solid hsl(var(--gold) / 0.3)',
+                 boxShadow: '0 0 30px hsl(var(--gold) / 0.1)',
+               }}
+             >
+               <Radio className="w-4 h-4 text-primary group-hover:animate-pulse" />
+               <span className="font-display text-sm tracking-wider text-gold-gradient">
+                 Enter The Sonic Lab
+               </span>
+             </Link>
+ 
+             {/* Mantrochar CTA */}
+             <Link
+               to="/mantrochar"
+               className="group inline-flex items-center gap-3 px-6 py-3 rounded-full transition-all duration-500 hover:scale-105"
+               style={{
+                 background: 'linear-gradient(135deg, hsl(var(--void-light) / 0.4), hsl(var(--void) / 0.2))',
+                 backdropFilter: 'blur(12px)',
+                 WebkitBackdropFilter: 'blur(12px)',
+                 border: '1px solid hsl(var(--gold) / 0.2)',
+               }}
+             >
+               <BookOpen className="w-4 h-4 text-primary/80 group-hover:text-primary transition-colors" />
+               <span className="font-display text-sm tracking-wider text-foreground/80 group-hover:text-foreground transition-colors">
+                 Learn Mantras
+               </span>
+             </Link>
+           </div>
  
           <div className="flex flex-col items-center gap-2">
             <span className="text-muted-foreground text-sm tracking-widest uppercase">Explore</span>
