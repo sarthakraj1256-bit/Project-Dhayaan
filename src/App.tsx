@@ -10,6 +10,7 @@ import Profile from "./pages/Profile";
 import SonicLab from "./pages/SonicLab";
 import Mantrochar from "./pages/Mantrochar";
 import Lakshya from "./pages/Lakshya";
+import LiveDarshan from "./pages/LiveDarshan";
 import SharedGarden from "./pages/SharedGarden";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
@@ -32,6 +33,7 @@ const App = () => (
           <Route path="/sonic-lab" element={<SonicLab />} />
           <Route path="/mantrochar" element={<Mantrochar />} />
           <Route path="/lakshya" element={<Lakshya />} />
+          <Route path="/live-darshan" element={<LiveDarshan />} />
           <Route path="/garden/:id" element={<SharedGarden />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
