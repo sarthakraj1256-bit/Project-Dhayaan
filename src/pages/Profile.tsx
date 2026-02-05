@@ -1,0 +1,279 @@
+ import { useState, useEffect, useRef } from 'react';
+ import { useNavigate } from 'react-router-dom';
+ import { User } from '@supabase/supabase-js';
+ import { supabase } from '@/integrations/backend/client';
+ import { toast } from 'sonner';
+ import { ArrowLeft, Camera, Loader2, Save, User as UserIcon } from 'lucide-react';
+ import { Button } from '@/components/ui/button';
+ import { Input } from '@/components/ui/input';
+ import { Label } from '@/components/ui/label';
+ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+ 
+ interface Profile {
+   id: string;
+   user_id: string;
+   display_name: string | null;
+   avatar_url: string | null;
+ }
+ 
+ const Profile = () => {
+   const navigate = useNavigate();
+   const fileInputRef = useRef<HTMLInputElement>(null);
+   const [user, setUser] = useState<User | null>(null);
+   const [profile, setProfile] = useState<Profile | null>(null);
+   const [displayName, setDisplayName] = useState('');
+   const [isLoading, setIsLoading] = useState(true);
+   const [isSaving, setIsSaving] = useState(false);
+   const [isUploading, setIsUploading] = useState(false);
+ 
+   useEffect(() => {
+     const checkAuth = async () => {
+       const { data: { session } } = await supabase.auth.getSession();
+       if (!session?.user) {
+         navigate('/auth');
+         return;
+       }
+       setUser(session.user);
+       await fetchProfile(session.user.id);
+     };
+     checkAuth();
+   }, [navigate]);
+ 
+   const fetchProfile = async (userId: string) => {
+     setIsLoading(true);
+     const { data, error } = await supabase
+       .from('profiles')
+       .select('*')
+       .eq('user_id', userId)
+       .maybeSingle();
+ 
+     if (error) {
+       toast.error('Failed to load profile');
+       console.error(error);
+     } else if (data) {
+       setProfile(data);
+       setDisplayName(data.display_name || '');
+     }
+     setIsLoading(false);
+   };
+ 
+   const handleSave = async () => {
+     if (!user) return;
+     setIsSaving(true);
+ 
+     const { error } = await supabase
+       .from('profiles')
+       .update({ display_name: displayName.trim() || null })
+       .eq('user_id', user.id);
+ 
+     if (error) {
+       toast.error('Failed to update profile');
+       console.error(error);
+     } else {
+       toast.success('Profile updated successfully');
+       setProfile(prev => prev ? { ...prev, display_name: displayName.trim() || null } : null);
+     }
+     setIsSaving(false);
+   };
+ 
+   const handleAvatarUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+     const file = event.target.files?.[0];
+     if (!file || !user) return;
+ 
+     // Validate file type
+     if (!file.type.startsWith('image/')) {
+       toast.error('Please upload an image file');
+       return;
+     }
+ 
+     // Validate file size (max 2MB)
+     if (file.size > 2 * 1024 * 1024) {
+       toast.error('Image must be less than 2MB');
+       return;
+     }
+ 
+     setIsUploading(true);
+ 
+     const fileExt = file.name.split('.').pop();
+     const filePath = `${user.id}/avatar.${fileExt}`;
+ 
+     // Upload to storage
+     const { error: uploadError } = await supabase.storage
+       .from('avatars')
+       .upload(filePath, file, { upsert: true });
+ 
+     if (uploadError) {
+       toast.error('Failed to upload avatar');
+       console.error(uploadError);
+       setIsUploading(false);
+       return;
+     }
+ 
+     // Get public URL
+     const { data: { publicUrl } } = supabase.storage
+       .from('avatars')
+       .getPublicUrl(filePath);
+ 
+     // Update profile with new avatar URL (add timestamp to bust cache)
+     const avatarUrlWithTimestamp = `${publicUrl}?t=${Date.now()}`;
+     const { error: updateError } = await supabase
+       .from('profiles')
+       .update({ avatar_url: avatarUrlWithTimestamp })
+       .eq('user_id', user.id);
+ 
+     if (updateError) {
+       toast.error('Failed to update profile');
+       console.error(updateError);
+     } else {
+       toast.success('Avatar updated successfully');
+       setProfile(prev => prev ? { ...prev, avatar_url: avatarUrlWithTimestamp } : null);
+     }
+ 
+     setIsUploading(false);
+   };
+ 
+   const getInitials = () => {
+     if (profile?.display_name) {
+       return profile.display_name.slice(0, 2).toUpperCase();
+     }
+     return user?.email?.slice(0, 2).toUpperCase() || '??';
+   };
+ 
+   if (isLoading) {
+     return (
+       <div className="min-h-screen bg-background flex items-center justify-center">
+         <Loader2 className="w-8 h-8 animate-spin text-primary" />
+       </div>
+     );
+   }
+ 
+   return (
+     <div className="min-h-screen bg-background">
+       {/* Sacred Pattern Overlay */}
+       <div className="fixed inset-0 sacred-pattern pointer-events-none opacity-20 z-0" />
+ 
+       <div className="relative z-10 max-w-2xl mx-auto px-6 py-12">
+         {/* Back Button */}
+         <button
+           onClick={() => navigate(-1)}
+           className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-8"
+         >
+           <ArrowLeft className="w-4 h-4" />
+           <span className="text-sm tracking-wider">Back</span>
+         </button>
+ 
+         {/* Header */}
+         <div className="text-center mb-12">
+           <h1 className="font-display text-3xl tracking-wider text-foreground mb-2">
+             Your Profile
+           </h1>
+           <p className="text-muted-foreground font-body">
+             Customize your sacred presence
+           </p>
+         </div>
+ 
+         {/* Profile Card */}
+         <div
+           className="rounded-2xl p-8"
+           style={{
+             background: 'hsl(var(--void-light) / 0.4)',
+             backdropFilter: 'blur(16px)',
+             WebkitBackdropFilter: 'blur(16px)',
+             border: '1px solid hsl(var(--gold) / 0.2)',
+           }}
+         >
+           {/* Avatar Section */}
+           <div className="flex flex-col items-center mb-8">
+             <div className="relative group">
+               <Avatar className="w-24 h-24 border-2 border-gold/30">
+                 <AvatarImage src={profile?.avatar_url || undefined} />
+                 <AvatarFallback
+                   className="text-xl font-display tracking-wider"
+                   style={{
+                     background: 'linear-gradient(135deg, hsl(var(--gold) / 0.3), hsl(var(--gold) / 0.1))',
+                     color: 'hsl(var(--gold))',
+                   }}
+                 >
+                   {getInitials()}
+                 </AvatarFallback>
+               </Avatar>
+ 
+               {/* Upload Overlay */}
+               <button
+                 onClick={() => fileInputRef.current?.click()}
+                 disabled={isUploading}
+                 className="absolute inset-0 rounded-full flex items-center justify-center bg-void/60 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+               >
+                 {isUploading ? (
+                   <Loader2 className="w-6 h-6 animate-spin text-gold" />
+                 ) : (
+                   <Camera className="w-6 h-6 text-gold" />
+                 )}
+               </button>
+ 
+               <input
+                 ref={fileInputRef}
+                 type="file"
+                 accept="image/*"
+                 onChange={handleAvatarUpload}
+                 className="hidden"
+               />
+             </div>
+ 
+             <p className="text-sm text-muted-foreground mt-3">
+               Click to upload avatar
+             </p>
+           </div>
+ 
+           {/* Form */}
+           <div className="space-y-6">
+             {/* Email (Read-only) */}
+             <div className="space-y-2">
+               <Label className="text-muted-foreground text-sm tracking-wider">
+                 Email
+               </Label>
+               <div className="px-4 py-3 rounded-lg bg-void/30 border border-gold/10 text-foreground/70">
+                 {user?.email}
+               </div>
+             </div>
+ 
+             {/* Display Name */}
+             <div className="space-y-2">
+               <Label htmlFor="displayName" className="text-muted-foreground text-sm tracking-wider">
+                 Display Name
+               </Label>
+               <Input
+                 id="displayName"
+                 value={displayName}
+                 onChange={(e) => setDisplayName(e.target.value)}
+                 placeholder="Enter your display name"
+                 maxLength={50}
+                 className="bg-void/30 border-gold/20 focus:border-gold/50 text-foreground placeholder:text-muted-foreground/50"
+               />
+             </div>
+ 
+             {/* Save Button */}
+             <Button
+               onClick={handleSave}
+               disabled={isSaving}
+               className="w-full mt-6"
+               style={{
+                 background: 'linear-gradient(135deg, hsl(var(--gold) / 0.8), hsl(var(--gold) / 0.6))',
+                 color: 'hsl(var(--void))',
+               }}
+             >
+               {isSaving ? (
+                 <Loader2 className="w-4 h-4 animate-spin mr-2" />
+               ) : (
+                 <Save className="w-4 h-4 mr-2" />
+               )}
+               {isSaving ? 'Saving...' : 'Save Changes'}
+             </Button>
+           </div>
+         </div>
+       </div>
+     </div>
+   );
+ };
+ 
+ export default Profile;
