@@ -87,7 +87,7 @@ import BottomNav from '@/components/BottomNav';
        </div>
  
        {/* Content */}
-       <div className="relative z-10">
+       <div className="relative z-10 pb-24 md:pb-0">
          {/* Header */}
          <header className="sticky top-0 z-40 px-6 py-4 bg-void/80 backdrop-blur-xl border-b border-white/5">
            <div className="max-w-5xl mx-auto flex items-center justify-between">

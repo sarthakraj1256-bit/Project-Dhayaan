@@ -94,7 +94,7 @@ const Index = () => {
       </div>
 
       {/* Scrollable Content */}
-      <main className={`relative z-10 transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
+      <main className={`relative z-10 transition-opacity duration-1000 pb-24 md:pb-0 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
         <HeroSection onMounted={handleHeroMounted} />
         
         {/* Divider */}
