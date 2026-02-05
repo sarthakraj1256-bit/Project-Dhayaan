@@ -31,8 +31,10 @@ import TempleFilters from '@/components/live-darshan/TempleFilters';
 import VideoPlayer from '@/components/live-darshan/VideoPlayer';
 import SpiritualContentCard from '@/components/live-darshan/SpiritualContentCard';
 import ContentVideoModal from '@/components/live-darshan/ContentVideoModal';
+import FavoritesPanel from '@/components/live-darshan/FavoritesPanel';
 import BottomNav from '@/components/BottomNav';
 import AartiReminderSettings from '@/components/live-darshan/AartiReminderSettings';
+import { useFavoriteAartiNotifications } from '@/hooks/useFavoriteAartiNotifications';
 
 const LiveDarshan = () => {
   const [selectedTemple, setSelectedTemple] = useState<Temple | null>(null);
@@ -44,6 +46,8 @@ const LiveDarshan = () => {
   const [showLiveOnly, setShowLiveOnly] = useState(false);
   const [contentType, setContentType] = useState<SpiritualContent['type'] | 'all'>('all');
 
+  // Initialize favorite aarti notifications
+  useFavoriteAartiNotifications();
   // Filter temples
   const filteredTemples = useMemo(() => {
     return temples.filter(temple => {
@@ -110,12 +114,15 @@ const LiveDarshan = () => {
             </div>
             
             {/* Right side controls */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 md:gap-3">
+              {/* Favorites Panel */}
+              <FavoritesPanel onSelectTemple={setSelectedTemple} />
+              
               {/* Schedule Link */}
               <Link to="/aarti-schedule">
                 <Button variant="outline" size="sm" className="gap-2 hidden md:flex">
                   <Calendar className="w-4 h-4" />
-                  Aarti Schedule
+                  Schedule
                 </Button>
                 <Button variant="outline" size="icon" className="md:hidden">
                   <Calendar className="w-4 h-4" />
@@ -126,10 +133,10 @@ const LiveDarshan = () => {
               <AartiReminderSettings />
               
               {/* Live Counter */}
-              <div className="flex items-center gap-2 px-3 py-1.5 bg-destructive/20 rounded-full">
+              <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-destructive/20 rounded-full">
                 <Radio className="w-4 h-4 text-destructive animate-pulse" />
                 <span className="text-sm text-destructive">
-                  {temples.filter(t => t.isLive).length} Live Now
+                  {temples.filter(t => t.isLive).length} Live
                 </span>
               </div>
             </div>

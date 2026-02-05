@@ -1,10 +1,11 @@
 import { motion } from 'framer-motion';
-import { Play, Users, Radio, MapPin, Clock } from 'lucide-react';
+import { Play, Users, Radio, MapPin } from 'lucide-react';
 import { Temple, deityLabels } from '@/data/templeStreams';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import TempleSchedule from './TempleSchedule';
+import FavoriteButton from './FavoriteButton';
 
 interface TempleCardProps {
   temple: Temple;
@@ -85,9 +86,12 @@ const TempleCard = ({ temple, onSelect, isSelected }: TempleCardProps) => {
           </h3>
           
           {/* Location */}
-          <div className="flex items-center gap-1.5 text-muted-foreground text-sm">
-            <MapPin className="w-3.5 h-3.5" />
-            <span className="line-clamp-1">{temple.location}</span>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-1.5 text-muted-foreground text-sm">
+              <MapPin className="w-3.5 h-3.5" />
+              <span className="line-clamp-1">{temple.location}</span>
+            </div>
+            <FavoriteButton templeId={temple.id} templeName={temple.name} size="sm" />
           </div>
           
           {/* Deity Badge */}

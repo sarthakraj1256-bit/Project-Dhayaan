@@ -332,6 +332,30 @@ export type Database = {
         }
         Relationships: []
       }
+      temple_favorites: {
+        Row: {
+          created_at: string
+          id: string
+          notifications_enabled: boolean
+          temple_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          notifications_enabled?: boolean
+          temple_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          notifications_enabled?: boolean
+          temple_id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_achievements: {
         Row: {
           achievement_id: string

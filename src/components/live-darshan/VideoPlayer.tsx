@@ -7,8 +7,6 @@ import {
   Volume2, 
   VolumeX,
   Share2,
-  Heart,
-  Bell,
   Users,
   Radio,
   MapPin,
@@ -20,6 +18,7 @@ import { Badge } from '@/components/ui/badge';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { toast } from 'sonner';
 import TempleSchedule from './TempleSchedule';
+import FavoriteButton from './FavoriteButton';
 
 interface VideoPlayerProps {
   temple: Temple;
@@ -29,8 +28,6 @@ interface VideoPlayerProps {
 const VideoPlayer = ({ temple, onClose }: VideoPlayerProps) => {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
-  const [isLiked, setIsLiked] = useState(false);
-  const [isNotified, setIsNotified] = useState(false);
 
   const handleShare = async () => {
     try {
@@ -43,16 +40,6 @@ const VideoPlayer = ({ temple, onClose }: VideoPlayerProps) => {
       navigator.clipboard.writeText(window.location.href);
       toast.success('Link copied to clipboard!');
     }
-  };
-
-  const handleLike = () => {
-    setIsLiked(!isLiked);
-    toast.success(isLiked ? 'Removed from favorites' : 'Added to favorites');
-  };
-
-  const handleNotify = () => {
-    setIsNotified(!isNotified);
-    toast.success(isNotified ? 'Notifications disabled' : 'You will be notified for live streams');
   };
 
   const youtubeEmbedUrl = `https://www.youtube.com/embed/${temple.youtubeVideoId}?autoplay=1&mute=${isMuted ? 1 : 0}&rel=0&modestbranding=1`;
@@ -137,23 +124,11 @@ const VideoPlayer = ({ temple, onClose }: VideoPlayerProps) => {
                 </div>
                 
                 <div className="flex items-center gap-2">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={handleLike}
-                    className={`bg-background/50 hover:bg-background/80 ${isLiked ? 'text-red-500' : ''}`}
-                  >
-                    <Heart className={`w-5 h-5 ${isLiked ? 'fill-current' : ''}`} />
-                  </Button>
-                  
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={handleNotify}
-                    className={`bg-background/50 hover:bg-background/80 ${isNotified ? 'text-primary' : ''}`}
-                  >
-                    <Bell className={`w-5 h-5 ${isNotified ? 'fill-current' : ''}`} />
-                  </Button>
+                  <FavoriteButton 
+                    templeId={temple.id} 
+                    templeName={temple.name} 
+                    showNotificationToggle 
+                  />
                   
                   <Button
                     variant="ghost"
