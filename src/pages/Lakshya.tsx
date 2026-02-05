@@ -114,7 +114,7 @@ const Lakshya = () => {
         onComplete={() => setShowLevelUp(false)}
       />
 
-      <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 py-8">
+      <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 py-8 pb-24 md:pb-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <button

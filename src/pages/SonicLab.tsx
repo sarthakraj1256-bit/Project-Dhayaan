@@ -328,7 +328,7 @@ import BottomNav from '@/components/BottomNav';
          </section>
  
          {/* Frequency Categories */}
-         <main className="px-6 pb-32 max-w-7xl mx-auto">
+         <main className="px-6 pb-32 md:pb-32 max-w-7xl mx-auto mb-16 md:mb-0">
            {categories.map((category) => (
              <CategorySection
                key={category.id}
