@@ -1,4 +1,5 @@
- import { motion, AnimatePresence } from 'framer-motion';
+import { forwardRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
  import { Heart, X, Play, Trash2, Star } from 'lucide-react';
  import { Favorite } from '@/hooks/useFavorites';
  import { atmospheres, categories } from '@/data/soundLibrary';
@@ -13,15 +14,19 @@
    onRemoveFavorite: (id: string) => void;
  }
  
- const FavoritesPanel = ({
-   isOpen,
-   favorites,
-   isLoading,
-   isAuthenticated,
-   onClose,
-   onPlayFavorite,
-   onRemoveFavorite,
- }: FavoritesPanelProps) => {
+const FavoritesPanel = forwardRef<HTMLDivElement, FavoritesPanelProps>(
+  (
+    {
+      isOpen,
+      favorites,
+      isLoading,
+      isAuthenticated,
+      onClose,
+      onPlayFavorite,
+      onRemoveFavorite,
+    },
+    ref
+  ) => {
    const getAtmosphereName = (id: string) => {
      return atmospheres.find((a) => a.id === id)?.name || 'None';
    };
@@ -44,9 +49,9 @@
    };
  
    return (
-     <AnimatePresence>
+    <AnimatePresence mode="wait">
        {isOpen && (
-         <>
+        <div ref={ref}>
            {/* Backdrop */}
            <motion.div
              initial={{ opacity: 0 }}
@@ -158,10 +163,13 @@
                )}
              </div>
            </motion.div>
-         </>
+        </div>
        )}
      </AnimatePresence>
    );
- };
+  }
+);
+
+FavoritesPanel.displayName = 'FavoritesPanel';
  
  export default FavoritesPanel;

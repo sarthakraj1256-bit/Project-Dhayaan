@@ -1,4 +1,4 @@
- import { AnimatePresence, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
  import { Link } from 'react-router-dom';
  import { ArrowLeft, Radio, Star } from 'lucide-react';
  import { useState, useCallback } from 'react';
@@ -180,28 +180,26 @@
          </main>
  
          {/* Fixed Audio Controls */}
-         <AnimatePresence>
-           <AudioControls
-             isPlaying={audioState.isPlaying}
-             currentFrequency={audioState.currentFrequency}
-             currentFrequencyName={currentFrequencyMeta?.name}
-             currentFrequencyCategory={currentFrequencyMeta?.category}
-             frequencyVolume={audioState.frequencyVolume}
-             atmosphereVolume={audioState.atmosphereVolume}
-             currentAtmosphere={audioState.currentAtmosphere}
-             atmosphereLoading={audioState.atmosphereLoading}
-             atmosphereCached={audioState.atmosphereCached}
-             atmosphereError={audioState.atmosphereError}
-             sessionTime={formattedTime}
-             isFavorited={currentIsFavorited}
-             isAuthenticated={isAuthenticated}
-             onSaveFavorite={handleSaveFavorite}
-             onFrequencyVolumeChange={setFrequencyVolume}
-             onAtmosphereVolumeChange={setAtmosphereVolume}
-             onAtmosphereChange={setAtmosphere}
-             onStop={stopFrequency}
-           />
-         </AnimatePresence>
+        <AudioControls
+          isPlaying={audioState.isPlaying}
+          currentFrequency={audioState.currentFrequency}
+          currentFrequencyName={currentFrequencyMeta?.name}
+          currentFrequencyCategory={currentFrequencyMeta?.category}
+          frequencyVolume={audioState.frequencyVolume}
+          atmosphereVolume={audioState.atmosphereVolume}
+          currentAtmosphere={audioState.currentAtmosphere}
+          atmosphereLoading={audioState.atmosphereLoading}
+          atmosphereCached={audioState.atmosphereCached}
+          atmosphereError={audioState.atmosphereError}
+          sessionTime={formattedTime}
+          isFavorited={currentIsFavorited}
+          isAuthenticated={isAuthenticated}
+          onSaveFavorite={handleSaveFavorite}
+          onFrequencyVolumeChange={setFrequencyVolume}
+          onAtmosphereVolumeChange={setAtmosphereVolume}
+          onAtmosphereChange={setAtmosphere}
+          onStop={stopFrequency}
+        />
        </div>
  
        {/* Favorites Panel */}
