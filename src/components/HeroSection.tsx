@@ -1,4 +1,6 @@
 import { useEffect, useRef } from 'react';
+ import { Link } from 'react-router-dom';
+ import { Radio } from 'lucide-react';
 
 interface HeroSectionProps {
   onMounted: () => void;
@@ -40,7 +42,25 @@ export default function HeroSection({ onMounted }: HeroSectionProps) {
         </p>
 
         {/* Scroll Indicator */}
-        <div className="animate-fade-in-up opacity-0" style={{ animationDelay: '1s', animationFillMode: 'forwards' }}>
+         <div className="animate-fade-in-up opacity-0 space-y-6" style={{ animationDelay: '1s', animationFillMode: 'forwards' }}>
+           {/* Sonic Lab CTA */}
+           <Link
+             to="/sonic-lab"
+             className="group inline-flex items-center gap-3 px-6 py-3 rounded-full transition-all duration-500 hover:scale-105"
+             style={{
+               background: 'linear-gradient(135deg, hsl(var(--void-light) / 0.6), hsl(var(--void) / 0.4))',
+               backdropFilter: 'blur(12px)',
+               WebkitBackdropFilter: 'blur(12px)',
+               border: '1px solid hsl(var(--gold) / 0.3)',
+               boxShadow: '0 0 30px hsl(var(--gold) / 0.1)',
+             }}
+           >
+             <Radio className="w-4 h-4 text-primary group-hover:animate-pulse" />
+             <span className="font-display text-sm tracking-wider text-gold-gradient">
+               Enter The Sonic Lab
+             </span>
+           </Link>
+ 
           <div className="flex flex-col items-center gap-2">
             <span className="text-muted-foreground text-sm tracking-widest uppercase">Explore</span>
             <div className="w-px h-16 bg-gradient-to-b from-primary/50 to-transparent animate-pulse-glow" />
