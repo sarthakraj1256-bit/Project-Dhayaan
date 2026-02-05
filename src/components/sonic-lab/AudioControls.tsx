@@ -1,5 +1,5 @@
  import { motion } from 'framer-motion';
- import { Volume2, VolumeX, Layers, Loader2, Check, Cloud } from 'lucide-react';
+ import { Volume2, VolumeX, Layers, Loader2, Check, Cloud, Timer } from 'lucide-react';
  import { Slider } from '@/components/ui/slider';
  import { atmospheres, AtmosphereItem } from '@/data/soundLibrary';
  
@@ -12,6 +12,7 @@
    atmosphereLoading?: boolean;
    atmosphereCached?: boolean;
    atmosphereError?: string | null;
+   sessionTime?: string;
    onFrequencyVolumeChange: (volume: number) => void;
    onAtmosphereVolumeChange: (volume: number) => void;
    onAtmosphereChange: (atmosphereId: string) => void;
@@ -27,6 +28,7 @@
    atmosphereLoading = false,
    atmosphereCached = false,
    atmosphereError = null,
+   sessionTime = '00:00',
    onFrequencyVolumeChange,
    onAtmosphereVolumeChange,
    onAtmosphereChange,
@@ -69,6 +71,12 @@
                  {currentFrequency}Hz
                </p>
              </div>
+           </div>
+ 
+           {/* Session Timer */}
+           <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10">
+             <Timer className="w-4 h-4 text-primary" />
+             <span className="font-mono text-lg text-foreground tracking-wider">{sessionTime}</span>
            </div>
  
            <button
