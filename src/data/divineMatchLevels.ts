@@ -211,6 +211,328 @@ export const DIVINE_MATCH_LEVELS: LevelConfig[] = [
     karmaReward: 70,
     starThresholds: [8, 16, 24],
   },
+  // Level 9: Multi-layer Illusions
+  {
+    id: 9,
+    name: 'Depths of Maya',
+    description: 'Break through multiple layers of illusion',
+    taskType: 'break_illusion',
+    gridSize: { rows: 7, cols: 7 },
+    movesLimit: 30,
+    targets: { illusionStones: 8 },
+    obstacles: {
+      illusionStones: [
+        { row: 1, col: 1, layers: 3 }, { row: 1, col: 5, layers: 2 },
+        { row: 2, col: 3, layers: 3 }, { row: 3, col: 1, layers: 2 },
+        { row: 3, col: 5, layers: 3 }, { row: 4, col: 3, layers: 2 },
+        { row: 5, col: 1, layers: 2 }, { row: 5, col: 5, layers: 3 },
+      ],
+    },
+    availableSymbols: ['lotus', 'om', 'chakra', 'yantra', 'trishul'],
+    karmaReward: 75,
+    starThresholds: [8, 16, 25],
+  },
+  // Level 10: Chained Temple
+  {
+    id: 10,
+    name: 'Bound Sanctuary',
+    description: 'Free the temple from all its chains',
+    taskType: 'unlock_chains',
+    gridSize: { rows: 7, cols: 7 },
+    movesLimit: 28,
+    targets: { chainsToBreak: 10 },
+    obstacles: {
+      chains: [
+        { row: 0, col: 3 }, { row: 1, col: 1 }, { row: 1, col: 5 },
+        { row: 2, col: 3 }, { row: 3, col: 0 }, { row: 3, col: 6 },
+        { row: 4, col: 3 }, { row: 5, col: 1 }, { row: 5, col: 5 },
+        { row: 6, col: 3 },
+      ],
+    },
+    availableSymbols: ['lotus', 'om', 'rudraksha', 'diya', 'chakra', 'shankh'],
+    karmaReward: 80,
+    starThresholds: [7, 15, 23],
+  },
+  // Level 11: Mist and Darkness
+  {
+    id: 11,
+    name: 'Twilight Fog',
+    description: 'Clear the mist before it consumes the temple',
+    taskType: 'purify_mist',
+    gridSize: { rows: 7, cols: 7 },
+    movesLimit: 22,
+    targets: { mistToClear: 12 },
+    obstacles: {
+      darkBlocks: [
+        { row: 2, col: 2 }, { row: 2, col: 3 }, { row: 2, col: 4 },
+        { row: 3, col: 2 }, { row: 3, col: 3 }, { row: 3, col: 4 },
+        { row: 4, col: 2 }, { row: 4, col: 3 }, { row: 4, col: 4 },
+      ],
+    },
+    availableSymbols: ['lotus', 'om', 'rudraksha', 'yantra', 'trishul', 'shankh'],
+    karmaReward: 85,
+    starThresholds: [5, 12, 18],
+  },
+  // Level 12: Collection Quest
+  {
+    id: 12,
+    name: 'Sacred Gathering',
+    description: 'Collect all the divine offerings',
+    taskType: 'collect_items',
+    gridSize: { rows: 8, cols: 7 },
+    movesLimit: 30,
+    targets: {
+      itemsToCollect: [
+        { type: 'lotus', count: 5 },
+        { type: 'rudraksha', count: 4 },
+        { type: 'diya', count: 3 },
+      ],
+    },
+    obstacles: {
+      darkBlocks: [
+        { row: 3, col: 0 }, { row: 3, col: 6 },
+        { row: 4, col: 0 }, { row: 4, col: 6 },
+      ],
+    },
+    availableSymbols: ['lotus', 'om', 'rudraksha', 'diya', 'chakra', 'yantra'],
+    karmaReward: 90,
+    starThresholds: [8, 18, 26],
+  },
+  // Level 13: Speed Devotion
+  {
+    id: 13,
+    name: 'Rapid Awakening',
+    description: 'Clear all obstacles before time expires',
+    taskType: 'timed_challenge',
+    gridSize: { rows: 7, cols: 7 },
+    timeLimit: 75,
+    targets: { darkBlocks: 15, lampsToLight: 4 },
+    obstacles: {
+      darkBlocks: [
+        { row: 1, col: 1 }, { row: 1, col: 3 }, { row: 1, col: 5 },
+        { row: 2, col: 2 }, { row: 2, col: 4 },
+        { row: 3, col: 1 }, { row: 3, col: 3 }, { row: 3, col: 5 },
+        { row: 4, col: 2 }, { row: 4, col: 4 },
+        { row: 5, col: 1 }, { row: 5, col: 3 }, { row: 5, col: 5 },
+        { row: 6, col: 2 }, { row: 6, col: 4 },
+      ],
+      lamps: [
+        { row: 0, col: 0 }, { row: 0, col: 6 },
+        { row: 6, col: 0 }, { row: 6, col: 6 },
+      ],
+    },
+    availableSymbols: ['lotus', 'om', 'rudraksha', 'diya', 'chakra', 'yantra', 'trishul'],
+    karmaReward: 100,
+    starThresholds: [25, 45, 65],
+  },
+  // Level 14: Triple Threat
+  {
+    id: 14,
+    name: 'Convergence',
+    description: 'Clear darkness, break illusions, and light lamps',
+    taskType: 'clear_darkness',
+    gridSize: { rows: 8, cols: 7 },
+    movesLimit: 35,
+    targets: { darkBlocks: 10, illusionStones: 4, lampsToLight: 3 },
+    obstacles: {
+      darkBlocks: [
+        { row: 2, col: 1 }, { row: 2, col: 2 }, { row: 2, col: 4 }, { row: 2, col: 5 },
+        { row: 4, col: 1 }, { row: 4, col: 2 }, { row: 4, col: 4 }, { row: 4, col: 5 },
+        { row: 6, col: 2 }, { row: 6, col: 4 },
+      ],
+      illusionStones: [
+        { row: 3, col: 0, layers: 2 }, { row: 3, col: 6, layers: 2 },
+        { row: 5, col: 0, layers: 3 }, { row: 5, col: 6, layers: 3 },
+      ],
+      lamps: [
+        { row: 0, col: 3 }, { row: 4, col: 3 }, { row: 7, col: 3 },
+      ],
+    },
+    availableSymbols: ['lotus', 'om', 'rudraksha', 'diya', 'chakra', 'yantra', 'trishul'],
+    karmaReward: 110,
+    starThresholds: [10, 20, 30],
+  },
+  // Level 15: Fortress of Chains
+  {
+    id: 15,
+    name: 'Liberation Path',
+    description: 'Break chains while clearing spreading darkness',
+    taskType: 'unlock_chains',
+    gridSize: { rows: 8, cols: 8 },
+    movesLimit: 32,
+    targets: { chainsToBreak: 12, darkBlocks: 8 },
+    obstacles: {
+      chains: [
+        { row: 1, col: 1 }, { row: 1, col: 6 },
+        { row: 2, col: 3 }, { row: 2, col: 4 },
+        { row: 3, col: 1 }, { row: 3, col: 6 },
+        { row: 4, col: 1 }, { row: 4, col: 6 },
+        { row: 5, col: 3 }, { row: 5, col: 4 },
+        { row: 6, col: 1 }, { row: 6, col: 6 },
+      ],
+      darkBlocks: [
+        { row: 3, col: 3 }, { row: 3, col: 4 },
+        { row: 4, col: 3 }, { row: 4, col: 4 },
+        { row: 2, col: 2 }, { row: 2, col: 5 },
+        { row: 5, col: 2 }, { row: 5, col: 5 },
+      ],
+    },
+    availableSymbols: ['lotus', 'om', 'rudraksha', 'diya', 'chakra', 'yantra', 'trishul', 'shankh'],
+    karmaReward: 120,
+    starThresholds: [9, 18, 27],
+  },
+  // Level 16: Temple Restoration
+  {
+    id: 16,
+    name: 'Divine Restoration',
+    description: 'Light all eight sacred lamps',
+    taskType: 'activate_lamps',
+    gridSize: { rows: 8, cols: 8 },
+    movesLimit: 35,
+    targets: { lampsToLight: 8 },
+    obstacles: {
+      lamps: [
+        { row: 0, col: 0 }, { row: 0, col: 7 },
+        { row: 2, col: 3 }, { row: 2, col: 4 },
+        { row: 5, col: 3 }, { row: 5, col: 4 },
+        { row: 7, col: 0 }, { row: 7, col: 7 },
+      ],
+      illusionStones: [
+        { row: 1, col: 1, layers: 2 }, { row: 1, col: 6, layers: 2 },
+        { row: 6, col: 1, layers: 2 }, { row: 6, col: 6, layers: 2 },
+      ],
+    },
+    availableSymbols: ['lotus', 'om', 'rudraksha', 'diya', 'chakra', 'yantra', 'trishul', 'shankh'],
+    karmaReward: 130,
+    starThresholds: [10, 20, 30],
+  },
+  // Level 17: Mist Storm
+  {
+    id: 17,
+    name: 'Tempest of Doubt',
+    description: 'Purify the overwhelming mist with chains blocking your path',
+    taskType: 'purify_mist',
+    gridSize: { rows: 8, cols: 8 },
+    movesLimit: 28,
+    targets: { mistToClear: 16, chainsToBreak: 6 },
+    obstacles: {
+      darkBlocks: [
+        { row: 2, col: 2 }, { row: 2, col: 3 }, { row: 2, col: 4 }, { row: 2, col: 5 },
+        { row: 3, col: 2 }, { row: 3, col: 5 },
+        { row: 4, col: 2 }, { row: 4, col: 5 },
+        { row: 5, col: 2 }, { row: 5, col: 3 }, { row: 5, col: 4 }, { row: 5, col: 5 },
+      ],
+      chains: [
+        { row: 1, col: 3 }, { row: 1, col: 4 },
+        { row: 3, col: 3 }, { row: 4, col: 4 },
+        { row: 6, col: 3 }, { row: 6, col: 4 },
+      ],
+    },
+    availableSymbols: ['lotus', 'om', 'rudraksha', 'diya', 'chakra', 'yantra', 'trishul', 'shankh'],
+    karmaReward: 140,
+    starThresholds: [7, 15, 23],
+  },
+  // Level 18: Ultimate Collection
+  {
+    id: 18,
+    name: 'Divine Treasury',
+    description: 'Gather all sacred symbols through the obstacles',
+    taskType: 'collect_items',
+    gridSize: { rows: 9, cols: 8 },
+    movesLimit: 40,
+    targets: {
+      itemsToCollect: [
+        { type: 'lotus', count: 6 },
+        { type: 'rudraksha', count: 5 },
+        { type: 'om', count: 4 },
+        { type: 'shankh', count: 3 },
+      ],
+    },
+    obstacles: {
+      darkBlocks: [
+        { row: 3, col: 2 }, { row: 3, col: 5 },
+        { row: 5, col: 2 }, { row: 5, col: 5 },
+      ],
+      illusionStones: [
+        { row: 4, col: 0, layers: 2 }, { row: 4, col: 7, layers: 2 },
+      ],
+      chains: [
+        { row: 2, col: 3 }, { row: 2, col: 4 },
+        { row: 6, col: 3 }, { row: 6, col: 4 },
+      ],
+    },
+    availableSymbols: ['lotus', 'om', 'rudraksha', 'diya', 'chakra', 'yantra', 'trishul', 'shankh'],
+    karmaReward: 150,
+    starThresholds: [12, 24, 35],
+  },
+  // Level 19: Time Crisis
+  {
+    id: 19,
+    name: 'Sacred Urgency',
+    description: 'Complete all objectives before time runs out',
+    taskType: 'timed_challenge',
+    gridSize: { rows: 8, cols: 8 },
+    timeLimit: 90,
+    targets: { darkBlocks: 12, illusionStones: 6, lampsToLight: 4 },
+    obstacles: {
+      darkBlocks: [
+        { row: 1, col: 2 }, { row: 1, col: 5 },
+        { row: 2, col: 1 }, { row: 2, col: 3 }, { row: 2, col: 4 }, { row: 2, col: 6 },
+        { row: 5, col: 1 }, { row: 5, col: 3 }, { row: 5, col: 4 }, { row: 5, col: 6 },
+        { row: 6, col: 2 }, { row: 6, col: 5 },
+      ],
+      illusionStones: [
+        { row: 3, col: 2, layers: 2 }, { row: 3, col: 5, layers: 2 },
+        { row: 4, col: 2, layers: 3 }, { row: 4, col: 5, layers: 3 },
+        { row: 3, col: 0, layers: 2 }, { row: 4, col: 7, layers: 2 },
+      ],
+      lamps: [
+        { row: 0, col: 0 }, { row: 0, col: 7 },
+        { row: 7, col: 0 }, { row: 7, col: 7 },
+      ],
+    },
+    availableSymbols: ['lotus', 'om', 'rudraksha', 'diya', 'chakra', 'yantra', 'trishul', 'shankh'],
+    karmaReward: 175,
+    starThresholds: [30, 55, 80],
+  },
+  // Level 20: Ultimate Challenge
+  {
+    id: 20,
+    name: 'Enlightenment',
+    description: 'Master all obstacles in the final challenge',
+    taskType: 'clear_darkness',
+    gridSize: { rows: 9, cols: 9 },
+    movesLimit: 45,
+    targets: { darkBlocks: 16, illusionStones: 6, lampsToLight: 6, chainsToBreak: 8 },
+    obstacles: {
+      darkBlocks: [
+        { row: 2, col: 2 }, { row: 2, col: 3 }, { row: 2, col: 5 }, { row: 2, col: 6 },
+        { row: 3, col: 2 }, { row: 3, col: 6 },
+        { row: 4, col: 3 }, { row: 4, col: 4 }, { row: 4, col: 5 },
+        { row: 5, col: 2 }, { row: 5, col: 6 },
+        { row: 6, col: 2 }, { row: 6, col: 3 }, { row: 6, col: 5 }, { row: 6, col: 6 },
+        { row: 4, col: 0 },
+      ],
+      illusionStones: [
+        { row: 1, col: 4, layers: 3 }, { row: 7, col: 4, layers: 3 },
+        { row: 4, col: 1, layers: 2 }, { row: 4, col: 7, layers: 2 },
+        { row: 3, col: 3, layers: 2 }, { row: 5, col: 5, layers: 2 },
+      ],
+      lamps: [
+        { row: 0, col: 0 }, { row: 0, col: 4 }, { row: 0, col: 8 },
+        { row: 8, col: 0 }, { row: 8, col: 4 }, { row: 8, col: 8 },
+      ],
+      chains: [
+        { row: 1, col: 1 }, { row: 1, col: 7 },
+        { row: 3, col: 4 }, { row: 5, col: 4 },
+        { row: 7, col: 1 }, { row: 7, col: 7 },
+        { row: 4, col: 2 }, { row: 4, col: 6 },
+      ],
+    },
+    availableSymbols: ['lotus', 'om', 'rudraksha', 'diya', 'chakra', 'yantra', 'trishul', 'shankh'],
+    karmaReward: 250,
+    starThresholds: [15, 28, 40],
+  },
 ];
 
 export const getLevel = (levelId: number): LevelConfig | undefined => {
