@@ -1,9 +1,10 @@
 import { motion } from 'framer-motion';
-import { Play, Users, Radio, MapPin } from 'lucide-react';
+import { Play, Users, Radio, MapPin, Clock } from 'lucide-react';
 import { Temple, deityLabels } from '@/data/templeStreams';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
+import TempleSchedule from './TempleSchedule';
 
 interface TempleCardProps {
   temple: Temple;
@@ -101,6 +102,13 @@ const TempleCard = ({ temple, onSelect, isSelected }: TempleCardProps) => {
             {temple.description}
           </p>
           
+          {/* Aarti Schedule Preview */}
+          {temple.aartiSchedule && temple.aartiSchedule.length > 0 && (
+            <div className="pt-2 border-t border-border/30">
+              <TempleSchedule schedule={temple.aartiSchedule} compact />
+            </div>
+          )}
+
           {/* Live Features */}
           <div className="flex flex-wrap gap-1">
             {temple.liveFeatures.slice(0, 2).map((feature, index) => (

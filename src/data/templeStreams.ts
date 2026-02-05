@@ -2,6 +2,13 @@ export type TempleCategory = 'jyotirlinga' | 'shakti_peeth' | 'major' | 'interna
 export type DeityType = 'shiva' | 'vishnu' | 'devi' | 'guru' | 'multi';
 export type Region = 'north' | 'south' | 'east' | 'west' | 'international';
 
+export interface AartiSchedule {
+  name: string;
+  time: string; // 24-hour format HH:MM
+  duration: number; // in minutes
+  description?: string;
+}
+
 export interface Temple {
   id: string;
   name: string;
@@ -17,6 +24,7 @@ export interface Temple {
   isFeatured: boolean;
   viewerCount?: number;
   thumbnail: string;
+  aartiSchedule?: AartiSchedule[];
 }
 
 export interface SpiritualContent {
@@ -44,7 +52,13 @@ export const temples: Temple[] = [
     isLive: true,
     isFeatured: true,
     viewerCount: 15420,
-    thumbnail: 'https://images.unsplash.com/photo-1514222134-b57cbb8ce073?w=800'
+    thumbnail: 'https://images.unsplash.com/photo-1514222134-b57cbb8ce073?w=800',
+    aartiSchedule: [
+      { name: 'Asa Di Var', time: '04:00', duration: 120, description: 'Morning hymns' },
+      { name: 'Sukhmani Sahib', time: '08:00', duration: 90 },
+      { name: 'Rehras Sahib', time: '18:30', duration: 45, description: 'Evening prayers' },
+      { name: 'Kirtan Sohila', time: '21:30', duration: 30, description: 'Night prayers' }
+    ]
   },
   {
     id: 'vaishno-devi',
@@ -59,7 +73,13 @@ export const temples: Temple[] = [
     isLive: true,
     isFeatured: true,
     viewerCount: 8932,
-    thumbnail: 'https://images.unsplash.com/photo-1621330396173-e41b1cafd17f?w=800'
+    thumbnail: 'https://images.unsplash.com/photo-1621330396173-e41b1cafd17f?w=800',
+    aartiSchedule: [
+      { name: 'Mangla Aarti', time: '05:00', duration: 30, description: 'Morning awakening' },
+      { name: 'Bhog Aarti', time: '12:00', duration: 30, description: 'Midday offering' },
+      { name: 'Sandhya Aarti', time: '19:00', duration: 30, description: 'Evening ceremony' },
+      { name: 'Shayan Aarti', time: '21:00', duration: 20, description: 'Night closing' }
+    ]
   },
   {
     id: 'kashi-vishwanath',
@@ -74,7 +94,14 @@ export const temples: Temple[] = [
     isLive: true,
     isFeatured: true,
     viewerCount: 12450,
-    thumbnail: 'https://images.unsplash.com/photo-1561361513-2d000a50f0dc?w=800'
+    thumbnail: 'https://images.unsplash.com/photo-1561361513-2d000a50f0dc?w=800',
+    aartiSchedule: [
+      { name: 'Mangala Aarti', time: '03:00', duration: 45, description: 'Pre-dawn worship' },
+      { name: 'Bhog Aarti', time: '11:30', duration: 30, description: 'Midday offering' },
+      { name: 'Sandhya Aarti', time: '19:00', duration: 45, description: 'Evening Ganga Aarti' },
+      { name: 'Shringar Aarti', time: '21:00', duration: 30, description: 'Night decoration' },
+      { name: 'Shayan Aarti', time: '22:30', duration: 20 }
+    ]
   },
   {
     id: 'tirupati-balaji',
@@ -89,7 +116,14 @@ export const temples: Temple[] = [
     isLive: true,
     isFeatured: true,
     viewerCount: 25680,
-    thumbnail: 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?w=800'
+    thumbnail: 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?w=800',
+    aartiSchedule: [
+      { name: 'Suprabhatam', time: '03:00', duration: 60, description: 'Divine awakening' },
+      { name: 'Thomala Seva', time: '08:00', duration: 45 },
+      { name: 'Archana', time: '10:00', duration: 30 },
+      { name: 'Sahasranamam', time: '16:00', duration: 45 },
+      { name: 'Ekanta Seva', time: '22:00', duration: 30, description: 'Night closing' }
+    ]
   },
   {
     id: 'somnath',
@@ -104,7 +138,13 @@ export const temples: Temple[] = [
     isLive: true,
     isFeatured: false,
     viewerCount: 6780,
-    thumbnail: 'https://images.unsplash.com/photo-1548013146-72479768bada?w=800'
+    thumbnail: 'https://images.unsplash.com/photo-1548013146-72479768bada?w=800',
+    aartiSchedule: [
+      { name: 'Mangala Aarti', time: '06:00', duration: 30 },
+      { name: 'Madhyan Aarti', time: '12:00', duration: 20 },
+      { name: 'Sandhya Aarti', time: '19:00', duration: 45, description: 'Sunset by Arabian Sea' },
+      { name: 'Light & Sound Show', time: '20:00', duration: 45 }
+    ]
   },
   {
     id: 'mahakaleshwar',
@@ -119,7 +159,13 @@ export const temples: Temple[] = [
     isLive: true,
     isFeatured: true,
     viewerCount: 9340,
-    thumbnail: 'https://images.unsplash.com/photo-1590766940554-634c4a6b0fc4?w=800'
+    thumbnail: 'https://images.unsplash.com/photo-1590766940554-634c4a6b0fc4?w=800',
+    aartiSchedule: [
+      { name: 'Bhasma Aarti', time: '04:00', duration: 60, description: 'Famous ash ceremony' },
+      { name: 'Madhyan Aarti', time: '10:30', duration: 30 },
+      { name: 'Sandhya Aarti', time: '18:30', duration: 30 },
+      { name: 'Shayan Aarti', time: '22:30', duration: 20 }
+    ]
   },
   // Jyotirlinga Network
   {
@@ -135,7 +181,13 @@ export const temples: Temple[] = [
     isLive: true,
     isFeatured: false,
     viewerCount: 7820,
-    thumbnail: 'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?w=800'
+    thumbnail: 'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?w=800',
+    aartiSchedule: [
+      { name: 'Mangala Aarti', time: '04:30', duration: 45, description: 'Himalayan dawn' },
+      { name: 'Madhyan Aarti', time: '11:00', duration: 30 },
+      { name: 'Sandhya Aarti', time: '18:00', duration: 30, description: 'Mountain sunset' },
+      { name: 'Shayan Aarti', time: '20:30', duration: 20 }
+    ]
   },
   {
     id: 'omkareshwar',
@@ -150,7 +202,12 @@ export const temples: Temple[] = [
     isLive: false,
     isFeatured: false,
     viewerCount: 3450,
-    thumbnail: 'https://images.unsplash.com/photo-1544735716-392fe2489ffa?w=800'
+    thumbnail: 'https://images.unsplash.com/photo-1544735716-392fe2489ffa?w=800',
+    aartiSchedule: [
+      { name: 'Mangala Aarti', time: '05:00', duration: 30 },
+      { name: 'Madhyan Aarti', time: '12:00', duration: 20 },
+      { name: 'Sandhya Aarti', time: '19:00', duration: 30, description: 'River Narmada view' }
+    ]
   },
   {
     id: 'trimbakeshwar',
@@ -165,7 +222,12 @@ export const temples: Temple[] = [
     isLive: false,
     isFeatured: false,
     viewerCount: 2890,
-    thumbnail: 'https://images.unsplash.com/photo-1609619385076-36a873425636?w=800'
+    thumbnail: 'https://images.unsplash.com/photo-1609619385076-36a873425636?w=800',
+    aartiSchedule: [
+      { name: 'Abhishek', time: '05:30', duration: 60, description: 'Sacred bathing ritual' },
+      { name: 'Madhyan Aarti', time: '12:00', duration: 20 },
+      { name: 'Sandhya Aarti', time: '19:30', duration: 30 }
+    ]
   },
   // Shakti Peeth Network
   {
@@ -181,7 +243,12 @@ export const temples: Temple[] = [
     isLive: true,
     isFeatured: false,
     viewerCount: 4560,
-    thumbnail: 'https://images.unsplash.com/photo-1605649487212-47bdab064df7?w=800'
+    thumbnail: 'https://images.unsplash.com/photo-1605649487212-47bdab064df7?w=800',
+    aartiSchedule: [
+      { name: 'Mangala Aarti', time: '05:30', duration: 45, description: 'Tantric worship' },
+      { name: 'Bhog Aarti', time: '11:00', duration: 30 },
+      { name: 'Sandhya Aarti', time: '18:00', duration: 30 }
+    ]
   },
   {
     id: 'kalighat',
@@ -196,7 +263,12 @@ export const temples: Temple[] = [
     isLive: false,
     isFeatured: false,
     viewerCount: 2340,
-    thumbnail: 'https://images.unsplash.com/photo-1605649461516-f169bd6e9f3c?w=800'
+    thumbnail: 'https://images.unsplash.com/photo-1605649461516-f169bd6e9f3c?w=800',
+    aartiSchedule: [
+      { name: 'Mangala Aarti', time: '04:00', duration: 30 },
+      { name: 'Bhog Aarti', time: '12:00', duration: 30 },
+      { name: 'Sandhya Aarti', time: '19:00', duration: 45, description: 'Evening Kali puja' }
+    ]
   },
   // South Indian Temples
   {
@@ -212,7 +284,14 @@ export const temples: Temple[] = [
     isLive: true,
     isFeatured: false,
     viewerCount: 5670,
-    thumbnail: 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?w=800'
+    thumbnail: 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?w=800',
+    aartiSchedule: [
+      { name: 'Tiruvanandal', time: '05:00', duration: 45, description: 'Morning awakening' },
+      { name: 'Kalasandhi Puja', time: '09:00', duration: 30 },
+      { name: 'Uchikala Puja', time: '12:00', duration: 30 },
+      { name: 'Sayarakshai', time: '18:00', duration: 30, description: 'Evening puja' },
+      { name: 'Palliarai', time: '21:30', duration: 45, description: 'Night ceremony' }
+    ]
   },
   {
     id: 'jagannath',
@@ -227,7 +306,14 @@ export const temples: Temple[] = [
     isLive: true,
     isFeatured: false,
     viewerCount: 4890,
-    thumbnail: 'https://images.unsplash.com/photo-1627894006066-b36589adb945?w=800'
+    thumbnail: 'https://images.unsplash.com/photo-1627894006066-b36589adb945?w=800',
+    aartiSchedule: [
+      { name: 'Mangala Alati', time: '05:00', duration: 30, description: 'Divine awakening' },
+      { name: 'Mailam', time: '06:00', duration: 45 },
+      { name: 'Sakala Dhupa', time: '10:00', duration: 30 },
+      { name: 'Sandhya Aarti', time: '19:00', duration: 45, description: 'Ocean sunset' },
+      { name: 'Badasinghara', time: '22:00', duration: 30 }
+    ]
   },
   // International Temples
   {
@@ -243,7 +329,11 @@ export const temples: Temple[] = [
     isLive: true,
     isFeatured: false,
     viewerCount: 3210,
-    thumbnail: 'https://images.unsplash.com/photo-1609619385076-36a873425636?w=800'
+    thumbnail: 'https://images.unsplash.com/photo-1609619385076-36a873425636?w=800',
+    aartiSchedule: [
+      { name: 'Morning Puja', time: '05:00', duration: 60 },
+      { name: 'Bagmati Aarti', time: '18:00', duration: 45, description: 'River ceremony' }
+    ]
   },
   {
     id: 'batu-caves',
@@ -258,7 +348,11 @@ export const temples: Temple[] = [
     isLive: false,
     isFeatured: false,
     viewerCount: 1890,
-    thumbnail: 'https://images.unsplash.com/photo-1596422846543-75c6fc197f07?w=800'
+    thumbnail: 'https://images.unsplash.com/photo-1596422846543-75c6fc197f07?w=800',
+    aartiSchedule: [
+      { name: 'Morning Puja', time: '06:30', duration: 30 },
+      { name: 'Evening Puja', time: '18:30', duration: 30 }
+    ]
   },
   // ISKCON Temples
   {
@@ -274,7 +368,14 @@ export const temples: Temple[] = [
     isLive: true,
     isFeatured: true,
     viewerCount: 8760,
-    thumbnail: 'https://images.unsplash.com/photo-1600100830012-d0ea5d40aa89?w=800'
+    thumbnail: 'https://images.unsplash.com/photo-1600100830012-d0ea5d40aa89?w=800',
+    aartiSchedule: [
+      { name: 'Mangala Aarti', time: '04:30', duration: 30, description: 'Pre-dawn kirtan' },
+      { name: 'Darshan Aarti', time: '07:15', duration: 15 },
+      { name: 'Raj Bhog Aarti', time: '12:00', duration: 20 },
+      { name: 'Sandhya Aarti', time: '19:00', duration: 30, description: 'Evening kirtan' },
+      { name: 'Shayana Aarti', time: '20:30', duration: 15 }
+    ]
   },
   {
     id: 'iskcon-mayapur',
@@ -289,9 +390,15 @@ export const temples: Temple[] = [
     isLive: true,
     isFeatured: false,
     viewerCount: 6540,
-    thumbnail: 'https://images.unsplash.com/photo-1600100830012-d0ea5d40aa89?w=800'
+    thumbnail: 'https://images.unsplash.com/photo-1600100830012-d0ea5d40aa89?w=800',
+    aartiSchedule: [
+      { name: 'Mangala Aarti', time: '04:30', duration: 45, description: 'Grand ceremony' },
+      { name: 'Guru Puja', time: '07:30', duration: 30 },
+      { name: 'Raj Bhog Aarti', time: '12:30', duration: 20 },
+      { name: 'Sandhya Aarti', time: '18:30', duration: 45, description: 'Sunset kirtan' }
+    ]
   },
-  // New Temples - Char Dham & Popular
+  // Char Dham & Popular Temples
   {
     id: 'badrinath',
     name: 'Badrinath Temple',
@@ -305,7 +412,12 @@ export const temples: Temple[] = [
     isLive: true,
     isFeatured: true,
     viewerCount: 11230,
-    thumbnail: 'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?w=800'
+    thumbnail: 'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?w=800',
+    aartiSchedule: [
+      { name: 'Maha Abhishek', time: '04:30', duration: 60, description: 'Sacred bathing' },
+      { name: 'Geet Govind Path', time: '18:00', duration: 45 },
+      { name: 'Aarti & Shayan', time: '21:00', duration: 30, description: 'Night closing' }
+    ]
   },
   {
     id: 'dwarkadheesh',
@@ -320,7 +432,14 @@ export const temples: Temple[] = [
     isLive: true,
     isFeatured: true,
     viewerCount: 8920,
-    thumbnail: 'https://images.unsplash.com/photo-1600100830012-d0ea5d40aa89?w=800'
+    thumbnail: 'https://images.unsplash.com/photo-1600100830012-d0ea5d40aa89?w=800',
+    aartiSchedule: [
+      { name: 'Mangala Aarti', time: '06:30', duration: 30 },
+      { name: 'Shringar Aarti', time: '10:30', duration: 30 },
+      { name: 'Raj Bhog Aarti', time: '12:30', duration: 20 },
+      { name: 'Sandhya Aarti', time: '19:00', duration: 45, description: 'Sunset at Gomti' },
+      { name: 'Shayan Aarti', time: '21:30', duration: 20 }
+    ]
   },
   {
     id: 'siddhivinayak',
@@ -335,7 +454,13 @@ export const temples: Temple[] = [
     isLive: true,
     isFeatured: true,
     viewerCount: 18540,
-    thumbnail: 'https://images.unsplash.com/photo-1609619385076-36a873425636?w=800'
+    thumbnail: 'https://images.unsplash.com/photo-1609619385076-36a873425636?w=800',
+    aartiSchedule: [
+      { name: 'Kakad Aarti', time: '05:30', duration: 30, description: 'Morning awakening' },
+      { name: 'Madhyan Aarti', time: '12:00', duration: 20 },
+      { name: 'Sandhya Aarti', time: '19:30', duration: 45, description: 'Evening ceremony' },
+      { name: 'Shej Aarti', time: '22:00', duration: 20, description: 'Night closing' }
+    ]
   },
   {
     id: 'shirdi-sai',
@@ -350,7 +475,13 @@ export const temples: Temple[] = [
     isLive: true,
     isFeatured: true,
     viewerCount: 22340,
-    thumbnail: 'https://images.unsplash.com/photo-1544735716-392fe2489ffa?w=800'
+    thumbnail: 'https://images.unsplash.com/photo-1544735716-392fe2489ffa?w=800',
+    aartiSchedule: [
+      { name: 'Kakad Aarti', time: '04:30', duration: 45, description: 'Famous morning aarti' },
+      { name: 'Madhyan Aarti', time: '12:00', duration: 30, description: 'Midday prayers' },
+      { name: 'Dhoop Aarti', time: '18:00', duration: 30, description: 'Evening incense' },
+      { name: 'Shej Aarti', time: '22:00', duration: 45, description: 'Grand night ceremony' }
+    ]
   },
   {
     id: 'rameshwaram',
@@ -365,7 +496,14 @@ export const temples: Temple[] = [
     isLive: true,
     isFeatured: false,
     viewerCount: 7650,
-    thumbnail: 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?w=800'
+    thumbnail: 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?w=800',
+    aartiSchedule: [
+      { name: 'Palliyarai', time: '05:00', duration: 45, description: '22 wells ritual' },
+      { name: 'Kalasandhi', time: '09:00', duration: 30 },
+      { name: 'Uchikala', time: '12:00', duration: 30 },
+      { name: 'Sayarakshai', time: '18:00', duration: 30, description: 'Ocean sunset' },
+      { name: 'Ardhajama', time: '21:00', duration: 30 }
+    ]
   },
   {
     id: 'akshardham-delhi',
@@ -380,7 +518,11 @@ export const temples: Temple[] = [
     isLive: false,
     isFeatured: false,
     viewerCount: 5430,
-    thumbnail: 'https://images.unsplash.com/photo-1548013146-72479768bada?w=800'
+    thumbnail: 'https://images.unsplash.com/photo-1548013146-72479768bada?w=800',
+    aartiSchedule: [
+      { name: 'Mangala Aarti', time: '07:00', duration: 30 },
+      { name: 'Light & Sound Show', time: '19:45', duration: 25, description: 'Musical fountain' }
+    ]
   },
   {
     id: 'mathura-krishna',
@@ -395,7 +537,14 @@ export const temples: Temple[] = [
     isLive: true,
     isFeatured: false,
     viewerCount: 9870,
-    thumbnail: 'https://images.unsplash.com/photo-1600100830012-d0ea5d40aa89?w=800'
+    thumbnail: 'https://images.unsplash.com/photo-1600100830012-d0ea5d40aa89?w=800',
+    aartiSchedule: [
+      { name: 'Mangala Aarti', time: '05:00', duration: 30 },
+      { name: 'Shringar Aarti', time: '07:30', duration: 30, description: 'Krishna decoration' },
+      { name: 'Raj Bhog Aarti', time: '12:00', duration: 20 },
+      { name: 'Sandhya Aarti', time: '19:00', duration: 45 },
+      { name: 'Midnight Aarti', time: '00:00', duration: 60, description: 'Birth celebration' }
+    ]
   },
   {
     id: 'sabarimala',
@@ -410,7 +559,12 @@ export const temples: Temple[] = [
     isLive: true,
     isFeatured: false,
     viewerCount: 6780,
-    thumbnail: 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?w=800'
+    thumbnail: 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?w=800',
+    aartiSchedule: [
+      { name: 'Usha Puja', time: '05:00', duration: 60, description: 'Dawn worship' },
+      { name: 'Padi Puja', time: '10:30', duration: 45 },
+      { name: 'Deeparadhana', time: '18:00', duration: 45, description: 'Lamp ceremony' }
+    ]
   },
   {
     id: 'bhimashankar',
@@ -425,37 +579,12 @@ export const temples: Temple[] = [
     isLive: true,
     isFeatured: false,
     viewerCount: 4230,
-    thumbnail: 'https://images.unsplash.com/photo-1590766940554-634c4a6b0fc4?w=800'
-  },
-  {
-    id: 'vaishnodevi-bhawan',
-    name: 'Vaishno Devi Bhawan',
-    location: 'Katra, Jammu & Kashmir',
-    deity: 'devi',
-    category: 'shakti_peeth',
-    region: 'north',
-    description: 'Holy cave shrine of Mata Vaishno Devi atop Trikuta Mountains',
-    liveFeatures: ['Cave darshan', 'Trek view', 'Aarti inside cave'],
-    youtubeVideoId: 'zGDzdps75ns',
-    isLive: true,
-    isFeatured: false,
-    viewerCount: 12450,
-    thumbnail: 'https://images.unsplash.com/photo-1621330396173-e41b1cafd17f?w=800'
-  },
-  {
-    id: 'ujjain-mahakal',
-    name: 'Mahakaleshwar Jyotirlinga',
-    location: 'Ujjain, Madhya Pradesh',
-    deity: 'shiva',
-    category: 'jyotirlinga',
-    region: 'west',
-    description: 'Only south-facing Jyotirlinga, famous for the Bhasma Aarti ritual',
-    liveFeatures: ['Bhasma Aarti 4AM', 'Bhasm Abhishek', 'Ujjain Kumbh coverage'],
-    youtubeVideoId: 'n3k-D6GdXRc',
-    isLive: true,
-    isFeatured: false,
-    viewerCount: 15670,
-    thumbnail: 'https://images.unsplash.com/photo-1590766940554-634c4a6b0fc4?w=800'
+    thumbnail: 'https://images.unsplash.com/photo-1590766940554-634c4a6b0fc4?w=800',
+    aartiSchedule: [
+      { name: 'Abhishek', time: '04:30', duration: 60, description: 'Forest dawn ritual' },
+      { name: 'Madhyan Aarti', time: '11:00', duration: 20 },
+      { name: 'Sandhya Aarti', time: '18:30', duration: 30, description: 'Sahyadri sunset' }
+    ]
   },
   {
     id: 'guruvayur',
@@ -470,7 +599,14 @@ export const temples: Temple[] = [
     isLive: true,
     isFeatured: false,
     viewerCount: 8340,
-    thumbnail: 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?w=800'
+    thumbnail: 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?w=800',
+    aartiSchedule: [
+      { name: 'Nirmalya Darshan', time: '03:00', duration: 30, description: 'Sacred first darshan' },
+      { name: 'Ezhunellippu', time: '06:00', duration: 45, description: 'Elephant procession' },
+      { name: 'Pantheeradi Puja', time: '11:30', duration: 30 },
+      { name: 'Deeparadhana', time: '18:30', duration: 45, description: 'Evening lamps' },
+      { name: 'Athazha Puja', time: '21:00', duration: 30 }
+    ]
   },
   {
     id: 'gangotri',
@@ -485,7 +621,11 @@ export const temples: Temple[] = [
     isLive: false,
     isFeatured: false,
     viewerCount: 3450,
-    thumbnail: 'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?w=800'
+    thumbnail: 'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?w=800',
+    aartiSchedule: [
+      { name: 'Mangala Aarti', time: '06:00', duration: 30, description: 'Himalayan dawn' },
+      { name: 'Ganga Aarti', time: '18:30', duration: 45, description: 'Source of Ganga' }
+    ]
   },
   {
     id: 'yamunotri',
@@ -500,7 +640,11 @@ export const temples: Temple[] = [
     isLive: false,
     isFeatured: false,
     viewerCount: 2890,
-    thumbnail: 'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?w=800'
+    thumbnail: 'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?w=800',
+    aartiSchedule: [
+      { name: 'Mangala Aarti', time: '06:30', duration: 30 },
+      { name: 'Yamuna Aarti', time: '19:00', duration: 30, description: 'Source of Yamuna' }
+    ]
   }
 ];
 
