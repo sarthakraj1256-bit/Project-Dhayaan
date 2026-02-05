@@ -1,11 +1,13 @@
  import { motion } from 'framer-motion';
- import { Volume2, VolumeX, Layers, Loader2, Check, Cloud, Timer } from 'lucide-react';
+ import { Volume2, VolumeX, Layers, Loader2, Check, Cloud, Timer, Heart } from 'lucide-react';
  import { Slider } from '@/components/ui/slider';
  import { atmospheres, AtmosphereItem } from '@/data/soundLibrary';
  
  interface AudioControlsProps {
    isPlaying: boolean;
    currentFrequency: number | null;
+   currentFrequencyName?: string;
+   currentFrequencyCategory?: string;
    frequencyVolume: number;
    atmosphereVolume: number;
    currentAtmosphere: string;
@@ -13,6 +15,9 @@
    atmosphereCached?: boolean;
    atmosphereError?: string | null;
    sessionTime?: string;
+   isFavorited?: boolean;
+   isAuthenticated?: boolean;
+   onSaveFavorite?: () => void;
    onFrequencyVolumeChange: (volume: number) => void;
    onAtmosphereVolumeChange: (volume: number) => void;
    onAtmosphereChange: (atmosphereId: string) => void;
@@ -22,6 +27,8 @@
  const AudioControls = ({
    isPlaying,
    currentFrequency,
+   currentFrequencyName,
+   currentFrequencyCategory,
    frequencyVolume,
    atmosphereVolume,
    currentAtmosphere,
@@ -29,6 +36,9 @@
    atmosphereCached = false,
    atmosphereError = null,
    sessionTime = '00:00',
+   isFavorited = false,
+   isAuthenticated = false,
+   onSaveFavorite,
    onFrequencyVolumeChange,
    onAtmosphereVolumeChange,
    onAtmosphereChange,
@@ -78,6 +88,24 @@
              <Timer className="w-4 h-4 text-primary" />
              <span className="font-mono text-lg text-foreground tracking-wider">{sessionTime}</span>
            </div>
+ 
+           {/* Favorite Button */}
+           {onSaveFavorite && (
+             <button
+               onClick={onSaveFavorite}
+               disabled={isFavorited}
+               className={`
+                 p-2 rounded-full transition-all duration-300
+                 ${isFavorited 
+                   ? 'bg-primary/20 text-primary cursor-default' 
+                   : 'bg-white/5 border border-white/10 hover:bg-primary/20 hover:text-primary text-muted-foreground'
+                 }
+               `}
+               title={isFavorited ? 'Already saved' : isAuthenticated ? 'Save to favorites' : 'Sign in to save'}
+             >
+               <Heart className={`w-5 h-5 ${isFavorited ? 'fill-primary' : ''}`} />
+             </button>
+           )}
  
            <button
              onClick={onStop}

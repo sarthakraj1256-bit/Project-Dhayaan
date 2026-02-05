@@ -41,6 +41,39 @@ export type Database = {
         }
         Relationships: []
       }
+      session_favorites: {
+        Row: {
+          atmosphere_id: string
+          created_at: string
+          frequency_category: string
+          frequency_name: string
+          frequency_value: number
+          id: string
+          name: string | null
+          user_id: string
+        }
+        Insert: {
+          atmosphere_id?: string
+          created_at?: string
+          frequency_category: string
+          frequency_name: string
+          frequency_value: number
+          id?: string
+          name?: string | null
+          user_id: string
+        }
+        Update: {
+          atmosphere_id?: string
+          created_at?: string
+          frequency_category?: string
+          frequency_name?: string
+          frequency_value?: number
+          id?: string
+          name?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       stress_metrics: {
         Row: {
           created_at: string

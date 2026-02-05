@@ -8,7 +8,7 @@
    category: CategoryInfo;
    frequencies: FrequencyItem[];
    activeFrequency: number | null;
-   onPlayFrequency: (freq: number) => void;
+   onPlayFrequency: (freq: number, name?: string, category?: string) => void;
    onStopFrequency: () => void;
  }
  
@@ -83,7 +83,7 @@
              frequency={freq}
              isActive={activeFrequency === freq.value}
              categoryColor={category.color}
-             onPlay={() => onPlayFrequency(freq.value)}
+             onPlay={() => onPlayFrequency(freq.value, freq.name, category.id)}
              onStop={onStopFrequency}
            />
          ))}
