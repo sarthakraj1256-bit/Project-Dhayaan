@@ -1,14 +1,23 @@
  import { AnimatePresence, motion } from 'framer-motion';
  import { Link } from 'react-router-dom';
- import { ArrowLeft, Radio } from 'lucide-react';
+ import { ArrowLeft, Radio, Star } from 'lucide-react';
+ import { useState, useCallback } from 'react';
  import { categories, getFrequenciesByCategory } from '@/data/soundLibrary';
  import { useFrequencyAudio } from '@/hooks/useFrequencyAudio';
  import { useSessionTimer } from '@/hooks/useSessionTimer';
+ import { useFavorites, Favorite } from '@/hooks/useFavorites';
  import CategorySection from '@/components/sonic-lab/CategorySection';
  import AudioControls from '@/components/sonic-lab/AudioControls';
  import WaveformVisualizer from '@/components/sonic-lab/WaveformVisualizer';
+ import FavoritesPanel from '@/components/sonic-lab/FavoritesPanel';
  
  const SonicLab = () => {
+   const [showFavorites, setShowFavorites] = useState(false);
+   const [currentFrequencyMeta, setCurrentFrequencyMeta] = useState<{
+     name: string;
+     category: string;
+   } | null>(null);
+ 
    const {
      audioState,
      playFrequency,
@@ -20,6 +29,50 @@
    } = useFrequencyAudio();
  
    const { formattedTime } = useSessionTimer(audioState.isPlaying);
+ 
+   const {
+     favorites,
+     isLoading: favoritesLoading,
+     isAuthenticated,
+     addFavorite,
+     removeFavorite,
+     isFavorited,
+   } = useFavorites();
+ 
+   // Wrap playFrequency to also track metadata
+   const handlePlayFrequency = useCallback((frequency: number, name?: string, category?: string) => {
+     playFrequency(frequency);
+     if (name && category) {
+       setCurrentFrequencyMeta({ name, category });
+     }
+   }, [playFrequency]);
+ 
+   const handleSaveFavorite = useCallback(() => {
+     if (audioState.currentFrequency && currentFrequencyMeta) {
+       addFavorite(
+         audioState.currentFrequency,
+         currentFrequencyMeta.name,
+         currentFrequencyMeta.category,
+         audioState.currentAtmosphere
+       );
+     }
+   }, [audioState.currentFrequency, audioState.currentAtmosphere, currentFrequencyMeta, addFavorite]);
+ 
+   const handlePlayFavorite = useCallback((favorite: Favorite) => {
+     playFrequency(favorite.frequency_value);
+     setCurrentFrequencyMeta({
+       name: favorite.frequency_name,
+       category: favorite.frequency_category,
+     });
+     if (favorite.atmosphere_id !== 'none') {
+       setAtmosphere(favorite.atmosphere_id);
+     }
+     setShowFavorites(false);
+   }, [playFrequency, setAtmosphere]);
+ 
+   const currentIsFavorited = audioState.currentFrequency && currentFrequencyMeta
+     ? isFavorited(audioState.currentFrequency, audioState.currentAtmosphere)
+     : false;
  
    return (
      <div className="min-h-screen bg-void relative overflow-hidden">
@@ -64,7 +117,19 @@
                </h1>
              </div>
  
-             <div className="w-16" /> {/* Spacer for centering */}
+             {/* Favorites Button */}
+             <button
+               onClick={() => setShowFavorites(true)}
+               className="flex items-center gap-2 px-3 py-2 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 transition-colors"
+             >
+               <Star className="w-4 h-4 text-primary" />
+               <span className="text-sm text-foreground/80 hidden sm:inline">Favorites</span>
+               {favorites.length > 0 && (
+                 <span className="w-5 h-5 rounded-full bg-primary/20 text-primary text-xs flex items-center justify-center">
+                   {favorites.length}
+                 </span>
+               )}
+             </button>
            </div>
          </header>
  
@@ -108,7 +173,7 @@
                category={category}
                frequencies={getFrequenciesByCategory(category.id)}
                activeFrequency={audioState.currentFrequency}
-               onPlayFrequency={playFrequency}
+               onPlayFrequency={handlePlayFrequency}
                onStopFrequency={stopFrequency}
              />
            ))}
@@ -119,6 +184,8 @@
            <AudioControls
              isPlaying={audioState.isPlaying}
              currentFrequency={audioState.currentFrequency}
+             currentFrequencyName={currentFrequencyMeta?.name}
+             currentFrequencyCategory={currentFrequencyMeta?.category}
              frequencyVolume={audioState.frequencyVolume}
              atmosphereVolume={audioState.atmosphereVolume}
              currentAtmosphere={audioState.currentAtmosphere}
@@ -126,6 +193,9 @@
              atmosphereCached={audioState.atmosphereCached}
              atmosphereError={audioState.atmosphereError}
              sessionTime={formattedTime}
+             isFavorited={currentIsFavorited}
+             isAuthenticated={isAuthenticated}
+             onSaveFavorite={handleSaveFavorite}
              onFrequencyVolumeChange={setFrequencyVolume}
              onAtmosphereVolumeChange={setAtmosphereVolume}
              onAtmosphereChange={setAtmosphere}
@@ -133,6 +203,17 @@
            />
          </AnimatePresence>
        </div>
+ 
+       {/* Favorites Panel */}
+       <FavoritesPanel
+         isOpen={showFavorites}
+         favorites={favorites}
+         isLoading={favoritesLoading}
+         isAuthenticated={isAuthenticated}
+         onClose={() => setShowFavorites(false)}
+         onPlayFavorite={handlePlayFavorite}
+         onRemoveFavorite={removeFavorite}
+       />
  
        {/* Footer */}
        <footer className="relative z-10 border-t border-white/5 px-6 py-8 text-center">
