@@ -10,7 +10,8 @@
  interface MantraLessonProps {
    mantra: Mantra;
    onBack: () => void;
-   onComplete: () => void;
+   onComplete: (reps: number) => void;
+   onSyllableProgress?: (syllableIndices: number[]) => void;
  }
  
  const STEPS = [
@@ -21,7 +22,7 @@
    { id: 'repetition', label: 'Repeat', icon: <Target className="w-4 h-4" /> },
  ];
  
- const MantraLesson = ({ mantra, onBack, onComplete }: MantraLessonProps) => {
+const MantraLesson = ({ mantra, onBack, onComplete, onSyllableProgress }: MantraLessonProps) => {
    const [currentStep, setCurrentStep] = useState(0);
    const [currentSyllableIndex, setCurrentSyllableIndex] = useState(0);
    const [completedSyllables, setCompletedSyllables] = useState<number[]>([]);
@@ -51,12 +52,15 @@
  
    const handleSyllableComplete = useCallback((index: number) => {
      if (!completedSyllables.includes(index)) {
-       setCompletedSyllables(prev => [...prev, index]);
+       const updated = [...completedSyllables, index];
+       setCompletedSyllables(updated);
+       // Save progress to database
+       onSyllableProgress?.(updated);
      }
      if (index < mantra.syllables.length - 1) {
        setCurrentSyllableIndex(index + 1);
      }
-   }, [completedSyllables, mantra.syllables.length]);
+   }, [completedSyllables, mantra.syllables.length, onSyllableProgress]);
  
    const handleNextStep = () => {
      if (currentStep < STEPS.length - 1) {
@@ -70,6 +74,10 @@
      }
    };
  
+   const handleRepetitionComplete = useCallback(() => {
+     onComplete(currentReps);
+   }, [currentReps, onComplete]);
+
    const renderStepContent = () => {
      switch (STEPS[currentStep].id) {
        case 'listen':
@@ -267,7 +275,7 @@
                currentReps={currentReps}
                onIncrement={() => setCurrentReps(prev => prev + 1)}
                onReset={() => setCurrentReps(0)}
-               onComplete={onComplete}
+                 onComplete={handleRepetitionComplete}
              />
  
              {/* Full Mantra for Reference */}

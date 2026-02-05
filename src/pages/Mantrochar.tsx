@@ -1,23 +1,40 @@
  import { useState } from 'react';
  import { motion } from 'framer-motion';
  import { Link } from 'react-router-dom';
- import { ArrowLeft, BookOpen, Radio, Flame, Trophy, GraduationCap } from 'lucide-react';
+ import { ArrowLeft, BookOpen, Radio, Flame, GraduationCap, Loader2, LogIn } from 'lucide-react';
  import { mantras, categories, getMantrasByDifficulty, type Mantra } from '@/data/mantraLibrary';
  import MantraCard from '@/components/mantrochar/MantraCard';
  import MantraLesson from '@/components/mantrochar/MantraLesson';
  import { toast } from 'sonner';
+ import { useMantraProgress } from '@/hooks/useMantraProgress';
  
  const difficultyOrder = ['beginner', 'intermediate', 'advanced', 'mastery'] as const;
  
  const Mantrochar = () => {
    const [selectedMantra, setSelectedMantra] = useState<Mantra | null>(null);
-   const [completedMantras, setCompletedMantras] = useState<string[]>([]);
    const [activeFilter, setActiveFilter] = useState<'all' | 'beginner' | 'intermediate' | 'advanced'>('all');
+   
+   const {
+     isLoading,
+     isAuthenticated,
+     completedMantraIds,
+     getCompletionPercent,
+     saveSyllableProgress,
+     saveRepetitions,
+     markMantraComplete,
+   } = useMantraProgress();
  
-   const handleMantraComplete = () => {
-     if (selectedMantra && !completedMantras.includes(selectedMantra.id)) {
-       setCompletedMantras(prev => [...prev, selectedMantra.id]);
+   const handleMantraComplete = (reps: number) => {
+     if (selectedMantra) {
+       saveRepetitions(selectedMantra.id, reps);
+       markMantraComplete(selectedMantra.id);
        toast.success(`${selectedMantra.name} completed! 🙏`);
+     }
+   };
+ 
+   const handleSyllableProgress = (syllableIndices: number[]) => {
+     if (selectedMantra) {
+       saveSyllableProgress(selectedMantra.id, syllableIndices);
      }
    };
  
@@ -46,7 +63,8 @@
            <MantraLesson
              mantra={selectedMantra}
              onBack={() => setSelectedMantra(null)}
-             onComplete={handleMantraComplete}
+               onComplete={handleMantraComplete}
+               onSyllableProgress={handleSyllableProgress}
            />
          </div>
        </div>
@@ -125,18 +143,40 @@
              <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20">
                <GraduationCap className="w-4 h-4 text-primary" />
                <span className="text-sm text-foreground">
-                 {completedMantras.length} / {mantras.length} Learned
+                   {isLoading ? (
+                     <Loader2 className="w-3 h-3 animate-spin inline" />
+                   ) : (
+                     `${completedMantraIds.length} / ${mantras.length} Learned`
+                   )}
                </span>
              </div>
-             {completedMantras.length > 0 && (
+               {completedMantraIds.length > 0 && (
                <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-amber-500/10 border border-amber-500/20">
                  <Flame className="w-4 h-4 text-amber-400" />
                  <span className="text-sm text-foreground">
-                   {completedMantras.length} day streak
+                     {completedMantraIds.length} day streak
                  </span>
                </div>
              )}
            </motion.div>
+
+             {/* Auth prompt */}
+             {!isAuthenticated && (
+               <motion.div
+                 initial={{ opacity: 0 }}
+                 animate={{ opacity: 1 }}
+                 transition={{ delay: 0.3 }}
+                 className="mt-4"
+               >
+                 <Link
+                   to="/auth"
+                   className="inline-flex items-center gap-2 text-sm text-primary/70 hover:text-primary transition-colors"
+                 >
+                   <LogIn className="w-4 h-4" />
+                   Sign in to save your progress
+                 </Link>
+               </motion.div>
+             )}
          </section>
  
          {/* Filter Tabs */}
@@ -189,7 +229,7 @@
                      <MantraCard
                        key={mantra.id}
                        mantra={mantra}
-                       progress={completedMantras.includes(mantra.id) ? 100 : 0}
+                         progress={getCompletionPercent(mantra.id, mantra.syllables.length)}
                        onClick={() => setSelectedMantra(mantra)}
                      />
                    ))}
