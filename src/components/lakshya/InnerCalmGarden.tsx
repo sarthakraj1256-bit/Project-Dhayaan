@@ -1,23 +1,32 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Droplets, Sun, Sparkles, Flower2, TreeDeciduous, Heart, Volume2, VolumeX, Music } from 'lucide-react';
+import { X, Droplets, Sun, Sparkles, Flower2, TreeDeciduous, Heart, Volume2, VolumeX, Calendar } from 'lucide-react';
 import { useSpiritualProgress } from '@/hooks/useSpiritualProgress';
 import { subscribeToGardenEvents } from '@/hooks/useGardenResources';
+import SeasonalEvents, { ExclusivePlant, BonusReward, getActiveEvents } from './SeasonalEvents';
 
 interface InnerCalmGardenProps {
   onClose: () => void;
   onKarmaEarned: (points: number) => void;
 }
 
+type PlantType = 'lotus' | 'bodhi' | 'tulsi' | 'jasmine' | 'bamboo' | string;
+type PlantEmotion = 'peace' | 'joy' | 'love' | 'wisdom' | 'clarity' | 'devotion' | 'prosperity' | 'renewal' | 'gratitude' | 'celebration';
+
 interface Plant {
   id: string;
-  type: 'lotus' | 'bodhi' | 'tulsi' | 'jasmine' | 'bamboo';
+  type: PlantType;
   stage: number; // 0-4 (seed, sprout, growing, blooming, flourishing)
   x: number;
   y: number;
   lastWatered: number;
   health: number; // 0-100
-  emotion: 'peace' | 'joy' | 'love' | 'wisdom' | 'clarity';
+  emotion: PlantEmotion;
+  isExclusive?: boolean;
+  rarity?: 'rare' | 'epic' | 'legendary';
+  karmaBonus?: number;
+  emoji?: string;
+  color?: string;
 }
 
 interface GardenState {
@@ -26,6 +35,7 @@ interface GardenState {
   sunlight: number;
   gardenLevel: number;
   totalGrowth: number;
+  claimedRewards: string[];
 }
 
 const PLANT_TYPES = {
@@ -76,12 +86,16 @@ const InnerCalmGarden = ({ onClose, onKarmaEarned }: InnerCalmGardenProps) => {
     sunlight: 100,
     gardenLevel: 1,
     totalGrowth: 0,
+    claimedRewards: [],
   });
   const [selectedPlantType, setSelectedPlantType] = useState<keyof typeof PLANT_TYPES | null>(null);
+  const [selectedExclusivePlant, setSelectedExclusivePlant] = useState<ExclusivePlant | null>(null);
   const [isPlanting, setIsPlanting] = useState(false);
   const [showPlantMenu, setShowPlantMenu] = useState(false);
+  const [showSeasonalEvents, setShowSeasonalEvents] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [message, setMessage] = useState<string | null>(null);
+  const [activeEvents] = useState(getActiveEvents());
   const [karmaEarned, setKarmaEarned] = useState(0);
   
   const audioContextRef = useRef<AudioContext | null>(null);
@@ -182,6 +196,45 @@ const InnerCalmGarden = ({ onClose, onKarmaEarned }: InnerCalmGardenProps) => {
   }, []);
 
   const plantSeed = useCallback((x: number, y: number) => {
+    // Handle exclusive plant planting
+    if (selectedExclusivePlant) {
+      if (gardenState.waterDrops < 2) {
+        showMessage('Exclusive plants need 2 water drops!');
+        return;
+      }
+
+      const newPlant: Plant = {
+        id: `plant-${Date.now()}`,
+        type: selectedExclusivePlant.type,
+        stage: 0,
+        x,
+        y,
+        lastWatered: Date.now(),
+        health: 100,
+        emotion: selectedExclusivePlant.emotion,
+        isExclusive: true,
+        rarity: selectedExclusivePlant.rarity,
+        karmaBonus: selectedExclusivePlant.karmaBonus,
+        emoji: selectedExclusivePlant.emoji,
+        color: selectedExclusivePlant.color,
+      };
+
+      setGardenState(prev => ({
+        ...prev,
+        plants: [...prev.plants, newPlant],
+        waterDrops: prev.waterDrops - 2,
+      }));
+
+      playSound('bloom');
+      showMessage(`Planted a ${selectedExclusivePlant.rarity} ${selectedExclusivePlant.name}! ✨`);
+      setSelectedExclusivePlant(null);
+      setIsPlanting(false);
+      
+      const karma = 10 + (selectedExclusivePlant.rarity === 'legendary' ? 20 : selectedExclusivePlant.rarity === 'epic' ? 10 : 5);
+      setKarmaEarned(prev => prev + karma);
+      return;
+    }
+
     if (!selectedPlantType || gardenState.waterDrops < 1) {
       showMessage('Need water to plant!');
       return;
@@ -209,10 +262,53 @@ const InnerCalmGarden = ({ onClose, onKarmaEarned }: InnerCalmGardenProps) => {
     setSelectedPlantType(null);
     setIsPlanting(false);
     
-    // Earn karma for planting
     const karma = 5;
     setKarmaEarned(prev => prev + karma);
-  }, [selectedPlantType, gardenState.waterDrops, playSound, showMessage]);
+  }, [selectedPlantType, selectedExclusivePlant, gardenState.waterDrops, playSound, showMessage]);
+
+  // Handle exclusive plant selection from seasonal events
+  const handleExclusivePlantSelect = useCallback((plant: ExclusivePlant) => {
+    setSelectedExclusivePlant(plant);
+    setSelectedPlantType(null);
+    setIsPlanting(true);
+    setShowPlantMenu(false);
+    setShowSeasonalEvents(false);
+    showMessage(`Tap to plant your ${plant.rarity} ${plant.name}!`);
+  }, [showMessage]);
+
+  // Handle claiming seasonal rewards
+  const handleClaimReward = useCallback((reward: BonusReward) => {
+    if (gardenState.claimedRewards.includes(reward.id)) return;
+
+    setGardenState(prev => ({
+      ...prev,
+      claimedRewards: [...prev.claimedRewards, reward.id],
+      waterDrops: reward.type === 'water_drops' 
+        ? Math.min(prev.waterDrops + reward.value, 30) 
+        : prev.waterDrops,
+    }));
+
+    playSound('bloom');
+
+    if (reward.type === 'water_drops') {
+      showMessage(`Claimed ${reward.value} water drops! 💧`);
+    } else if (reward.type === 'karma_multiplier') {
+      showMessage(`${reward.value}x Karma activated! ✨`);
+      setKarmaEarned(prev => prev + 25);
+    } else if (reward.type === 'instant_growth') {
+      // Grow the first non-flourishing plant
+      const plantToGrow = gardenState.plants.find(p => p.stage < 4);
+      if (plantToGrow) {
+        setGardenState(prev => ({
+          ...prev,
+          plants: prev.plants.map(p => 
+            p.id === plantToGrow.id ? { ...p, stage: Math.min(p.stage + 2, 4), health: 100 } : p
+          ),
+        }));
+        showMessage('A plant grew instantly! 🌱➡️🌸');
+      }
+    }
+  }, [gardenState.claimedRewards, gardenState.plants, playSound, showMessage]);
 
   // Water a plant
   const waterPlant = useCallback((plantId: string) => {
@@ -254,7 +350,7 @@ const InnerCalmGarden = ({ onClose, onKarmaEarned }: InnerCalmGardenProps) => {
 
   // Handle garden click for planting
   const handleGardenClick = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    if (!isPlanting || !selectedPlantType || !gardenRef.current) return;
+    if (!isPlanting || (!selectedPlantType && !selectedExclusivePlant) || !gardenRef.current) return;
     
     const rect = gardenRef.current.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width) * 100;
@@ -265,7 +361,7 @@ const InnerCalmGarden = ({ onClose, onKarmaEarned }: InnerCalmGardenProps) => {
     const clampedY = Math.max(30, Math.min(85, y));
     
     plantSeed(clampedX, clampedY);
-  }, [isPlanting, selectedPlantType, plantSeed]);
+  }, [isPlanting, selectedPlantType, selectedExclusivePlant, plantSeed]);
 
   // Save karma when closing
   const handleClose = useCallback(() => {
@@ -382,7 +478,9 @@ const InnerCalmGarden = ({ onClose, onKarmaEarned }: InnerCalmGardenProps) => {
         {/* Plants */}
         <AnimatePresence>
           {gardenState.plants.map((plant) => {
-            const plantInfo = PLANT_TYPES[plant.type];
+            const plantInfo = plant.isExclusive 
+              ? { name: plant.type, emoji: plant.emoji || '🌸', color: plant.color || '#8B5CF6' }
+              : PLANT_TYPES[plant.type as keyof typeof PLANT_TYPES] || { name: plant.type, emoji: '🌱', color: '#22C55E' };
             const scale = 0.5 + (plant.stage * 0.25);
             
             return (
@@ -403,26 +501,41 @@ const InnerCalmGarden = ({ onClose, onKarmaEarned }: InnerCalmGardenProps) => {
                 whileHover={{ scale: scale * 1.1 }}
                 whileTap={{ scale: scale * 0.95 }}
               >
-                {/* Glow effect */}
+                {/* Glow effect - enhanced for exclusive plants */}
                 <motion.div
                   animate={{ 
-                    opacity: [0.3, 0.6, 0.3],
+                    opacity: plant.isExclusive ? [0.4, 0.8, 0.4] : [0.3, 0.6, 0.3],
                     scale: [1, 1.2, 1],
                   }}
-                  transition={{ duration: 2, repeat: Infinity }}
+                  transition={{ duration: plant.isExclusive ? 1.5 : 2, repeat: Infinity }}
                   className="absolute inset-0 rounded-full blur-xl"
                   style={{ 
-                    background: plantInfo.color,
-                    transform: `scale(${scale})`,
+                    background: plant.isExclusive 
+                      ? `radial-gradient(circle, ${plantInfo.color}, transparent)` 
+                      : plantInfo.color,
+                    transform: `scale(${scale * (plant.isExclusive ? 1.5 : 1)})`,
                   }}
                 />
+
+                {/* Rarity indicator for exclusive plants */}
+                {plant.isExclusive && plant.stage === 4 && (
+                  <motion.div
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 10, repeat: Infinity, ease: 'linear' }}
+                    className="absolute -inset-2 rounded-full"
+                    style={{
+                      background: `conic-gradient(from 0deg, transparent, ${plantInfo.color}40, transparent)`,
+                    }}
+                  />
+                )}
                 
                 {/* Plant emoji */}
                 <motion.span
                   animate={plant.stage === 4 ? { 
                     rotate: [-2, 2, -2],
+                    scale: plant.isExclusive ? [1, 1.1, 1] : 1,
                   } : undefined}
-                  transition={{ duration: 3, repeat: Infinity }}
+                  transition={{ duration: plant.isExclusive ? 2 : 3, repeat: Infinity }}
                   className="relative z-10 block"
                   style={{ 
                     fontSize: `${1.5 + plant.stage * 0.5}rem`,
@@ -449,9 +562,23 @@ const InnerCalmGarden = ({ onClose, onKarmaEarned }: InnerCalmGardenProps) => {
                 )}
 
                 {/* Tooltip on hover */}
-                <div className="absolute -top-12 left-1/2 -translate-x-1/2 px-2 py-1 rounded-lg bg-black/80 text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                  <p className="font-medium text-foreground">{plantInfo.name}</p>
+                <div className="absolute -top-14 left-1/2 -translate-x-1/2 px-2 py-1 rounded-lg bg-black/80 text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                  <p className="font-medium text-foreground flex items-center gap-1">
+                    {plantInfo.name}
+                    {plant.isExclusive && (
+                      <span className={`text-[10px] px-1 rounded ${
+                        plant.rarity === 'legendary' ? 'bg-amber-500/30 text-amber-400' :
+                        plant.rarity === 'epic' ? 'bg-purple-500/30 text-purple-400' :
+                        'bg-cyan-500/30 text-cyan-400'
+                      }`}>
+                        {plant.rarity}
+                      </span>
+                    )}
+                  </p>
                   <p className="text-muted-foreground">{STAGE_NAMES[plant.stage]} • {plant.health}% health</p>
+                  {plant.karmaBonus && plant.stage === 4 && (
+                    <p className="text-amber-400">+{plant.karmaBonus} Karma bonus</p>
+                  )}
                 </div>
               </motion.button>
             );
@@ -481,9 +608,18 @@ const InnerCalmGarden = ({ onClose, onKarmaEarned }: InnerCalmGardenProps) => {
             <motion.div
               animate={{ opacity: [0.5, 1, 0.5] }}
               transition={{ duration: 1.5, repeat: Infinity }}
-              className="px-4 py-2 rounded-full bg-black/50 backdrop-blur-sm"
+              className={`px-4 py-2 rounded-full backdrop-blur-sm ${
+                selectedExclusivePlant 
+                  ? 'bg-gradient-to-r from-purple-500/30 to-amber-500/30 border border-amber-500/30' 
+                  : 'bg-black/50'
+              }`}
             >
-              <p className="text-sm text-foreground">Tap to plant your {selectedPlantType && PLANT_TYPES[selectedPlantType].name}</p>
+              <p className="text-sm text-foreground">
+                {selectedExclusivePlant 
+                  ? `Tap to plant your ${selectedExclusivePlant.rarity} ${selectedExclusivePlant.name} ✨`
+                  : `Tap to plant your ${selectedPlantType && PLANT_TYPES[selectedPlantType].name}`
+                }
+              </p>
             </motion.div>
           </div>
         )}
@@ -509,6 +645,7 @@ const InnerCalmGarden = ({ onClose, onKarmaEarned }: InnerCalmGardenProps) => {
           <button
             onClick={() => {
               setShowPlantMenu(!showPlantMenu);
+              setShowSeasonalEvents(false);
               setIsPlanting(false);
             }}
             className={`
@@ -522,10 +659,32 @@ const InnerCalmGarden = ({ onClose, onKarmaEarned }: InnerCalmGardenProps) => {
             <Flower2 className="w-4 h-4" />
             <span className="text-sm">Plant Seed</span>
           </button>
+
+          {activeEvents.length > 0 && (
+            <button
+              onClick={() => {
+                setShowSeasonalEvents(!showSeasonalEvents);
+                setShowPlantMenu(false);
+                setIsPlanting(false);
+              }}
+              className={`
+                flex items-center gap-2 px-4 py-2 rounded-lg transition-all
+                ${showSeasonalEvents 
+                  ? 'bg-gradient-to-r from-purple-500/30 to-amber-500/30 text-amber-300 border border-amber-500/50' 
+                  : 'bg-gradient-to-r from-purple-500/20 to-amber-500/20 hover:from-purple-500/30 hover:to-amber-500/30 text-foreground border border-transparent'
+                }
+              `}
+            >
+              <Calendar className="w-4 h-4" />
+              <span className="text-sm">{activeEvents[0].emoji} Events</span>
+              <span className="px-1.5 py-0.5 rounded-full bg-amber-500/30 text-amber-400 text-[10px]">
+                {activeEvents.length}
+              </span>
+            </button>
+          )}
           
           <button
             onClick={() => {
-              // Water all plants at once (costs more water)
               if (gardenState.waterDrops < gardenState.plants.length) {
                 showMessage('Not enough water for all plants!');
                 return;
@@ -584,11 +743,32 @@ const InnerCalmGarden = ({ onClose, onKarmaEarned }: InnerCalmGardenProps) => {
           )}
         </AnimatePresence>
 
+        {/* Seasonal Events Panel */}
+        <AnimatePresence>
+          {showSeasonalEvents && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="mt-3 overflow-hidden"
+            >
+              <SeasonalEvents
+                onPlantSelect={handleExclusivePlantSelect}
+                onClaimReward={handleClaimReward}
+                claimedRewards={gardenState.claimedRewards}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* Meditation tip */}
         <div className="mt-4 p-3 rounded-lg bg-white/5 border border-white/10">
           <p className="text-xs text-muted-foreground">
             💡 <span className="text-foreground">Tip:</span> Meditate in Sonic Lab to earn more water drops! 
             Each 10 minutes of meditation gives you 1 drop.
+            {activeEvents.length > 0 && (
+              <span className="text-amber-400"> Check the Events tab for exclusive seasonal plants!</span>
+            )}
           </p>
         </div>
       </div>
