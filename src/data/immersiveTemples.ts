@@ -86,62 +86,163 @@ export interface ImmersiveTemple {
   }[];
 }
 
-// Default zone template for temples without specific zones
-const createDefaultZones = (templeId: string): TempleZone[] => [
-  {
-    id: `${templeId}_entrance`,
-    name: 'Temple Entrance',
-    nameHindi: 'मंदिर प्रवेश द्वार',
-    description: 'The grand entrance to the sacred temple',
-    panoramaUrl: `https://images.unsplash.com/photo-1548013146-72479768bada?w=2048&q=80`,
-    hotspots: [
-      { id: 'h1', targetZoneId: `${templeId}_corridor`, position: { x: 0, y: 0, z: -10 }, label: 'Enter Temple' }
-    ],
-    ritualPoints: [
-      { id: 'r1', type: 'bell', position: { x: 3, y: 2, z: -5 }, label: 'Ring Temple Bell' }
-    ],
-    meditationSpots: [],
-    ambienceType: 'entrance'
+// Temple-specific panorama image mappings for variety
+const templePanoramaImages: Record<string, { entrance: string; corridor: string; sanctum: string }> = {
+  // ISKCON temples - Krishna themed
+  iskcon_vrindavan: {
+    entrance: 'https://images.unsplash.com/photo-1600093463592-8e36ae95ef56?w=2048&q=80',
+    corridor: 'https://images.unsplash.com/photo-1609619385002-f40f1df9b7eb?w=2048&q=80',
+    sanctum: 'https://images.unsplash.com/photo-1545126178-862cdb469409?w=2048&q=80'
   },
-  {
-    id: `${templeId}_corridor`,
-    name: 'Temple Corridor',
-    nameHindi: 'मंदिर गलियारा',
-    description: 'The sacred passage leading to the main sanctum',
-    panoramaUrl: `https://images.unsplash.com/photo-1582510003544-4d00b7f74220?w=2048&q=80`,
-    hotspots: [
-      { id: 'h1', targetZoneId: `${templeId}_entrance`, position: { x: 0, y: 0, z: 10 }, label: 'Back to Entrance' },
-      { id: 'h2', targetZoneId: `${templeId}_sanctum`, position: { x: 0, y: 0, z: -10 }, label: 'Enter Sanctum' }
-    ],
-    ritualPoints: [
-      { id: 'r1', type: 'diya', position: { x: -3, y: 1, z: -3 }, label: 'Light Diya' },
-      { id: 'r2', type: 'flower', position: { x: 3, y: 1, z: -3 }, label: 'Offer Flowers' }
-    ],
-    meditationSpots: [
-      { id: 'm1', position: { x: -5, y: 0, z: 0 }, name: 'Quiet Corner', recommended: false }
-    ],
-    ambienceType: 'corridor'
+  iskcon_mayapur: {
+    entrance: 'https://images.unsplash.com/photo-1548013146-72479768bada?w=2048&q=80',
+    corridor: 'https://images.unsplash.com/photo-1609619385002-f40f1df9b7eb?w=2048&q=80',
+    sanctum: 'https://images.unsplash.com/photo-1518791841217-8f162f1e1131?w=2048&q=80'
   },
-  {
-    id: `${templeId}_sanctum`,
-    name: 'Main Sanctum (Garbhagriha)',
-    nameHindi: 'गर्भगृह',
-    description: 'The innermost sanctum where the deity resides',
-    panoramaUrl: `https://images.unsplash.com/photo-1600093463592-8e36ae95ef56?w=2048&q=80`,
-    hotspots: [
-      { id: 'h1', targetZoneId: `${templeId}_corridor`, position: { x: 0, y: 0, z: 10 }, label: 'Back to Corridor' }
-    ],
-    ritualPoints: [
-      { id: 'r1', type: 'prasad', position: { x: 0, y: 1, z: -8 }, label: 'Offer Prasad' },
-      { id: 'r2', type: 'diya', position: { x: -2, y: 1, z: -6 }, label: 'Light Aarti Diya' },
-      { id: 'r3', type: 'flower', position: { x: 2, y: 1, z: -6 }, label: 'Offer Garland' }
-    ],
-    meditationSpots: [
-      { id: 'm1', position: { x: 0, y: 0, z: 5 }, name: 'Before the Deity', recommended: true }
-    ],
-    ambienceType: 'sanctum'
+  iskcon_bangalore: {
+    entrance: 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?w=2048&q=80',
+    corridor: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=2048&q=80',
+    sanctum: 'https://images.unsplash.com/photo-1609619385002-f40f1df9b7eb?w=2048&q=80'
+  },
+  // Jyotirlinga temples - Shiva themed
+  kedarnath: {
+    entrance: 'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?w=2048&q=80',
+    corridor: 'https://images.unsplash.com/photo-1585409677983-0f6c41ca9c3b?w=2048&q=80',
+    sanctum: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=2048&q=80'
+  },
+  kashi_vishwanath: {
+    entrance: 'https://images.unsplash.com/photo-1561361513-2d000a50f0dc?w=2048&q=80',
+    corridor: 'https://images.unsplash.com/photo-1564507592333-c60657eea523?w=2048&q=80',
+    sanctum: 'https://images.unsplash.com/photo-1587135941948-670b381f08ce?w=2048&q=80'
+  },
+  somnath: {
+    entrance: 'https://images.unsplash.com/photo-1590766940554-634f6c5d9a70?w=2048&q=80',
+    corridor: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=2048&q=80',
+    sanctum: 'https://images.unsplash.com/photo-1512100356356-de1b84283e18?w=2048&q=80'
+  },
+  mahakaleshwar: {
+    entrance: 'https://images.unsplash.com/photo-1544006659-f0b21884ce1d?w=2048&q=80',
+    corridor: 'https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=2048&q=80',
+    sanctum: 'https://images.unsplash.com/photo-1514222134-b57cbb8ce073?w=2048&q=80'
+  },
+  // Shakti Peeth temples - Goddess themed
+  vaishno_devi: {
+    entrance: 'https://images.unsplash.com/photo-1585409677983-0f6c41ca9c3b?w=2048&q=80',
+    corridor: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=2048&q=80',
+    sanctum: 'https://images.unsplash.com/photo-1470770841072-f978cf4d019e?w=2048&q=80'
+  },
+  kamakhya: {
+    entrance: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=2048&q=80',
+    corridor: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=2048&q=80',
+    sanctum: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=2048&q=80'
+  },
+  meenakshi_amman: {
+    entrance: 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?w=2048&q=80',
+    corridor: 'https://images.unsplash.com/photo-1564507592333-c60657eea523?w=2048&q=80',
+    sanctum: 'https://images.unsplash.com/photo-1609619385002-f40f1df9b7eb?w=2048&q=80'
+  },
+  // Vishnu temples
+  tirupati: {
+    entrance: 'https://images.unsplash.com/photo-1564507592333-c60657eea523?w=2048&q=80',
+    corridor: 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?w=2048&q=80',
+    sanctum: 'https://images.unsplash.com/photo-1545126178-862cdb469409?w=2048&q=80'
+  },
+  jagannath_puri: {
+    entrance: 'https://images.unsplash.com/photo-1518791841217-8f162f1e1131?w=2048&q=80',
+    corridor: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=2048&q=80',
+    sanctum: 'https://images.unsplash.com/photo-1600093463592-8e36ae95ef56?w=2048&q=80'
+  },
+  badrinath: {
+    entrance: 'https://images.unsplash.com/photo-1585409677983-0f6c41ca9c3b?w=2048&q=80',
+    corridor: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=2048&q=80',
+    sanctum: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=2048&q=80'
+  },
+  // Sikh temples
+  golden_temple: {
+    entrance: 'https://images.unsplash.com/photo-1514222134-b57cbb8ce073?w=2048&q=80',
+    corridor: 'https://images.unsplash.com/photo-1609619385002-f40f1df9b7eb?w=2048&q=80',
+    sanctum: 'https://images.unsplash.com/photo-1518791841217-8f162f1e1131?w=2048&q=80'
+  },
+  // International temples
+  pashupatinath: {
+    entrance: 'https://images.unsplash.com/photo-1544006659-f0b21884ce1d?w=2048&q=80',
+    corridor: 'https://images.unsplash.com/photo-1564507592333-c60657eea523?w=2048&q=80',
+    sanctum: 'https://images.unsplash.com/photo-1587135941948-670b381f08ce?w=2048&q=80'
+  },
+  batu_caves: {
+    entrance: 'https://images.unsplash.com/photo-1508739773434-c26b3d09e071?w=2048&q=80',
+    corridor: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=2048&q=80',
+    sanctum: 'https://images.unsplash.com/photo-1470770841072-f978cf4d019e?w=2048&q=80'
   }
-];
+};
+
+// Fallback images for temples not in the mapping
+const defaultImages = {
+  entrance: 'https://images.unsplash.com/photo-1548013146-72479768bada?w=2048&q=80',
+  corridor: 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?w=2048&q=80',
+  sanctum: 'https://images.unsplash.com/photo-1600093463592-8e36ae95ef56?w=2048&q=80'
+};
+
+// Default zone template for temples with unique images per temple
+const createDefaultZones = (templeId: string): TempleZone[] => {
+  const images = templePanoramaImages[templeId] || defaultImages;
+  
+  return [
+    {
+      id: `${templeId}_entrance`,
+      name: 'Temple Entrance',
+      nameHindi: 'मंदिर प्रवेश द्वार',
+      description: 'The grand entrance to the sacred temple',
+      panoramaUrl: images.entrance,
+      hotspots: [
+        { id: 'h1', targetZoneId: `${templeId}_corridor`, position: { x: 0, y: 0, z: -10 }, label: 'Enter Temple' }
+      ],
+      ritualPoints: [
+        { id: 'r1', type: 'bell', position: { x: 3, y: 2, z: -5 }, label: 'Ring Temple Bell' }
+      ],
+      meditationSpots: [],
+      ambienceType: 'entrance'
+    },
+    {
+      id: `${templeId}_corridor`,
+      name: 'Temple Corridor',
+      nameHindi: 'मंदिर गलियारा',
+      description: 'The sacred passage leading to the main sanctum',
+      panoramaUrl: images.corridor,
+      hotspots: [
+        { id: 'h1', targetZoneId: `${templeId}_entrance`, position: { x: 0, y: 0, z: 10 }, label: 'Back to Entrance' },
+        { id: 'h2', targetZoneId: `${templeId}_sanctum`, position: { x: 0, y: 0, z: -10 }, label: 'Enter Sanctum' }
+      ],
+      ritualPoints: [
+        { id: 'r1', type: 'diya', position: { x: -3, y: 1, z: -3 }, label: 'Light Diya' },
+        { id: 'r2', type: 'flower', position: { x: 3, y: 1, z: -3 }, label: 'Offer Flowers' }
+      ],
+      meditationSpots: [
+        { id: 'm1', position: { x: -5, y: 0, z: 0 }, name: 'Quiet Corner', recommended: false }
+      ],
+      ambienceType: 'corridor'
+    },
+    {
+      id: `${templeId}_sanctum`,
+      name: 'Main Sanctum (Garbhagriha)',
+      nameHindi: 'गर्भगृह',
+      description: 'The innermost sanctum where the deity resides',
+      panoramaUrl: images.sanctum,
+      hotspots: [
+        { id: 'h1', targetZoneId: `${templeId}_corridor`, position: { x: 0, y: 0, z: 10 }, label: 'Back to Corridor' }
+      ],
+      ritualPoints: [
+        { id: 'r1', type: 'prasad', position: { x: 0, y: 1, z: -8 }, label: 'Offer Prasad' },
+        { id: 'r2', type: 'diya', position: { x: -2, y: 1, z: -6 }, label: 'Light Aarti Diya' },
+        { id: 'r3', type: 'flower', position: { x: 2, y: 1, z: -6 }, label: 'Offer Garland' }
+      ],
+      meditationSpots: [
+        { id: 'm1', position: { x: 0, y: 0, z: 5 }, name: 'Before the Deity', recommended: true }
+      ],
+      ambienceType: 'sanctum'
+    }
+  ];
+};
 
 // ISKCON Temples
 export const iskconTemples: ImmersiveTemple[] = [

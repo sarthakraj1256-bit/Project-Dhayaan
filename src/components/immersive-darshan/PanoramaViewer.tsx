@@ -27,7 +27,17 @@ interface PanoramaViewerProps {
   timeOfDay: 'morning' | 'afternoon' | 'evening' | 'night';
 }
 
-// Panorama sphere component
+// Helper to check if URL is external
+const isExternalUrl = (url: string): boolean => {
+  if (url.startsWith('data:') || url.startsWith('blob:')) return false;
+  try {
+    return new URL(url).origin !== window.location.origin;
+  } catch {
+    return false;
+  }
+};
+
+// Panorama sphere component with proper CORS handling
 const PanoramaSphere = ({ 
   imageUrl, 
   lightColor, 
@@ -39,20 +49,70 @@ const PanoramaSphere = ({
 }) => {
   const meshRef = useRef<THREE.Mesh>(null);
   const [texture, setTexture] = useState<THREE.Texture | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    setIsLoading(true);
+    setError(null);
+    
     const loader = new THREE.TextureLoader();
-    loader.load(imageUrl, (loadedTexture) => {
-      loadedTexture.wrapS = THREE.RepeatWrapping;
-      loadedTexture.repeat.x = -1;
-      setTexture(loadedTexture);
-    });
+    
+    // Set crossOrigin for external URLs BEFORE loading
+    if (isExternalUrl(imageUrl)) {
+      loader.setCrossOrigin('anonymous');
+    }
+    
+    loader.load(
+      imageUrl,
+      (loadedTexture) => {
+        loadedTexture.wrapS = THREE.RepeatWrapping;
+        loadedTexture.repeat.x = -1;
+        loadedTexture.colorSpace = THREE.SRGBColorSpace;
+        setTexture(loadedTexture);
+        setIsLoading(false);
+      },
+      undefined, // onProgress
+      (err) => {
+        console.error('Failed to load panorama texture:', err);
+        setError('Failed to load panorama');
+        setIsLoading(false);
+      }
+    );
+
+    // Cleanup previous texture
+    return () => {
+      if (texture) {
+        texture.dispose();
+      }
+    };
   }, [imageUrl]);
 
   return (
     <>
       <ambientLight intensity={lightIntensity * 0.5} color={lightColor} />
       <pointLight position={[0, 10, 0]} intensity={lightIntensity} color={lightColor} />
+      
+      {/* Loading indicator */}
+      {isLoading && (
+        <Html center>
+          <div className="flex flex-col items-center gap-2 text-white">
+            <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+            <span className="text-sm">Loading panorama...</span>
+          </div>
+        </Html>
+      )}
+      
+      {/* Error message */}
+      {error && (
+        <Html center>
+          <div className="bg-destructive/80 text-white px-4 py-2 rounded-lg text-sm">
+            {error}
+          </div>
+        </Html>
+      )}
+      
+      {/* Panorama sphere */}
       {texture && (
         <Sphere ref={meshRef} args={[500, 64, 64]} scale={[-1, 1, 1]}>
           <meshBasicMaterial map={texture} side={THREE.BackSide} />
