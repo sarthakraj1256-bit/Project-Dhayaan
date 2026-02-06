@@ -134,7 +134,6 @@ export const useGuruVoice = (options: UseGuruVoiceOptions = {}) => {
         setIsLoading(true);
         const playedPreGenerated = await tryPreGeneratedAudio(effectiveMantraId);
         if (playedPreGenerated) {
-          console.log('Playing pre-generated audio from storage');
           setIsLoading(false);
           return;
         }
@@ -144,7 +143,6 @@ export const useGuruVoice = (options: UseGuruVoiceOptions = {}) => {
       const cachedBlob = await getCachedTTS(text);
       
       if (cachedBlob) {
-        console.log('Playing TTS from local cache');
         await playBlob(cachedBlob, true);
         return;
       }
@@ -177,7 +175,6 @@ export const useGuruVoice = (options: UseGuruVoiceOptions = {}) => {
       
       // Cache the audio for future use
       await setCachedTTS(text, audioBlob);
-      console.log('TTS cached for future use');
       
       await playBlob(audioBlob, false);
     } catch (err) {

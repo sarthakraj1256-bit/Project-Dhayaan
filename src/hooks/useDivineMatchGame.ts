@@ -181,8 +181,8 @@ export const useDivineMatchGame = (level: LevelConfig) => {
         osc.start(ctx.currentTime + i * 0.08);
         osc.stop(ctx.currentTime + i * 0.08 + 0.3);
       });
-    } catch (error) {
-      console.log('Audio not available');
+    } catch {
+      // Audio not available - silent fail
     }
   }, []);
 

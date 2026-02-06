@@ -46,13 +46,19 @@
  }: AudioControlsProps) => {
    if (!isPlaying) return null;
  
-   return (
-     <motion.div
-       initial={{ opacity: 0, y: 100 }}
-       animate={{ opacity: 1, y: 0 }}
-       exit={{ opacity: 0, y: 100 }}
-       className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-3rem)] max-w-2xl"
-     >
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 100 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: 100 }}
+        transition={{ 
+          type: 'spring', 
+          stiffness: 300, 
+          damping: 30,
+          duration: 0.5
+        }}
+        className="fixed bottom-20 md:bottom-6 left-1/2 -translate-x-1/2 z-40 w-[calc(100%-3rem)] max-w-2xl"
+      >
        <div
          className="rounded-2xl p-6"
          style={{

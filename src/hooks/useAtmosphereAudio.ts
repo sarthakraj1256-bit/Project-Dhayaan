@@ -88,7 +88,6 @@
        const cachedBlob = await getCachedAudio(atmosphereId);
        
        if (cachedBlob) {
-         console.log(`Playing cached atmosphere: ${atmosphereId}`);
          playAudioBlob(cachedBlob, state.atmosphereVolume);
          setState((prev) => ({
            ...prev,
@@ -99,7 +98,6 @@
        }
  
        // Generate new audio via edge function
-       console.log(`Generating new atmosphere: ${atmosphereId}`);
        const response = await fetch(
          `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/elevenlabs-sfx`,
          {
@@ -122,8 +120,7 @@
  
        // Cache the generated audio
        await setCachedAudio(atmosphereId, audioBlob);
-       console.log(`Cached atmosphere: ${atmosphereId}`);
- 
+
        // Play the audio
        playAudioBlob(audioBlob, state.atmosphereVolume);
  

@@ -97,8 +97,8 @@ const ChakraAlignmentGame = ({ onClose, onKarmaEarned }: ChakraAlignmentGameProp
       
       oscillator.start();
       oscillator.stop(ctx.currentTime + duration);
-    } catch (error) {
-      console.log('Audio not available');
+    } catch {
+      // Audio not available - silent fail
     }
   }, [soundEnabled]);
 
@@ -131,8 +131,8 @@ const ChakraAlignmentGame = ({ onClose, onKarmaEarned }: ChakraAlignmentGameProp
         oscillator.start(ctx.currentTime + i * 0.1);
         oscillator.stop(ctx.currentTime + 1);
       });
-    } catch (error) {
-      console.log('Audio not available');
+    } catch {
+      // Audio not available - silent fail
     }
   }, [soundEnabled]);
 

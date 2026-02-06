@@ -150,8 +150,8 @@ const LevelUpCelebration = ({ isVisible, newLevel, onComplete }: LevelUpCelebrat
         osc.start(ctx.currentTime + i * 0.15);
         osc.stop(ctx.currentTime + i * 0.15 + 1.5);
       });
-    } catch (error) {
-      console.log('Audio not available');
+    } catch {
+      // Audio not available - silent fail
     }
 
     // Auto-close after animation

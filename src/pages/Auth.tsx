@@ -338,9 +338,10 @@ const Auth = () => {
       
       {/* Glassmorphism Card */}
       <motion.div
-        initial={{ opacity: 0, y: 20, scale: 0.95 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.95 }}
+        transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
         className="relative w-full max-w-md"
       >
         {/* Outer glow */}

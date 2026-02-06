@@ -167,8 +167,8 @@ const InnerCalmGarden = ({ onClose, onKarmaEarned }: InnerCalmGardenProps) => {
       try {
         const parsed = JSON.parse(saved);
         setGardenState(parsed);
-      } catch (e) {
-        console.log('Could not load garden state');
+      } catch {
+        // Silent fail for localStorage parse errors
       }
     }
   }, []);
@@ -229,8 +229,8 @@ const InnerCalmGarden = ({ onClose, onKarmaEarned }: InnerCalmGardenProps) => {
         osc.start(ctx.currentTime + i * 0.1);
         osc.stop(ctx.currentTime + i * 0.1 + 0.5);
       });
-    } catch (error) {
-      console.log('Audio not available');
+    } catch {
+      // Audio not available - silent fail
     }
   }, [soundEnabled]);
 

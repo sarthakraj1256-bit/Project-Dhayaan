@@ -96,7 +96,7 @@ const ImmersiveDarshan = () => {
                 audio.stopAudio();
               }}
               onRitualInteract={handleRitualInteract}
-              onMeditationStart={(spotId) => console.log('Start meditation at:', spotId)}
+              onMeditationStart={() => {}}
               timeOfDay={timeOfDay}
             />
 

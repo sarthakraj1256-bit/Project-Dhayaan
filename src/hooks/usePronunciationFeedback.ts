@@ -139,7 +139,6 @@
        wsRef.current = ws;
        
        ws.onopen = () => {
-         console.log('STT WebSocket connected');
          setIsConnecting(false);
          setIsListening(true);
          
