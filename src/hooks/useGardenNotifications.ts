@@ -37,8 +37,8 @@ export const useGardenNotifications = () => {
     if (saved) {
       try {
         setSettings(JSON.parse(saved));
-      } catch (e) {
-        console.log('Could not load notification settings');
+      } catch {
+        // Silent fail for localStorage parse errors
       }
     }
 

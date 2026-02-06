@@ -279,9 +279,7 @@ export async function cleanupExpiredCache(): Promise<{ tts: number; atmosphere: 
     };
     localStorage.setItem(CLEANUP_STATS_KEY, JSON.stringify(stats));
     
-    if (total > 0) {
-      console.log(`Cache cleanup: removed ${ttsRemoved} TTS and ${atmosphereRemoved} atmosphere entries (older than ${CACHE_EXPIRY_DAYS} days)`);
-    }
+    // Removed console.log for production cleanliness
 
     return { tts: ttsRemoved, atmosphere: atmosphereRemoved };
   } catch (error) {

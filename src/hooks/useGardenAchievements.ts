@@ -254,8 +254,8 @@ export const useGardenAchievements = () => {
           totalWaterUsed: parsed.totalWaterUsed || 0,
           totalKarmaEarned: parsed.totalKarmaEarned || 0,
         }));
-      } catch (e) {
-        console.log('Could not load achievement state');
+      } catch {
+        // Silent fail for localStorage parse errors
       }
     }
   }, []);

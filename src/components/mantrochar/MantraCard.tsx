@@ -23,21 +23,24 @@
    mastery: { label: 'Mastery', color: 'text-violet-400' },
  };
  
- const MantraCard = ({ mantra, progress = 0, isLocked = false, onClick }: MantraCardProps) => {
-   return (
-     <motion.button
-       onClick={onClick}
-       disabled={isLocked}
-       whileHover={{ scale: isLocked ? 1 : 1.02 }}
-       whileTap={{ scale: isLocked ? 1 : 0.98 }}
-       className={`
-         w-full text-left p-4 rounded-xl border bg-gradient-to-br transition-all
-         ${isLocked 
-           ? 'from-white/5 to-white/0 border-white/10 opacity-60 cursor-not-allowed' 
-           : difficultyColors[mantra.difficulty] + ' hover:shadow-lg'
-         }
-       `}
-     >
+const MantraCard = ({ mantra, progress = 0, isLocked = false, onClick }: MantraCardProps) => {
+  return (
+    <motion.button
+      onClick={onClick}
+      disabled={isLocked}
+      whileHover={{ 
+        scale: isLocked ? 1 : 1.02,
+        boxShadow: isLocked ? undefined : '0 0 30px rgba(212, 175, 55, 0.4), 0 0 60px rgba(212, 175, 55, 0.2)'
+      }}
+      whileTap={{ scale: isLocked ? 1 : 0.98 }}
+      className={`
+        w-full text-left p-4 rounded-xl border bg-gradient-to-br transition-all duration-300
+        ${isLocked 
+          ? 'from-white/5 to-white/0 border-white/10 opacity-60 cursor-not-allowed' 
+          : difficultyColors[mantra.difficulty] + ' hover:border-gold/50 hover:shadow-[0_0_20px_rgba(212,175,55,0.3)]'
+        }
+      `}
+    >
        <div className="flex items-start gap-4">
          {/* Sanskrit Symbol */}
          <div className={`
