@@ -1,9 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { logError } from '@/lib/logger';
 
+// Public leaderboard entry (no user_id exposed)
 export interface LeaderboardEntry {
   id: string;
-  user_id: string;
   display_name: string | null;
   avatar_url: string | null;
   total_plants: number;
@@ -21,7 +22,7 @@ interface UseGardenLeaderboardReturn {
   isLoading: boolean;
   error: string | null;
   refreshLeaderboard: () => Promise<void>;
-  updateUserStats: (stats: Partial<LeaderboardEntry>) => Promise<void>;
+  updateUserStats: (stats: Partial<Omit<LeaderboardEntry, 'id'>>) => Promise<void>;
 }
 
 export const useGardenLeaderboard = (userId?: string): UseGardenLeaderboardReturn => {
@@ -35,52 +36,35 @@ export const useGardenLeaderboard = (userId?: string): UseGardenLeaderboardRetur
       setIsLoading(true);
       setError(null);
 
-      // Fetch top 50 gardeners sorted by karma and achievements
+      // Use the anonymized view that doesn't expose user_id
+      // Cast to 'any' since the view isn't in the generated types
       const { data, error: fetchError } = await supabase
-        .from('garden_stats')
+        .from('garden_leaderboard')
         .select('*')
-        .order('total_karma_earned', { ascending: false })
-        .order('achievements_unlocked', { ascending: false })
-        .limit(50);
+        .limit(50) as { data: LeaderboardEntry[] | null; error: any };
 
       if (fetchError) throw fetchError;
 
-      const entries = (data || []) as LeaderboardEntry[];
+      const entries = data || [];
       setLeaderboard(entries);
 
-      // Find user's rank if they're logged in
+      // Find user's rank if they're logged in (query their own stats via RLS)
       if (userId) {
-        const userIndex = entries.findIndex(e => e.user_id === userId);
-        if (userIndex !== -1) {
-          setUserRank(userIndex + 1);
-        } else {
-          // User might not be in top 50, fetch their specific rank
-          const { count } = await supabase
-            .from('garden_stats')
-            .select('*', { count: 'exact', head: true })
-            .or(`total_karma_earned.gt.${entries[entries.length - 1]?.total_karma_earned || 0}`);
-          
-          if (count !== null) {
-            // Check if user exists in stats
-            const { data: userData } = await supabase
-              .from('garden_stats')
-              .select('total_karma_earned')
-              .eq('user_id', userId)
-              .maybeSingle();
-            
-            if (userData) {
-              const { count: betterCount } = await supabase
-                .from('garden_stats')
-                .select('*', { count: 'exact', head: true })
-                .gt('total_karma_earned', userData.total_karma_earned);
-              
-              setUserRank((betterCount || 0) + 1);
-            }
-          }
+        const { data: userStats } = await supabase
+          .from('garden_stats')
+          .select('total_karma_earned')
+          .eq('user_id', userId)
+          .maybeSingle();
+
+        if (userStats) {
+          // Find rank by counting entries with higher karma
+          const userKarma = userStats.total_karma_earned;
+          const rank = entries.filter(e => e.total_karma_earned > userKarma).length + 1;
+          setUserRank(rank);
         }
       }
     } catch (err) {
-      console.error('Error fetching leaderboard:', err);
+      logError('Error fetching leaderboard', err);
       setError('Failed to load leaderboard');
     } finally {
       setIsLoading(false);
@@ -130,7 +114,7 @@ export const useGardenLeaderboard = (userId?: string): UseGardenLeaderboardRetur
       // Refresh leaderboard after update
       await fetchLeaderboard();
     } catch (err) {
-      console.error('Error updating garden stats:', err);
+      logError('Error updating garden stats', err);
     }
   }, [userId, fetchLeaderboard]);
 

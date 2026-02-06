@@ -329,6 +329,13 @@ export type Database = {
             referencedRelation: "temple_stories"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "story_reactions_story_id_fkey"
+            columns: ["story_id"]
+            isOneToOne: false
+            referencedRelation: "temple_stories_public"
+            referencedColumns: ["id"]
+          },
         ]
       }
       stress_metrics: {
@@ -507,7 +514,58 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      garden_leaderboard: {
+        Row: {
+          achievements_unlocked: number | null
+          avatar_url: string | null
+          display_name: string | null
+          flourishing_plants: number | null
+          garden_level: number | null
+          id: string | null
+          last_active_at: string | null
+          total_karma_earned: number | null
+          total_plants: number | null
+          total_water_used: number | null
+        }
+        Insert: {
+          achievements_unlocked?: number | null
+          avatar_url?: string | null
+          display_name?: string | null
+          flourishing_plants?: number | null
+          garden_level?: number | null
+          id?: string | null
+          last_active_at?: string | null
+          total_karma_earned?: number | null
+          total_plants?: number | null
+          total_water_used?: number | null
+        }
+        Update: {
+          achievements_unlocked?: number | null
+          avatar_url?: string | null
+          display_name?: string | null
+          flourishing_plants?: number | null
+          garden_level?: number | null
+          id?: string | null
+          last_active_at?: string | null
+          total_karma_earned?: number | null
+          total_plants?: number | null
+          total_water_used?: number | null
+        }
+        Relationships: []
+      }
+      temple_stories_public: {
+        Row: {
+          author_avatar: string | null
+          author_name: string | null
+          created_at: string | null
+          id: string | null
+          photos: string[] | null
+          rating: number | null
+          story: string | null
+          temple_id: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       get_stress_statistics: {

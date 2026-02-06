@@ -136,7 +136,9 @@ const GardenLeaderboardPanel = ({
             ) : (
               sortedLeaderboard.map((entry, index) => {
                 const rank = index + 1;
-                const isCurrentUser = entry.user_id === currentUserId;
+                // Since we no longer have user_id in the public leaderboard,
+                // we can't highlight the current user's entry this way
+                const isCurrentUser = false;
                 const rankConfig = RANK_ICONS[rank as keyof typeof RANK_ICONS];
                 const RankIcon = rankConfig?.icon;
 

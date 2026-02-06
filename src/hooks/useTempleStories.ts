@@ -1,24 +1,34 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { logError } from '@/lib/logger';
 
+// Public story interface (no user_id exposed)
 export interface TempleStory {
+  id: string;
+  temple_id: string;
+  story: string;
+  rating: number | null;
+  photos: string[] | null;
+  created_at: string;
+  author_name: string | null;
+  author_avatar: string | null;
+}
+
+// Private story for user's own stories (includes user_id for delete operations)
+interface OwnStory {
   id: string;
   user_id: string;
   temple_id: string;
   story: string;
-  visit_date: string | null;
   rating: number | null;
   photos: string[] | null;
   created_at: string;
-  profile?: {
-    display_name: string | null;
-    avatar_url: string | null;
-  };
 }
 
 export const useTempleStories = (templeId?: string) => {
   const [stories, setStories] = useState<TempleStory[]>([]);
+  const [ownStoryIds, setOwnStoryIds] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(true);
   const [userId, setUserId] = useState<string | null>(null);
 
@@ -40,40 +50,46 @@ export const useTempleStories = (templeId?: string) => {
   const fetchStories = useCallback(async () => {
     setLoading(true);
     try {
-      let query = supabase
-        .from('temple_stories')
+      // Use the anonymized public view (no user_id exposed)
+      // Cast since the view isn't in the generated types
+      const { data, error } = await supabase
+        .from('temple_stories_public')
         .select('*')
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .eq(templeId ? 'temple_id' : 'id', templeId || undefined as any)
+        .limit(50) as { data: TempleStory[] | null; error: any };
 
-      if (templeId) {
-        query = query.eq('temple_id', templeId);
+      // If no templeId filter, just query all
+      let result = data;
+      if (!templeId) {
+        const { data: allData, error: allError } = await supabase
+          .from('temple_stories_public')
+          .select('*')
+          .order('created_at', { ascending: false })
+          .limit(50) as { data: TempleStory[] | null; error: any };
+        if (allError) throw allError;
+        result = allData;
+      } else if (error) {
+        throw error;
       }
 
-      const { data, error } = await query.limit(50);
+      setStories(result || []);
 
-      if (error) throw error;
-
-      // Fetch profiles for each story
-      const userIds = [...new Set(data?.map(s => s.user_id) || [])];
-      const { data: profiles } = await supabase
-        .from('profiles')
-        .select('user_id, display_name, avatar_url')
-        .in('user_id', userIds);
-
-      const profileMap = new Map(profiles?.map(p => [p.user_id, p]) || []);
-
-      const storiesWithProfiles = (data || []).map(story => ({
-        ...story,
-        profile: profileMap.get(story.user_id)
-      }));
-
-      setStories(storiesWithProfiles);
+      // Fetch user's own stories to know which ones they can delete
+      if (userId) {
+        const { data: ownStories } = await supabase
+          .from('temple_stories')
+          .select('id')
+          .eq('user_id', userId);
+        
+        setOwnStoryIds(new Set(ownStories?.map(s => s.id) || []));
+      }
     } catch (error) {
-      console.error('Error fetching stories:', error);
+      logError('Error fetching stories', error);
     } finally {
       setLoading(false);
     }
-  }, [templeId]);
+  }, [templeId, userId]);
 
   useEffect(() => {
     fetchStories();
@@ -93,7 +109,7 @@ export const useTempleStories = (templeId?: string) => {
         .upload(fileName, file);
       
       if (error) {
-        console.error('Upload error:', error);
+        logError('Upload error', error);
         continue;
       }
       
@@ -137,7 +153,7 @@ export const useTempleStories = (templeId?: string) => {
       await fetchStories();
       return true;
     } catch (error) {
-      console.error('Error adding story:', error);
+      logError('Error adding story', error);
       toast.error('Failed to share your experience');
       return false;
     }
@@ -156,11 +172,16 @@ export const useTempleStories = (templeId?: string) => {
       setStories(prev => prev.filter(s => s.id !== storyId));
       return true;
     } catch (error) {
-      console.error('Error deleting story:', error);
+      logError('Error deleting story', error);
       toast.error('Failed to delete story');
       return false;
     }
   }, []);
+
+  // Helper to check if user can delete a story
+  const canDeleteStory = useCallback((storyId: string) => {
+    return ownStoryIds.has(storyId);
+  }, [ownStoryIds]);
 
   return {
     stories,
@@ -170,6 +191,6 @@ export const useTempleStories = (templeId?: string) => {
     uploadPhotos,
     refreshStories: fetchStories,
     isAuthenticated: !!userId,
-    userId
+    canDeleteStory
   };
 };
