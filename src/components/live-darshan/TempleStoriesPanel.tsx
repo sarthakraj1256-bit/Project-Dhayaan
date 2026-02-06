@@ -85,7 +85,7 @@ const StoryCard = ({
   onToggleLike: () => void;
 }) => {
   const temple = temples.find(t => t.id === story.temple_id);
-  const initials = story.profile?.display_name
+  const initials = story.author_name
     ?.split(' ')
     .map(n => n[0])
     .join('')
@@ -101,7 +101,7 @@ const StoryCard = ({
         <CardContent className="p-4">
           <div className="flex items-start gap-3">
             <Avatar className="w-10 h-10 flex-shrink-0">
-              <AvatarImage src={story.profile?.avatar_url || undefined} />
+              <AvatarImage src={story.author_avatar || undefined} />
               <AvatarFallback className="bg-primary/20 text-primary text-sm">
                 {initials}
               </AvatarFallback>
@@ -111,7 +111,7 @@ const StoryCard = ({
               <div className="flex items-center justify-between gap-2 mb-1">
                 <div className="flex items-center gap-2 flex-wrap">
                   <span className="font-medium text-sm text-foreground">
-                    {story.profile?.display_name || 'Devotee'}
+                    {story.author_name || 'Devotee'}
                   </span>
                   {story.rating && (
                     <div className="flex items-center gap-0.5">
@@ -190,13 +190,6 @@ const StoryCard = ({
                       {likeCount > 0 ? likeCount : ''}
                     </span>
                   </button>
-                  
-                  {story.visit_date && (
-                    <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                      <Calendar className="w-3 h-3" />
-                      <span>Visited {format(new Date(story.visit_date), 'MMM d, yyyy')}</span>
-                    </div>
-                  )}
                 </div>
                 
                 {canDelete && (
@@ -450,7 +443,7 @@ const TempleStoriesPanel = ({ templeId }: TempleStoriesPanelProps) => {
     deleteStory,
     uploadPhotos,
     isAuthenticated,
-    userId 
+    canDeleteStory 
   } = useTempleStories(templeId);
   
   // Get story IDs for reactions hook
@@ -545,7 +538,7 @@ const TempleStoriesPanel = ({ templeId }: TempleStoriesPanelProps) => {
                     <StoryCard
                       key={story.id}
                       story={story}
-                      canDelete={userId === story.user_id}
+                      canDelete={canDeleteStory(story.id)}
                       onDelete={() => deleteStory(story.id)}
                       likeCount={getReactionCount(story.id)}
                       hasLiked={hasUserReacted(story.id)}
