@@ -1,6 +1,13 @@
 import { useState, useCallback, useRef } from 'react';
 import { getCachedTTS, setCachedTTS } from '@/lib/audioCache';
 
+// Fallback values to prevent undefined URL issues
+const FALLBACK_SUPABASE_URL = "https://pgavnutkwiiovdvbrbcl.supabase.co";
+const FALLBACK_SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBnYXZudXRrd2lpb3ZkdmJyYmNsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAwNDgyOTcsImV4cCI6MjA4NTYyNDI5N30.bM1DTGq9Fgn0WPcDlS2hjxRr-bdTDIbLq47RZFIvFbo";
+
+const getSupabaseUrl = () => import.meta.env.VITE_SUPABASE_URL || FALLBACK_SUPABASE_URL;
+const getSupabaseKey = () => import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || FALLBACK_SUPABASE_KEY;
+
 interface UseGuruVoiceOptions {
   onPlayStart?: () => void;
   onPlayEnd?: () => void;
@@ -76,14 +83,17 @@ export const useGuruVoice = (options: UseGuruVoiceOptions = {}) => {
       // Not cached, fetch from API
       setIsLoading(true);
       
+      const supabaseUrl = getSupabaseUrl();
+      const supabaseKey = getSupabaseKey();
+      
       const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/elevenlabs-tts`,
+        `${supabaseUrl}/functions/v1/elevenlabs-tts`,
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'apikey': import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
-            'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+            'apikey': supabaseKey,
+            'Authorization': `Bearer ${supabaseKey}`,
           },
           body: JSON.stringify({ text }),
         }
