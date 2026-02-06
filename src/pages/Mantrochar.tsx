@@ -124,14 +124,10 @@ import BottomNav from '@/components/BottomNav';
              animate={{ opacity: 1, y: 0 }}
              className="max-w-2xl mx-auto"
            >
-             <h2 className="font-display text-3xl md:text-4xl tracking-wider text-foreground mb-4">
-               Learn to <span className="text-gold-gradient">Chant</span> Correctly
-             </h2>
-             <p className="text-muted-foreground font-body leading-relaxed">
-               Master mantras step by step — from listening to understanding to perfect repetition.
-               Like Duolingo, but for ancient wisdom.
-             </p>
-           </motion.div>
+              <h2 className="font-display text-3xl md:text-4xl tracking-wider text-foreground mb-4">
+                Learn to <span className="text-gold-gradient">Chant</span> Correctly
+              </h2>
+            </motion.div>
  
            {/* Stats */}
            <motion.div
