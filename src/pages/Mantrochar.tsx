@@ -1,14 +1,17 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, BookOpen, Radio, Flame, GraduationCap, Loader2, LogIn } from 'lucide-react';
-import { mantras, categories, getMantrasByDifficulty, type Mantra } from '@/data/mantraLibrary';
+import { mantras, getMantrasByDifficulty, type Mantra } from '@/data/mantraLibrary';
 import MantraCard from '@/components/mantrochar/MantraCard';
 import MantraLesson from '@/components/mantrochar/MantraLesson';
 import { toast } from 'sonner';
 import { useMantraProgress } from '@/hooks/useMantraProgress';
 import BottomNav from '@/components/BottomNav';
- const difficultyOrder = ['beginner', 'intermediate', 'advanced', 'mastery'] as const;
+import { useInfiniteScroll } from '@/hooks/useLazyLoad';
+import { CardSkeleton } from '@/components/LazyCard';
+
+const difficultyOrder = ['beginner', 'intermediate', 'advanced', 'mastery'] as const;
  
  const Mantrochar = () => {
    const [selectedMantra, setSelectedMantra] = useState<Mantra | null>(null);

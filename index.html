@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
     <title>Dhyaan: The Science of Silence</title>
     <meta name="description" content="Resonate with the Cosmos. Explore the fractal geometry, acoustic science, and sacred mathematics of ancient Indian temples." />
     <meta name="author" content="Sarthak Raj" />
@@ -23,15 +23,88 @@
     <meta name="twitter:description" content="Resonate with the Cosmos. Decoding the fractal geometry of Indian Temples." />
     <meta name="twitter:image" content="/og-image.png" />
     
-    <!-- Theme Color -->
+    <!-- Theme Color & PWA -->
     <meta name="theme-color" content="#0a0a0c" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Dhyaan" />
+    <link rel="apple-touch-icon" href="/og-image.png" />
     
-    <!-- Preconnect to Google Fonts -->
+    <!-- Preconnect & Preload Critical Resources -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://images.unsplash.com" />
+    <link rel="dns-prefetch" href="https://pgavnutkwiiovdvbrbcl.supabase.co" />
+    
+    <!-- Preload critical fonts with display=swap for FOUT prevention -->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Cormorant+Garamond:wght@400;500&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Cormorant+Garamond:wght@400;500&display=swap" media="print" onload="this.media='all'" />
+    <noscript>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Cormorant+Garamond:wght@400;500&display=swap" />
+    </noscript>
+    
+    <!-- Critical CSS for instant first paint -->
+    <style>
+      /* Critical above-the-fold styles */
+      :root {
+        --background: 240 10% 4%;
+        --foreground: 35 40% 85%;
+        --primary: 38 70% 50%;
+      }
+      
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      
+      html { 
+        scroll-behavior: smooth;
+        -webkit-font-smoothing: antialiased;
+      }
+      
+      body {
+        background: hsl(240 10% 4%);
+        color: hsl(35 40% 85%);
+        font-family: 'Cormorant Garamond', Georgia, serif;
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
+      
+      #root {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+      
+      /* Loading skeleton styles */
+      .initial-loader {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: hsl(240 10% 4%);
+        z-index: 9999;
+      }
+      
+      .loader-pulse {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: radial-gradient(circle, hsl(38 70% 50% / 0.3), transparent);
+        animation: pulse 1.5s ease-in-out infinite;
+      }
+      
+      @keyframes pulse {
+        0%, 100% { transform: scale(1); opacity: 0.5; }
+        50% { transform: scale(1.2); opacity: 1; }
+      }
+    </style>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- Initial loading state - replaced by React -->
+      <div class="initial-loader">
+        <div class="loader-pulse"></div>
+      </div>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
