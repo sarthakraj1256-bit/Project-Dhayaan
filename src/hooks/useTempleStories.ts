@@ -50,30 +50,16 @@ export const useTempleStories = (templeId?: string) => {
   const fetchStories = useCallback(async () => {
     setLoading(true);
     try {
-      // Use the anonymized public view (no user_id exposed)
-      // Cast since the view isn't in the generated types
+      // Use the RPC function that safely exposes stories without user_id
       const { data, error } = await supabase
-        .from('temple_stories_public')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .eq(templeId ? 'temple_id' : 'id', templeId || undefined as any)
-        .limit(50) as { data: TempleStory[] | null; error: any };
+        .rpc('get_temple_stories_public', { 
+          temple_filter: templeId || null,
+          limit_count: 50 
+        });
 
-      // If no templeId filter, just query all
-      let result = data;
-      if (!templeId) {
-        const { data: allData, error: allError } = await supabase
-          .from('temple_stories_public')
-          .select('*')
-          .order('created_at', { ascending: false })
-          .limit(50) as { data: TempleStory[] | null; error: any };
-        if (allError) throw allError;
-        result = allData;
-      } else if (error) {
-        throw error;
-      }
+      if (error) throw error;
 
-      setStories(result || []);
+      setStories((data || []) as TempleStory[]);
 
       // Fetch user's own stories to know which ones they can delete
       if (userId) {

@@ -36,16 +36,13 @@ export const useGardenLeaderboard = (userId?: string): UseGardenLeaderboardRetur
       setIsLoading(true);
       setError(null);
 
-      // Use the anonymized view that doesn't expose user_id
-      // Cast to 'any' since the view isn't in the generated types
+      // Use the RPC function that safely exposes leaderboard data without user_id
       const { data, error: fetchError } = await supabase
-        .from('garden_leaderboard')
-        .select('*')
-        .limit(50) as { data: LeaderboardEntry[] | null; error: any };
+        .rpc('get_garden_leaderboard', { limit_count: 50 });
 
       if (fetchError) throw fetchError;
 
-      const entries = data || [];
+      const entries = (data || []) as LeaderboardEntry[];
       setLeaderboard(entries);
 
       // Find user's rank if they're logged in (query their own stats via RLS)
