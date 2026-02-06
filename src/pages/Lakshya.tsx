@@ -9,13 +9,14 @@ import ChakraAlignmentGame from '@/components/lakshya/ChakraAlignmentGame';
 import InnerCalmGarden from '@/components/lakshya/InnerCalmGarden';
 import DivineMatchGame from '@/components/lakshya/DivineMatchGame';
 import KarmaDisplay from '@/components/lakshya/KarmaDisplay';
-import LevelProgressBar from '@/components/lakshya/LevelProgressBar';
+import LiquidGoldProgressBar from '@/components/lakshya/LiquidGoldProgressBar';
 import ChakraProgress from '@/components/lakshya/ChakraProgress';
 import CosmicBackground from '@/components/lakshya/CosmicBackground';
 import MultiplierDisplay from '@/components/lakshya/MultiplierDisplay';
 import KarmaGainAnimation from '@/components/lakshya/KarmaGainAnimation';
 import LevelUpCelebration from '@/components/lakshya/LevelUpCelebration';
 import HiddenRewards from '@/components/lakshya/HiddenRewards';
+import SadhanaFlame from '@/components/lakshya/SadhanaFlame';
 import BottomNav from '@/components/BottomNav';
 
 const Lakshya = () => {
@@ -178,7 +179,7 @@ const Lakshya = () => {
                   </div>
                 ) : progress && (
                   <>
-                    <LevelProgressBar progress={progress} />
+                    <LiquidGoldProgressBar progress={progress} showShimmer={showKarmaAnimation} />
                     
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6">
                       <div className="text-center p-3 rounded-lg bg-white/5">
@@ -193,9 +194,9 @@ const Lakshya = () => {
                         <p className="text-2xl font-display text-foreground">{progress.total_games_played}</p>
                         <p className="text-xs text-muted-foreground">Games Played</p>
                       </div>
-                      <div className="text-center p-3 rounded-lg bg-white/5">
-                        <p className="text-2xl font-display text-foreground">{progress.current_streak}</p>
-                        <p className="text-xs text-muted-foreground">Day Streak 🔥</p>
+                      {/* Interactive Sadhana Flame */}
+                      <div className="flex items-center justify-center p-3 rounded-lg bg-white/5">
+                        <SadhanaFlame streak={progress.current_streak} />
                       </div>
                     </div>
                   </>

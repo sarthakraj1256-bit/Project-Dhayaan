@@ -327,19 +327,19 @@ import BottomNav from '@/components/BottomNav';
            </motion.div>
          </section>
  
-         {/* Frequency Categories */}
-         <main className="px-6 pb-32 md:pb-32 max-w-7xl mx-auto mb-16 md:mb-0">
-           {categories.map((category) => (
-             <CategorySection
-               key={category.id}
-               category={category}
-               frequencies={getFrequenciesByCategory(category.id)}
-               activeFrequency={audioState.currentFrequency}
-               onPlayFrequency={handlePlayFrequency}
-               onStopFrequency={stopFrequency}
-             />
-           ))}
-         </main>
+        {/* Frequency Categories */}
+          <main className="px-6 pb-40 md:pb-36 max-w-7xl mx-auto mb-16 md:mb-0">
+            {categories.map((category) => (
+              <CategorySection
+                key={category.id}
+                category={category}
+                frequencies={getFrequenciesByCategory(category.id)}
+                activeFrequency={audioState.currentFrequency}
+                onPlayFrequency={handlePlayFrequency}
+                onStopFrequency={stopFrequency}
+              />
+            ))}
+          </main>
  
          {/* Fixed Audio Controls */}
         <AudioControls
