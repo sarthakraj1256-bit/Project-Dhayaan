@@ -48,6 +48,15 @@ export const useDevotionalAudio = (temple: ImmersiveTemple | null) => {
 
   // Generate audio using ElevenLabs SFX API
   const generateAudio = useCallback(async (prompt: string, duration: number = 10): Promise<ArrayBuffer | null> => {
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+    const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+    
+    // Validate environment variables
+    if (!supabaseUrl || !supabaseKey) {
+      console.warn('Supabase environment variables not configured for audio generation');
+      return null;
+    }
+
     const cacheKey = generateCacheKey('sfx', prompt);
     
     // Check cache first
@@ -58,19 +67,24 @@ export const useDevotionalAudio = (temple: ImmersiveTemple | null) => {
 
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/elevenlabs-sfx`,
+        `${supabaseUrl}/functions/v1/elevenlabs-sfx`,
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'apikey': import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
-            'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`
+            'apikey': supabaseKey,
+            'Authorization': `Bearer ${supabaseKey}`
           },
           body: JSON.stringify({ prompt, duration })
         }
       );
 
       if (!response.ok) {
+        // Don't log as error for missing edge function - it's expected during development
+        if (response.status === 404) {
+          console.info('Audio generation edge function not deployed yet');
+          return null;
+        }
         throw new Error(`Audio generation failed: ${response.status}`);
       }
 
@@ -81,7 +95,8 @@ export const useDevotionalAudio = (temple: ImmersiveTemple | null) => {
       
       return await audioBlob.arrayBuffer();
     } catch (error) {
-      console.error('Error generating audio:', error);
+      // Silently handle network errors to avoid console spam
+      console.info('Audio generation unavailable:', error instanceof Error ? error.message : 'Unknown error');
       return null;
     }
   }, []);

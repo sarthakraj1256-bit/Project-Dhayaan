@@ -73,11 +73,8 @@ const ImmersiveDarshan = () => {
     setActiveRitual(ritualType as 'diya' | 'bell' | 'flower' | 'prasad');
   };
 
-  // Start ambience when entering temple
+  // Stop audio when leaving temple (don't auto-play to avoid errors)
   useEffect(() => {
-    if (selectedTemple && currentZone) {
-      audio.playAmbience(currentZone.ambienceType);
-    }
     return () => {
       audio.stopAudio();
     };
