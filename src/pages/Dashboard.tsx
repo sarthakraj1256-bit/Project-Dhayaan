@@ -158,41 +158,11 @@ const Dashboard = () => {
             </motion.div>
           )}
 
-          {/* Info Section */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="glass-card p-8"
-          >
-            <h3 className="font-display text-xl text-foreground mb-4 tracking-wider">
-              Protected Route Test
-            </h3>
-            <div className="space-y-4 font-body text-muted-foreground">
-              <p className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-green-500" />
-                Authentication is working correctly
-              </p>
-              <p className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-green-500" />
-                ProtectedRoute wrapper is functioning
-              </p>
-              <p className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-green-500" />
-                User session is active
-              </p>
-              <p className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-green-500" />
-                Redirects to /auth when unauthenticated
-              </p>
-            </div>
-          </motion.div>
-
           {/* Action Buttons */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
+            transition={{ delay: 0.3 }}
             className="mt-8 flex flex-col sm:flex-row gap-4 justify-center"
           >
             <Button
@@ -201,14 +171,6 @@ const Dashboard = () => {
               className="border-primary/30 hover:border-primary/50 hover:bg-primary/5"
             >
               Return to Home
-            </Button>
-            <Button
-              onClick={handleSignOut}
-              variant="outline"
-              className="border-destructive/30 hover:border-destructive/50 hover:bg-destructive/5 hover:text-destructive"
-            >
-              <LogOut className="w-4 h-4 mr-2" />
-              Test Sign Out & Redirect
             </Button>
           </motion.div>
         </motion.div>
