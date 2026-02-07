@@ -21,10 +21,10 @@ const BottomNav = () => {
   const location = useLocation();
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 md:hidden">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 md:hidden safe-bottom">
       {/* Backdrop blur container */}
       <div 
-        className="mx-2 mb-2 rounded-2xl overflow-hidden"
+        className="mx-2 mb-2 rounded-2xl overflow-hidden touch-manipulation"
         style={{
           background: 'hsl(var(--void-light) / 0.85)',
           backdropFilter: 'blur(20px)',
@@ -42,7 +42,7 @@ const BottomNav = () => {
               <Link
                 key={item.path}
                 to={item.path}
-                className="relative flex flex-col items-center justify-center py-2 px-3 min-w-[60px]"
+                className="relative flex flex-col items-center justify-center py-2 px-3 min-w-[60px] min-h-[44px] touch-target tap-transparent select-none"
               >
                 {/* Active indicator */}
                 {isActive && (
@@ -59,8 +59,9 @@ const BottomNav = () => {
 
                 {/* Icon */}
                 <motion.div
-                  whileTap={{ scale: 0.9 }}
+                  whileTap={{ scale: 0.85 }}
                   className="relative z-10"
+                  transition={{ type: 'spring', stiffness: 400, damping: 20 }}
                 >
                   <Icon
                     className={cn(
@@ -94,9 +95,6 @@ const BottomNav = () => {
           })}
         </div>
       </div>
-
-      {/* Safe area padding for devices with home indicators */}
-      <div className="h-safe-area-inset-bottom bg-transparent" />
     </nav>
   );
 };

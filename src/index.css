@@ -219,4 +219,144 @@
   ::-webkit-scrollbar-thumb:hover {
     background: hsl(var(--gold) / 0.5);
   }
+
+  /* Mobile Touch Utilities */
+  .touch-manipulation {
+    touch-action: manipulation;
+  }
+
+  .touch-pan-y {
+    touch-action: pan-y;
+  }
+
+  .touch-pan-x {
+    touch-action: pan-x;
+  }
+
+  /* Prevent text selection on touch */
+  .select-touch-none {
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+  }
+
+  /* Safe area insets for notched devices */
+  .safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
+
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .safe-left {
+    padding-left: env(safe-area-inset-left);
+  }
+
+  .safe-right {
+    padding-right: env(safe-area-inset-right);
+  }
+
+  .safe-all {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+
+  /* Minimum touch target (44x44 per Apple HIG) */
+  .touch-target {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .touch-target-lg {
+    min-width: 48px;
+    min-height: 48px;
+  }
+
+  /* Prevent iOS zoom on input focus */
+  @supports (-webkit-touch-callout: none) {
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="number"],
+    input[type="tel"],
+    input[type="url"],
+    input[type="search"],
+    textarea,
+    select {
+      font-size: 16px;
+    }
+  }
+
+  /* Smooth momentum scrolling on iOS */
+  .scroll-momentum {
+    -webkit-overflow-scrolling: touch;
+    overflow-y: auto;
+  }
+
+  /* Hide mobile browser UI on scroll */
+  .hide-browser-ui {
+    overscroll-behavior: contain;
+  }
+
+  /* Touch-friendly spacing for lists */
+  .touch-list > * {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+
+  /* Active/pressed state for touch devices */
+  @media (hover: none) and (pointer: coarse) {
+    .touch-highlight:active {
+      background-color: hsl(var(--gold) / 0.1);
+      transform: scale(0.98);
+      transition: transform 0.1s ease-out;
+    }
+  }
+
+  /* Reduce motion for users who prefer it */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  /* Mobile-first responsive text */
+  .text-responsive {
+    font-size: clamp(1rem, 4vw, 1.25rem);
+  }
+
+  .text-responsive-lg {
+    font-size: clamp(1.25rem, 5vw, 2rem);
+  }
+
+  .text-responsive-xl {
+    font-size: clamp(1.5rem, 6vw, 3rem);
+  }
+
+  .text-responsive-hero {
+    font-size: clamp(2rem, 8vw, 4rem);
+  }
+
+  /* Mobile-friendly spacing */
+  .px-safe {
+    padding-left: max(1rem, env(safe-area-inset-left));
+    padding-right: max(1rem, env(safe-area-inset-right));
+  }
+
+  /* Tap highlight color */
+  .tap-gold {
+    -webkit-tap-highlight-color: hsl(var(--gold) / 0.2);
+  }
+
+  .tap-transparent {
+    -webkit-tap-highlight-color: transparent;
+  }
 }

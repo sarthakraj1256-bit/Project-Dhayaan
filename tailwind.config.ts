@@ -12,6 +12,24 @@ export default {
         "2xl": "1400px",
       },
     },
+    screens: {
+      // Mobile-first breakpoints
+      'xs': '375px',      // Small phones
+      'sm': '640px',      // Large phones / small tablets
+      'md': '768px',      // Tablets
+      'lg': '1024px',     // Laptops / small desktops
+      'xl': '1280px',     // Desktops
+      '2xl': '1536px',    // Large desktops
+      // Touch-specific breakpoints
+      'touch': { 'raw': '(hover: none) and (pointer: coarse)' },
+      'stylus': { 'raw': '(hover: none) and (pointer: fine)' },
+      'mouse': { 'raw': '(hover: hover) and (pointer: fine)' },
+      // Orientation breakpoints
+      'portrait': { 'raw': '(orientation: portrait)' },
+      'landscape': { 'raw': '(orientation: landscape)' },
+      // Safe area support detection
+      'has-safe-area': { 'raw': '(env(safe-area-inset-bottom) > 0px)' },
+    },
     extend: {
       fontFamily: {
         display: ['Cinzel', 'serif'],
