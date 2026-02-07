@@ -2,6 +2,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Home, Radio, BookOpen, Sparkles, Play } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { triggerHaptic } from '@/hooks/useHapticFeedback';
 
 interface NavItem {
   path: string;
@@ -19,6 +20,13 @@ const navItems: NavItem[] = [
 
 const BottomNav = () => {
   const location = useLocation();
+
+  const handleNavClick = (path: string) => {
+    // Only trigger haptic if navigating to a different page
+    if (location.pathname !== path) {
+      triggerHaptic('selection');
+    }
+  };
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 md:hidden safe-bottom">
@@ -42,6 +50,7 @@ const BottomNav = () => {
               <Link
                 key={item.path}
                 to={item.path}
+                onClick={() => handleNavClick(item.path)}
                 className="relative flex flex-col items-center justify-center py-2 px-3 min-w-[60px] min-h-[44px] touch-target tap-transparent select-none"
               >
                 {/* Active indicator */}
