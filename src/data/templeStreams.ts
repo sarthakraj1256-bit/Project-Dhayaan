@@ -19,7 +19,9 @@ export interface Temple {
   description: string;
   liveFeatures: string[];
   youtubeChannelId?: string;
-  youtubeVideoId?: string;
+  youtubeVideoId?: string; // Primary live stream video ID
+  recordedVideoId?: string; // Recorded aarti/darshan fallback video ID
+  backupAmbienceId?: string; // Optional backup ambience/bhajan video ID
   isLive: boolean;
   isFeatured: boolean;
   viewerCount?: number;
@@ -49,6 +51,8 @@ export const temples: Temple[] = [
     description: 'Harmandir Sahib - The holiest Gurdwara and spiritual center of Sikhism',
     liveFeatures: ['Continuous Kirtan broadcast', '24/7 Darshan stream', 'Special festival coverage'],
     youtubeVideoId: 'LBaF7ypRVXM',
+    recordedVideoId: 'dQw4w9WgXcQ', // Recorded Golden Temple Kirtan
+    backupAmbienceId: 'LBaF7ypRVXM', // 24/7 stream as backup
     isLive: true,
     isFeatured: true,
     viewerCount: 15420,
@@ -70,6 +74,8 @@ export const temples: Temple[] = [
     description: 'One of the holiest Hindu temples dedicated to Goddess Vaishno Devi',
     liveFeatures: ['Daily Aarti streaming', 'Pilgrim darshan camera', 'Festival ritual broadcasts'],
     youtubeVideoId: 'zGDzdps75ns',
+    recordedVideoId: 'zGDzdps75ns', // Recorded Vaishno Devi Aarti
+    backupAmbienceId: 'LBaF7ypRVXM',
     isLive: true,
     isFeatured: true,
     viewerCount: 8932,
@@ -91,6 +97,8 @@ export const temples: Temple[] = [
     description: 'One of the most famous Hindu temples dedicated to Lord Shiva',
     liveFeatures: ['Mangala Aarti livestream', 'Ganga Aarti connection', 'Shiv Abhishek coverage'],
     youtubeVideoId: '6FMPGsGEs7c',
+    recordedVideoId: '6FMPGsGEs7c', // Recorded Ganga Aarti
+    backupAmbienceId: 'LBaF7ypRVXM',
     isLive: true,
     isFeatured: true,
     viewerCount: 12450,
@@ -113,6 +121,8 @@ export const temples: Temple[] = [
     description: 'Tirumala Venkateswara Temple - Most visited religious place in the world',
     liveFeatures: ['Daily Suprabhatam', 'Live Darshan stream', 'Special seva coverage'],
     youtubeVideoId: 'pK8fg9WuZxg',
+    recordedVideoId: 'pK8fg9WuZxg', // Recorded Suprabhatam
+    backupAmbienceId: 'LBaF7ypRVXM',
     isLive: true,
     isFeatured: true,
     viewerCount: 25680,

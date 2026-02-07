@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   X, 
@@ -8,9 +8,9 @@ import {
   VolumeX,
   Share2,
   Users,
-  Radio,
   MapPin,
-  ExternalLink
+  ExternalLink,
+  RefreshCw
 } from 'lucide-react';
 import { Temple, deityLabels, categoryLabels } from '@/data/templeStreams';
 import { Button } from '@/components/ui/button';
@@ -19,6 +19,9 @@ import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { toast } from 'sonner';
 import TempleSchedule from './TempleSchedule';
 import FavoriteButton from './FavoriteButton';
+import VideoStatusBadge from './VideoStatusBadge';
+import LiveSwitchPrompt from './LiveSwitchPrompt';
+import { useVideoFallback } from '@/hooks/useVideoFallback';
 
 interface VideoPlayerProps {
   temple: Temple;
@@ -29,7 +32,28 @@ const VideoPlayer = ({ temple, onClose }: VideoPlayerProps) => {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
 
-  const handleShare = async () => {
+  // Video fallback system for 24/7 uninterrupted playback
+  const {
+    currentVideoId,
+    streamStatus,
+    showLiveSwitchPrompt,
+    switchToLive,
+    dismissLivePrompt,
+    retryConnection,
+    statusMessage,
+  } = useVideoFallback({
+    liveVideoId: temple.youtubeVideoId,
+    recordedVideoId: temple.recordedVideoId,
+    backupAmbienceId: temple.backupAmbienceId,
+    onLiveAvailable: () => {
+      toast.info('🔴 Live Aarti has started!', {
+        description: `Live stream from ${temple.name} is now available`,
+        duration: 5000,
+      });
+    },
+  });
+
+  const handleShare = useCallback(async () => {
     try {
       await navigator.share({
         title: `${temple.name} - Live Darshan`,
@@ -40,9 +64,12 @@ const VideoPlayer = ({ temple, onClose }: VideoPlayerProps) => {
       navigator.clipboard.writeText(window.location.href);
       toast.success('Link copied to clipboard!');
     }
-  };
+  }, [temple.name]);
 
-  const youtubeEmbedUrl = `https://www.youtube.com/embed/${temple.youtubeVideoId}?autoplay=1&mute=${isMuted ? 1 : 0}&rel=0&modestbranding=1`;
+  // Build YouTube embed URL with fallback video
+  const youtubeEmbedUrl = currentVideoId 
+    ? `https://www.youtube.com/embed/${currentVideoId}?autoplay=1&mute=${isMuted ? 1 : 0}&rel=0&modestbranding=1&loop=1&playlist=${currentVideoId}`
+    : null;
 
   return (
     <AnimatePresence>
@@ -66,12 +93,10 @@ const VideoPlayer = ({ temple, onClose }: VideoPlayerProps) => {
                 <h2 className="font-display text-2xl md:text-3xl text-foreground">
                   {temple.name}
                 </h2>
-                {temple.isLive && (
-                  <Badge className="bg-red-600 text-white border-0 gap-1 animate-pulse">
-                    <Radio className="w-3 h-3" />
-                    LIVE
-                  </Badge>
-                )}
+                <VideoStatusBadge 
+                  streamStatus={streamStatus} 
+                  templeName={temple.name}
+                />
               </div>
               
               <Button
@@ -92,15 +117,57 @@ const VideoPlayer = ({ temple, onClose }: VideoPlayerProps) => {
             transition={{ delay: 0.1 }}
             className={`relative flex-1 ${isFullscreen ? 'h-full' : 'rounded-2xl overflow-hidden border border-border/50 shadow-2xl'}`}
           >
+            {/* Loading State */}
+            {streamStatus === 'loading' && (
+              <div className="absolute inset-0 flex items-center justify-center bg-background/80 z-10">
+                <div className="text-center space-y-4">
+                  <div className="w-16 h-16 mx-auto rounded-full bg-primary/20 animate-pulse" />
+                  <p className="text-muted-foreground">{statusMessage}</p>
+                </div>
+              </div>
+            )}
+
+            {/* Fail-safe Ambience State */}
+            {streamStatus === 'ambience' && (
+              <div className="absolute top-4 left-4 right-4 z-10">
+                <div className="bg-primary/20 backdrop-blur-sm border border-primary/30 rounded-lg p-3 flex items-center justify-between">
+                  <p className="text-sm text-primary-foreground/90">{statusMessage}</p>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={retryConnection}
+                    className="gap-1 text-primary-foreground/90 hover:text-primary-foreground"
+                  >
+                    <RefreshCw className="w-4 h-4" />
+                    Retry
+                  </Button>
+                </div>
+              </div>
+            )}
+
             <AspectRatio ratio={16 / 9} className="h-full">
-              <iframe
-                src={youtubeEmbedUrl}
-                title={temple.name}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="w-full h-full"
-              />
+              {youtubeEmbedUrl ? (
+                <iframe
+                  src={youtubeEmbedUrl}
+                  title={temple.name}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  className="w-full h-full"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center bg-muted">
+                  <p className="text-muted-foreground">Loading darshan...</p>
+                </div>
+              )}
             </AspectRatio>
+
+            {/* Live Switch Prompt */}
+            <LiveSwitchPrompt
+              show={showLiveSwitchPrompt}
+              templeName={temple.name}
+              onSwitch={switchToLive}
+              onDismiss={dismissLivePrompt}
+            />
 
             {/* Video Controls Overlay */}
             <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-background/90 to-transparent">
@@ -115,12 +182,21 @@ const VideoPlayer = ({ temple, onClose }: VideoPlayerProps) => {
                     {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
                   </Button>
                   
-                  {temple.viewerCount && (
+                  {temple.viewerCount && streamStatus === 'live' && (
                     <div className="flex items-center gap-1.5 text-sm text-foreground/80">
                       <Users className="w-4 h-4 text-primary" />
                       <span>{temple.viewerCount.toLocaleString()} watching</span>
                     </div>
                   )}
+                  
+                  {/* Stream Status Indicator */}
+                  <div className="hidden md:block">
+                    <VideoStatusBadge 
+                      streamStatus={streamStatus} 
+                      templeName={temple.name}
+                      compact
+                    />
+                  </div>
                 </div>
                 
                 <div className="flex items-center gap-2">
@@ -208,7 +284,7 @@ const VideoPlayer = ({ temple, onClose }: VideoPlayerProps) => {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => window.open(`https://www.youtube.com/watch?v=${temple.youtubeVideoId}`, '_blank')}
+                onClick={() => window.open(`https://www.youtube.com/watch?v=${currentVideoId || temple.youtubeVideoId}`, '_blank')}
                 className="gap-2"
               >
                 <ExternalLink className="w-4 h-4" />
