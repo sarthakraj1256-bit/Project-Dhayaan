@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Skeleton } from "@/components/ui/skeleton";
 import EnvHealthCheck from "./components/EnvHealthCheck";
+import { PWASplashScreen } from "./components/pwa/PWASplashScreen";
 
 // Critical routes - loaded immediately
 import Index from "./pages/Index";
@@ -56,6 +57,7 @@ const queryClient = new QueryClient({
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
+      <PWASplashScreen minDisplayTime={2500} />
       <Toaster />
       <Sonner />
       <EnvHealthCheck />
