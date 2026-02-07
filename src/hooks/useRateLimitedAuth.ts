@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from '@/integrations/backend/client';
 
 interface AuthResult {
   success: boolean;
@@ -21,7 +21,10 @@ interface UseRateLimitedAuthReturn {
   retryAfter: number | null;
 }
 
-const AUTH_FUNCTION_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/auth-rate-limiter`;
+// Use the Supabase URL from environment with fallback
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || "https://pgavnutkwiiovdvbrbcl.supabase.co";
+const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBnYXZudXRrd2lpb3ZkdmJyYmNsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAwNDgyOTcsImV4cCI6MjA4NTYyNDI5N30.bM1DTGq9Fgn0WPcDlS2hjxRr-bdTDIbLq47RZFIvFbo";
+const AUTH_FUNCTION_URL = `${SUPABASE_URL}/functions/v1/auth-rate-limiter`;
 
 export const useRateLimitedAuth = (): UseRateLimitedAuthReturn => {
   const [isLoading, setIsLoading] = useState(false);
@@ -41,7 +44,7 @@ export const useRateLimitedAuth = (): UseRateLimitedAuthReturn => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'apikey': import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+          'apikey': SUPABASE_KEY,
         },
         body: JSON.stringify(payload),
       });
