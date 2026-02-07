@@ -5,13 +5,14 @@ import { z } from "zod";
 import { supabase } from "@/integrations/backend/client";
 import { lovable } from "@/integrations/lovableSafe";
 import { useToast } from "@/hooks/use-toast";
+import { useRateLimitedAuth } from "@/hooks/useRateLimitedAuth";
 import SriYantraBackground from "@/components/auth/SriYantraBackground";
 import FloatingInput from "@/components/auth/FloatingInput";
 import SanctumButton from "@/components/auth/SanctumButton";
 import GoogleButton from "@/components/auth/GoogleButton";
 import AppleButton from "@/components/auth/AppleButton";
-import { ArrowLeft } from "lucide-react";
- import { logError } from "@/lib/logger";
+import { ArrowLeft, Clock } from "lucide-react";
+import { logError } from "@/lib/logger";
 
 // Validation schemas
 const emailSchema = z.string().email("Please enter a valid email address");
@@ -30,9 +31,11 @@ const Auth = () => {
   const [isAppleLoading, setIsAppleLoading] = useState(false);
   const [spinSpeed, setSpinSpeed] = useState(1);
   const [errors, setErrors] = useState<{ email?: string; password?: string; confirmPassword?: string }>({});
+  const [rateLimitCountdown, setRateLimitCountdown] = useState<number | null>(null);
   
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { login, signup, resetPassword, isLoading: isRateLimitedLoading, rateLimitError, retryAfter } = useRateLimitedAuth();
 
   // Check for password reset token in URL
   useEffect(() => {
@@ -72,6 +75,23 @@ const Auth = () => {
        logError("Auth initialization error", error);
     }
   }, [navigate, mode]);
+
+  // Handle rate limit countdown
+  useEffect(() => {
+    if (retryAfter && retryAfter > 0) {
+      setRateLimitCountdown(retryAfter);
+      const interval = setInterval(() => {
+        setRateLimitCountdown(prev => {
+          if (prev === null || prev <= 1) {
+            clearInterval(interval);
+            return null;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+      return () => clearInterval(interval);
+    }
+  }, [retryAfter]);
 
   // Handle password typing for background animation
   const handlePasswordTyping = (isTyping: boolean) => {
@@ -193,41 +213,53 @@ const Auth = () => {
     
     if (!validateForm()) return;
     
+    // Check if rate limited
+    if (rateLimitCountdown && rateLimitCountdown > 0) {
+      toast({
+        title: "Please wait",
+        description: `You can try again in ${rateLimitCountdown} seconds.`,
+        variant: "destructive",
+      });
+      return;
+    }
+    
     setIsLoading(true);
     
     try {
       if (mode === "login") {
-        const { error } = await supabase.auth.signInWithPassword({
-          email,
-          password,
-        });
+        // Use rate-limited auth endpoint
+        const result = await login(email, password);
         
-        if (error) {
-          if (error.message.includes("Invalid login credentials")) {
+        if (!result.success) {
+          if (result.retryAfter) {
             toast({
-              title: "Invalid credentials",
-              description: "Please check your email and password and try again.",
+              title: "Too many attempts",
+              description: result.error || "Please wait before trying again.",
               variant: "destructive",
             });
           } else {
             toast({
-              title: "Login failed",
-              description: error.message,
+              title: "Invalid credentials",
+              description: result.error || "Please check your email and password and try again.",
               variant: "destructive",
             });
           }
+        } else {
+          // Successful login - navigation handled by auth state change
+          navigate("/");
         }
       } else {
-        const { error } = await supabase.auth.signUp({
-          email,
-          password,
-          options: {
-            emailRedirectTo: `${window.location.origin}/`,
-          },
-        });
+        // Use rate-limited signup endpoint
+        const result = await signup(email, password);
         
-        if (error) {
-          if (error.message.includes("User already registered")) {
+        if (!result.success) {
+          if (result.retryAfter) {
+            toast({
+              title: "Too many attempts",
+              description: result.error || "Please wait before trying again.",
+              variant: "destructive",
+            });
+          } else if (result.error?.includes("different email")) {
             toast({
               title: "Account exists",
               description: "This email is already registered. Please login instead.",
@@ -237,14 +269,14 @@ const Auth = () => {
           } else {
             toast({
               title: "Signup failed",
-              description: error.message,
+              description: result.error || "Unable to create account.",
               variant: "destructive",
             });
           }
         } else {
           toast({
             title: "Check your email",
-            description: "We've sent you a confirmation link to verify your account.",
+            description: result.data?.message || "We've sent you a confirmation link to verify your account.",
           });
         }
       }
@@ -562,6 +594,36 @@ const Auth = () => {
               </motion.div>
             </AnimatePresence>
 
+            {/* Rate Limit Warning */}
+            <AnimatePresence>
+              {rateLimitCountdown && rateLimitCountdown > 0 && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="overflow-hidden"
+                >
+                  <div 
+                    className="flex items-center gap-3 p-4 rounded-lg"
+                    style={{
+                      background: 'hsl(var(--destructive) / 0.1)',
+                      border: '1px solid hsl(var(--destructive) / 0.3)',
+                    }}
+                  >
+                    <Clock className="w-5 h-5 text-destructive flex-shrink-0" />
+                    <div className="flex-1">
+                      <p className="text-sm text-destructive font-body">
+                        Too many attempts. Please wait{' '}
+                        <span className="font-medium tabular-nums">
+                          {rateLimitCountdown}s
+                        </span>
+                      </p>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
             {/* Forgot Password Link - only show for login */}
             {mode === "login" && (
               <motion.div 
@@ -584,7 +646,11 @@ const Auth = () => {
             
             {/* Submit Button */}
             <div className="pt-4">
-              <SanctumButton type="submit" isLoading={isLoading}>
+              <SanctumButton 
+                type="submit" 
+                isLoading={isLoading || isRateLimitedLoading}
+                disabled={!!rateLimitCountdown && rateLimitCountdown > 0}
+              >
                 {getButtonText()}
               </SanctumButton>
             </div>
