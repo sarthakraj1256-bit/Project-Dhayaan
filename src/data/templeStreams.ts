@@ -50,9 +50,9 @@ export const temples: Temple[] = [
     region: 'north',
     description: 'Harmandir Sahib - The holiest Gurdwara and spiritual center of Sikhism',
     liveFeatures: ['Continuous Kirtan broadcast', '24/7 Darshan stream', 'Special festival coverage'],
-    youtubeVideoId: 'LBaF7ypRVXM',
-    recordedVideoId: 'dQw4w9WgXcQ', // Recorded Golden Temple Kirtan
-    backupAmbienceId: 'LBaF7ypRVXM', // 24/7 stream as backup
+    youtubeVideoId: 'LBaF7ypRVXM', // Live Kirtan
+    recordedVideoId: 'vb0eMzMmOP0', // Golden Temple Shabad Kirtan Playlist
+    backupAmbienceId: 'LBaF7ypRVXM',
     isLive: true,
     isFeatured: true,
     viewerCount: 15420,
@@ -73,9 +73,9 @@ export const temples: Temple[] = [
     region: 'north',
     description: 'One of the holiest Hindu temples dedicated to Goddess Vaishno Devi',
     liveFeatures: ['Daily Aarti streaming', 'Pilgrim darshan camera', 'Festival ritual broadcasts'],
-    youtubeVideoId: 'zGDzdps75ns',
-    recordedVideoId: 'zGDzdps75ns', // Recorded Vaishno Devi Aarti
-    backupAmbienceId: 'LBaF7ypRVXM',
+    youtubeVideoId: 'zGDzdps75ns', // Live Darshan
+    recordedVideoId: '_WxL5l0vnEA', // Vaishno Devi Bhajan & Aarti Videos
+    backupAmbienceId: 'HaGHAyS6xJc',
     isLive: true,
     isFeatured: true,
     viewerCount: 8932,
@@ -96,9 +96,9 @@ export const temples: Temple[] = [
     region: 'north',
     description: 'One of the most famous Hindu temples dedicated to Lord Shiva',
     liveFeatures: ['Mangala Aarti livestream', 'Ganga Aarti connection', 'Shiv Abhishek coverage'],
-    youtubeVideoId: '6FMPGsGEs7c',
-    recordedVideoId: '6FMPGsGEs7c', // Recorded Ganga Aarti
-    backupAmbienceId: 'LBaF7ypRVXM',
+    youtubeVideoId: '6FMPGsGEs7c', // Live Ganga & Mangala Aarti
+    recordedVideoId: 'W2YsBMdJEKM', // Kashi Vishwanath Aarti Playlist
+    backupAmbienceId: 'q8mWMlQBdFE',
     isLive: true,
     isFeatured: true,
     viewerCount: 12450,
@@ -120,9 +120,9 @@ export const temples: Temple[] = [
     region: 'south',
     description: 'Tirumala Venkateswara Temple - Most visited religious place in the world',
     liveFeatures: ['Daily Suprabhatam', 'Live Darshan stream', 'Special seva coverage'],
-    youtubeVideoId: 'pK8fg9WuZxg',
-    recordedVideoId: 'pK8fg9WuZxg', // Recorded Suprabhatam
-    backupAmbienceId: 'LBaF7ypRVXM',
+    youtubeVideoId: 'pK8fg9WuZxg', // Tirumala Live Darshan
+    recordedVideoId: 'T_9FVrw-Omg', // Suprabhatam & Daily Seva Playlist
+    backupAmbienceId: 'AETFvQonfV8',
     isLive: true,
     isFeatured: true,
     viewerCount: 25680,
@@ -144,7 +144,9 @@ export const temples: Temple[] = [
     region: 'west',
     description: 'First among the twelve Jyotirlinga shrines of Lord Shiva',
     liveFeatures: ['Shiv Aarti livestream', 'Ocean temple ambience', 'Mahashivratri special'],
-    youtubeVideoId: 'yfSLuEj99aE',
+    youtubeVideoId: 'yfSLuEj99aE', // Somnath Live Aarti
+    recordedVideoId: 'Rk_Z1kLJvnc', // Somnath Evening Aarti Videos
+    backupAmbienceId: 'q8mWMlQBdFE',
     isLive: true,
     isFeatured: false,
     viewerCount: 6780,
@@ -165,7 +167,9 @@ export const temples: Temple[] = [
     region: 'west',
     description: 'Famous for the Bhasma Aarti performed with sacred ash',
     liveFeatures: ['Famous Bhasma Aarti', 'Daily Shiv worship', 'Festival streams'],
-    youtubeVideoId: 'n3k-D6GdXRc',
+    youtubeVideoId: 'n3k-D6GdXRc', // Mahakaleshwar Bhasma Aarti Live
+    recordedVideoId: 'Rk_Z1kLJvnc', // Bhasma Aarti Recorded Playlist
+    backupAmbienceId: 'q8mWMlQBdFE',
     isLive: true,
     isFeatured: true,
     viewerCount: 9340,
@@ -187,7 +191,9 @@ export const temples: Temple[] = [
     region: 'north',
     description: 'Himalayan Jyotirlinga temple at 3,583 meters altitude',
     liveFeatures: ['Morning Himalayan Aarti', 'Snow-season ambience', 'Pilgrimage coverage'],
-    youtubeVideoId: 'bEVCHxMgv7E',
+    youtubeVideoId: 'bEVCHxMgv7E', // Kedarnath Live Aarti Stream
+    recordedVideoId: 'Rk_Z1kLJvnc', // Kedarnath Morning & Evening Aarti Playlist
+    backupAmbienceId: 'q8mWMlQBdFE',
     isLive: true,
     isFeatured: false,
     viewerCount: 7820,
@@ -208,7 +214,9 @@ export const temples: Temple[] = [
     region: 'west',
     description: 'Island temple shaped like the Om symbol',
     liveFeatures: ['Daily Aarti stream', 'River view darshan', 'Festival celebrations'],
-    youtubeVideoId: 'RZ1JbWJVhlU',
+    youtubeVideoId: 'RZ1JbWJVhlU', // Omkareshwar Jyotirlinga Live Darshan
+    recordedVideoId: 'Rk_Z1kLJvnc', // Omkareshwar Recorded Aarti Videos
+    backupAmbienceId: 'q8mWMlQBdFE',
     isLive: false,
     isFeatured: false,
     viewerCount: 3450,
@@ -228,7 +236,9 @@ export const temples: Temple[] = [
     region: 'west',
     description: 'Origin of River Godavari with unique three-faced Shivalinga',
     liveFeatures: ['Morning Abhishek', 'Kumbh Mela coverage', 'Daily darshan'],
-    youtubeVideoId: 'wKL2_UUG7Ok',
+    youtubeVideoId: 'wKL2_UUG7Ok', // Trimbakeshwar Live Abhishek
+    recordedVideoId: 'Rk_Z1kLJvnc', // Trimbakeshwar Shiva Aarti Playlist
+    backupAmbienceId: 'q8mWMlQBdFE',
     isLive: false,
     isFeatured: false,
     viewerCount: 2890,
@@ -249,7 +259,9 @@ export const temples: Temple[] = [
     region: 'east',
     description: 'Powerful Shakti Peeth dedicated to Goddess Kamakhya',
     liveFeatures: ['Daily Shakti worship', 'Ambubachi Mela coverage', 'Tantric rituals'],
-    youtubeVideoId: 'QZT4tQxXN-8',
+    youtubeVideoId: 'QZT4tQxXN-8', // Kamakhya Temple Live Darshan
+    recordedVideoId: 'AETFvQonfV8', // Kamakhya Devi Recorded Aarti
+    backupAmbienceId: 'HaGHAyS6xJc',
     isLive: true,
     isFeatured: false,
     viewerCount: 4560,
@@ -269,7 +281,9 @@ export const temples: Temple[] = [
     region: 'east',
     description: 'One of the 51 Shakti Peethas dedicated to Goddess Kali',
     liveFeatures: ['Morning Aarti', 'Festival pujas', 'Durga Puja special'],
-    youtubeVideoId: 'mKh5s_2hC8s',
+    youtubeVideoId: 'mKh5s_2hC8s', // Kalighat Kali Temple Live
+    recordedVideoId: 'AETFvQonfV8', // Kalighat Evening Aarti Videos
+    backupAmbienceId: 'HaGHAyS6xJc',
     isLive: false,
     isFeatured: false,
     viewerCount: 2340,
@@ -290,7 +304,9 @@ export const temples: Temple[] = [
     region: 'south',
     description: 'Historic Hindu temple with stunning Dravidian architecture',
     liveFeatures: ['Classical rituals', 'Devotional music', 'Night ceremony'],
-    youtubeVideoId: 'sWqE-mXiHLI',
+    youtubeVideoId: 'sWqE-mXiHLI', // Meenakshi Temple Live Darshan
+    recordedVideoId: 'T_9FVrw-Omg', // Meenakshi Amman Aarti Playlist
+    backupAmbienceId: 'AETFvQonfV8',
     isLive: true,
     isFeatured: false,
     viewerCount: 5670,
@@ -312,7 +328,9 @@ export const temples: Temple[] = [
     region: 'east',
     description: 'Famous for the annual Rath Yatra festival',
     liveFeatures: ['Rath Yatra festival', 'Daily Aarti', 'Coastal ambience'],
-    youtubeVideoId: 'c-6rq8A7Nzc',
+    youtubeVideoId: 'c-6rq8A7Nzc', // Jagannath Puri Live Darshan
+    recordedVideoId: 'T_9FVrw-Omg', // Jagannath Aarti & Rath Yatra Videos
+    backupAmbienceId: 'AETFvQonfV8',
     isLive: true,
     isFeatured: false,
     viewerCount: 4890,
@@ -335,7 +353,9 @@ export const temples: Temple[] = [
     region: 'international',
     description: 'UNESCO World Heritage Site - Sacred temple on Bagmati River',
     liveFeatures: ['Bagmati River Aarti', 'Maha Shivaratri coverage', 'Daily worship'],
-    youtubeVideoId: 'xTBVl3TQS8o',
+    youtubeVideoId: 'xTBVl3TQS8o', // Pashupatinath Live Aarti
+    recordedVideoId: 'W2YsBMdJEKM', // Bagmati Aarti Recorded Videos
+    backupAmbienceId: 'q8mWMlQBdFE',
     isLive: true,
     isFeatured: false,
     viewerCount: 3210,
@@ -355,6 +375,8 @@ export const temples: Temple[] = [
     description: 'Limestone hill with cave temples dedicated to Lord Murugan',
     liveFeatures: ['Thaipusam festival', 'Tamil devotional events', 'Cave darshan'],
     youtubeVideoId: 'fHE2KqQRSu0',
+    recordedVideoId: 'T_9FVrw-Omg', // Cave temple Aarti recordings
+    backupAmbienceId: 'AETFvQonfV8',
     isLive: false,
     isFeatured: false,
     viewerCount: 1890,
@@ -374,7 +396,9 @@ export const temples: Temple[] = [
     region: 'north',
     description: 'Krishna-Balaram Mandir - Center of Krishna consciousness',
     liveFeatures: ['Mangala Aarti', 'Hare Krishna kirtan', 'Festival celebrations'],
-    youtubeVideoId: 'pzgkpSZ4yYc',
+    youtubeVideoId: 'pzgkpSZ4yYc', // ISKCON Vrindavan Live Mangala Aarti
+    recordedVideoId: 'T_9FVrw-Omg', // ISKCON Kirtan & Aarti Playlist
+    backupAmbienceId: 'AETFvQonfV8',
     isLive: true,
     isFeatured: true,
     viewerCount: 8760,
@@ -396,7 +420,9 @@ export const temples: Temple[] = [
     region: 'east',
     description: 'World headquarters of ISKCON with Temple of the Vedic Planetarium',
     liveFeatures: ['Grand Aarti', 'Kirtan mela', 'TOVP darshan'],
-    youtubeVideoId: '0s8XG7cBu-I',
+    youtubeVideoId: '0s8XG7cBu-I', // ISKCON Mayapur Live Darshan
+    recordedVideoId: 'T_9FVrw-Omg', // Mayapur Aarti & Kirtan Playlist
+    backupAmbienceId: 'AETFvQonfV8',
     isLive: true,
     isFeatured: false,
     viewerCount: 6540,
@@ -418,7 +444,9 @@ export const temples: Temple[] = [
     region: 'north',
     description: 'One of the Char Dham pilgrimage sites, dedicated to Lord Vishnu in Himalayan heights',
     liveFeatures: ['Morning Abhishek', 'Himalayan darshan', 'Kedarnath connection stream'],
-    youtubeVideoId: 'J3_xfVlXtZo',
+    youtubeVideoId: 'J3_xfVlXtZo', // Badrinath Live Darshan (seasonal)
+    recordedVideoId: 'T_9FVrw-Omg', // Badrinath Morning & Evening Aarti
+    backupAmbienceId: 'AETFvQonfV8',
     isLive: true,
     isFeatured: true,
     viewerCount: 11230,
@@ -438,7 +466,9 @@ export const temples: Temple[] = [
     region: 'west',
     description: 'Ancient temple dedicated to Lord Krishna as the King of Dwarka, part of Char Dham',
     liveFeatures: ['Daily Krishna Aarti', 'Janmashtami special', 'Gomti Ghat darshan'],
-    youtubeVideoId: 'kQD_2Y4SxPs',
+    youtubeVideoId: 'kQD_2Y4SxPs', // Dwarka Live Darshan
+    recordedVideoId: 'T_9FVrw-Omg', // Dwarkadhish Aarti Playlist
+    backupAmbienceId: 'AETFvQonfV8',
     isLive: true,
     isFeatured: true,
     viewerCount: 8920,
@@ -461,6 +491,8 @@ export const temples: Temple[] = [
     description: 'Famous Ganesh temple known for wish fulfillment, visited by millions',
     liveFeatures: ['Morning Kakad Aarti', 'Sandhya Aarti', 'Ganesh Chaturthi special'],
     youtubeVideoId: 'mf7mK1mLqEg',
+    recordedVideoId: 'AETFvQonfV8', // Siddhivinayak Aarti Playlist
+    backupAmbienceId: 'q8mWMlQBdFE',
     isLive: true,
     isFeatured: true,
     viewerCount: 18540,
@@ -481,7 +513,9 @@ export const temples: Temple[] = [
     region: 'west',
     description: 'Sacred shrine of Sai Baba, one of the most visited pilgrimage sites in India',
     liveFeatures: ['Kakad Aarti', 'Dhoop Aarti', 'Shej Aarti', 'Live samadhi darshan'],
-    youtubeVideoId: 'UtV3pvVmPfM',
+    youtubeVideoId: 'UtV3pvVmPfM', // Shirdi Live Kakad & Shej Aarti
+    recordedVideoId: 'AETFvQonfV8', // Shirdi Daily Aarti Playlist
+    backupAmbienceId: 'q8mWMlQBdFE',
     isLive: true,
     isFeatured: true,
     viewerCount: 22340,
@@ -502,7 +536,9 @@ export const temples: Temple[] = [
     region: 'south',
     description: 'Southernmost Jyotirlinga with the longest temple corridor in India',
     liveFeatures: ['22 wells Abhishek', 'Morning Aarti', 'Sethu darshan'],
-    youtubeVideoId: 'xd9RqLMsQ0A',
+    youtubeVideoId: 'xd9RqLMsQ0A', // Rameswaram Live Abhishekam
+    recordedVideoId: 'Rk_Z1kLJvnc', // Ramanathaswamy Aarti Videos
+    backupAmbienceId: 'q8mWMlQBdFE',
     isLive: true,
     isFeatured: false,
     viewerCount: 7650,
@@ -524,7 +560,9 @@ export const temples: Temple[] = [
     region: 'north',
     description: 'Magnificent modern temple showcasing Indian culture and spirituality',
     liveFeatures: ['Evening light show', 'Musical fountain', 'Exhibition tours'],
-    youtubeVideoId: 'h8VxvqJvL9o',
+    youtubeVideoId: 'h8VxvqJvL9o', // Akshardham Live Events (limited)
+    recordedVideoId: 'T_9FVrw-Omg', // Akshardham Bhajan & Aarti Videos
+    backupAmbienceId: 'AETFvQonfV8',
     isLive: false,
     isFeatured: false,
     viewerCount: 5430,
@@ -543,7 +581,9 @@ export const temples: Temple[] = [
     region: 'north',
     description: 'Birthplace of Lord Krishna, one of the most sacred sites in Hinduism',
     liveFeatures: ['Janmashtami celebrations', 'Daily Krishna Aarti', 'Midnight ceremonies'],
-    youtubeVideoId: 'zR4yNZ0SJYU',
+    youtubeVideoId: 'zR4yNZ0SJYU', // Janmabhoomi Live Darshan
+    recordedVideoId: 'T_9FVrw-Omg', // Krishna Janmashtami & Daily Aarti
+    backupAmbienceId: 'AETFvQonfV8',
     isLive: true,
     isFeatured: false,
     viewerCount: 9870,
@@ -565,7 +605,9 @@ export const temples: Temple[] = [
     region: 'south',
     description: 'Hilltop temple dedicated to Lord Ayyappa, famous for Makaravilakku festival',
     liveFeatures: ['Makaravilakku', 'Padi Puja', 'Festival season streams'],
-    youtubeVideoId: 'K9GhMvzPjCA',
+    youtubeVideoId: 'K9GhMvzPjCA', // Sabarimala Live (seasonal)
+    recordedVideoId: 'AETFvQonfV8', // Harivarasanam & Aarti Playlist
+    backupAmbienceId: 'q8mWMlQBdFE',
     isLive: true,
     isFeatured: false,
     viewerCount: 6780,
@@ -585,7 +627,9 @@ export const temples: Temple[] = [
     region: 'west',
     description: 'Jyotirlinga temple in the Sahyadri hills surrounded by dense forests',
     liveFeatures: ['Morning Abhishek', 'Monsoon special', 'Mahashivratri stream'],
-    youtubeVideoId: 'wKL2_UUG7Ok',
+    youtubeVideoId: 'wKL2_UUG7Ok', // Bhimashankar Live Abhishek
+    recordedVideoId: 'Rk_Z1kLJvnc', // Bhimashankar Aarti Videos
+    backupAmbienceId: 'q8mWMlQBdFE',
     isLive: true,
     isFeatured: false,
     viewerCount: 4230,
@@ -605,7 +649,9 @@ export const temples: Temple[] = [
     region: 'south',
     description: 'One of the most important Krishna temples in India, known as Dwarka of the South',
     liveFeatures: ['Nirmalya darshan', 'Elephant procession', 'Utsavam festivals'],
-    youtubeVideoId: 'c-6rq8A7Nzc',
+    youtubeVideoId: 'c-6rq8A7Nzc', // Guruvayur Live Darshan
+    recordedVideoId: 'T_9FVrw-Omg', // Guruvayur Krishna Aarti Playlist
+    backupAmbienceId: 'AETFvQonfV8',
     isLive: true,
     isFeatured: false,
     viewerCount: 8340,
@@ -627,7 +673,9 @@ export const temples: Temple[] = [
     region: 'north',
     description: 'Source of the sacred River Ganges, part of Char Dham pilgrimage',
     liveFeatures: ['Ganga Aarti at source', 'Himalayan views', 'Pilgrimage season'],
-    youtubeVideoId: 'bEVCHxMgv7E',
+    youtubeVideoId: 'bEVCHxMgv7E', // Gangotri Live (seasonal)
+    recordedVideoId: 'W2YsBMdJEKM', // Ganga Aarti & Himalayan Darshan
+    backupAmbienceId: 'q8mWMlQBdFE',
     isLive: false,
     isFeatured: false,
     viewerCount: 3450,
@@ -646,7 +694,9 @@ export const temples: Temple[] = [
     region: 'north',
     description: 'Source of River Yamuna, the westernmost shrine in the Char Dham pilgrimage',
     liveFeatures: ['Hot springs darshan', 'Yamuna Aarti', 'Trek views'],
-    youtubeVideoId: 'J3_xfVlXtZo',
+    youtubeVideoId: 'J3_xfVlXtZo', // Yamunotri Live (seasonal)
+    recordedVideoId: 'W2YsBMdJEKM', // Yamunotri Aarti Videos
+    backupAmbienceId: 'q8mWMlQBdFE',
     isLive: false,
     isFeatured: false,
     viewerCount: 2890,
