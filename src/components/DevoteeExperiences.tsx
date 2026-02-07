@@ -7,7 +7,8 @@ import IntentTagSelector, { type IntentTag } from './IntentTagSelector';
 import FinalStressModal from './FinalStressModal';
 import { getInitialStress } from './StressCheckInModal';
 import { useToast } from '@/hooks/use-toast';
- import { logError, logWarn } from '@/lib/logger';
+import { logError, logWarn } from '@/lib/logger';
+import { getVersionString } from '@/lib/version';
 
 // Lazy load Supabase to prevent initialization errors
 const getSupabase = async () => {
@@ -410,9 +411,18 @@ export default function DevoteeExperiences() {
               </p>
             </div>
             
-            <p className="font-display text-sm text-foreground tracking-wider pt-4">
-              © 2026 Project Dhyaan
-            </p>
+            <div className="flex items-center justify-center gap-3 pt-4">
+              <p className="font-display text-sm text-foreground tracking-wider">
+                © 2026 Project Dhyaan
+              </p>
+              <span className="text-muted-foreground/30">•</span>
+              <span 
+                className="font-mono text-xs text-muted-foreground/60 px-2 py-0.5 rounded bg-muted/20 border border-border/20"
+                title="App version"
+              >
+                {getVersionString()}
+              </span>
+            </div>
           </div>
 
           <p className="text-xs text-muted-foreground/50 pt-4 tracking-wide">
