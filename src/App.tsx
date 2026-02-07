@@ -10,6 +10,7 @@ import EnvHealthCheck from "./components/EnvHealthCheck";
 // Critical routes - loaded immediately
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
+import AuthCallback from "./pages/AuthCallback";
 import NotFound from "./pages/NotFound";
 
 // Lazy-loaded routes - loaded on demand
@@ -63,6 +64,7 @@ const App = () => (
             {/* Critical routes - no lazy loading */}
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<Auth />} />
+            <Route path="/auth/callback" element={<AuthCallback />} />
             
             {/* Protected routes - lazy loaded */}
             <Route path="/dashboard" element={
