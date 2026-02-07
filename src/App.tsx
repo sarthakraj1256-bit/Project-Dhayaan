@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Skeleton } from "@/components/ui/skeleton";
 import EnvHealthCheck from "./components/EnvHealthCheck";
 import { PWASplashScreen } from "./components/pwa/PWASplashScreen";
+import { OfflineIndicator } from "./components/pwa/OfflineIndicator";
 
 // Critical routes - loaded immediately
 import Index from "./pages/Index";
@@ -58,6 +59,7 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <PWASplashScreen minDisplayTime={2500} />
+      <OfflineIndicator />
       <Toaster />
       <Sonner />
       <EnvHealthCheck />
