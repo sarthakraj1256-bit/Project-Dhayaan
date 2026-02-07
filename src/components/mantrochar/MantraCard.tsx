@@ -30,14 +30,15 @@ const MantraCard = ({ mantra, progress = 0, isLocked = false, onClick }: MantraC
       disabled={isLocked}
       whileHover={{ 
         scale: isLocked ? 1 : 1.02,
-        boxShadow: isLocked ? undefined : '0 0 30px rgba(212, 175, 55, 0.4), 0 0 60px rgba(212, 175, 55, 0.2)'
+        boxShadow: isLocked ? undefined : '0 0 40px rgba(212, 175, 55, 0.5), 0 0 80px rgba(212, 175, 55, 0.25), inset 0 1px 0 rgba(212, 175, 55, 0.2)'
       }}
       whileTap={{ scale: isLocked ? 1 : 0.98 }}
+      transition={{ type: 'spring', stiffness: 400, damping: 25 }}
       className={`
         w-full text-left p-4 rounded-xl border bg-gradient-to-br transition-all duration-300
         ${isLocked 
           ? 'from-white/5 to-white/0 border-white/10 opacity-60 cursor-not-allowed' 
-          : difficultyColors[mantra.difficulty] + ' hover:border-gold/50 hover:shadow-[0_0_20px_rgba(212,175,55,0.3)]'
+          : difficultyColors[mantra.difficulty] + ' hover:border-gold/60 hover:shadow-[0_0_30px_rgba(212,175,55,0.4)]'
         }
       `}
     >

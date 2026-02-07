@@ -163,7 +163,17 @@ export function useSpiritualProgress() {
         newChakras: newUnlockedChakras,
       };
     },
-    onSuccess: () => {
+    onSuccess: (result) => {
+      // Immediately update the cache for instant UI feedback
+      queryClient.setQueryData(['spiritual-progress', userId], (old: SpiritualProgress | null) => {
+        if (!old) return old;
+        return {
+          ...old,
+          karma_points: result.newTotal,
+          current_level: result.newLevel,
+        };
+      });
+      // Then invalidate to get fresh data from server
       queryClient.invalidateQueries({ queryKey: ['spiritual-progress', userId] });
     },
   });
