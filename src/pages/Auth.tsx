@@ -9,6 +9,7 @@ import SriYantraBackground from "@/components/auth/SriYantraBackground";
 import FloatingInput from "@/components/auth/FloatingInput";
 import SanctumButton from "@/components/auth/SanctumButton";
 import GoogleButton from "@/components/auth/GoogleButton";
+import AppleButton from "@/components/auth/AppleButton";
 import { ArrowLeft } from "lucide-react";
  import { logError } from "@/lib/logger";
 
@@ -26,6 +27,7 @@ const Auth = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  const [isAppleLoading, setIsAppleLoading] = useState(false);
   const [spinSpeed, setSpinSpeed] = useState(1);
   const [errors, setErrors] = useState<{ email?: string; password?: string; confirmPassword?: string }>({});
   
@@ -280,6 +282,32 @@ const Auth = () => {
       });
     } finally {
       setIsGoogleLoading(false);
+    }
+  };
+
+  const handleAppleLogin = async () => {
+    setIsAppleLoading(true);
+    
+    try {
+      const result = await lovable.auth.signInWithOAuth("apple", {
+        redirect_uri: `${window.location.origin}/auth/callback`,
+      });
+      
+      if (result.error) {
+        toast({
+          title: "Apple login failed",
+          description: result.error.message,
+          variant: "destructive",
+        });
+      }
+    } catch {
+      toast({
+        title: "An error occurred",
+        description: "Could not connect to Apple. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsAppleLoading(false);
     }
   };
 
@@ -572,8 +600,9 @@ const Auth = () => {
               </div>
               
               {/* Social Login */}
-              <div className="flex justify-center">
+              <div className="flex justify-center gap-4">
                 <GoogleButton onClick={handleGoogleLogin} isLoading={isGoogleLoading} />
+                <AppleButton onClick={handleAppleLogin} isLoading={isAppleLoading} />
               </div>
             </>
           )}
