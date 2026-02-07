@@ -1,24 +1,24 @@
-import { useState, useEffect, useCallback, Suspense } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { Link } from 'react-router-dom';
 import { LogIn } from 'lucide-react';
 import { supabase } from '@/integrations/backend/client';
 import { User } from '@supabase/supabase-js';
 import TempleScene from '@/components/TempleScene';
-import HeroSection from '@/components/HeroSection';
-import VastuSection from '@/components/VastuSection';
-import ComparisonSection from '@/components/ComparisonSection';
-import ScienceSection from '@/components/ScienceSection';
-import StressStatsDashboard from '@/components/StressStatsDashboard';
-import DevoteeExperiences from '@/components/DevoteeExperiences';
 import UserMenu from '@/components/UserMenu';
 import BottomNav from '@/components/BottomNav';
 import { PWAInstallPrompt } from '@/components/pwa/PWAInstallPrompt';
+import {
+  HeroSection,
+  QuickStartSection,
+  RelaxationSection,
+  DarshanSection,
+  DailyHighlightsSection,
+  PhilosophySection,
+  FinalCTASection,
+} from '@/components/home';
 
 const Index = () => {
   const [scrollProgress, setScrollProgress] = useState(0);
-  const [showMandala, setShowMandala] = useState(false);
-  const [showParticles, setShowParticles] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(false);
   const [showTemple, setShowTemple] = useState(true);
   const [user, setUser] = useState<User | null>(null);
 
@@ -44,24 +44,13 @@ const Index = () => {
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
       const progress = Math.min(scrollTop / docHeight, 1);
       setScrollProgress(progress);
-
-      // Show mandala when past hero section
-      setShowMandala(scrollTop > window.innerHeight * 0.5);
       
-      // Hide temple after scrolling past hero section (fade out)
+      // Hide temple after scrolling past hero section
       setShowTemple(scrollTop < window.innerHeight * 0.8);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const handleHeroMounted = useCallback(() => {
-    setIsLoaded(true);
-  }, []);
-
-  const toggleParticles = useCallback(() => {
-    setShowParticles(prev => !prev);
   }, []);
 
   return (
@@ -73,20 +62,20 @@ const Index = () => {
         <Suspense fallback={
           <div className="fixed inset-0 bg-background flex items-center justify-center">
             <div className="text-primary font-display text-xl tracking-wider animate-pulse">
-              Loading Sacred Geometry...
+              Loading...
             </div>
           </div>
         }>
           <TempleScene 
             scrollProgress={scrollProgress} 
-            showMandala={showMandala}
-            showParticles={showParticles}
+            showMandala={false}
+            showParticles={false}
           />
         </Suspense>
       </div>
 
       {/* Sacred Pattern Overlay */}
-      <div className="fixed inset-0 sacred-pattern pointer-events-none opacity-30 z-[1]" />
+      <div className="fixed inset-0 sacred-pattern pointer-events-none opacity-20 z-[1]" />
 
       {/* Gradient Overlays for readability */}
       <div className="fixed inset-0 pointer-events-none z-[2]">
@@ -95,46 +84,32 @@ const Index = () => {
       </div>
 
       {/* Scrollable Content */}
-      <main className={`relative z-10 transition-opacity duration-1000 pb-24 md:pb-0 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
-        <HeroSection onMounted={handleHeroMounted} />
+      <main className="relative z-10 pb-24 md:pb-0">
+        {/* 1. Hero Section */}
+        <HeroSection />
         
         {/* Divider */}
-        <div className="temple-divider">
-          <span className="text-primary text-2xl">◆</span>
+        <div className="flex items-center justify-center py-4">
+          <div className="w-24 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
         </div>
 
-        <VastuSection />
+        {/* 2. Quick Start Section */}
+        <QuickStartSection />
 
-        {/* Divider */}
-        <div className="temple-divider">
-          <span className="text-primary text-2xl">◆</span>
-        </div>
+        {/* 3. Relaxation Section */}
+        <RelaxationSection />
 
-        <ComparisonSection />
+        {/* 4. Darshan Section */}
+        <DarshanSection />
 
-        {/* Divider */}
-        <div className="temple-divider">
-          <span className="text-primary text-2xl">◆</span>
-        </div>
+        {/* 5. Daily Highlights */}
+        <DailyHighlightsSection />
 
-        <ScienceSection 
-          onToggleParticles={toggleParticles}
-          particlesActive={showParticles}
-        />
+        {/* 6. Philosophy Section */}
+        <PhilosophySection />
 
-        {/* Divider */}
-        <div className="temple-divider">
-          <span className="text-primary text-2xl">◆</span>
-        </div>
-
-        <StressStatsDashboard />
-
-        {/* Divider */}
-        <div className="temple-divider">
-          <span className="text-primary text-2xl">◆</span>
-        </div>
-
-        <DevoteeExperiences />
+        {/* 7. Final CTA */}
+        <FinalCTASection />
       </main>
 
       {/* Navigation - Fixed Top Right */}
@@ -147,54 +122,16 @@ const Index = () => {
              className="group"
            >
              <div
-               className="flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 hover:scale-105"
-               style={{
-                 background: 'hsl(var(--void-light) / 0.6)',
-                 backdropFilter: 'blur(12px)',
-                 WebkitBackdropFilter: 'blur(12px)',
-                 border: '1px solid hsl(var(--gold) / 0.3)',
-                 boxShadow: '0 0 20px hsl(var(--gold) / 0.1)',
-               }}
+               className="flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 hover:scale-105 bg-void-light/60 backdrop-blur-xl border border-primary/30 shadow-[0_0_20px_hsl(var(--gold)/0.1)]"
              >
-               <LogIn className="w-4 h-4 text-gold transition-transform duration-300 group-hover:translate-x-0.5" />
-               <span className="font-body text-sm tracking-wider text-gold">
+               <LogIn className="w-4 h-4 text-primary transition-transform duration-300 group-hover:translate-x-0.5" />
+               <span className="font-body text-sm tracking-wider text-primary">
                  Enter Sanctum
                </span>
              </div>
            </Link>
          )}
       </div>
-
-      {/* Navigation Dots (Side) */}
-      <nav className="fixed right-6 top-1/2 -translate-y-1/2 z-50 hidden lg:flex flex-col gap-4">
-        {['Hero', 'Vastu', 'Styles', 'Science'].map((section, idx) => (
-          <a
-            key={section}
-            href={`#${section.toLowerCase()}`}
-            className={`
-              group flex items-center gap-3 transition-all duration-300
-            `}
-            onClick={(e) => {
-              e.preventDefault();
-              const target = idx === 0 
-                ? document.body 
-                : document.getElementById(section.toLowerCase());
-              target?.scrollIntoView({ behavior: 'smooth' });
-            }}
-          >
-            <span className="text-xs text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity tracking-wider uppercase">
-              {section}
-            </span>
-            <span className={`
-              w-2 h-2 rounded-full border border-primary/50 transition-all duration-300
-              ${scrollProgress > (idx * 0.25) && scrollProgress <= ((idx + 1) * 0.25)
-                ? 'bg-primary scale-150'
-                : 'bg-transparent group-hover:bg-primary/50'
-              }
-            `} />
-          </a>
-        ))}
-      </nav>
 
       {/* Mobile Bottom Navigation */}
       <BottomNav />
