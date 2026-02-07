@@ -44,16 +44,41 @@ export default defineConfig(({ mode }) => ({
     mode === "development" && componentTagger(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'og-image.png', 'robots.txt'],
+      includeAssets: ['favicon.ico', 'og-image.png', 'robots.txt', 'pwa-icon-192.png', 'pwa-icon-512.png'],
       manifest: {
         name: 'Dhyaan - Temple Darshan & Spiritual Wellness',
         short_name: 'Dhyaan',
-        description: 'Live temple darshan, meditation frequencies, and spiritual wellness',
+        description: 'Live temple darshan, meditation frequencies, and spiritual wellness. Experience sacred geometry, mantra chanting, and mindful practices.',
         theme_color: '#D4AF37',
         background_color: '#0a0a0a',
         display: 'standalone',
         orientation: 'portrait',
         start_url: '/',
+        scope: '/',
+        categories: ['health', 'lifestyle', 'education'],
+        shortcuts: [
+          {
+            name: 'Sonic Lab',
+            short_name: 'Meditate',
+            description: 'Start a meditation session',
+            url: '/sonic-lab',
+            icons: [{ src: '/pwa-icon-192.png', sizes: '192x192' }]
+          },
+          {
+            name: 'Live Darshan',
+            short_name: 'Darshan',
+            description: 'Watch live temple streams',
+            url: '/live-darshan',
+            icons: [{ src: '/pwa-icon-192.png', sizes: '192x192' }]
+          },
+          {
+            name: 'Mantrochar',
+            short_name: 'Mantras',
+            description: 'Learn sacred mantras',
+            url: '/mantrochar',
+            icons: [{ src: '/pwa-icon-192.png', sizes: '192x192' }]
+          }
+        ],
         icons: [
           {
             src: '/favicon.ico',
@@ -61,10 +86,31 @@ export default defineConfig(({ mode }) => ({
             type: 'image/x-icon'
           },
           {
-            src: '/og-image.png',
+            src: '/pwa-icon-192.png',
             sizes: '192x192',
             type: 'image/png',
-            purpose: 'any maskable'
+            purpose: 'any'
+          },
+          {
+            src: '/pwa-icon-512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'any'
+          },
+          {
+            src: '/pwa-icon-512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'maskable'
+          }
+        ],
+        screenshots: [
+          {
+            src: '/og-image.png',
+            sizes: '1920x1088',
+            type: 'image/png',
+            form_factor: 'wide',
+            label: 'Dhyaan Home Screen'
           }
         ]
       },
