@@ -23,6 +23,7 @@ const LiveDarshan = lazy(() => import("./pages/LiveDarshan"));
 const AartiSchedule = lazy(() => import("./pages/AartiSchedule"));
 const ImmersiveDarshan = lazy(() => import("./pages/ImmersiveDarshan"));
 const SharedGarden = lazy(() => import("./pages/SharedGarden"));
+const Install = lazy(() => import("./pages/Install"));
 
 // Lazy-loaded protected route wrapper
 const ProtectedRoute = lazy(() => import("./components/auth/ProtectedRoute"));
@@ -86,6 +87,7 @@ const App = () => (
             <Route path="/aarti-schedule" element={<AartiSchedule />} />
             <Route path="/immersive-darshan" element={<ImmersiveDarshan />} />
             <Route path="/garden/:id" element={<SharedGarden />} />
+            <Route path="/install" element={<Install />} />
             
             {/* Catch-all */}
             <Route path="*" element={<NotFound />} />

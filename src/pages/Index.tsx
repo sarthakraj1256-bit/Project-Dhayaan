@@ -12,6 +12,7 @@ import StressStatsDashboard from '@/components/StressStatsDashboard';
 import DevoteeExperiences from '@/components/DevoteeExperiences';
 import UserMenu from '@/components/UserMenu';
 import BottomNav from '@/components/BottomNav';
+import { PWAInstallPrompt } from '@/components/pwa/PWAInstallPrompt';
 
 const Index = () => {
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -197,6 +198,9 @@ const Index = () => {
 
       {/* Mobile Bottom Navigation */}
       <BottomNav />
+
+      {/* PWA Install Prompt */}
+      <PWAInstallPrompt />
     </div>
   );
 };
