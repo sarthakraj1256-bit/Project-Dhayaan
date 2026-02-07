@@ -43,8 +43,9 @@ export default defineConfig(({ mode }) => ({
     react(),
     mode === "development" && componentTagger(),
     VitePWA({
-      registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'og-image.png', 'robots.txt', 'pwa-icon-192.png', 'pwa-icon-512.png'],
+      registerType: 'prompt', // Changed to prompt so we control the update flow
+      injectRegister: false, // Disable auto-injection, we handle registration manually
+      includeAssets: ['favicon.ico', 'og-image.png', 'robots.txt', 'pwa-icon-192.png', 'pwa-icon-512.png', 'sw-custom.js'],
       manifest: {
         name: 'Dhyaan - Temple Darshan & Spiritual Wellness',
         short_name: 'Dhyaan',
