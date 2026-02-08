@@ -5,6 +5,8 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { useYouTubePlayerAPI, StreamStatus } from '@/hooks/useYouTubeAPI';
+import { useViewerCount } from '@/hooks/useViewerCount';
+import ViewerCountBadge from './ViewerCountBadge';
 import { toast } from 'sonner';
 
 interface YouTubeAPIPlayerProps {
@@ -46,6 +48,17 @@ const YouTubeAPIPlayer = memo(({
     onError,
   });
 
+  // Fetch real-time viewer count from YouTube API
+  const {
+    viewerCount,
+    isLive: isApiLive,
+    isLoading: isViewerCountLoading,
+  } = useViewerCount({
+    videoId: currentVideoId,
+    enabled: isPlayerReady && (status === 'live' || status === 'recorded'),
+    pollInterval: 30000, // Update every 30 seconds
+  });
+
   // Show loading state while API loads
   if (!isAPIReady) {
     return (
@@ -78,9 +91,18 @@ const YouTubeAPIPlayer = memo(({
       {/* YouTube Player Container */}
       <div id={containerId} className="absolute inset-0 w-full h-full" />
 
-      {/* Status Badge Overlay */}
-      <div className="absolute top-4 left-4 z-10">
+      {/* Status Badge & Viewer Count Overlay */}
+      <div className="absolute top-4 left-4 right-4 z-10 flex items-start justify-between">
         <StatusBadge status={status} templeName={templeName} />
+        
+        {/* Real-time Viewer Count */}
+        {(status === 'live' || status === 'recorded') && (
+          <ViewerCountBadge
+            viewerCount={viewerCount}
+            isLive={isApiLive || status === 'live'}
+            isLoading={isViewerCountLoading}
+          />
+        )}
       </div>
 
       {/* Loading Overlay */}
