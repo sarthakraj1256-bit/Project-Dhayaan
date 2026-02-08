@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 
-// YouTube IFrame API types - defined inline to avoid ambient declaration issues
+// YouTube IFrame API types
 interface YTPlayerEvent {
   target: YTPlayer;
   data: number;
@@ -74,7 +74,6 @@ declare global {
   }
 }
 
-// Player state constants
 const PlayerState = {
   UNSTARTED: -1,
   ENDED: 0,
@@ -83,58 +82,6 @@ const PlayerState = {
   BUFFERING: 3,
   CUED: 5,
 } as const;
-
-// YouTube IFrame API loader hook
-export const useYouTubeAPI = () => {
-  const [isReady, setIsReady] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    // Check if API is already loaded
-    if (window.YT?.Player) {
-      setIsReady(true);
-      return;
-    }
-
-    // Check if script is already being loaded
-    const existingScript = document.querySelector('script[src*="youtube.com/iframe_api"]');
-    if (existingScript) {
-      const checkReady = setInterval(() => {
-        if (window.YT?.Player) {
-          setIsReady(true);
-          clearInterval(checkReady);
-        }
-      }, 100);
-      return () => clearInterval(checkReady);
-    }
-
-    // Load the YouTube IFrame API script
-    const script = document.createElement('script');
-    script.src = 'https://www.youtube.com/iframe_api';
-    script.async = true;
-
-    const originalCallback = window.onYouTubeIframeAPIReady;
-
-    window.onYouTubeIframeAPIReady = () => {
-      setIsReady(true);
-      if (originalCallback) {
-        originalCallback();
-      }
-    };
-
-    script.onerror = () => {
-      setError('Failed to load YouTube API');
-    };
-
-    document.body.appendChild(script);
-
-    return () => {
-      // Cleanup handled by browser
-    };
-  }, []);
-
-  return { isReady, error };
-};
 
 // YouTube error codes
 export enum YouTubeErrorCode {
@@ -145,7 +92,6 @@ export enum YouTubeErrorCode {
   EMBED_NOT_ALLOWED_2 = 150,
 }
 
-// Stream status type
 export type StreamStatus = 'loading' | 'live' | 'recorded' | 'ambience' | 'error';
 
 interface UseYouTubePlayerAPIOptions {
@@ -157,7 +103,7 @@ interface UseYouTubePlayerAPIOptions {
   onError?: (errorMessage: string) => void;
 }
 
-const DEFAULT_AMBIENCE_ID = 'LBaF7ypRVXM'; // Golden Temple 24/7 backup
+const DEFAULT_AMBIENCE_ID = 'LBaF7ypRVXM';
 
 export const useYouTubePlayerAPI = ({
   containerId,
@@ -167,129 +113,150 @@ export const useYouTubePlayerAPI = ({
   onStatusChange,
   onError,
 }: UseYouTubePlayerAPIOptions) => {
-  const { isReady: isAPIReady, error: apiError } = useYouTubeAPI();
-  
-  const playerRef = useRef<YTPlayer | null>(null);
+  // ALL HOOKS MUST BE AT THE TOP - unconditionally
+  const [isAPIReady, setIsAPIReady] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
   const [status, setStatus] = useState<StreamStatus>('loading');
-  const [currentVideoId, setCurrentVideoId] = useState<string>(
-    liveVideoId || recordedVideoId || backupAmbienceId || DEFAULT_AMBIENCE_ID
-  );
   const [isMuted, setIsMuted] = useState(true);
   const [isPlayerReady, setIsPlayerReady] = useState(false);
   
+  const playerRef = useRef<YTPlayer | null>(null);
   const errorCountRef = useRef(0);
-  const maxRetries = 3;
+  const isHandlingErrorRef = useRef(false);
   const currentAttemptRef = useRef<'live' | 'recorded' | 'ambience'>('live');
+  const currentVideoIdRef = useRef<string>(
+    liveVideoId || recordedVideoId || backupAmbienceId || DEFAULT_AMBIENCE_ID
+  );
 
-  // Update external status callback
-  const updateStatus = useCallback((newStatus: StreamStatus) => {
-    setStatus(newStatus);
-    onStatusChange?.(newStatus);
-  }, [onStatusChange]);
+  // Load YouTube IFrame API
+  useEffect(() => {
+    if (window.YT?.Player) {
+      setIsAPIReady(true);
+      return;
+    }
 
-  // Get fallback video ID based on current attempt
-  const getNextFallback = useCallback((): string => {
+    const existingScript = document.querySelector('script[src*="youtube.com/iframe_api"]');
+    if (existingScript) {
+      const checkReady = setInterval(() => {
+        if (window.YT?.Player) {
+          setIsAPIReady(true);
+          clearInterval(checkReady);
+        }
+      }, 100);
+      return () => clearInterval(checkReady);
+    }
+
+    const script = document.createElement('script');
+    script.src = 'https://www.youtube.com/iframe_api';
+    script.async = true;
+
+    const originalCallback = window.onYouTubeIframeAPIReady;
+    window.onYouTubeIframeAPIReady = () => {
+      setIsAPIReady(true);
+      originalCallback?.();
+    };
+
+    script.onerror = () => setApiError('Failed to load YouTube API');
+    document.body.appendChild(script);
+  }, []);
+
+  // Set initial attempt based on available videos
+  useEffect(() => {
+    currentAttemptRef.current = liveVideoId ? 'live' : (recordedVideoId ? 'recorded' : 'ambience');
+    currentVideoIdRef.current = liveVideoId || recordedVideoId || backupAmbienceId || DEFAULT_AMBIENCE_ID;
+  }, [liveVideoId, recordedVideoId, backupAmbienceId]);
+
+  // Get next fallback video
+  const getNextFallback = useCallback((): string | null => {
+    if (currentAttemptRef.current === 'ambience') return null;
+    
     if (currentAttemptRef.current === 'live' && recordedVideoId) {
       currentAttemptRef.current = 'recorded';
       return recordedVideoId;
     }
-    if (currentAttemptRef.current === 'recorded' && backupAmbienceId) {
-      currentAttemptRef.current = 'ambience';
-      return backupAmbienceId;
-    }
+    
     currentAttemptRef.current = 'ambience';
-    return DEFAULT_AMBIENCE_ID;
+    return backupAmbienceId || DEFAULT_AMBIENCE_ID;
   }, [recordedVideoId, backupAmbienceId]);
 
-  // Handle player ready event
-  const handlePlayerReady = useCallback((event: YTPlayerEvent) => {
-    console.log('[YT Player] Ready');
-    setIsPlayerReady(true);
-    errorCountRef.current = 0;
-    
-    if (currentVideoId === liveVideoId) {
-      updateStatus('live');
-    } else if (currentVideoId === recordedVideoId) {
-      updateStatus('recorded');
-    } else {
-      updateStatus('ambience');
-    }
-    
-    event.target.playVideo();
-  }, [currentVideoId, liveVideoId, recordedVideoId, updateStatus]);
+  // Initialize player
+  useEffect(() => {
+    if (!isAPIReady || !window.YT?.Player || playerRef.current) return;
 
-  // Handle player state change
-  const handleStateChange = useCallback((event: YTPlayerEvent) => {
-    const state = event.data;
-    
-    if (state === PlayerState.ENDED) {
-      console.log('[YT Player] Video ended, restarting...');
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    const videoId = currentVideoIdRef.current;
+    console.log('[YT Player] Initializing with video:', videoId);
+
+    const handleReady = (event: YTPlayerEvent) => {
+      console.log('[YT Player] Ready');
+      setIsPlayerReady(true);
+      errorCountRef.current = 0;
       
-      if (currentAttemptRef.current !== 'live' && liveVideoId) {
-        console.log('[YT Player] Checking if live stream is back...');
-        currentAttemptRef.current = 'live';
-        setCurrentVideoId(liveVideoId);
-        playerRef.current?.loadVideoById(liveVideoId);
+      const vid = currentVideoIdRef.current;
+      if (vid === liveVideoId) {
+        setStatus('live');
+        onStatusChange?.('live');
+      } else if (vid === recordedVideoId) {
+        setStatus('recorded');
+        onStatusChange?.('recorded');
       } else {
+        setStatus('ambience');
+        onStatusChange?.('ambience');
+      }
+      
+      event.target.playVideo();
+    };
+
+    const handleStateChange = (event: YTPlayerEvent) => {
+      if (event.data === PlayerState.ENDED) {
+        console.log('[YT Player] Video ended, restarting...');
         event.target.seekTo(0);
         event.target.playVideo();
       }
-    }
-  }, [liveVideoId]);
+    };
 
-  // Handle player error - THE CRITICAL FALLBACK LOGIC
-  const handlePlayerError = useCallback((event: YTOnErrorEvent) => {
-    const errorCode = event.data;
-    console.warn(`[YT Player] Error ${errorCode} on video ${currentVideoId}`);
-    
-    errorCountRef.current += 1;
-
-    const criticalErrors = [
-      YouTubeErrorCode.VIDEO_NOT_FOUND,
-      YouTubeErrorCode.EMBED_NOT_ALLOWED,
-      YouTubeErrorCode.EMBED_NOT_ALLOWED_2,
-      YouTubeErrorCode.HTML5_ERROR,
-    ];
-
-    if (criticalErrors.includes(errorCode) || errorCountRef.current >= maxRetries) {
-      const fallbackId = getNextFallback();
-      console.log(`[YT Player] Switching to fallback: ${fallbackId}`);
+    const handleError = (event: YTOnErrorEvent) => {
+      if (isHandlingErrorRef.current) return;
       
-      setCurrentVideoId(fallbackId);
-      
-      if (fallbackId === recordedVideoId) {
-        updateStatus('recorded');
-      } else {
-        updateStatus('ambience');
+      const errorCode = event.data;
+      console.warn(`[YT Player] Error ${errorCode}`);
+      errorCountRef.current += 1;
+
+      const criticalErrors = [100, 101, 150, 5];
+      if (criticalErrors.includes(errorCode) || errorCountRef.current >= 3) {
+        isHandlingErrorRef.current = true;
+        
+        const fallbackId = getNextFallback();
+        if (!fallbackId) {
+          console.log('[YT Player] No more fallbacks');
+          setStatus('ambience');
+          onStatusChange?.('ambience');
+          isHandlingErrorRef.current = false;
+          return;
+        }
+        
+        console.log(`[YT Player] Switching to: ${fallbackId}`);
+        currentVideoIdRef.current = fallbackId;
+        
+        const newStatus = fallbackId === recordedVideoId ? 'recorded' : 'ambience';
+        setStatus(newStatus);
+        onStatusChange?.(newStatus);
+        
+        playerRef.current?.loadVideoById(fallbackId);
+        errorCountRef.current = 0;
+        
+        setTimeout(() => { isHandlingErrorRef.current = false; }, 1000);
       }
       
-      if (playerRef.current) {
-        playerRef.current.loadVideoById(fallbackId);
-      }
-      
-      errorCountRef.current = 0;
-    }
-    
-    onError?.(`YouTube Error ${errorCode}`);
-  }, [currentVideoId, getNextFallback, recordedVideoId, updateStatus, onError]);
+      onError?.(`YouTube Error ${errorCode}`);
+    };
 
-  // Initialize player when API is ready
-  useEffect(() => {
-    if (!isAPIReady || playerRef.current) return;
-    if (!window.YT?.Player) return;
-
-    const container = document.getElementById(containerId);
-    if (!container) {
-      console.error('[YT Player] Container not found:', containerId);
-      return;
-    }
-
-    console.log('[YT Player] Initializing with video:', currentVideoId);
-    
     playerRef.current = new window.YT.Player(containerId, {
       width: '100%',
       height: '100%',
-      videoId: currentVideoId,
+      videoId,
       playerVars: {
         autoplay: 1,
         mute: 1,
@@ -297,7 +264,7 @@ export const useYouTubePlayerAPI = ({
         rel: 0,
         modestbranding: 1,
         loop: 1,
-        playlist: currentVideoId,
+        playlist: videoId,
         playsinline: 1,
         enablejsapi: 1,
         origin: window.location.origin,
@@ -305,64 +272,48 @@ export const useYouTubePlayerAPI = ({
         iv_load_policy: 3,
       },
       events: {
-        onReady: handlePlayerReady,
+        onReady: handleReady,
         onStateChange: handleStateChange,
-        onError: handlePlayerError,
+        onError: handleError,
       },
     });
 
     return () => {
-      if (playerRef.current) {
-        playerRef.current.destroy();
-        playerRef.current = null;
-      }
+      playerRef.current?.destroy();
+      playerRef.current = null;
     };
-  }, [isAPIReady, containerId, currentVideoId, handlePlayerReady, handleStateChange, handlePlayerError]);
+  }, [isAPIReady, containerId, liveVideoId, recordedVideoId, backupAmbienceId, getNextFallback, onStatusChange, onError]);
 
-  // Handle mute toggle
   const toggleMute = useCallback(() => {
-    if (playerRef.current && isPlayerReady) {
-      if (isMuted) {
-        playerRef.current.unMute();
-      } else {
-        playerRef.current.mute();
-      }
-      setIsMuted(!isMuted);
+    if (!playerRef.current || !isPlayerReady) return;
+    if (isMuted) {
+      playerRef.current.unMute();
+    } else {
+      playerRef.current.mute();
     }
+    setIsMuted(!isMuted);
   }, [isMuted, isPlayerReady]);
 
-  // Force retry connection
   const retryConnection = useCallback(() => {
-    if (playerRef.current && liveVideoId) {
-      console.log('[YT Player] Manual retry - checking live stream');
-      errorCountRef.current = 0;
-      currentAttemptRef.current = 'live';
-      setCurrentVideoId(liveVideoId);
-      playerRef.current.loadVideoById(liveVideoId);
-      updateStatus('loading');
-    }
-  }, [liveVideoId, updateStatus]);
-
-  // Switch to specific video
-  const switchToVideo = useCallback((videoId: string, newStatus: StreamStatus) => {
-    if (playerRef.current) {
-      setCurrentVideoId(videoId);
-      playerRef.current.loadVideoById(videoId);
-      updateStatus(newStatus);
-    }
-  }, [updateStatus]);
+    if (!playerRef.current || !liveVideoId) return;
+    console.log('[YT Player] Retrying live stream');
+    errorCountRef.current = 0;
+    currentAttemptRef.current = 'live';
+    currentVideoIdRef.current = liveVideoId;
+    playerRef.current.loadVideoById(liveVideoId);
+    setStatus('loading');
+    onStatusChange?.('loading');
+  }, [liveVideoId, onStatusChange]);
 
   return {
-    player: playerRef.current,
     status,
-    currentVideoId,
+    currentVideoId: currentVideoIdRef.current,
     isMuted,
     isPlayerReady,
     isAPIReady,
     apiError,
     toggleMute,
     retryConnection,
-    switchToVideo,
   };
 };
 
