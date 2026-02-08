@@ -9,19 +9,20 @@ import {
   Share2,
   Users,
   MapPin,
-  ExternalLink,
   RefreshCw
 } from 'lucide-react';
 import { Temple, deityLabels, categoryLabels } from '@/data/templeStreams';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { toast } from 'sonner';
 import TempleSchedule from './TempleSchedule';
 import FavoriteButton from './FavoriteButton';
 import VideoStatusBadge from './VideoStatusBadge';
 import LiveSwitchPrompt from './LiveSwitchPrompt';
-import { useVideoFallback } from '@/hooks/useVideoFallback';
+import YouTubeEmbed from './YouTubeEmbed';
+import FailSafeOverlay from './FailSafeOverlay';
+import OpenInYouTubeButton from './OpenInYouTubeButton';
+import { useYouTubePlayer } from '@/hooks/useYouTubePlayer';
 
 interface VideoPlayerProps {
   temple: Temple;
@@ -30,9 +31,8 @@ interface VideoPlayerProps {
 
 const VideoPlayer = ({ temple, onClose }: VideoPlayerProps) => {
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [isMuted, setIsMuted] = useState(false);
 
-  // Video fallback system for 24/7 uninterrupted playback
+  // 24/7 video fallback system with YouTube player state monitoring
   const {
     currentVideoId,
     streamStatus,
@@ -40,8 +40,12 @@ const VideoPlayer = ({ temple, onClose }: VideoPlayerProps) => {
     switchToLive,
     dismissLivePrompt,
     retryConnection,
+    handlePlayerError,
+    handlePlayerReady,
     statusMessage,
-  } = useVideoFallback({
+    isMuted,
+    setIsMuted,
+  } = useYouTubePlayer({
     liveVideoId: temple.youtubeVideoId,
     recordedVideoId: temple.recordedVideoId,
     backupAmbienceId: temple.backupAmbienceId,
@@ -50,6 +54,9 @@ const VideoPlayer = ({ temple, onClose }: VideoPlayerProps) => {
         description: `Live stream from ${temple.name} is now available`,
         duration: 5000,
       });
+    },
+    onError: (error) => {
+      console.warn('Video fallback error:', error);
     },
   });
 
@@ -66,10 +73,7 @@ const VideoPlayer = ({ temple, onClose }: VideoPlayerProps) => {
     }
   }, [temple.name]);
 
-  // Build YouTube embed URL with fallback video
-  const youtubeEmbedUrl = currentVideoId 
-    ? `https://www.youtube.com/embed/${currentVideoId}?autoplay=1&mute=${isMuted ? 1 : 0}&rel=0&modestbranding=1&loop=1&playlist=${currentVideoId}`
-    : null;
+  const showFailSafe = streamStatus === 'ambience' || streamStatus === 'error';
 
   return (
     <AnimatePresence>
@@ -127,39 +131,24 @@ const VideoPlayer = ({ temple, onClose }: VideoPlayerProps) => {
               </div>
             )}
 
-            {/* Fail-safe Ambience State */}
-            {streamStatus === 'ambience' && (
-              <div className="absolute top-4 left-4 right-4 z-10">
-                <div className="bg-primary/20 backdrop-blur-sm border border-primary/30 rounded-lg p-3 flex items-center justify-between">
-                  <p className="text-sm text-primary-foreground/90">{statusMessage}</p>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={retryConnection}
-                    className="gap-1 text-primary-foreground/90 hover:text-primary-foreground"
-                  >
-                    <RefreshCw className="w-4 h-4" />
-                    Retry
-                  </Button>
-                </div>
-              </div>
-            )}
+            {/* Fail-Safe Overlay with Ambient Audio */}
+            <FailSafeOverlay
+              show={showFailSafe}
+              templeName={temple.name}
+              thumbnailUrl={temple.thumbnail}
+              onRetry={retryConnection}
+            />
 
-            <AspectRatio ratio={16 / 9} className="h-full">
-              {youtubeEmbedUrl ? (
-                <iframe
-                  src={youtubeEmbedUrl}
-                  title={temple.name}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  className="w-full h-full"
-                />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center bg-muted">
-                  <p className="text-muted-foreground">Loading darshan...</p>
-                </div>
-              )}
-            </AspectRatio>
+            {/* YouTube Embed with Error Handling */}
+            {!showFailSafe && (
+              <YouTubeEmbed
+                videoId={currentVideoId}
+                isMuted={isMuted}
+                onError={handlePlayerError}
+                onReady={handlePlayerReady}
+                title={`${temple.name} - ${streamStatus === 'live' ? 'Live Aarti' : 'Recorded Darshan'}`}
+              />
+            )}
 
             {/* Live Switch Prompt */}
             <LiveSwitchPrompt
@@ -168,6 +157,26 @@ const VideoPlayer = ({ temple, onClose }: VideoPlayerProps) => {
               onSwitch={switchToLive}
               onDismiss={dismissLivePrompt}
             />
+
+            {/* Recorded Mode Banner */}
+            {streamStatus === 'recorded' && (
+              <div className="absolute top-4 left-4 right-4 z-10">
+                <div className="bg-secondary/80 backdrop-blur-sm border border-secondary rounded-lg p-3 flex items-center justify-between">
+                  <p className="text-sm text-secondary-foreground">
+                    📹 Recorded Aarti from {temple.name}
+                  </p>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={retryConnection}
+                    className="gap-1 text-secondary-foreground hover:text-foreground"
+                  >
+                    <RefreshCw className="w-4 h-4" />
+                    Check Live
+                  </Button>
+                </div>
+              </div>
+            )}
 
             {/* Video Controls Overlay */}
             <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-background/90 to-transparent">
@@ -280,16 +289,8 @@ const VideoPlayer = ({ temple, onClose }: VideoPlayerProps) => {
                 </div>
               )}
 
-              {/* Open in YouTube */}
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => window.open(`https://www.youtube.com/watch?v=${currentVideoId || temple.youtubeVideoId}`, '_blank')}
-                className="gap-2"
-              >
-                <ExternalLink className="w-4 h-4" />
-                Open in YouTube
-              </Button>
+              {/* Open in YouTube - Using proper link with target="_blank" */}
+              <OpenInYouTubeButton videoId={currentVideoId} />
             </motion.div>
           )}
         </div>
