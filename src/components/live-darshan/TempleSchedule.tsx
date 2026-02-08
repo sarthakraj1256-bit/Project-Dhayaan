@@ -1,4 +1,3 @@
-import { forwardRef } from 'react';
 import { motion } from 'framer-motion';
 import { Clock, Sun, Moon, Sunrise, Sunset } from 'lucide-react';
 import { AartiSchedule } from '@/data/templeStreams';
@@ -48,7 +47,7 @@ const isUpcoming = (time: string): boolean => {
   return diffMins > 0 && diffMins <= 60; // Within next hour
 };
 
-const TempleSchedule = forwardRef<HTMLDivElement, TempleScheduleProps>(({ schedule, compact = false }, ref) => {
+const TempleSchedule = ({ schedule, compact = false }: TempleScheduleProps) => {
   if (compact) {
     // Show only next 2 upcoming aartis for cards
     const sortedSchedule = [...schedule].sort((a, b) => a.time.localeCompare(b.time));
@@ -89,7 +88,7 @@ const TempleSchedule = forwardRef<HTMLDivElement, TempleScheduleProps>(({ schedu
   }
 
   return (
-    <div ref={ref} className="space-y-3">
+    <div className="space-y-3">
       <div className="flex items-center gap-2">
         <Clock className="w-4 h-4 text-primary" />
         <h4 className="font-medium text-foreground">Daily Aarti Schedule</h4>
@@ -143,8 +142,6 @@ const TempleSchedule = forwardRef<HTMLDivElement, TempleScheduleProps>(({ schedu
       </div>
     </div>
   );
-});
-
-TempleSchedule.displayName = 'TempleSchedule';
+};
 
 export default TempleSchedule;

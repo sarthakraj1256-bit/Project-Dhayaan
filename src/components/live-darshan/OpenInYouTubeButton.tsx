@@ -1,4 +1,3 @@
-import { forwardRef } from 'react';
 import { ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -14,12 +13,12 @@ interface OpenInYouTubeButtonProps {
  * ERR_BLOCKED_BY_RESPONSE errors from YouTube's security policies.
  * This must NEVER open inside an iframe or modal.
  */
-const OpenInYouTubeButton = forwardRef<HTMLButtonElement, OpenInYouTubeButtonProps>(({ 
+const OpenInYouTubeButton = ({ 
   videoId, 
   variant = 'outline',
   size = 'sm',
   className = ''
-}, ref) => {
+}: OpenInYouTubeButtonProps) => {
   const youtubeUrl = `https://www.youtube.com/watch?v=${videoId}`;
 
   const handleOpenInYouTube = () => {
@@ -30,7 +29,6 @@ const OpenInYouTubeButton = forwardRef<HTMLButtonElement, OpenInYouTubeButtonPro
 
   return (
     <Button
-      ref={ref}
       variant={variant}
       size={size}
       className={`gap-2 ${className}`}
@@ -40,8 +38,6 @@ const OpenInYouTubeButton = forwardRef<HTMLButtonElement, OpenInYouTubeButtonPro
       Open in YouTube
     </Button>
   );
-});
-
-OpenInYouTubeButton.displayName = 'OpenInYouTubeButton';
+};
 
 export default OpenInYouTubeButton;
