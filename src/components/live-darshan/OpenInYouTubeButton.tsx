@@ -1,3 +1,4 @@
+import { forwardRef } from 'react';
 import { ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -9,34 +10,38 @@ interface OpenInYouTubeButtonProps {
 }
 
 /**
- * Opens YouTube video in a new tab to avoid ERR_BLOCKED_BY_RESPONSE errors
- * that occur when trying to navigate within an iframe context.
+ * Opens YouTube video in a new tab using window.open to avoid 
+ * ERR_BLOCKED_BY_RESPONSE errors from YouTube's security policies.
+ * This must NEVER open inside an iframe or modal.
  */
-const OpenInYouTubeButton = ({ 
+const OpenInYouTubeButton = forwardRef<HTMLButtonElement, OpenInYouTubeButtonProps>(({ 
   videoId, 
   variant = 'outline',
   size = 'sm',
   className = ''
-}: OpenInYouTubeButtonProps) => {
+}, ref) => {
   const youtubeUrl = `https://www.youtube.com/watch?v=${videoId}`;
+
+  const handleOpenInYouTube = () => {
+    // Use window.open to ensure it opens in a new tab
+    // This prevents YouTube's ERR_BLOCKED_BY_RESPONSE error
+    window.open(youtubeUrl, '_blank', 'noopener,noreferrer');
+  };
 
   return (
     <Button
+      ref={ref}
       variant={variant}
       size={size}
       className={`gap-2 ${className}`}
-      asChild
+      onClick={handleOpenInYouTube}
     >
-      <a 
-        href={youtubeUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <ExternalLink className="w-4 h-4" />
-        Open in YouTube
-      </a>
+      <ExternalLink className="w-4 h-4" />
+      Open in YouTube
     </Button>
   );
-};
+});
+
+OpenInYouTubeButton.displayName = 'OpenInYouTubeButton';
 
 export default OpenInYouTubeButton;
