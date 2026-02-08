@@ -6,10 +6,13 @@ import { Badge } from '@/components/ui/badge';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { useYouTubePlayerAPI, StreamStatus } from '@/hooks/useYouTubeAPI';
 import { useViewerCount } from '@/hooks/useViewerCount';
+import { useTemplePresence } from '@/hooks/useTemplePresence';
 import ViewerCountBadge from './ViewerCountBadge';
+import DevoteesOnlineBadge from './DevoteesOnlineBadge';
 import { toast } from 'sonner';
 
 interface YouTubeAPIPlayerProps {
+  templeId: string;
   liveVideoId?: string;
   recordedVideoId?: string;
   backupAmbienceId?: string;
@@ -19,6 +22,7 @@ interface YouTubeAPIPlayerProps {
 }
 
 const YouTubeAPIPlayer = memo(({
+  templeId,
   liveVideoId,
   recordedVideoId,
   backupAmbienceId,
@@ -59,6 +63,15 @@ const YouTubeAPIPlayer = memo(({
     pollInterval: 30000, // Update every 30 seconds
   });
 
+  // Track devotees online in our app using Realtime Presence
+  const {
+    onlineCount,
+    isConnected,
+  } = useTemplePresence({
+    templeId,
+    enabled: isPlayerReady,
+  });
+
   // Show loading state while API loads
   if (!isAPIReady) {
     return (
@@ -93,9 +106,13 @@ const YouTubeAPIPlayer = memo(({
 
       {/* Status Badge & Viewer Count Overlay */}
       <div className="absolute top-4 left-4 right-4 z-10 flex items-start justify-between">
-        <StatusBadge status={status} templeName={templeName} />
+        <div className="flex flex-col gap-2">
+          <StatusBadge status={status} templeName={templeName} />
+          {/* Devotees Online in our app */}
+          <DevoteesOnlineBadge count={onlineCount} isConnected={isConnected} />
+        </div>
         
-        {/* Real-time Viewer Count */}
+        {/* Real-time YouTube Viewer Count */}
         {(status === 'live' || status === 'recorded') && (
           <ViewerCountBadge
             viewerCount={viewerCount}
