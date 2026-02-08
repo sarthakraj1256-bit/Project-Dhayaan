@@ -1,9 +1,11 @@
 import { useId, memo } from 'react';
 import { motion } from 'framer-motion';
-import { RefreshCw, Volume2, VolumeX, Loader2 } from 'lucide-react';
+import { RefreshCw, Volume2, VolumeX, Loader2, PictureInPicture2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { useYouTubePlayerAPI, StreamStatus } from '@/hooks/useYouTubeAPI';
+import { toast } from 'sonner';
 
 interface YouTubeAPIPlayerProps {
   liveVideoId?: string;
@@ -34,6 +36,7 @@ const YouTubeAPIPlayer = memo(({
     apiError,
     toggleMute,
     retryConnection,
+    enterPictureInPicture,
   } = useYouTubePlayerAPI({
     containerId,
     liveVideoId,
@@ -162,6 +165,39 @@ const YouTubeAPIPlayer = memo(({
             {/* Compact status indicator */}
             <StatusBadge status={status} templeName={templeName} compact />
           </div>
+          
+          {/* PiP Button */}
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={async () => {
+                    const success = await enterPictureInPicture();
+                    if (success) {
+                      toast.success('🪷 Darshan in mini-player', {
+                        description: 'Continue browsing while watching',
+                        duration: 3000,
+                      });
+                    } else {
+                      toast.error('PiP not available', {
+                        description: 'Your browser may not support this feature',
+                        duration: 3000,
+                      });
+                    }
+                  }}
+                  className="bg-background/50 hover:bg-background/80"
+                  disabled={!isPlayerReady}
+                >
+                  <PictureInPicture2 className="w-5 h-5" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Watch in mini-player</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
       </div>
     </div>

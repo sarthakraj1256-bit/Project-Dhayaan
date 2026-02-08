@@ -305,6 +305,66 @@ export const useYouTubePlayerAPI = ({
     onStatusChange?.('loading');
   }, [liveVideoId, onStatusChange]);
 
+  const enterPictureInPicture = useCallback(async () => {
+    if (!isPlayerReady) return false;
+    
+    try {
+      // Find the video element inside the YouTube iframe
+      const container = document.getElementById(containerId);
+      const iframe = container?.querySelector('iframe');
+      
+      if (!iframe) {
+        console.warn('[YT Player] No iframe found for PiP');
+        return false;
+      }
+
+      // For YouTube embeds, we need to use the document PiP API on the iframe itself
+      // or find the video element. YouTube doesn't expose the video directly,
+      // so we'll use the experimental documentPictureInPicture API if available
+      
+      // Check if PiP is supported
+      if (!document.pictureInPictureEnabled) {
+        console.warn('[YT Player] PiP not supported');
+        return false;
+      }
+
+      // Try to get video element from iframe (works in some browsers)
+      try {
+        const iframeDoc = (iframe as HTMLIFrameElement).contentDocument || 
+                          (iframe as HTMLIFrameElement).contentWindow?.document;
+        const video = iframeDoc?.querySelector('video');
+        if (video && !video.disablePictureInPicture) {
+          await video.requestPictureInPicture();
+          return true;
+        }
+      } catch (crossOriginError) {
+        // Cross-origin access blocked - this is expected for YouTube
+        console.log('[YT Player] Cross-origin PiP blocked, using fallback');
+      }
+
+      // Fallback: Open video in new window for "pseudo-PiP" experience
+      const videoId = currentVideoIdRef.current;
+      if (videoId) {
+        const pipWidth = 400;
+        const pipHeight = 225;
+        const left = window.screen.width - pipWidth - 20;
+        const top = window.screen.height - pipHeight - 100;
+        
+        window.open(
+          `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=0`,
+          'DarshanPiP',
+          `width=${pipWidth},height=${pipHeight},left=${left},top=${top},resizable=yes`
+        );
+        return true;
+      }
+      
+      return false;
+    } catch (error) {
+      console.error('[YT Player] PiP error:', error);
+      return false;
+    }
+  }, [containerId, isPlayerReady]);
+
   return {
     status,
     currentVideoId: currentVideoIdRef.current,
@@ -314,6 +374,7 @@ export const useYouTubePlayerAPI = ({
     apiError,
     toggleMute,
     retryConnection,
+    enterPictureInPicture,
   };
 };
 
