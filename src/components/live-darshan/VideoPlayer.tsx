@@ -5,7 +5,6 @@ import {
   Maximize2, 
   Minimize2, 
   Share2,
-  Users,
   MapPin,
 } from 'lucide-react';
 import { Temple, deityLabels, categoryLabels } from '@/data/templeStreams';
@@ -16,6 +15,7 @@ import TempleSchedule from './TempleSchedule';
 import FavoriteButton from './FavoriteButton';
 import OpenInYouTubeButton from './OpenInYouTubeButton';
 import YouTubeAPIPlayer from './YouTubeAPIPlayer';
+import DarshanChatPanel from './DarshanChatPanel';
 import { StreamStatus } from '@/hooks/useYouTubeAPI';
 
 interface VideoPlayerProps {
@@ -27,6 +27,7 @@ const VideoPlayer = ({ temple, onClose }: VideoPlayerProps) => {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [streamStatus, setStreamStatus] = useState<StreamStatus>('loading');
   const [currentVideoId, setCurrentVideoId] = useState(temple.youtubeVideoId);
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
   const handleStatusChange = useCallback((status: StreamStatus) => {
     setStreamStatus(status);
@@ -109,17 +110,9 @@ const VideoPlayer = ({ temple, onClose }: VideoPlayerProps) => {
               onError={handleError}
             />
 
-            {/* Additional Controls Overlay */}
+            {/* Additional Controls Overlay - removed old viewer count (now in YouTubeAPIPlayer) */}
             <div className="absolute bottom-16 left-0 right-0 p-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  {temple.viewerCount && streamStatus === 'live' && (
-                    <div className="flex items-center gap-1.5 text-sm text-foreground/80 bg-background/50 px-3 py-1.5 rounded-full">
-                      <Users className="w-4 h-4 text-primary" />
-                      <span>{temple.viewerCount.toLocaleString()} watching</span>
-                    </div>
-                  )}
-                </div>
+              <div className="flex items-center justify-end">
                 
                 <div className="flex items-center gap-2">
                   <FavoriteButton 
@@ -160,6 +153,14 @@ const VideoPlayer = ({ temple, onClose }: VideoPlayerProps) => {
                 <X className="w-6 h-6" />
               </Button>
             )}
+
+            {/* Live Chat Panel */}
+            <DarshanChatPanel
+              templeId={temple.id}
+              templeName={temple.name}
+              isOpen={isChatOpen}
+              onToggle={() => setIsChatOpen(!isChatOpen)}
+            />
           </motion.div>
 
           {/* Info Section */}
