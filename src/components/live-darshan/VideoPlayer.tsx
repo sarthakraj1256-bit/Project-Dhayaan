@@ -102,6 +102,7 @@ const VideoPlayer = ({ temple, onClose }: VideoPlayerProps) => {
           >
             {/* YouTube API Player - Self-healing with automatic fallback */}
             <YouTubeAPIPlayer
+              templeId={temple.id}
               liveVideoId={temple.youtubeVideoId}
               recordedVideoId={temple.recordedVideoId}
               backupAmbienceId={temple.backupAmbienceId}
