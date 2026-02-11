@@ -32,7 +32,7 @@ const BottomNav = () => {
       <div
         className="mx-0 overflow-hidden touch-manipulation border-t border-border/30"
         style={{
-          background: '#111827',
+          background: '#020617',
           backdropFilter: 'blur(16px)',
           WebkitBackdropFilter: 'blur(16px)',
         }}
