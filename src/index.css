@@ -73,24 +73,24 @@
     --sidebar-ring: 38 75% 55%;
   }
 
-  /* Homepage-only Deep Charcoal palette */
+  /* Homepage-only Deep Midnight palette */
   .homepage-theme {
-    --background: 217 33% 17%;       /* #1F2937 Deep Charcoal */
+    --background: 222 47% 11%;       /* #0F172A Deep Midnight */
     --foreground: 210 20% 98%;       /* #F9FAFB Ice White */
-    --card: 217 19% 27%;             /* #374151 Elevated Steel */
-    --card-foreground: 210 20% 98%;  /* #F9FAFB */
-    --popover: 217 19% 27%;
-    --popover-foreground: 210 20% 98%;
-    --primary: 210 20% 98%;          /* #F9FAFB Ice White accent */
-    --primary-foreground: 217 33% 17%;
-    --secondary: 217 24% 22%;
+    --card: 210 40% 98%;             /* #F8FAFC Soft Porcelain */
+    --card-foreground: 222 47% 11%;  /* #0F172A Dark text on light cards */
+    --popover: 210 40% 98%;
+    --popover-foreground: 222 47% 11%;
+    --primary: 210 40% 98%;          /* #F8FAFC */
+    --primary-foreground: 222 47% 11%;
+    --secondary: 222 40% 16%;
     --secondary-foreground: 210 20% 90%;
-    --muted: 217 24% 20%;
-    --muted-foreground: 215 15% 60%;
-    --accent: 217 19% 32%;
+    --muted: 222 40% 14%;
+    --muted-foreground: 215 15% 55%;
+    --accent: 222 35% 18%;
     --accent-foreground: 210 20% 98%;
-    --border: 217 19% 30%;
-    --input: 217 19% 30%;
+    --border: 220 20% 88%;
+    --input: 220 20% 88%;
     --ring: 210 20% 98%;
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 98%;
