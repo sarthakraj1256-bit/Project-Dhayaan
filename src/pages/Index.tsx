@@ -15,6 +15,7 @@ import {
   PhilosophySection,
   FinalCTASection,
 } from '@/components/home';
+import WavyBackground from '@/components/home/WavyBackground';
 
 const Index = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -35,7 +36,8 @@ const Index = () => {
 
   return (
     <div className="homepage-theme relative min-h-screen bg-background overflow-x-hidden">
-      <main className="relative pb-24 md:pb-0">
+      <WavyBackground />
+      <main className="relative z-10 pb-24 md:pb-0">
         <HeroSection user={user} />
         <QuickStartSection />
         <RelaxationSection />
