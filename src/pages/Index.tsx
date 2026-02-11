@@ -35,17 +35,16 @@ const Index = () => {
 
   return (
     <div className="homepage-theme relative min-h-screen bg-background overflow-x-hidden">
-      {/* Scrollable Content */}
       <main className="relative pb-24 md:pb-0">
         <HeroSection />
         <QuickStartSection />
 
-        <div className="mx-5 h-px bg-border" />
+        <div className="mx-6 h-px bg-border/60" />
 
         <RelaxationSection />
         <DarshanSection />
 
-        <div className="mx-5 h-px bg-border" />
+        <div className="mx-6 h-px bg-border/60" />
 
         <DailyHighlightsSection />
         <PhilosophySection />
@@ -59,7 +58,7 @@ const Index = () => {
          ) : (
            <Link
              to="/auth"
-             className="flex items-center gap-2 px-3.5 py-2 rounded-full bg-card/80 backdrop-blur-sm border border-border text-sm font-medium text-foreground transition-all duration-200 hover:border-primary/40 active:scale-95"
+             className="flex items-center gap-2 px-3.5 py-2 rounded-full bg-card/80 backdrop-blur-sm border border-border/60 text-sm font-medium text-foreground transition-all duration-200 hover:shadow-sm active:scale-95"
            >
              <LogIn className="w-4 h-4 text-primary" />
              Sign in
