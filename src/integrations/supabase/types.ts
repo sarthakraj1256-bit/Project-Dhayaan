@@ -122,6 +122,158 @@ export type Database = {
         }
         Relationships: []
       }
+      jap_entries: {
+        Row: {
+          chant_count: number
+          created_at: string
+          id: string
+          mantra_name: string
+          user_id: string
+        }
+        Insert: {
+          chant_count?: number
+          created_at?: string
+          id?: string
+          mantra_name: string
+          user_id: string
+        }
+        Update: {
+          chant_count?: number
+          created_at?: string
+          id?: string
+          mantra_name?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      jap_goals: {
+        Row: {
+          created_at: string
+          current_count: number
+          deadline: string | null
+          dedication: string | null
+          id: string
+          mantra_name: string
+          status: string
+          target_count: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          current_count?: number
+          deadline?: string | null
+          dedication?: string | null
+          id?: string
+          mantra_name: string
+          status?: string
+          target_count: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          current_count?: number
+          deadline?: string | null
+          dedication?: string | null
+          id?: string
+          mantra_name?: string
+          status?: string
+          target_count?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      jap_proofs: {
+        Row: {
+          created_at: string
+          id: string
+          notes: string | null
+          performer_id: string
+          proof_type: string
+          proof_url: string
+          request_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          notes?: string | null
+          performer_id: string
+          proof_type?: string
+          proof_url: string
+          request_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          notes?: string | null
+          performer_id?: string
+          proof_type?: string
+          proof_url?: string
+          request_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "jap_proofs_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "jap_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      jap_requests: {
+        Row: {
+          completed_count: number
+          created_at: string
+          deadline: string | null
+          dedicated_to: string | null
+          feedback: string | null
+          id: string
+          karma_reward: number
+          mantra_name: string
+          performer_id: string | null
+          rating: number | null
+          requester_id: string
+          required_count: number
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          completed_count?: number
+          created_at?: string
+          deadline?: string | null
+          dedicated_to?: string | null
+          feedback?: string | null
+          id?: string
+          karma_reward?: number
+          mantra_name: string
+          performer_id?: string | null
+          rating?: number | null
+          requester_id: string
+          required_count: number
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          completed_count?: number
+          created_at?: string
+          deadline?: string | null
+          dedicated_to?: string | null
+          feedback?: string | null
+          id?: string
+          karma_reward?: number
+          mantra_name?: string
+          performer_id?: string | null
+          rating?: number | null
+          requester_id?: string
+          required_count?: number
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       mantra_progress: {
         Row: {
           completed: boolean
@@ -547,6 +699,16 @@ export type Database = {
           total_karma_earned: number
           total_plants: number
           total_water_used: number
+        }[]
+      }
+      get_jap_leaderboard: {
+        Args: { limit_count?: number; mantra_filter?: string }
+        Returns: {
+          avatar_url: string
+          display_name: string
+          mantra_name: string
+          total_chants: number
+          user_id: string
         }[]
       }
       get_stress_statistics: {
