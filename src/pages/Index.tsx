@@ -34,7 +34,7 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="relative min-h-screen bg-background overflow-x-hidden">
+    <div className="homepage-theme relative min-h-screen bg-background overflow-x-hidden">
       {/* Scrollable Content */}
       <main className="relative pb-24 md:pb-0">
         <HeroSection />
