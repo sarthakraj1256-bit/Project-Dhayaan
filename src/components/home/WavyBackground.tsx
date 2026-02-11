@@ -66,7 +66,7 @@ export default function WavyBackground() {
 
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
         {/* Base — deep midnight blue */}
-        <div className="absolute inset-0" style={{ background: '#0B1A2E' }} />
+        <div className="absolute inset-0" style={{ background: '#0B1D3A' }} />
 
         {/* Layer 1 — Deep dark-blue band (top-left sweep) */}
         <svg
@@ -107,13 +107,13 @@ export default function WavyBackground() {
           />
         </svg>
 
-        {/* Layer 3.5 — Dark blue mid-section with smooth gradient blend */}
+        {/* Layer 3.5 — Solid dark blue mid-section */}
         <div
           className="absolute left-0 w-full"
           style={{
             top: '30vh',
             height: '40vh',
-            background: 'linear-gradient(180deg, #0F2847 0%, #0B1A2E 50%, #0F2847 100%)',
+            background: '#0B1D3A',
           }}
         />
 
