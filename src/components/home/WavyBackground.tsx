@@ -1,102 +1,89 @@
 export default function WavyBackground() {
   return (
     <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
-      {/* Base soft gradient */}
-      <div
-        className="absolute inset-0"
-        style={{
-          background: 'linear-gradient(180deg, #F0FDF9 0%, #FFF5F0 40%, #FDF2F8 70%, #F0FDFA 100%)',
-        }}
-      />
+      {/* Base — soft mint */}
+      <div className="absolute inset-0" style={{ background: '#F0FDF9' }} />
 
-      {/* Wave layer 1 — top mint */}
+      {/* Layer 1 — Deep dark-blue band (top-left sweep) */}
       <svg
         className="absolute top-0 left-0 w-full"
-        viewBox="0 0 1440 400"
+        viewBox="0 0 1440 700"
         preserveAspectRatio="none"
-        style={{ height: '45vh' }}
+        style={{ height: '65vh' }}
       >
-        <defs>
-          <linearGradient id="wave1" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#99F6E4" stopOpacity="0.5" />
-            <stop offset="50%" stopColor="#A7F3D0" stopOpacity="0.35" />
-            <stop offset="100%" stopColor="#6EE7B7" stopOpacity="0.2" />
-          </linearGradient>
-        </defs>
         <path
-          d="M0,0 L0,200 C120,280 240,160 480,220 C720,280 840,140 1080,200 C1200,230 1320,180 1440,200 L1440,0 Z"
-          fill="url(#wave1)"
+          d="M0,0 L1440,0 L1440,180 C1200,320 900,380 600,300 C300,220 120,350 0,280 Z"
+          fill="#1E3A5F"
         />
       </svg>
 
-      {/* Wave layer 2 — mid teal */}
+      {/* Layer 2 — Teal ribbon over blue */}
       <svg
         className="absolute top-0 left-0 w-full"
-        viewBox="0 0 1440 350"
+        viewBox="0 0 1440 700"
         preserveAspectRatio="none"
-        style={{ height: '38vh' }}
+        style={{ height: '60vh' }}
       >
-        <defs>
-          <linearGradient id="wave2" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#5EEAD4" stopOpacity="0.25" />
-            <stop offset="50%" stopColor="#2DD4BF" stopOpacity="0.15" />
-            <stop offset="100%" stopColor="#99F6E4" stopOpacity="0.2" />
-          </linearGradient>
-        </defs>
         <path
-          d="M0,0 L0,160 C200,240 400,100 600,180 C800,260 1000,120 1200,180 C1320,210 1380,170 1440,180 L1440,0 Z"
-          fill="url(#wave2)"
+          d="M0,0 L1440,0 L1440,120 C1100,260 800,200 500,260 C200,320 60,200 0,240 Z"
+          fill="#2DD4BF"
         />
       </svg>
 
-      {/* Wave layer 3 — bottom coral/peach */}
+      {/* Layer 3 — Mint panel sliding from top */}
+      <svg
+        className="absolute top-0 left-0 w-full"
+        viewBox="0 0 1440 600"
+        preserveAspectRatio="none"
+        style={{ height: '42vh' }}
+      >
+        <path
+          d="M0,0 L1440,0 L1440,80 C1200,180 960,140 720,180 C480,220 240,140 0,190 Z"
+          fill="#99F6E4"
+        />
+      </svg>
+
+      {/* Layer 4 — Coral / peach band (bottom sweep) */}
       <svg
         className="absolute bottom-0 left-0 w-full"
-        viewBox="0 0 1440 400"
+        viewBox="0 0 1440 600"
+        preserveAspectRatio="none"
+        style={{ height: '50vh' }}
+      >
+        <path
+          d="M0,600 L1440,600 L1440,360 C1200,260 960,340 720,280 C480,220 240,310 0,260 Z"
+          fill="#F87171"
+          opacity="0.55"
+        />
+      </svg>
+
+      {/* Layer 5 — Peach ribbon above coral */}
+      <svg
+        className="absolute bottom-0 left-0 w-full"
+        viewBox="0 0 1440 500"
         preserveAspectRatio="none"
         style={{ height: '40vh' }}
       >
-        <defs>
-          <linearGradient id="wave3" x1="0%" y1="100%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#FECDD3" stopOpacity="0.4" />
-            <stop offset="40%" stopColor="#FED7AA" stopOpacity="0.3" />
-            <stop offset="70%" stopColor="#FBCFE8" stopOpacity="0.25" />
-            <stop offset="100%" stopColor="#FDE68A" stopOpacity="0.15" />
-          </linearGradient>
-        </defs>
         <path
-          d="M0,400 L0,220 C180,140 360,280 540,200 C720,120 900,260 1080,180 C1200,140 1320,220 1440,180 L1440,400 Z"
-          fill="url(#wave3)"
+          d="M0,500 L1440,500 L1440,340 C1100,250 800,320 500,280 C200,240 80,310 0,300 Z"
+          fill="#FBBF24"
+          opacity="0.3"
         />
       </svg>
 
-      {/* Wave layer 4 — subtle peach overlay */}
+      {/* Layer 6 — Soft coral/peach bottom edge */}
       <svg
         className="absolute bottom-0 left-0 w-full"
-        viewBox="0 0 1440 300"
+        viewBox="0 0 1440 400"
         preserveAspectRatio="none"
-        style={{ height: '30vh' }}
+        style={{ height: '32vh' }}
       >
-        <defs>
-          <linearGradient id="wave4" x1="0%" y1="100%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#FDA4AF" stopOpacity="0.2" />
-            <stop offset="50%" stopColor="#FDBA74" stopOpacity="0.15" />
-            <stop offset="100%" stopColor="#FCA5A5" stopOpacity="0.1" />
-          </linearGradient>
-        </defs>
         <path
-          d="M0,300 L0,180 C240,100 480,240 720,160 C960,80 1200,200 1440,140 L1440,300 Z"
-          fill="url(#wave4)"
+          d="M0,400 L1440,400 L1440,280 C1200,200 900,300 600,240 C300,180 100,260 0,220 Z"
+          fill="#FB923C"
+          opacity="0.4"
         />
       </svg>
-
-      {/* Soft radial glow center */}
-      <div
-        className="absolute inset-0"
-        style={{
-          background: 'radial-gradient(ellipse at 50% 30%, rgba(167,243,208,0.15) 0%, transparent 60%)',
-        }}
-      />
     </div>
   );
 }
