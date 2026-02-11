@@ -20,7 +20,7 @@ export default function RelaxationSection() {
       >
         <Link
           to="/sonic-lab"
-          className="block p-5 rounded-2xl bg-card border border-border/60 hover:shadow-sm transition-all duration-200 active:scale-[0.98]"
+          className="block p-5 rounded-xl bg-card hover:brightness-110 transition-all duration-200 active:scale-[0.98]"
         >
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center shrink-0">

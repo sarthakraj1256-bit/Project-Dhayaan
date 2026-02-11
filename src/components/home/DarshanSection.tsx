@@ -29,7 +29,7 @@ export default function DarshanSection() {
           >
             <Link
               to="/live-darshan"
-              className="block rounded-2xl overflow-hidden bg-card border border-border/60 hover:shadow-sm transition-all duration-200 active:scale-[0.98]"
+              className="block rounded-xl overflow-hidden bg-card hover:brightness-110 transition-all duration-200 active:scale-[0.98]"
             >
               <div className="aspect-[4/3] bg-muted relative overflow-hidden">
                 <img

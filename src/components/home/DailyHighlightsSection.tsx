@@ -25,7 +25,7 @@ export default function DailyHighlightsSection() {
           >
             <Link
               to={item.href}
-              className="flex items-center gap-3 p-3.5 rounded-2xl bg-card border border-border/60 hover:shadow-sm transition-all duration-200 active:scale-[0.98]"
+              className="flex items-center gap-3 p-3.5 rounded-xl bg-card hover:brightness-110 transition-all duration-200 active:scale-[0.98]"
             >
               <div className="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
                 <item.icon className="w-4 h-4 text-primary" strokeWidth={1.8} />
