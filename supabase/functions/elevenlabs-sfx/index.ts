@@ -7,6 +7,15 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
+// Atmosphere prompts for ElevenLabs SFX generation
+const atmospherePrompts: Record<string, string> = {
+  rain: "Soft, gentle rain falling on leaves, peaceful and calming ambient sound for meditation, 20 second loop",
+  river: "Peaceful river stream flowing over rocks, gentle water sounds for relaxation and meditation, 20 second loop",
+  bells: "Tibetan temple bells ringing softly and slowly, spiritual meditation ambience, 20 second loop",
+  forest: "Peaceful forest soundscape with birds chirping softly, leaves rustling gently, nature sounds for meditation, 20 second loop",
+  chimes: "Gentle wind chimes in a light breeze, peaceful and meditative ambient sound, 20 second loop",
+};
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
