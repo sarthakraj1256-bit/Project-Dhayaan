@@ -23,7 +23,7 @@ export const usePWAUpdate = (): PWAUpdateState => {
 
   useEffect(() => {
     // Only run in production with service worker support
-    if (!('serviceWorker' in navigator)) {
+    if (!('serviceWorker' in navigator) || import.meta.env.DEV) {
       return;
     }
 
@@ -93,6 +93,11 @@ export const usePWAUpdate = (): PWAUpdateState => {
  */
 export const registerServiceWorker = async (): Promise<void> => {
   if (!('serviceWorker' in navigator)) {
+    return;
+  }
+
+  // Don't register in development - sw.js doesn't exist
+  if (import.meta.env.DEV) {
     return;
   }
 
