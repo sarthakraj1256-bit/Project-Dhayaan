@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
-import { Flame, Calendar, Trophy, TrendingUp } from 'lucide-react';
+import { Flame, Calendar, Trophy } from 'lucide-react';
 import type { JapEntry } from '@/hooks/useJapBank';
 
 interface JapLedgerProps {
@@ -37,10 +37,24 @@ const JapLedger = ({ entries, lifetimeTotal, todayTotal, getTotalForMantra }: Ja
     return s;
   }, [entries]);
 
+  // Streak fire badges
+  const streakLabel = streak >= 30 ? '🔥🔥🔥' : streak >= 7 ? '🔥🔥' : streak >= 1 ? '🔥' : '';
+
   return (
     <div className="space-y-4">
+      {/* Streak Banner */}
+      {streak >= 1 && (
+        <div className="flex items-center justify-center gap-2 rounded-xl bg-primary/10 border border-primary/20 py-3 px-4">
+          <span className="text-2xl">{streakLabel}</span>
+          <span className="text-sm font-semibold text-primary">
+            {streak} Day Streak{streak >= 7 ? ' — Keep it up!' : ''}
+          </span>
+          <span className="text-2xl">{streakLabel}</span>
+        </div>
+      )}
+
       {/* Stats Cards */}
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-3 gap-3">
         <Card className="border-primary/20 bg-card/80">
           <CardContent className="p-4 text-center">
             <Flame className="w-6 h-6 mx-auto text-primary mb-1" />
@@ -60,13 +74,6 @@ const JapLedger = ({ entries, lifetimeTotal, todayTotal, getTotalForMantra }: Ja
             <Trophy className="w-6 h-6 mx-auto text-primary mb-1" />
             <p className="text-2xl font-bold text-primary font-[Cinzel]">{lifetimeTotal.toLocaleString()}</p>
             <p className="text-xs text-muted-foreground">Lifetime</p>
-          </CardContent>
-        </Card>
-        <Card className="border-primary/20 bg-card/80">
-          <CardContent className="p-4 text-center">
-            <TrendingUp className="w-6 h-6 mx-auto text-accent mb-1" />
-            <p className="text-2xl font-bold text-accent font-[Cinzel]">{streak}</p>
-            <p className="text-xs text-muted-foreground">Day Streak</p>
           </CardContent>
         </Card>
       </div>
