@@ -1,5 +1,6 @@
 import { useState, useCallback, useRef } from 'react';
 import { getCachedTTS, setCachedTTS } from '@/lib/audioCache';
+import { supabase } from '@/integrations/backend/client';
 
 // Fallback values to prevent undefined URL issues
 const FALLBACK_SUPABASE_URL = "https://pgavnutkwiiovdvbrbcl.supabase.co";
@@ -152,6 +153,8 @@ export const useGuruVoice = (options: UseGuruVoiceOptions = {}) => {
       
       const supabaseUrl = getSupabaseUrl();
       const supabaseKey = getSupabaseKey();
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = session?.access_token || supabaseKey;
       
       const response = await fetch(
         `${supabaseUrl}/functions/v1/elevenlabs-tts`,
@@ -160,7 +163,7 @@ export const useGuruVoice = (options: UseGuruVoiceOptions = {}) => {
           headers: {
             'Content-Type': 'application/json',
             'apikey': supabaseKey,
-            'Authorization': `Bearer ${supabaseKey}`,
+            'Authorization': `Bearer ${token}`,
           },
           body: JSON.stringify({ text }),
         }
