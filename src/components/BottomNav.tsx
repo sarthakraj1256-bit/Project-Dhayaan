@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Home, Radio, BookOpen, Sparkles, Play } from 'lucide-react';
+import { Home, Radio, BookOpen, Sparkles, Play, ScrollText } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { triggerHaptic } from '@/hooks/useHapticFeedback';
 
@@ -14,6 +14,7 @@ const navItems: NavItem[] = [
   { path: '/', label: 'Home', icon: Home },
   { path: '/sonic-lab', label: 'Sonic', icon: Radio },
   { path: '/mantrochar', label: 'Mantra', icon: BookOpen },
+  { path: '/jap-bank', label: 'Jap', icon: ScrollText },
   { path: '/lakshya', label: 'Lakshya', icon: Sparkles },
   { path: '/live-darshan', label: 'Darshan', icon: Play },
 ];
