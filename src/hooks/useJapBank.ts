@@ -37,6 +37,12 @@ export interface JapRequest {
   status: string;
   rating: number | null;
   feedback: string | null;
+  escrow_amount: number;
+  escrow_status: string;
+  auto_complete_at: string | null;
+  requester_terms_accepted_at: string | null;
+  performer_terms_accepted_at: string | null;
+  sankalpa_receipt: Record<string, unknown> | null;
   created_at: string;
   updated_at: string;
 }
@@ -204,21 +210,40 @@ export function useJapBank() {
   });
 
   const createRequest = useMutation({
-    mutationFn: async (req: { mantraName: string; requiredCount: number; dedicatedTo?: string; deadline?: string; karmaReward?: number }) => {
+    mutationFn: async (req: { mantraName: string; requiredCount: number; dedicatedTo?: string; deadline?: string; karmaReward?: number; escrowAmount?: number }) => {
       if (!userId) throw new Error('Not authenticated');
+      // Fetch requester display name for receipt
+      const { data: profile } = await supabase.from('profiles').select('display_name').eq('user_id', userId).single();
+      const karmaReward = req.karmaReward || 50;
+      const receipt = {
+        devotee_name: profile?.display_name || 'Devotee',
+        mantra: req.mantraName,
+        count: req.requiredCount,
+        performer_name: null,
+        dedicated_to: req.dedicatedTo || null,
+        deadline: req.deadline || null,
+        karma_reward: karmaReward,
+        escrow_amount: req.escrowAmount || 0,
+        created_at: new Date().toISOString(),
+        status: 'pending',
+      };
       const { error } = await supabase.from('jap_requests').insert({
         requester_id: userId,
         mantra_name: req.mantraName,
         required_count: req.requiredCount,
         dedicated_to: req.dedicatedTo || null,
         deadline: req.deadline || null,
-        karma_reward: req.karmaReward || 50,
+        karma_reward: karmaReward,
+        escrow_amount: req.escrowAmount || 0,
+        escrow_status: req.escrowAmount ? 'held' : 'none',
+        requester_terms_accepted_at: new Date().toISOString(),
+        sankalpa_receipt: receipt,
       });
       if (error) throw error;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['jap-requests', userId] });
-      toast.success('🙏 Jap request created!');
+      toast.success('🙏 Jap request created! Sankalpa receipt generated.');
     },
     onError: () => toast.error('Failed to create request'),
   });
@@ -226,15 +251,21 @@ export function useJapBank() {
   const acceptRequest = useMutation({
     mutationFn: async (requestId: string) => {
       if (!userId) throw new Error('Not authenticated');
+      const { data: profile } = await supabase.from('profiles').select('display_name').eq('user_id', userId).single();
+      // Update request and add performer name to receipt
+      const { data: req } = await supabase.from('jap_requests').select('sankalpa_receipt').eq('id', requestId).single();
+      const updatedReceipt = req?.sankalpa_receipt ? { ...(req.sankalpa_receipt as Record<string, unknown>), performer_name: profile?.display_name || 'Devotee', status: 'accepted' } : null;
       const { error } = await supabase.from('jap_requests').update({
         performer_id: userId,
         status: 'accepted',
+        performer_terms_accepted_at: new Date().toISOString(),
+        sankalpa_receipt: updatedReceipt,
       }).eq('id', requestId);
       if (error) throw error;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['jap-requests', userId] });
-      toast.success('You accepted the jap request!');
+      toast.success('🙏 You accepted the Jap Seva!');
     },
   });
 
@@ -249,14 +280,17 @@ export function useJapBank() {
         notes: notes || null,
       });
       if (proofError) throw proofError;
+      // Set auto-complete 48 hours from now
+      const autoCompleteAt = new Date(Date.now() + 48 * 60 * 60 * 1000).toISOString();
       const { error } = await supabase.from('jap_requests').update({
         status: 'proof_submitted',
+        auto_complete_at: autoCompleteAt,
       }).eq('id', requestId);
       if (error) throw error;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['jap-requests', userId] });
-      toast.success('✅ Proof submitted!');
+      toast.success('✅ Proof submitted! Requester has 48 hours to review.');
     },
   });
 
@@ -267,14 +301,25 @@ export function useJapBank() {
         status: 'completed',
         rating: rating || null,
         feedback: feedback || null,
+        escrow_status: 'released',
       }).eq('id', requestId);
       if (error) throw error;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['jap-requests', userId] });
-      toast.success('🎉 Jap request completed!');
+      toast.success('🎉 Jap Seva completed! Funds released to Performer.');
     },
   });
+
+  // Auto-complete check: runs on load to trigger any overdue 48h windows
+  useEffect(() => {
+    if (!userId) return;
+    supabase.rpc('check_auto_complete_requests').then(() => {
+      supabase.rpc('check_expired_requests').then(() => {
+        queryClient.invalidateQueries({ queryKey: ['jap-requests', userId] });
+      });
+    });
+  }, [userId, queryClient]);
 
   // --- Leaderboard ---
   const { data: leaderboard = [] } = useQuery({
