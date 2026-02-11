@@ -9,7 +9,7 @@ export default function DarshanSection() {
   return (
     <section className="px-6 py-5">
       <div className="flex items-center justify-between mb-3">
-        <h2 className="text-xs font-semibold text-foreground/60 uppercase tracking-widest">
+        <h2 className="text-xs font-semibold text-foreground/50 uppercase tracking-widest">
           Temple Darshan
         </h2>
         <Link to="/live-darshan" className="text-xs text-primary font-medium flex items-center gap-1 hover:underline">
@@ -29,7 +29,7 @@ export default function DarshanSection() {
           >
             <Link
               to="/live-darshan"
-              className="block rounded-2xl overflow-hidden bg-white/60 backdrop-blur-sm border border-white/50 shadow-[0_2px_12px_rgba(0,0,0,0.04)] hover:shadow-[0_4px_20px_rgba(0,0,0,0.08)] hover:bg-white/75 transition-all duration-200 active:scale-[0.98]"
+              className="block rounded-2xl overflow-hidden bg-white/[0.07] backdrop-blur-md border border-white/[0.12] shadow-[0_2px_16px_rgba(0,0,0,0.2)] hover:shadow-[0_4px_24px_rgba(0,0,0,0.3)] hover:bg-white/[0.12] transition-all duration-200 active:scale-[0.98]"
             >
               <div className="aspect-[4/3] bg-muted relative overflow-hidden">
                 <img
@@ -39,7 +39,7 @@ export default function DarshanSection() {
                   loading="lazy"
                 />
                 <div className="absolute top-2 left-2">
-                  <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-white/80 backdrop-blur-sm text-[10px] font-medium text-foreground">
+                  <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-black/40 backdrop-blur-sm text-[10px] font-medium text-white/90">
                     <span className="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse" />
                     Live
                   </span>

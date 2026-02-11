@@ -73,25 +73,25 @@
     --sidebar-ring: 38 75% 55%;
   }
 
-  /* Homepage — Soft Pastel Wave Theme */
+  /* Homepage — Deep Navy + Vibrant Accent Theme */
   .homepage-theme {
-    --background: 160 30% 97%;        /* #F0FDF9 Soft mint white */
-    --foreground: 220 20% 14%;        /* #1E293B Dark slate for text */
-    --card: 0 0% 100% / 0.7;          /* White glass cards */
-    --card-foreground: 220 20% 14%;   /* Dark text on cards */
-    --popover: 0 0% 100%;
-    --popover-foreground: 220 20% 14%;
-    --primary: 166 56% 42%;           /* #2AA88A Soft teal */
-    --primary-foreground: 0 0% 100%;
-    --secondary: 12 80% 72%;          /* #F0937A Soft coral */
-    --secondary-foreground: 220 20% 14%;
-    --muted: 160 15% 92%;
-    --muted-foreground: 220 10% 42%;  /* Medium-dark for secondary text */
-    --accent: 166 56% 42%;            /* Teal accent */
-    --accent-foreground: 0 0% 100%;
-    --border: 160 15% 88%;
-    --input: 160 15% 90%;
-    --ring: 166 56% 42%;
+    --background: 215 55% 11%;          /* #0B1A2E Deep midnight */
+    --foreground: 210 20% 95%;          /* #EDF2F7 Bright off-white */
+    --card: 215 40% 18% / 0.75;         /* Frosted navy glass */
+    --card-foreground: 210 20% 95%;     /* Bright text on cards */
+    --popover: 215 40% 16%;
+    --popover-foreground: 210 20% 95%;
+    --primary: 166 56% 50%;             /* #2DD4A8 Vibrant teal */
+    --primary-foreground: 215 55% 8%;
+    --secondary: 12 80% 72%;            /* #F0937A Soft coral */
+    --secondary-foreground: 210 20% 95%;
+    --muted: 215 30% 22%;
+    --muted-foreground: 210 15% 68%;    /* Soft light grey for secondary */
+    --accent: 166 56% 50%;              /* Teal accent */
+    --accent-foreground: 215 55% 8%;
+    --border: 215 25% 28%;
+    --input: 215 30% 22%;
+    --ring: 166 56% 50%;
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 98%;
   }

@@ -56,7 +56,7 @@ const Index = () => {
          ) : (
            <Link
              to="/auth"
-             className="flex items-center gap-2 px-3.5 py-2 rounded-full bg-white/70 backdrop-blur-sm border border-white/50 text-sm font-medium text-foreground shadow-[0_2px_8px_rgba(0,0,0,0.06)] transition-all duration-200 hover:bg-white/85 active:scale-95"
+             className="flex items-center gap-2 px-3.5 py-2 rounded-full bg-white/[0.1] backdrop-blur-md border border-white/[0.15] text-sm font-medium text-foreground shadow-[0_2px_12px_rgba(0,0,0,0.2)] transition-all duration-200 hover:bg-white/[0.18] active:scale-95"
            >
              <LogIn className="w-4 h-4 text-primary" />
              Sign in
