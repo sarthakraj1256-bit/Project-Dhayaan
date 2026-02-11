@@ -1,14 +1,18 @@
-import { Suspense, lazy } from 'react';
+import { Suspense, lazy, useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowLeft, BookOpen, Target, HandHeart, Trophy, Building2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Input } from '@/components/ui/input';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useJapBank } from '@/hooks/useJapBank';
+import { useJapBank, PRESET_MANTRAS } from '@/hooks/useJapBank';
 import { useJapGoalReminders } from '@/hooks/useJapGoalReminders';
 import BottomNav from '@/components/BottomNav';
 
 const JapCounter = lazy(() => import('@/components/jap-bank/JapCounter'));
+const MantraBreakdown = lazy(() => import('@/components/jap-bank/MantraBreakdown'));
+const MiniWeekCalendar = lazy(() => import('@/components/jap-bank/MiniWeekCalendar'));
 const JapLedger = lazy(() => import('@/components/jap-bank/JapLedger'));
 const JapGoals = lazy(() => import('@/components/jap-bank/JapGoals'));
 const JapLeaderboard = lazy(() => import('@/components/jap-bank/JapLeaderboard'));
@@ -29,12 +33,37 @@ const JapBank = () => {
 
   useJapGoalReminders(goals, isAuthenticated);
 
+  const [selectedMantra, setSelectedMantra] = useState(PRESET_MANTRAS[0]);
+  const [customMantra, setCustomMantra] = useState('');
+  const [selectedDate, setSelectedDate] = useState(() => new Date().toISOString().slice(0, 10));
+
+  const mantraName = selectedMantra === 'custom' ? customMantra.trim() : selectedMantra;
+
+  // Stats for selected date
+  const dateStats = useMemo(() => {
+    const dateEntries = entries.filter(e => new Date(e.created_at).toISOString().slice(0, 10) === selectedDate);
+    const total = dateEntries.reduce((sum, e) => sum + e.chant_count, 0);
+    const mantras = new Map<string, number>();
+    dateEntries.forEach(e => mantras.set(e.mantra_name, (mantras.get(e.mantra_name) || 0) + e.chant_count));
+    return { total, mantras };
+  }, [entries, selectedDate]);
+
+  const mantraLifetimeCount = useMemo(() => getTotalForMantra(mantraName || ''), [mantraName, getTotalForMantra]);
+
+  const mantraTodayCount = useMemo(() => {
+    const todayStr = new Date().toDateString();
+    return entries
+      .filter(e => e.mantra_name === mantraName && new Date(e.created_at).toDateString() === todayStr)
+      .reduce((sum, e) => sum + e.chant_count, 0);
+  }, [entries, mantraName]);
+
   return (
     <div className="min-h-screen bg-background pb-28">
       <Suspense fallback={null}><GoalConfetti /></Suspense>
-      {/* Header */}
+
+      {/* Compact Header */}
       <div
-        className="relative px-4 pt-12 pb-6 safe-top"
+        className="relative px-4 pt-10 pb-4 safe-top"
         style={{ background: 'linear-gradient(180deg, hsl(var(--void)), hsl(var(--void-light)))' }}
       >
         <Link to="/" className="absolute top-4 left-4 p-2 text-muted-foreground hover:text-foreground safe-top">
@@ -45,24 +74,9 @@ const JapBank = () => {
           animate={{ opacity: 1, y: 0 }}
           className="text-center"
         >
-          <h1 className="text-2xl font-bold text-primary font-[Cinzel] tracking-wide">
-            📿 Jap Bank
+          <h1 className="text-xl font-bold text-primary font-[Cinzel] tracking-wide">
+            📿 Jap Seva
           </h1>
-          <p className="text-sm text-muted-foreground mt-1">
-            Your spiritual chanting ledger
-          </p>
-          {isAuthenticated && (
-            <div className="flex justify-center gap-6 mt-3">
-              <div className="text-center">
-                <p className="text-xl font-bold text-primary font-[Cinzel]">{todayTotal}</p>
-                <p className="text-[10px] text-muted-foreground">Today</p>
-              </div>
-              <div className="text-center">
-                <p className="text-xl font-bold text-accent font-[Cinzel]">{lifetimeTotal.toLocaleString()}</p>
-                <p className="text-[10px] text-muted-foreground">Lifetime</p>
-              </div>
-            </div>
-          )}
         </motion.div>
       </div>
 
@@ -72,7 +86,7 @@ const JapBank = () => {
           <Link to="/auth" className="text-primary underline font-semibold">Sign In</Link>
         </div>
       ) : (
-        <div className="px-4 mt-4">
+        <div className="px-4 mt-2">
           <Tabs defaultValue="bank">
             <TabsList className="w-full flex overflow-x-auto gap-1 h-auto flex-wrap">
               <TabsTrigger value="bank" className="flex-1 min-w-[60px] text-xs gap-1">
@@ -92,18 +106,106 @@ const JapBank = () => {
               </TabsTrigger>
             </TabsList>
 
-            <TabsContent value="bank" className="mt-4 space-y-4">
+            <TabsContent value="bank" className="mt-3 space-y-0">
               <Suspense fallback={<Fallback />}>
-                <JapCounter
-                  onSave={(name, count) => addEntry.mutate({ mantraName: name, count })}
-                  isSaving={addEntry.isPending}
-                />
-                <JapLedger
+                {/* 1. TOP: Mantra Selection + Breakdown */}
+                <div className="space-y-3 mb-3">
+                  <Select value={selectedMantra} onValueChange={setSelectedMantra}>
+                    <SelectTrigger className="bg-muted border-border">
+                      <SelectValue placeholder="Select Mantra" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {PRESET_MANTRAS.map(m => (
+                        <SelectItem key={m} value={m}>{m}</SelectItem>
+                      ))}
+                      <SelectItem value="custom">✏️ Custom Mantra</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  {selectedMantra === 'custom' && (
+                    <Input
+                      placeholder="Enter your mantra..."
+                      value={customMantra}
+                      onChange={e => setCustomMantra(e.target.value)}
+                      maxLength={200}
+                      className="bg-muted border-border"
+                    />
+                  )}
+
+                  <MantraBreakdown
+                    mantraName={mantraName || PRESET_MANTRAS[0]}
+                    todayCount={mantraTodayCount}
+                    lifetimeCount={mantraLifetimeCount}
+                  />
+                </div>
+
+                {/* Soft divider */}
+                <div className="py-1">
+                  <div className="h-px w-full" style={{ background: 'linear-gradient(90deg, transparent, hsl(var(--gold) / 0.25), transparent)' }} />
+                </div>
+
+                {/* 2. MIDDLE: Mini Week Calendar */}
+                <MiniWeekCalendar
                   entries={entries}
-                  lifetimeTotal={lifetimeTotal}
-                  todayTotal={todayTotal}
-                  getTotalForMantra={getTotalForMantra}
+                  goals={goals}
+                  selectedDate={selectedDate}
+                  onSelectDate={setSelectedDate}
                 />
+
+                {/* Date stats */}
+                {dateStats.total > 0 && (
+                  <motion.div
+                    key={selectedDate}
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="rounded-lg px-4 py-2.5 mb-3"
+                    style={{
+                      background: 'hsl(var(--void-light) / 0.5)',
+                      border: '1px solid hsl(var(--gold) / 0.1)',
+                    }}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-muted-foreground">
+                        {selectedDate === new Date().toISOString().slice(0, 10) ? 'Today' : new Date(selectedDate + 'T00:00').toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
+                      </span>
+                      <span className="text-sm font-semibold text-primary font-[Cinzel]">
+                        {dateStats.total.toLocaleString()} chants
+                      </span>
+                    </div>
+                    {dateStats.mantras.size > 1 && (
+                      <div className="flex flex-wrap gap-2 mt-1.5">
+                        {Array.from(dateStats.mantras.entries()).map(([name, cnt]) => (
+                          <span key={name} className="text-[10px] text-muted-foreground">
+                            {name}: <span className="text-foreground/80">{cnt.toLocaleString()}</span>
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </motion.div>
+                )}
+
+                {/* Soft divider */}
+                <div className="py-1">
+                  <div className="h-px w-full" style={{ background: 'linear-gradient(90deg, transparent, hsl(var(--gold) / 0.25), transparent)' }} />
+                </div>
+
+                {/* 3. BOTTOM: Tap Counter */}
+                <div className="pt-2">
+                  <JapCounter
+                    onSave={(name, count) => addEntry.mutate({ mantraName: name, count })}
+                    isSaving={addEntry.isPending}
+                    selectedMantra={mantraName || PRESET_MANTRAS[0]}
+                  />
+                </div>
+
+                {/* Ledger below (scrollable) */}
+                <div className="mt-4">
+                  <JapLedger
+                    entries={entries}
+                    lifetimeTotal={lifetimeTotal}
+                    todayTotal={todayTotal}
+                    getTotalForMantra={getTotalForMantra}
+                  />
+                </div>
               </Suspense>
             </TabsContent>
 

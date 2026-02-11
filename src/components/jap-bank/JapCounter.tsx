@@ -1,17 +1,13 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Minus, RotateCcw, Save, AlertTriangle } from 'lucide-react';
+import { Plus, Minus, RotateCcw, Save, AlertTriangle, Keyboard } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { PRESET_MANTRAS } from '@/hooks/useJapBank';
 import { triggerHaptic } from '@/hooks/useHapticFeedback';
 
-// Average chanting speed: ~10 chants/minute is fast, ~15/min is extreme
 const MAX_CHANTS_PER_MINUTE = 15;
-const MANUAL_WARNING_THRESHOLD = 1080; // ~1hr at max speed
+const MANUAL_WARNING_THRESHOLD = 1080;
 const MANUAL_HARD_LIMIT = 100000;
 
 const validateTapSpeed = (count: number, elapsedMs: number): { valid: boolean; warning: string | null } => {
@@ -34,40 +30,51 @@ const validateManualEntry = (count: number): { valid: boolean; warning: string |
   return { valid: true, warning: null };
 };
 
+interface RippleItem {
+  id: number;
+  x: number;
+  y: number;
+}
+
 interface JapCounterProps {
   onSave: (mantraName: string, count: number) => void;
   isSaving: boolean;
+  selectedMantra: string;
 }
 
-const JapCounter = ({ onSave, isSaving }: JapCounterProps) => {
-  const [selectedMantra, setSelectedMantra] = useState(PRESET_MANTRAS[0]);
-  const [customMantra, setCustomMantra] = useState('');
+const JapCounter = ({ onSave, isSaving, selectedMantra }: JapCounterProps) => {
   const [count, setCount] = useState(0);
   const [manualCount, setManualCount] = useState('');
-  const [mode, setMode] = useState<'tap' | 'manual'>('tap');
+  const [showManual, setShowManual] = useState(false);
+  const [ripples, setRipples] = useState<RippleItem[]>([]);
   const tapStartTime = useRef<number | null>(null);
+  const rippleId = useRef(0);
 
-  const mantraName = selectedMantra === 'custom' ? customMantra.trim() : selectedMantra;
+  const mantraName = selectedMantra;
 
-  // Reset timer when count resets
   useEffect(() => {
     if (count === 0) tapStartTime.current = null;
   }, [count]);
 
-  const handleTap = () => {
+  const handleTap = useCallback(() => {
     if (tapStartTime.current === null) tapStartTime.current = Date.now();
     setCount(prev => prev + 1);
     triggerHaptic('light');
-  };
 
-  // Validation state
+    // Spawn ripple
+    const id = ++rippleId.current;
+    const xOffset = (Math.random() - 0.5) * 40;
+    setRipples(prev => [...prev, { id, x: xOffset, y: 0 }]);
+    setTimeout(() => setRipples(prev => prev.filter(r => r.id !== id)), 1200);
+  }, []);
+
   const tapElapsed = tapStartTime.current ? Date.now() - tapStartTime.current : 0;
   const tapValidation = validateTapSpeed(count, tapElapsed);
   const manualParsed = parseInt(manualCount) || 0;
   const manualValidation = validateManualEntry(manualParsed);
 
-  const currentValidation = mode === 'tap' ? tapValidation : manualValidation;
-  const finalCount = mode === 'tap' ? count : manualParsed;
+  const currentValidation = showManual ? manualValidation : tapValidation;
+  const finalCount = showManual ? manualParsed : count;
 
   const handleSave = () => {
     if (!mantraName || finalCount <= 0 || !currentValidation.valid) return;
@@ -79,134 +86,152 @@ const JapCounter = ({ onSave, isSaving }: JapCounterProps) => {
   };
 
   return (
-    <Card className="border-primary/20 bg-card/80 backdrop-blur-sm">
-      <CardHeader className="pb-3">
-        <CardTitle className="text-lg text-primary">🙏 Chant Counter</CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        {/* Mantra Selection */}
-        <div className="space-y-2">
-          <Select value={selectedMantra} onValueChange={setSelectedMantra}>
-            <SelectTrigger className="bg-muted border-border">
-              <SelectValue placeholder="Select Mantra" />
-            </SelectTrigger>
-            <SelectContent>
-              {PRESET_MANTRAS.map(m => (
-                <SelectItem key={m} value={m}>{m}</SelectItem>
-              ))}
-              <SelectItem value="custom">✏️ Custom Mantra</SelectItem>
-            </SelectContent>
-          </Select>
-          {selectedMantra === 'custom' && (
-            <Input
-              placeholder="Enter your mantra..."
-              value={customMantra}
-              onChange={e => setCustomMantra(e.target.value)}
-              maxLength={200}
-              className="bg-muted border-border"
-            />
-          )}
-        </div>
-
-        {/* Mode Tabs */}
-        <Tabs value={mode} onValueChange={v => setMode(v as 'tap' | 'manual')}>
-          <TabsList className="w-full">
-            <TabsTrigger value="tap" className="flex-1">Tap Counter</TabsTrigger>
-            <TabsTrigger value="manual" className="flex-1">Manual Entry</TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="tap" className="mt-4">
-            <div className="flex flex-col items-center gap-4">
-              {/* Big counter display */}
-              <motion.div
-                key={count}
-                initial={{ scale: 1.3, opacity: 0.5 }}
-                animate={{ scale: 1, opacity: 1 }}
-                className="text-6xl font-bold text-primary font-[Cinzel]"
-              >
-                {count}
-              </motion.div>
-
-              {/* Tap button */}
-              <motion.button
-                whileTap={{ scale: 0.92 }}
-                onClick={handleTap}
-                className="w-28 h-28 rounded-full flex items-center justify-center text-primary-foreground font-bold text-lg touch-target"
-                style={{
-                  background: 'linear-gradient(135deg, hsl(var(--primary)), hsl(var(--gold-light)))',
-                  boxShadow: '0 0 30px hsl(var(--gold) / 0.4)',
-                }}
-              >
-                <Plus className="w-10 h-10" />
-              </motion.button>
-
-              <div className="flex gap-3">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => { setCount(prev => Math.max(0, prev - 1)); triggerHaptic('light'); }}
-                >
-                  <Minus className="w-4 h-4" />
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => { setCount(0); triggerHaptic('light'); }}
-                >
-                  <RotateCcw className="w-4 h-4" />
-                </Button>
-              </div>
-            </div>
-          </TabsContent>
-
-          <TabsContent value="manual" className="mt-4">
-            <div className="flex gap-3 items-end">
-              <div className="flex-1">
-                <Input
-                  type="number"
-                  placeholder="Enter chant count"
-                  value={manualCount}
-                  onChange={e => setManualCount(e.target.value)}
-                  min={1}
-                  max={MANUAL_HARD_LIMIT}
-                  className="bg-muted border-border text-lg h-12"
-                />
-              </div>
-            </div>
-          </TabsContent>
-        </Tabs>
-
-        {/* Speed Validation Warning */}
+    <div className="space-y-3">
+      {/* Ripples that float upward */}
+      <div className="relative h-0 overflow-visible pointer-events-none">
         <AnimatePresence>
-          {currentValidation.warning && (
+          {ripples.map(r => (
             <motion.div
-              initial={{ opacity: 0, y: -8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              className={`flex items-start gap-2 rounded-lg p-3 text-sm ${
-                currentValidation.valid
-                  ? 'bg-accent/10 text-accent border border-accent/20'
-                  : 'bg-destructive/10 text-destructive border border-destructive/20'
-              }`}
+              key={r.id}
+              initial={{ opacity: 0.7, y: 0, x: r.x, scale: 0.5 }}
+              animate={{ opacity: 0, y: -120, scale: 1.5 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 1.2, ease: 'easeOut' }}
+              className="absolute left-1/2 -translate-x-1/2 bottom-0"
             >
-              <AlertTriangle className="w-4 h-4 mt-0.5 flex-shrink-0" />
-              <span>{currentValidation.warning}</span>
+              <div
+                className="w-6 h-6 rounded-full"
+                style={{
+                  background: 'radial-gradient(circle, hsl(var(--gold) / 0.6), transparent)',
+                }}
+              />
             </motion.div>
-          )}
+          ))}
         </AnimatePresence>
+      </div>
 
-        {/* Save Button */}
-        <Button
-          onClick={handleSave}
-          disabled={isSaving || !mantraName || finalCount <= 0 || !currentValidation.valid}
-          className="w-full"
-          size="lg"
-        >
-          <Save className="w-4 h-4 mr-2" />
-          {isSaving ? 'Saving...' : 'Save to Jap Bank'}
-        </Button>
-      </CardContent>
-    </Card>
+      {/* Validation Warning */}
+      <AnimatePresence>
+        {currentValidation.warning && (
+          <motion.div
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            className={`flex items-start gap-2 rounded-lg p-3 text-sm ${
+              currentValidation.valid
+                ? 'bg-accent/10 text-accent border border-accent/20'
+                : 'bg-destructive/10 text-destructive border border-destructive/20'
+            }`}
+          >
+            <AlertTriangle className="w-4 h-4 mt-0.5 flex-shrink-0" />
+            <span>{currentValidation.warning}</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {showManual ? (
+        /* Manual Entry Mode */
+        <div className="flex gap-2 items-center">
+          <Input
+            type="number"
+            placeholder="Enter chant count"
+            value={manualCount}
+            onChange={e => setManualCount(e.target.value)}
+            min={1}
+            max={MANUAL_HARD_LIMIT}
+            className="bg-muted border-border text-lg h-12 flex-1"
+            autoFocus
+          />
+          <Button
+            onClick={handleSave}
+            disabled={isSaving || manualParsed <= 0 || !manualValidation.valid}
+            size="lg"
+            className="h-12 px-5"
+          >
+            <Save className="w-4 h-4 mr-1.5" />
+            Save
+          </Button>
+          <Button variant="ghost" size="icon" className="h-12 w-12" onClick={() => setShowManual(false)}>
+            <Plus className="w-5 h-5" />
+          </Button>
+        </div>
+      ) : (
+        /* Tap Counter Mode */
+        <div className="flex items-center gap-4">
+          {/* Controls left */}
+          <div className="flex flex-col gap-1.5">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-9 w-9 rounded-full border border-border/50 text-muted-foreground"
+              onClick={() => { setCount(prev => Math.max(0, prev - 1)); triggerHaptic('light'); }}
+            >
+              <Minus className="w-3.5 h-3.5" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-9 w-9 rounded-full border border-border/50 text-muted-foreground"
+              onClick={() => { setCount(0); triggerHaptic('light'); }}
+            >
+              <RotateCcw className="w-3.5 h-3.5" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-9 w-9 rounded-full border border-border/50 text-muted-foreground"
+              onClick={() => setShowManual(true)}
+              title="Manual entry"
+            >
+              <Keyboard className="w-3.5 h-3.5" />
+            </Button>
+          </div>
+
+          {/* Big tap button */}
+          <div className="flex-1 flex flex-col items-center gap-2 relative">
+            <motion.div
+              key={count}
+              initial={{ scale: 1.2, opacity: 0.5 }}
+              animate={{ scale: 1, opacity: 1 }}
+              className="text-4xl font-bold text-primary font-[Cinzel]"
+            >
+              {count}
+            </motion.div>
+
+            <motion.button
+              whileTap={{ scale: 0.9 }}
+              onClick={handleTap}
+              className="w-24 h-24 rounded-full flex items-center justify-center text-primary-foreground font-bold touch-target select-touch-none"
+              style={{
+                background: 'linear-gradient(135deg, hsl(var(--primary)), hsl(var(--gold-light)))',
+                boxShadow: count > 0
+                  ? '0 0 40px hsl(var(--gold) / 0.5), 0 0 80px hsl(var(--gold) / 0.2)'
+                  : '0 0 20px hsl(var(--gold) / 0.3)',
+                transition: 'box-shadow 0.3s ease',
+              }}
+            >
+              <Plus className="w-9 h-9" />
+            </motion.button>
+          </div>
+
+          {/* Save button right */}
+          <div className="flex flex-col items-center gap-1.5">
+            <Button
+              onClick={handleSave}
+              disabled={isSaving || count <= 0 || !tapValidation.valid}
+              size="icon"
+              className="h-12 w-12 rounded-full"
+              style={{
+                background: count > 0 ? 'linear-gradient(135deg, hsl(var(--accent)), hsl(var(--gold-light)))' : undefined,
+              }}
+            >
+              <Save className="w-5 h-5" />
+            </Button>
+            <span className="text-[10px] text-muted-foreground">Save</span>
+          </div>
+        </div>
+      )}
+    </div>
   );
 };
 
