@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Minus, RotateCcw, Save } from 'lucide-react';
+import { Plus, Minus, RotateCcw, Save, AlertTriangle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -8,6 +8,31 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { PRESET_MANTRAS } from '@/hooks/useJapBank';
 import { triggerHaptic } from '@/hooks/useHapticFeedback';
+
+// Average chanting speed: ~10 chants/minute is fast, ~15/min is extreme
+const MAX_CHANTS_PER_MINUTE = 15;
+const MANUAL_WARNING_THRESHOLD = 1080; // ~1hr at max speed
+const MANUAL_HARD_LIMIT = 100000;
+
+const validateTapSpeed = (count: number, elapsedMs: number): { valid: boolean; warning: string | null } => {
+  if (count <= 0) return { valid: true, warning: null };
+  const minutes = elapsedMs / 60000;
+  if (minutes < 0.1) return { valid: true, warning: null };
+  const rate = count / minutes;
+  if (rate > MAX_CHANTS_PER_MINUTE * 2) {
+    return { valid: false, warning: `Speed of ${Math.round(rate)}/min seems unrealistic. Average is 5–10/min.` };
+  }
+  if (rate > MAX_CHANTS_PER_MINUTE) {
+    return { valid: true, warning: `Chanting at ${Math.round(rate)}/min — that's very fast!` };
+  }
+  return { valid: true, warning: null };
+};
+
+const validateManualEntry = (count: number): { valid: boolean; warning: string | null } => {
+  if (count > MANUAL_HARD_LIMIT) return { valid: false, warning: `Maximum ${MANUAL_HARD_LIMIT.toLocaleString()} per entry.` };
+  if (count > MANUAL_WARNING_THRESHOLD) return { valid: true, warning: `${count.toLocaleString()} chants is a large claim. Please ensure accuracy. 🙏` };
+  return { valid: true, warning: null };
+};
 
 interface JapCounterProps {
   onSave: (mantraName: string, count: number) => void;
@@ -20,20 +45,36 @@ const JapCounter = ({ onSave, isSaving }: JapCounterProps) => {
   const [count, setCount] = useState(0);
   const [manualCount, setManualCount] = useState('');
   const [mode, setMode] = useState<'tap' | 'manual'>('tap');
+  const tapStartTime = useRef<number | null>(null);
 
   const mantraName = selectedMantra === 'custom' ? customMantra.trim() : selectedMantra;
 
+  // Reset timer when count resets
+  useEffect(() => {
+    if (count === 0) tapStartTime.current = null;
+  }, [count]);
+
   const handleTap = () => {
+    if (tapStartTime.current === null) tapStartTime.current = Date.now();
     setCount(prev => prev + 1);
     triggerHaptic('light');
   };
 
+  // Validation state
+  const tapElapsed = tapStartTime.current ? Date.now() - tapStartTime.current : 0;
+  const tapValidation = validateTapSpeed(count, tapElapsed);
+  const manualParsed = parseInt(manualCount) || 0;
+  const manualValidation = validateManualEntry(manualParsed);
+
+  const currentValidation = mode === 'tap' ? tapValidation : manualValidation;
+  const finalCount = mode === 'tap' ? count : manualParsed;
+
   const handleSave = () => {
-    const finalCount = mode === 'tap' ? count : parseInt(manualCount) || 0;
-    if (!mantraName || finalCount <= 0) return;
+    if (!mantraName || finalCount <= 0 || !currentValidation.valid) return;
     onSave(mantraName, finalCount);
     setCount(0);
     setManualCount('');
+    tapStartTime.current = null;
     triggerHaptic('success');
   };
 
@@ -127,7 +168,7 @@ const JapCounter = ({ onSave, isSaving }: JapCounterProps) => {
                   value={manualCount}
                   onChange={e => setManualCount(e.target.value)}
                   min={1}
-                  max={100000}
+                  max={MANUAL_HARD_LIMIT}
                   className="bg-muted border-border text-lg h-12"
                 />
               </div>
@@ -135,10 +176,29 @@ const JapCounter = ({ onSave, isSaving }: JapCounterProps) => {
           </TabsContent>
         </Tabs>
 
+        {/* Speed Validation Warning */}
+        <AnimatePresence>
+          {currentValidation.warning && (
+            <motion.div
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              className={`flex items-start gap-2 rounded-lg p-3 text-sm ${
+                currentValidation.valid
+                  ? 'bg-accent/10 text-accent border border-accent/20'
+                  : 'bg-destructive/10 text-destructive border border-destructive/20'
+              }`}
+            >
+              <AlertTriangle className="w-4 h-4 mt-0.5 flex-shrink-0" />
+              <span>{currentValidation.warning}</span>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* Save Button */}
         <Button
           onClick={handleSave}
-          disabled={isSaving || !mantraName || (mode === 'tap' ? count <= 0 : !manualCount || parseInt(manualCount) <= 0)}
+          disabled={isSaving || !mantraName || finalCount <= 0 || !currentValidation.valid}
           className="w-full"
           size="lg"
         >
