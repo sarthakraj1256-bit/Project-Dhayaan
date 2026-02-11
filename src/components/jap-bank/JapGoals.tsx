@@ -3,8 +3,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Progress } from '@/components/ui/progress';
 import { Target, Plus, CheckCircle2 } from 'lucide-react';
+import RadialProgress from './RadialProgress';
 import { PRESET_MANTRAS, type JapGoal } from '@/hooks/useJapBank';
 
 interface JapGoalsProps {
@@ -90,26 +90,32 @@ const JapGoals = ({ goals, onCreateGoal, isCreating }: JapGoalsProps) => {
           <h3 className="text-sm font-semibold text-primary flex items-center gap-2">
             <Target className="w-4 h-4" /> Active Goals
           </h3>
-          {activeGoals.map(g => (
-            <Card key={g.id} className="border-primary/20 bg-card/80">
-              <CardContent className="p-4 space-y-2">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <p className="font-semibold text-foreground">{g.mantra_name}</p>
-                    {g.dedication && <p className="text-xs text-muted-foreground">For: {g.dedication}</p>}
+          {activeGoals.map(g => {
+            const pct = (g.current_count / g.target_count) * 100;
+            return (
+              <Card key={g.id} className="border-primary/20 bg-card/80">
+                <CardContent className="p-4">
+                  <div className="flex items-center gap-4">
+                    <RadialProgress
+                      percentage={pct}
+                      current={g.current_count}
+                      target={g.target_count}
+                    />
+                    <div className="flex-1 min-w-0 space-y-1">
+                      <p className="font-semibold text-foreground truncate">{g.mantra_name}</p>
+                      {g.dedication && <p className="text-xs text-muted-foreground truncate">For: {g.dedication}</p>}
+                      <p className="text-xs text-muted-foreground">
+                        {g.current_count.toLocaleString()} / {g.target_count.toLocaleString()} chants
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {g.deadline ? `Due: ${new Date(g.deadline).toLocaleDateString()}` : 'No deadline'}
+                      </p>
+                    </div>
                   </div>
-                  <span className="text-xs text-muted-foreground">
-                    {g.deadline ? `Due: ${new Date(g.deadline).toLocaleDateString()}` : 'No deadline'}
-                  </span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">{g.current_count.toLocaleString()} / {g.target_count.toLocaleString()}</span>
-                  <span className="text-primary font-semibold">{Math.round((g.current_count / g.target_count) * 100)}%</span>
-                </div>
-                <Progress value={(g.current_count / g.target_count) * 100} className="h-2" />
-              </CardContent>
-            </Card>
-          ))}
+                </CardContent>
+              </Card>
+            );
+          })}
         </div>
       )}
 
