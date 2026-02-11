@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
-import { Flame, Calendar, Trophy } from 'lucide-react';
+import { Flame, Trophy } from 'lucide-react';
 import type { JapEntry } from '@/hooks/useJapBank';
 
 interface JapLedgerProps {
@@ -17,14 +17,6 @@ const JapLedger = ({ entries, lifetimeTotal, todayTotal, getTotalForMantra }: Ja
     return Array.from(names);
   }, [entries]);
 
-  const weeklyTotal = useMemo(() => {
-    const weekAgo = new Date();
-    weekAgo.setDate(weekAgo.getDate() - 7);
-    return entries
-      .filter(e => new Date(e.created_at) >= weekAgo)
-      .reduce((sum, e) => sum + e.chant_count, 0);
-  }, [entries]);
-
   // Streak calculation
   const streak = useMemo(() => {
     const days = new Set(entries.map(e => new Date(e.created_at).toDateString()));
@@ -36,52 +28,6 @@ const JapLedger = ({ entries, lifetimeTotal, todayTotal, getTotalForMantra }: Ja
     }
     return s;
   }, [entries]);
-
-  // Heatmap: last 7 full weeks aligned to Monday
-  const heatmapData = useMemo(() => {
-    const dailyCounts: Record<string, number> = {};
-    entries.forEach(e => {
-      const key = new Date(e.created_at).toISOString().slice(0, 10);
-      dailyCounts[key] = (dailyCounts[key] || 0) + e.chant_count;
-    });
-
-    // Find the Monday that starts the grid (7 weeks back from this week's Monday)
-    const today = new Date();
-    const todayDow = today.getDay(); // 0=Sun
-    const mondayOffset = todayDow === 0 ? 6 : todayDow - 1;
-    const thisMonday = new Date(today);
-    thisMonday.setDate(today.getDate() - mondayOffset);
-    thisMonday.setHours(0, 0, 0, 0);
-
-    const startMonday = new Date(thisMonday);
-    startMonday.setDate(startMonday.getDate() - 6 * 7); // 7 weeks total
-
-    const days: { dateStr: string; count: number; isToday: boolean; isFuture: boolean }[] = [];
-    const todayStr = today.toISOString().slice(0, 10);
-
-    for (let i = 0; i < 7 * 7; i++) {
-      const d = new Date(startMonday);
-      d.setDate(d.getDate() + i);
-      const dateStr = d.toISOString().slice(0, 10);
-      days.push({
-        dateStr,
-        count: dailyCounts[dateStr] || 0,
-        isToday: dateStr === todayStr,
-        isFuture: d > today,
-      });
-    }
-    const maxCount = Math.max(...days.map(d => d.count), 1);
-    return { days, maxCount };
-  }, [entries]);
-
-  const getHeatColor = (count: number, max: number) => {
-    if (count === 0) return 'bg-muted/50';
-    const ratio = count / max;
-    if (ratio > 0.75) return 'bg-primary';
-    if (ratio > 0.5) return 'bg-primary/70';
-    if (ratio > 0.25) return 'bg-primary/40';
-    return 'bg-primary/20';
-  };
 
   // Streak fire badges
   const streakLabel = streak >= 30 ? '🔥🔥🔥' : streak >= 7 ? '🔥🔥' : streak >= 1 ? '🔥' : '';
@@ -100,19 +46,12 @@ const JapLedger = ({ entries, lifetimeTotal, todayTotal, getTotalForMantra }: Ja
       )}
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-2 gap-3">
         <Card className="border-primary/20 bg-card/80">
           <CardContent className="p-4 text-center">
             <Flame className="w-6 h-6 mx-auto text-primary mb-1" />
             <p className="text-2xl font-bold text-primary font-[Cinzel]">{todayTotal}</p>
             <p className="text-xs text-muted-foreground">Today</p>
-          </CardContent>
-        </Card>
-        <Card className="border-primary/20 bg-card/80">
-          <CardContent className="p-4 text-center">
-            <Calendar className="w-6 h-6 mx-auto text-accent mb-1" />
-            <p className="text-2xl font-bold text-accent font-[Cinzel]">{weeklyTotal}</p>
-            <p className="text-xs text-muted-foreground">This Week</p>
           </CardContent>
         </Card>
         <Card className="border-primary/20 bg-card/80">
@@ -123,42 +62,6 @@ const JapLedger = ({ entries, lifetimeTotal, todayTotal, getTotalForMantra }: Ja
           </CardContent>
         </Card>
       </div>
-
-      {/* Weekly Heatmap */}
-      <Card className="border-primary/20 bg-card/80">
-        <CardHeader className="pb-2">
-          <CardTitle className="text-lg text-primary">🗓️ Chanting Activity</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-7 gap-1.5">
-            {['M', 'T', 'W', 'T', 'F', 'S', 'S'].map((d, i) => (
-              <div key={i} className="text-[10px] text-muted-foreground text-center font-medium">{d}</div>
-            ))}
-            {heatmapData.days.map(d => (
-              <div
-                key={d.dateStr}
-                title={d.isFuture ? '' : `${d.dateStr}: ${d.count.toLocaleString()} chants`}
-                className={`aspect-square rounded-sm transition-colors ${
-                  d.isFuture
-                    ? 'bg-transparent'
-                    : d.isToday
-                    ? `${getHeatColor(d.count, heatmapData.maxCount)} ring-1 ring-primary`
-                    : getHeatColor(d.count, heatmapData.maxCount)
-                }`}
-              />
-            ))}
-          </div>
-          <div className="flex items-center justify-end gap-1.5 mt-3">
-            <span className="text-[10px] text-muted-foreground">Less</span>
-            <div className="w-3 h-3 rounded-sm bg-muted/50" />
-            <div className="w-3 h-3 rounded-sm bg-primary/20" />
-            <div className="w-3 h-3 rounded-sm bg-primary/40" />
-            <div className="w-3 h-3 rounded-sm bg-primary/70" />
-            <div className="w-3 h-3 rounded-sm bg-primary" />
-            <span className="text-[10px] text-muted-foreground">More</span>
-          </div>
-        </CardContent>
-      </Card>
 
       {/* Per-Mantra Breakdown */}
       <Card className="border-primary/20 bg-card/80">
