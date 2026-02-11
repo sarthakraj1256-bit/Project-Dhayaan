@@ -34,7 +34,7 @@ export default function HeroSection({ user }: HeroSectionProps) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <p className="text-black/70 text-xs uppercase tracking-[0.2em] font-medium">
+        <p className="text-white/60 text-xs uppercase tracking-[0.2em] font-medium">
           {greetingText}
         </p>
 
@@ -43,7 +43,7 @@ export default function HeroSection({ user }: HeroSectionProps) {
             className="text-5xl font-extralight italic tracking-[0.12em]"
             style={{
               fontFamily: "'Georgia', 'Times New Roman', serif",
-              color: '#111111',
+              color: '#FFFFFF',
             }}
           >
             Dhyaan
@@ -54,7 +54,7 @@ export default function HeroSection({ user }: HeroSectionProps) {
             animate={{ scale: 1 }}
             transition={{ delay: 0.6, type: 'spring', stiffness: 300 }}
             className="inline-block w-2 h-2 rounded-full ml-1 align-super"
-            style={{ background: '#2AA88A', boxShadow: '0 0 8px 2px rgba(42,168,138,0.35)' }}
+            style={{ background: '#34D9A8', boxShadow: '0 0 10px 3px rgba(52,217,168,0.4)' }}
           />
           {/* Shimmer line */}
           <motion.div
@@ -63,13 +63,13 @@ export default function HeroSection({ user }: HeroSectionProps) {
             transition={{ delay: 0.4, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             className="h-[1.5px] mt-1.5 origin-left rounded-full"
             style={{
-              background: 'linear-gradient(90deg, #2AA88A 0%, #F0937A 50%, transparent 100%)',
+              background: 'linear-gradient(90deg, #34D9A8 0%, #F5816E 50%, transparent 100%)',
               maxWidth: '160px',
             }}
           />
         </h1>
 
-        <p className="text-black/60 text-sm mt-3 leading-relaxed tracking-wide">
+        <p className="text-white/50 text-sm mt-3 leading-relaxed tracking-wide">
           Your space for calm and connection.
         </p>
       </motion.div>
