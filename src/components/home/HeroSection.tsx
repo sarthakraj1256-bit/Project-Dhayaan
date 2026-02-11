@@ -35,8 +35,17 @@ export default function HeroSection({ user }: HeroSectionProps) {
         transition={{ duration: 0.4 }}
       >
         <p className="text-muted-foreground text-sm">{greetingText}</p>
-        <h1 className="text-2xl font-semibold text-foreground tracking-tight mt-0.5">
-          Dhyaan
+        <h1 className="mt-0.5 text-3xl font-bold tracking-tight">
+          <span
+            className="bg-clip-text text-transparent"
+            style={{
+              backgroundImage: 'linear-gradient(135deg, #FFC875 0%, #33BECC 60%, #706FD3 100%)',
+              fontFamily: "'Georgia', serif",
+              letterSpacing: '0.08em',
+            }}
+          >
+            Dhyaan
+          </span>
         </h1>
         <p className="text-muted-foreground text-sm mt-1 leading-relaxed">
           Your space for calm and connection.
