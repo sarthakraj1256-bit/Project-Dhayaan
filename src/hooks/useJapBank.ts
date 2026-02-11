@@ -118,6 +118,7 @@ export function useJapBank() {
         }).eq('id', goal.id);
         if (newStatus === 'completed') {
           toast.success(`🎯 Goal completed: ${goal.target_count.toLocaleString()} ${mantraName}!`);
+          window.dispatchEvent(new CustomEvent('jap-goal-complete', { detail: { mantraName } }));
         }
       }
     },

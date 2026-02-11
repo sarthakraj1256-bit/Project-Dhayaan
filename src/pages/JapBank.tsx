@@ -14,6 +14,7 @@ const JapGoals = lazy(() => import('@/components/jap-bank/JapGoals'));
 const JapLeaderboard = lazy(() => import('@/components/jap-bank/JapLeaderboard'));
 const JapRequests = lazy(() => import('@/components/jap-bank/JapRequests'));
 const TempleJapReporting = lazy(() => import('@/components/jap-bank/TempleJapReporting'));
+const GoalConfetti = lazy(() => import('@/components/jap-bank/GoalConfetti'));
 
 const Fallback = () => <Skeleton className="h-40 w-full bg-muted/30 rounded-lg" />;
 
@@ -30,6 +31,7 @@ const JapBank = () => {
 
   return (
     <div className="min-h-screen bg-background pb-28">
+      <Suspense fallback={null}><GoalConfetti /></Suspense>
       {/* Header */}
       <div
         className="relative px-4 pt-12 pb-6 safe-top"
