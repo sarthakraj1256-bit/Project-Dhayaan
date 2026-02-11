@@ -73,25 +73,25 @@
     --sidebar-ring: 38 75% 55%;
   }
 
-  /* Homepage-only Obsidian & Amber Glow palette */
+  /* Homepage — Soft Pastel Wave Theme */
   .homepage-theme {
-    --background: 0 0% 5%;           /* #0D0D0D Obsidian */
-    --foreground: 0 0% 94%;          /* #F0F0F0 Off-White */
-    --card: 216 7% 11%;              /* #1A1C1E Deep Navy-Grey */
-    --card-foreground: 0 0% 94%;     /* #F0F0F0 */
-    --popover: 216 7% 11%;
-    --popover-foreground: 0 0% 94%;
-    --primary: 35 100% 73%;          /* #FFC875 Amber Glow */
-    --primary-foreground: 0 0% 5%;
-    --secondary: 184 59% 50%;        /* #33BECC Blue Curacao */
-    --secondary-foreground: 0 0% 94%;
-    --muted: 210 4% 14%;
-    --muted-foreground: 210 6% 65%;  /* #9FA6AD Cool Grey */
-    --accent: 184 59% 50%;           /* #33BECC Blue Curacao */
-    --accent-foreground: 0 0% 5%;
-    --border: 195 7% 21%;            /* #2D3436 Carbon */
-    --input: 195 7% 21%;
-    --ring: 35 100% 73%;
+    --background: 160 30% 97%;        /* #F0FDF9 Soft mint white */
+    --foreground: 220 20% 14%;        /* #1E293B Dark slate for text */
+    --card: 0 0% 100% / 0.7;          /* White glass cards */
+    --card-foreground: 220 20% 14%;   /* Dark text on cards */
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 20% 14%;
+    --primary: 166 56% 42%;           /* #2AA88A Soft teal */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 12 80% 72%;          /* #F0937A Soft coral */
+    --secondary-foreground: 220 20% 14%;
+    --muted: 160 15% 92%;
+    --muted-foreground: 220 10% 42%;  /* Medium-dark for secondary text */
+    --accent: 166 56% 42%;            /* Teal accent */
+    --accent-foreground: 0 0% 100%;
+    --border: 160 15% 88%;
+    --input: 160 15% 90%;
+    --ring: 166 56% 42%;
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 98%;
   }

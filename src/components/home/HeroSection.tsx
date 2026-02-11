@@ -38,12 +38,12 @@ export default function HeroSection({ user }: HeroSectionProps) {
           {greetingText}
         </p>
 
-        <h1 className="mt-2 relative">
+        <h1 className="mt-3 relative">
           <span
-            className="text-5xl font-extralight italic tracking-[0.15em] bg-clip-text text-transparent"
+            className="text-5xl font-extralight italic tracking-[0.12em]"
             style={{
-              backgroundImage: 'linear-gradient(135deg, #FFC875 0%, #FFD9A0 30%, #33BECC 70%, #706FD3 100%)',
               fontFamily: "'Georgia', 'Times New Roman', serif",
+              color: '#1E293B',
             }}
           >
             Dhyaan
@@ -54,17 +54,17 @@ export default function HeroSection({ user }: HeroSectionProps) {
             animate={{ scale: 1 }}
             transition={{ delay: 0.6, type: 'spring', stiffness: 300 }}
             className="inline-block w-2 h-2 rounded-full ml-1 align-super"
-            style={{ background: '#FFC875', boxShadow: '0 0 8px 2px rgba(255,200,117,0.5)' }}
+            style={{ background: '#2AA88A', boxShadow: '0 0 8px 2px rgba(42,168,138,0.35)' }}
           />
           {/* Shimmer line */}
           <motion.div
             initial={{ scaleX: 0 }}
             animate={{ scaleX: 1 }}
             transition={{ delay: 0.4, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-            className="h-[1px] mt-1 origin-left"
+            className="h-[1.5px] mt-1.5 origin-left rounded-full"
             style={{
-              background: 'linear-gradient(90deg, #FFC875 0%, #33BECC 50%, transparent 100%)',
-              maxWidth: '180px',
+              background: 'linear-gradient(90deg, #2AA88A 0%, #F0937A 50%, transparent 100%)',
+              maxWidth: '160px',
             }}
           />
         </h1>
