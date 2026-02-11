@@ -100,9 +100,24 @@ export function useJapBank() {
         chant_count: count,
       });
       if (error) throw error;
+
+      // Auto-update matching active goals
+      const matchingGoals = goals.filter(g => g.mantra_name === mantraName && g.status === 'active');
+      for (const goal of matchingGoals) {
+        const newCount = Math.min(goal.current_count + count, goal.target_count);
+        const newStatus = newCount >= goal.target_count ? 'completed' : 'active';
+        await supabase.from('jap_goals').update({
+          current_count: newCount,
+          status: newStatus,
+        }).eq('id', goal.id);
+        if (newStatus === 'completed') {
+          toast.success(`🎯 Goal completed: ${goal.target_count.toLocaleString()} ${mantraName}!`);
+        }
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['jap-entries', userId] });
+      queryClient.invalidateQueries({ queryKey: ['jap-goals', userId] });
       queryClient.invalidateQueries({ queryKey: ['jap-leaderboard'] });
       toast.success('🙏 Jap recorded in your bank!');
     },
