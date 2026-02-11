@@ -34,7 +34,7 @@ export default function HeroSection({ user }: HeroSectionProps) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <p className="text-muted-foreground text-xs uppercase tracking-[0.2em] font-medium">
+        <p className="text-black/70 text-xs uppercase tracking-[0.2em] font-medium">
           {greetingText}
         </p>
 
@@ -43,7 +43,7 @@ export default function HeroSection({ user }: HeroSectionProps) {
             className="text-5xl font-extralight italic tracking-[0.12em]"
             style={{
               fontFamily: "'Georgia', 'Times New Roman', serif",
-              color: '#EDF2F7',
+              color: '#111111',
             }}
           >
             Dhyaan
@@ -69,7 +69,7 @@ export default function HeroSection({ user }: HeroSectionProps) {
           />
         </h1>
 
-        <p className="text-muted-foreground text-sm mt-3 leading-relaxed tracking-wide">
+        <p className="text-black/60 text-sm mt-3 leading-relaxed tracking-wide">
           Your space for calm and connection.
         </p>
       </motion.div>
