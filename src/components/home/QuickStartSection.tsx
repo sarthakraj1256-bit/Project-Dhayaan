@@ -1,83 +1,87 @@
 import { Link } from 'react-router-dom';
-import { Brain, Radio, PlayCircle } from 'lucide-react';
+import {
+  Radio, BookOpen, Sparkles, Play, ScrollText, Waves, Eye, Gamepad2,
+} from 'lucide-react';
 import { motion } from 'framer-motion';
+import { cn } from '@/lib/utils';
 
-const quickActions = [
+const features = [
   {
-    icon: Brain,
-    title: 'Calm My Mind',
-    description: 'Soothing sound frequencies for relaxation and stress relief.',
+    icon: Waves,
+    label: 'Sonic Lab',
+    description: 'Healing frequencies',
     href: '/sonic-lab',
-    gradient: 'from-violet-500/20 to-indigo-500/20',
-    iconColor: 'text-violet-400',
   },
   {
-    icon: Radio,
-    title: 'Watch Live Darshan',
-    description: 'Live aarti and temple rituals happening right now.',
+    icon: Play,
+    label: 'Live Darshan',
+    description: 'Temple streams',
     href: '/live-darshan',
-    gradient: 'from-red-500/20 to-orange-500/20',
-    iconColor: 'text-red-400',
   },
   {
-    icon: PlayCircle,
-    title: 'Watch Recorded Darshan',
-    description: 'Temple darshan available anytime, day or night.',
-    href: '/live-darshan',
-    gradient: 'from-amber-500/20 to-yellow-500/20',
-    iconColor: 'text-amber-400',
+    icon: BookOpen,
+    label: 'Mantrochar',
+    description: 'Learn mantras',
+    href: '/mantrochar',
+  },
+  {
+    icon: ScrollText,
+    label: 'Jap Seva',
+    description: 'Chanting log',
+    href: '/jap-bank',
+  },
+  {
+    icon: Sparkles,
+    label: 'Lakshya',
+    description: 'Spiritual progress',
+    href: '/lakshya',
+  },
+  {
+    icon: Eye,
+    label: 'Immersive',
+    description: '360° darshan',
+    href: '/immersive-darshan',
   },
 ];
 
 export default function QuickStartSection() {
   return (
-    <section className="px-6 py-16 md:py-24">
-      <div className="max-w-5xl mx-auto">
-        {/* Section Title */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mb-12"
-        >
-          <h2 className="font-display text-2xl md:text-3xl text-foreground mb-3">
-            What would you like to do right now?
-          </h2>
-          <p className="text-muted-foreground font-body text-lg">
-            Choose your path to inner peace
-          </p>
-        </motion.div>
-
-        {/* Quick Action Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {quickActions.map((action, index) => (
-            <motion.div
-              key={action.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
+    <section className="px-5 py-4">
+      <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-4">
+        Explore
+      </h2>
+      <div className="grid grid-cols-3 gap-3">
+        {features.map((feature, index) => (
+          <motion.div
+            key={feature.label}
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.05, duration: 0.3 }}
+          >
+            <Link
+              to={feature.href}
+              className={cn(
+                'flex flex-col items-center gap-2 p-4 rounded-2xl',
+                'bg-card border border-border',
+                'hover:border-primary/40 hover:bg-secondary/50',
+                'transition-all duration-200 active:scale-95',
+                'min-h-[100px] justify-center'
+              )}
             >
-              <Link
-                to={action.href}
-                className="group block h-full p-6 rounded-2xl bg-void-light/60 backdrop-blur-xl border border-border hover:border-primary/40 transition-all duration-300 hover:shadow-[0_0_40px_hsl(var(--gold)/0.1)]"
-              >
-                {/* Icon */}
-                <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${action.gradient} flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300`}>
-                  <action.icon className={`w-7 h-7 ${action.iconColor}`} />
-                </div>
-
-                {/* Content */}
-                <h3 className="font-display text-xl text-foreground mb-2 group-hover:text-primary transition-colors">
-                  {action.title}
-                </h3>
-                <p className="text-muted-foreground font-body text-base leading-relaxed">
-                  {action.description}
+              <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                <feature.icon className="w-5 h-5 text-primary" />
+              </div>
+              <div className="text-center">
+                <p className="text-sm font-medium text-foreground leading-tight">
+                  {feature.label}
                 </p>
-              </Link>
-            </motion.div>
-          ))}
-        </div>
+                <p className="text-[11px] text-muted-foreground mt-0.5 leading-tight">
+                  {feature.description}
+                </p>
+              </div>
+            </Link>
+          </motion.div>
+        ))}
       </div>
     </section>
   );

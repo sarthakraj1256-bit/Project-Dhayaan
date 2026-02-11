@@ -7,72 +7,72 @@
 
 @layer base {
   :root {
-    /* Core Palette - Temple Theme */
-    --background: 240 10% 4%;
-    --foreground: 35 40% 85%;
+    /* Core Palette - Soft Dark Slate */
+    --background: 220 16% 10%;
+    --foreground: 220 10% 90%;
 
-    --card: 240 10% 8%;
-    --card-foreground: 35 40% 85%;
+    --card: 220 16% 13%;
+    --card-foreground: 220 10% 90%;
 
-    --popover: 240 10% 6%;
-    --popover-foreground: 35 40% 85%;
+    --popover: 220 16% 12%;
+    --popover-foreground: 220 10% 90%;
 
-    /* Gold/Bronze Accents */
-    --primary: 38 70% 50%;
-    --primary-foreground: 240 10% 4%;
+    /* Soft Indigo Accent */
+    --primary: 230 60% 60%;
+    --primary-foreground: 220 16% 10%;
 
-    /* Muted Sandstone */
-    --secondary: 35 25% 20%;
-    --secondary-foreground: 35 40% 85%;
+    /* Slate Secondary */
+    --secondary: 220 14% 18%;
+    --secondary-foreground: 220 10% 80%;
 
-    --muted: 240 8% 12%;
-    --muted-foreground: 35 20% 55%;
+    --muted: 220 14% 16%;
+    --muted-foreground: 220 10% 55%;
 
-    /* Lighter Gold for Highlights */
-    --accent: 45 80% 55%;
-    --accent-foreground: 240 10% 4%;
+    /* Warm Accent for highlights */
+    --accent: 35 70% 55%;
+    --accent-foreground: 220 16% 10%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 38 30% 20%;
-    --input: 240 8% 15%;
-    --ring: 38 70% 50%;
+    --border: 220 14% 20%;
+    --input: 220 14% 18%;
+    --ring: 230 60% 60%;
 
     --radius: 0.75rem;
 
-    /* Custom Temple Tokens */
-    --gold: 38 70% 50%;
-    --gold-light: 45 80% 60%;
-    --gold-glow: 38 100% 65%;
-    --sandstone: 35 40% 85%;
-    --sandstone-muted: 35 20% 55%;
-    --void: 240 10% 4%;
-    --void-light: 240 10% 8%;
+    /* Custom Tokens - updated for slate theme */
+    --gold: 35 70% 55%;
+    --gold-light: 40 65% 65%;
+    --gold-glow: 35 80% 60%;
+    --sandstone: 220 10% 85%;
+    --sandstone-muted: 220 10% 55%;
+    --void: 220 16% 10%;
+    --void-light: 220 16% 13%;
 
     /* Gradients */
-    --gradient-gold: linear-gradient(135deg, hsl(38 70% 50%), hsl(45 80% 60%));
-    --gradient-void: linear-gradient(180deg, hsl(240 10% 4%), hsl(240 10% 8%));
-    --gradient-radial-gold: radial-gradient(circle at center, hsl(38 70% 50% / 0.15), transparent 70%);
+    --gradient-gold: linear-gradient(135deg, hsl(230 60% 60%), hsl(260 50% 65%));
+    --gradient-void: linear-gradient(180deg, hsl(220 16% 10%), hsl(220 16% 13%));
+    --gradient-radial-gold: radial-gradient(circle at center, hsl(230 60% 60% / 0.1), transparent 70%);
 
     /* Shadows */
-    --shadow-gold: 0 0 60px -15px hsl(38 70% 50% / 0.4);
-    --shadow-glow: 0 0 40px hsl(38 100% 65% / 0.3);
+    --shadow-gold: 0 4px 24px -4px hsl(230 60% 60% / 0.2);
+    --shadow-glow: 0 0 20px hsl(230 60% 60% / 0.15);
 
     /* Glassmorphism */
-    --glass-bg: hsl(240 10% 8% / 0.6);
-    --glass-border: hsl(38 30% 30% / 0.3);
-    --glass-blur: 20px;
+    --glass-bg: hsl(220 16% 13% / 0.7);
+    --glass-border: hsl(220 14% 25% / 0.5);
+    --glass-blur: 16px;
 
-    /* Sidebar - keeping for compatibility */
-    --sidebar-background: 240 10% 6%;
-    --sidebar-foreground: 35 40% 85%;
-    --sidebar-primary: 38 70% 50%;
-    --sidebar-primary-foreground: 240 10% 4%;
-    --sidebar-accent: 240 8% 12%;
-    --sidebar-accent-foreground: 35 40% 85%;
-    --sidebar-border: 38 30% 20%;
-    --sidebar-ring: 38 70% 50%;
+    /* Sidebar */
+    --sidebar-background: 220 16% 11%;
+    --sidebar-foreground: 220 10% 85%;
+    --sidebar-primary: 230 60% 60%;
+    --sidebar-primary-foreground: 220 16% 10%;
+    --sidebar-accent: 220 14% 16%;
+    --sidebar-accent-foreground: 220 10% 85%;
+    --sidebar-border: 220 14% 20%;
+    --sidebar-ring: 230 60% 60%;
   }
 }
 
@@ -87,12 +87,13 @@
 
   body {
     @apply bg-background text-foreground antialiased;
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Inter', 'system-ui', sans-serif;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Cinzel', serif;
-    letter-spacing: 0.05em;
+    font-family: 'Inter', 'system-ui', sans-serif;
+    font-weight: 600;
+    letter-spacing: -0.01em;
   }
 
   ::selection {
