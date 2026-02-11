@@ -32,7 +32,7 @@ const BottomNav = () => {
       <div
         className="mx-0 overflow-hidden touch-manipulation border-t border-border/30"
         style={{
-          background: '#0D0D0D',
+          background: '#0B1D3A',
           backdropFilter: 'blur(16px)',
           WebkitBackdropFilter: 'blur(16px)',
         }}
@@ -53,22 +53,22 @@ const BottomNav = () => {
                 {isActive && (
                   <motion.div
                     layoutId="bottomNavDot"
-                    className="absolute -top-0.5 w-1 h-1 rounded-full bg-primary"
+                    className="absolute -top-0.5 w-1 h-1 rounded-full" style={{ background: '#34D9A8' }}
                     transition={{ type: 'spring', stiffness: 500, damping: 30 }}
                   />
                 )}
 
-                <Icon
-                  className={cn(
-                    'w-5 h-5 transition-colors duration-150',
-                    isActive ? 'text-primary' : 'text-muted-foreground'
-                  )}
+                 <Icon
+                   className={cn(
+                     'w-5 h-5 transition-colors duration-150',
+                     isActive ? 'text-white' : 'text-white/35'
+                   )}
                 />
 
                 <span
                   className={cn(
-                    'text-[10px] mt-0.5 font-medium transition-colors duration-150',
-                    isActive ? 'text-primary' : 'text-muted-foreground'
+                     'text-[10px] mt-0.5 font-medium transition-colors duration-150',
+                     isActive ? 'text-white' : 'text-white/35'
                   )}
                 >
                   {item.label}

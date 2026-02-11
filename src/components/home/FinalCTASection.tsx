@@ -15,14 +15,14 @@ export default function FinalCTASection() {
           to="/sonic-lab"
           className="flex-1 flex items-center justify-center gap-2 py-3.5 rounded-2xl bg-primary text-primary-foreground text-sm font-medium shadow-[0_4px_20px_rgba(45,212,168,0.3)] transition-all duration-200 active:scale-[0.96]"
         >
-          <Headphones className="w-4 h-4" strokeWidth={1.8} />
+          <Headphones className="w-4 h-4" strokeWidth={2.2} />
           Relax
         </Link>
         <Link
           to="/live-darshan"
-          className="flex-1 flex items-center justify-center gap-2 py-3.5 rounded-2xl bg-white/[0.07] backdrop-blur-md border border-white/[0.12] text-foreground text-sm font-medium shadow-[0_2px_16px_rgba(0,0,0,0.2)] transition-all duration-200 active:scale-[0.96] hover:bg-white/[0.12]"
+          className="flex-1 flex items-center justify-center gap-2 py-3.5 rounded-2xl bg-white/[0.07] backdrop-blur-md border border-white/[0.12] text-white/90 text-sm font-medium shadow-[0_2px_16px_rgba(0,0,0,0.2)] transition-all duration-200 active:scale-[0.96] hover:bg-white/[0.12]"
         >
-          <Building2 className="w-4 h-4 text-primary" strokeWidth={1.8} />
+          <Building2 className="w-4 h-4" style={{ color: '#34D9A8' }} strokeWidth={2.2} />
           Darshan
         </Link>
       </motion.div>
