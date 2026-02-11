@@ -17,8 +17,8 @@
     --popover: 220 16% 12%;
     --popover-foreground: 220 10% 90%;
 
-    /* Soft Indigo Accent */
-    --primary: 230 60% 60%;
+    /* Gold Primary */
+    --primary: 38 75% 55%;
     --primary-foreground: 220 16% 10%;
 
     /* Slate Secondary */
@@ -37,8 +37,7 @@
 
     --border: 220 14% 20%;
     --input: 220 14% 18%;
-    --ring: 230 60% 60%;
-
+    --ring: 38 75% 55%;
     --radius: 0.75rem;
 
     /* Custom Tokens - updated for slate theme */
@@ -51,14 +50,13 @@
     --void-light: 220 16% 13%;
 
     /* Gradients */
-    --gradient-gold: linear-gradient(135deg, hsl(230 60% 60%), hsl(260 50% 65%));
+    --gradient-gold: linear-gradient(135deg, hsl(38 75% 55%), hsl(45 70% 60%));
     --gradient-void: linear-gradient(180deg, hsl(220 16% 10%), hsl(220 16% 13%));
-    --gradient-radial-gold: radial-gradient(circle at center, hsl(230 60% 60% / 0.1), transparent 70%);
+    --gradient-radial-gold: radial-gradient(circle at center, hsl(38 75% 55% / 0.1), transparent 70%);
 
     /* Shadows */
-    --shadow-gold: 0 4px 24px -4px hsl(230 60% 60% / 0.2);
-    --shadow-glow: 0 0 20px hsl(230 60% 60% / 0.15);
-
+    --shadow-gold: 0 4px 24px -4px hsl(38 75% 55% / 0.2);
+    --shadow-glow: 0 0 20px hsl(38 75% 55% / 0.15);
     /* Glassmorphism */
     --glass-bg: hsl(220 16% 13% / 0.7);
     --glass-border: hsl(220 14% 25% / 0.5);
@@ -67,12 +65,21 @@
     /* Sidebar */
     --sidebar-background: 220 16% 11%;
     --sidebar-foreground: 220 10% 85%;
-    --sidebar-primary: 230 60% 60%;
+    --sidebar-primary: 38 75% 55%;
     --sidebar-primary-foreground: 220 16% 10%;
     --sidebar-accent: 220 14% 16%;
     --sidebar-accent-foreground: 220 10% 85%;
     --sidebar-border: 220 14% 20%;
-    --sidebar-ring: 230 60% 60%;
+    --sidebar-ring: 38 75% 55%;
+  }
+
+  /* Homepage-only indigo theme */
+  .homepage-theme {
+    --primary: 230 60% 60%;
+    --ring: 230 60% 60%;
+    --gradient-gold: linear-gradient(135deg, hsl(230 60% 60%), hsl(260 50% 65%));
+    --shadow-gold: 0 4px 24px -4px hsl(230 60% 60% / 0.2);
+    --shadow-glow: 0 0 20px hsl(230 60% 60% / 0.15);
   }
 }
 
