@@ -37,6 +37,35 @@ const JapLedger = ({ entries, lifetimeTotal, todayTotal, getTotalForMantra }: Ja
     return s;
   }, [entries]);
 
+  // Heatmap: last 7 weeks (49 days)
+  const heatmapData = useMemo(() => {
+    const dailyCounts: Record<string, number> = {};
+    entries.forEach(e => {
+      const key = new Date(e.created_at).toISOString().slice(0, 10);
+      dailyCounts[key] = (dailyCounts[key] || 0) + e.chant_count;
+    });
+
+    const days: { date: Date; dateStr: string; count: number }[] = [];
+    const today = new Date();
+    for (let i = 48; i >= 0; i--) {
+      const d = new Date(today);
+      d.setDate(d.getDate() - i);
+      const dateStr = d.toISOString().slice(0, 10);
+      days.push({ date: d, dateStr, count: dailyCounts[dateStr] || 0 });
+    }
+    const maxCount = Math.max(...days.map(d => d.count), 1);
+    return { days, maxCount };
+  }, [entries]);
+
+  const getHeatColor = (count: number, max: number) => {
+    if (count === 0) return 'bg-muted/50';
+    const ratio = count / max;
+    if (ratio > 0.75) return 'bg-primary';
+    if (ratio > 0.5) return 'bg-primary/70';
+    if (ratio > 0.25) return 'bg-primary/40';
+    return 'bg-primary/20';
+  };
+
   // Streak fire badges
   const streakLabel = streak >= 30 ? '🔥🔥🔥' : streak >= 7 ? '🔥🔥' : streak >= 1 ? '🔥' : '';
 
@@ -77,6 +106,36 @@ const JapLedger = ({ entries, lifetimeTotal, todayTotal, getTotalForMantra }: Ja
           </CardContent>
         </Card>
       </div>
+
+      {/* Weekly Heatmap */}
+      <Card className="border-primary/20 bg-card/80">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-lg text-primary">🗓️ Chanting Activity</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-7 gap-1.5">
+            {['M', 'T', 'W', 'T', 'F', 'S', 'S'].map((d, i) => (
+              <div key={i} className="text-[10px] text-muted-foreground text-center font-medium">{d}</div>
+            ))}
+            {heatmapData.days.map(d => (
+              <div
+                key={d.dateStr}
+                title={`${d.dateStr}: ${d.count.toLocaleString()} chants`}
+                className={`aspect-square rounded-sm ${getHeatColor(d.count, heatmapData.maxCount)} transition-colors`}
+              />
+            ))}
+          </div>
+          <div className="flex items-center justify-end gap-1.5 mt-3">
+            <span className="text-[10px] text-muted-foreground">Less</span>
+            <div className="w-3 h-3 rounded-sm bg-muted/50" />
+            <div className="w-3 h-3 rounded-sm bg-primary/20" />
+            <div className="w-3 h-3 rounded-sm bg-primary/40" />
+            <div className="w-3 h-3 rounded-sm bg-primary/70" />
+            <div className="w-3 h-3 rounded-sm bg-primary" />
+            <span className="text-[10px] text-muted-foreground">More</span>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Per-Mantra Breakdown */}
       <Card className="border-primary/20 bg-card/80">
