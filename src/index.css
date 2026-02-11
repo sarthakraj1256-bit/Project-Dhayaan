@@ -73,13 +73,27 @@
     --sidebar-ring: 38 75% 55%;
   }
 
-  /* Homepage-only indigo theme */
+  /* Homepage-only warm brown palette */
   .homepage-theme {
-    --primary: 230 60% 60%;
-    --ring: 230 60% 60%;
-    --gradient-gold: linear-gradient(135deg, hsl(230 60% 60%), hsl(260 50% 65%));
-    --shadow-gold: 0 4px 24px -4px hsl(230 60% 60% / 0.2);
-    --shadow-glow: 0 0 20px hsl(230 60% 60% / 0.15);
+    --background: 30 30% 90%;
+    --foreground: 24 30% 25%;
+    --card: 33 35% 85%;
+    --card-foreground: 24 30% 25%;
+    --popover: 33 35% 85%;
+    --popover-foreground: 24 30% 25%;
+    --primary: 24 35% 42%;
+    --primary-foreground: 30 30% 95%;
+    --secondary: 33 30% 80%;
+    --secondary-foreground: 24 30% 30%;
+    --muted: 33 25% 82%;
+    --muted-foreground: 24 15% 48%;
+    --accent: 24 35% 42%;
+    --accent-foreground: 30 30% 95%;
+    --border: 30 20% 78%;
+    --input: 33 30% 80%;
+    --ring: 24 35% 42%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 98%;
   }
 }
 

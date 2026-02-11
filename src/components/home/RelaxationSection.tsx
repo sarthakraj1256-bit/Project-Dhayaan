@@ -4,27 +4,27 @@ import { motion } from 'framer-motion';
 
 export default function RelaxationSection() {
   return (
-    <section className="px-5 py-4">
+    <section className="px-6 py-5">
       <div className="flex items-center justify-between mb-3">
-        <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
+        <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">
           Quick Calm
         </h2>
-        <Link to="/sonic-lab" className="text-xs text-primary flex items-center gap-1 hover:underline">
+        <Link to="/sonic-lab" className="text-xs text-primary font-medium flex items-center gap-1 hover:underline">
           See all <ArrowRight className="w-3 h-3" />
         </Link>
       </div>
       <motion.div
-        initial={{ opacity: 0, y: 12 }}
+        initial={{ opacity: 0, y: 10 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
       >
         <Link
           to="/sonic-lab"
-          className="block p-5 rounded-2xl bg-gradient-to-br from-primary/10 via-card to-card border border-border hover:border-primary/30 transition-all duration-200 active:scale-[0.98]"
+          className="block p-5 rounded-2xl bg-card border border-border/60 hover:shadow-sm transition-all duration-200 active:scale-[0.98]"
         >
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-primary/15 flex items-center justify-center shrink-0">
-              <Waves className="w-6 h-6 text-primary" />
+            <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center shrink-0">
+              <Waves className="w-6 h-6 text-primary" strokeWidth={1.8} />
             </div>
             <div className="flex-1 min-w-0">
               <p className="font-medium text-foreground">Healing Frequencies</p>
