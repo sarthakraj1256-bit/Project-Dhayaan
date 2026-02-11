@@ -43,7 +43,7 @@ export default function HeroSection({ user }: HeroSectionProps) {
             className="text-5xl font-extralight italic tracking-[0.12em]"
             style={{
               fontFamily: "'Georgia', 'Times New Roman', serif",
-              color: '#1E293B',
+              color: '#EDF2F7',
             }}
           >
             Dhyaan
