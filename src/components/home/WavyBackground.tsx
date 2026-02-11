@@ -73,7 +73,7 @@ export default function WavyBackground() {
           className="absolute top-0 left-0 w-full"
           viewBox="0 0 1440 700"
           preserveAspectRatio="none"
-          style={{ height: '65vh', ...topStyle(0), ...parallax(-0.08) }}
+          style={{ height: '65vh', ...topStyle(0), ...parallax(-0.04) }}
         >
           <path
             d="M0,0 L1440,0 L1440,180 C1200,320 900,380 600,300 C300,220 120,350 0,280 Z"
@@ -86,7 +86,7 @@ export default function WavyBackground() {
           className="absolute top-0 left-0 w-full"
           viewBox="0 0 1440 700"
           preserveAspectRatio="none"
-          style={{ height: '60vh', ...topStyle(0), ...parallax(-0.12) }}
+          style={{ height: '60vh', ...topStyle(0), ...parallax(-0.06) }}
         >
           <path
             d="M0,0 L1440,0 L1440,120 C1100,260 800,200 500,260 C200,320 60,200 0,240 Z"
@@ -99,7 +99,7 @@ export default function WavyBackground() {
           className="absolute top-0 left-0 w-full"
           viewBox="0 0 1440 600"
           preserveAspectRatio="none"
-          style={{ height: '42vh', ...topStyle(0), ...parallax(-0.15) }}
+          style={{ height: '42vh', ...topStyle(0), ...parallax(-0.07) }}
         >
           <path
             d="M0,0 L1440,0 L1440,80 C1200,180 960,140 720,180 C480,220 240,140 0,190 Z"
@@ -122,7 +122,7 @@ export default function WavyBackground() {
           className="absolute bottom-0 left-0 w-full"
           viewBox="0 0 1440 600"
           preserveAspectRatio="none"
-          style={{ height: '50vh', ...bottomStyle(0), ...parallax(0.08) }}
+          style={{ height: '50vh', ...bottomStyle(0), ...parallax(0.04) }}
         >
           <path
             d="M0,600 L1440,600 L1440,360 C1200,260 960,340 720,280 C480,220 240,310 0,260 Z"
@@ -136,7 +136,7 @@ export default function WavyBackground() {
           className="absolute bottom-0 left-0 w-full"
           viewBox="0 0 1440 500"
           preserveAspectRatio="none"
-          style={{ height: '40vh', ...bottomStyle(0), ...parallax(0.12) }}
+          style={{ height: '40vh', ...bottomStyle(0), ...parallax(0.06) }}
         >
           <path
             d="M0,500 L1440,500 L1440,340 C1100,250 800,320 500,280 C200,240 80,310 0,300 Z"
@@ -150,7 +150,7 @@ export default function WavyBackground() {
           className="absolute bottom-0 left-0 w-full"
           viewBox="0 0 1440 400"
           preserveAspectRatio="none"
-          style={{ height: '32vh', ...bottomStyle(0), ...parallax(0.15) }}
+          style={{ height: '32vh', ...bottomStyle(0), ...parallax(0.07) }}
         >
           <path
             d="M0,400 L1440,400 L1440,280 C1200,200 900,300 600,240 C300,180 100,260 0,220 Z"
