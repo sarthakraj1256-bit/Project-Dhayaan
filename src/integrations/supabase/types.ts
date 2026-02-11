@@ -582,6 +582,51 @@ export type Database = {
         }
         Relationships: []
       }
+      temple_jap_reports: {
+        Row: {
+          chant_count: number
+          created_at: string
+          deadline: string | null
+          dedication: string | null
+          id: string
+          mantra_name: string
+          notes: string | null
+          reference_id: string
+          status: string
+          temple_id: string
+          temple_name: string
+          user_id: string
+        }
+        Insert: {
+          chant_count?: number
+          created_at?: string
+          deadline?: string | null
+          dedication?: string | null
+          id?: string
+          mantra_name: string
+          notes?: string | null
+          reference_id?: string
+          status?: string
+          temple_id: string
+          temple_name: string
+          user_id: string
+        }
+        Update: {
+          chant_count?: number
+          created_at?: string
+          deadline?: string | null
+          dedication?: string | null
+          id?: string
+          mantra_name?: string
+          notes?: string | null
+          reference_id?: string
+          status?: string
+          temple_id?: string
+          temple_name?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       temple_stories: {
         Row: {
           created_at: string
