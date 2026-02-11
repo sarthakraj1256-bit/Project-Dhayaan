@@ -73,25 +73,25 @@
     --sidebar-ring: 38 75% 55%;
   }
 
-  /* Homepage-only Dark Slate palette */
+  /* Homepage-only Deep Charcoal palette */
   .homepage-theme {
-    --background: 215 25% 27%;       /* #334155 Slate Grey */
-    --foreground: 210 40% 98%;       /* #F8FAFC Ghost White */
-    --card: 215 19% 35%;             /* #475569 Cool Steel */
-    --card-foreground: 210 40% 98%;  /* #F8FAFC */
-    --popover: 215 19% 35%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 210 40% 98%;          /* #F8FAFC Ghost White accent */
-    --primary-foreground: 215 25% 27%;
-    --secondary: 215 20% 32%;
-    --secondary-foreground: 210 40% 90%;
-    --muted: 215 20% 30%;
-    --muted-foreground: 215 15% 65%;
-    --accent: 215 19% 40%;
-    --accent-foreground: 210 40% 98%;
-    --border: 215 18% 38%;
-    --input: 215 18% 38%;
-    --ring: 210 40% 98%;
+    --background: 217 33% 17%;       /* #1F2937 Deep Charcoal */
+    --foreground: 210 20% 98%;       /* #F9FAFB Ice White */
+    --card: 217 19% 27%;             /* #374151 Elevated Steel */
+    --card-foreground: 210 20% 98%;  /* #F9FAFB */
+    --popover: 217 19% 27%;
+    --popover-foreground: 210 20% 98%;
+    --primary: 210 20% 98%;          /* #F9FAFB Ice White accent */
+    --primary-foreground: 217 33% 17%;
+    --secondary: 217 24% 22%;
+    --secondary-foreground: 210 20% 90%;
+    --muted: 217 24% 20%;
+    --muted-foreground: 215 15% 60%;
+    --accent: 217 19% 32%;
+    --accent-foreground: 210 20% 98%;
+    --border: 217 19% 30%;
+    --input: 217 19% 30%;
+    --ring: 210 20% 98%;
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 98%;
   }

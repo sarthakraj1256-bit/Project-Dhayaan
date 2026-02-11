@@ -13,14 +13,14 @@ export default function FinalCTASection() {
       >
         <Link
           to="/sonic-lab"
-          className="flex-1 flex items-center justify-center gap-2 py-3.5 rounded-2xl bg-primary text-primary-foreground text-sm font-medium transition-all duration-200 active:scale-[0.96]"
+          className="flex-1 flex items-center justify-center gap-2 py-3.5 rounded-xl bg-primary text-primary-foreground text-sm font-medium transition-all duration-200 active:scale-[0.96]"
         >
           <Headphones className="w-4 h-4" strokeWidth={1.8} />
           Relax
         </Link>
         <Link
           to="/live-darshan"
-          className="flex-1 flex items-center justify-center gap-2 py-3.5 rounded-2xl bg-card border border-border/60 text-foreground text-sm font-medium transition-all duration-200 active:scale-[0.96] hover:shadow-sm"
+          className="flex-1 flex items-center justify-center gap-2 py-3.5 rounded-xl bg-card text-foreground text-sm font-medium transition-all duration-200 active:scale-[0.96] hover:brightness-110"
         >
           <Building2 className="w-4 h-4 text-primary" strokeWidth={1.8} />
           Darshan

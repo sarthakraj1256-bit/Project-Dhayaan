@@ -7,7 +7,7 @@ export default function PhilosophySection() {
         initial={{ opacity: 0, y: 10 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="p-6 rounded-2xl bg-card border border-border/60 text-center"
+        className="p-6 rounded-xl bg-card text-center"
       >
         <p className="text-base text-foreground leading-relaxed italic">
           "Sound, devotion, and sacred traditions — pathways to inner balance."

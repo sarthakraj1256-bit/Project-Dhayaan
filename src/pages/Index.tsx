@@ -38,13 +38,9 @@ const Index = () => {
       <main className="relative pb-24 md:pb-0">
         <HeroSection user={user} />
         <QuickStartSection />
-
-        <div className="mx-6 h-px bg-border/60" />
-
         <RelaxationSection />
         <DarshanSection />
 
-        <div className="mx-6 h-px bg-border/60" />
 
         <DailyHighlightsSection />
         <PhilosophySection />
