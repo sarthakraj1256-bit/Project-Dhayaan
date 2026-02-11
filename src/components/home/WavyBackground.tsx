@@ -19,6 +19,7 @@ export default function WavyBackground() {
           className="absolute inset-0"
           style={{
             background: 'linear-gradient(135deg, #0D9488 0%, #06B6D4 40%, #22D3EE 70%, #67E8F9 100%)',
+            opacity: 0.75,
           }}
         />
         {/* Wavy bottom edge */}
@@ -26,7 +27,7 @@ export default function WavyBackground() {
           className="absolute bottom-0 left-0 w-full"
           viewBox="0 0 1440 120"
           preserveAspectRatio="none"
-          style={{ height: '80px', transform: 'translateY(1px)' }}
+          style={{ height: '80px', transform: 'translateY(1px)', opacity: 0.75 }}
         >
           <path
             d="M0,40 C180,100 360,0 540,50 C720,100 900,10 1080,60 C1200,90 1320,30 1440,50 L1440,0 L0,0 Z"
@@ -56,7 +57,7 @@ export default function WavyBackground() {
           className="absolute top-0 left-0 w-full"
           viewBox="0 0 1440 120"
           preserveAspectRatio="none"
-          style={{ height: '80px', transform: 'translateY(-1px)' }}
+          style={{ height: '80px', transform: 'translateY(-1px)', opacity: 0.75 }}
         >
           <path
             d="M0,80 C180,20 360,110 540,60 C720,10 900,100 1080,50 C1200,20 1320,80 1440,60 L1440,120 L0,120 Z"
@@ -76,6 +77,7 @@ export default function WavyBackground() {
           style={{
             background: 'linear-gradient(135deg, #F97316 0%, #FB923C 40%, #F472B6 70%, #EC4899 100%)',
             top: '79px',
+            opacity: 0.75,
           }}
         />
       </motion.div>
