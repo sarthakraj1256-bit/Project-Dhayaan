@@ -6,12 +6,12 @@ import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
 const features = [
-  { icon: Waves, label: 'Sonic Lab', description: 'Healing frequencies', href: '/sonic-lab', color: '#34D9A8' },
-  { icon: Play, label: 'Live Darshan', description: 'Temple streams', href: '/live-darshan', color: '#F5816E' },
-  { icon: BookOpen, label: 'Mantrochar', description: 'Learn mantras', href: '/mantrochar', color: '#4ABA7E' },
-  { icon: ScrollText, label: 'Jap Seva', description: 'Chanting log', href: '/jap-bank', color: '#E8A87C' },
-  { icon: Sparkles, label: 'Lakshya', description: 'Spiritual progress', href: '/lakshya', color: '#A594E0' },
-  { icon: Eye, label: 'Immersive', description: '360° darshan', href: '/immersive-darshan', color: '#6EC4D6' },
+  { icon: Waves, label: 'Sonic Lab', description: 'Healing frequencies', href: '/sonic-lab', color: '#2EEAB4' },
+  { icon: Play, label: 'Live Darshan', description: 'Temple streams', href: '/live-darshan', color: '#FF7A65' },
+  { icon: BookOpen, label: 'Mantrochar', description: 'Learn mantras', href: '/mantrochar', color: '#3ED88A' },
+  { icon: ScrollText, label: 'Jap Seva', description: 'Chanting log', href: '/jap-bank', color: '#FFB07A' },
+  { icon: Sparkles, label: 'Lakshya', description: 'Spiritual progress', href: '/lakshya', color: '#B8A4F0' },
+  { icon: Eye, label: 'Immersive', description: '360° darshan', href: '/immersive-darshan', color: '#5DD8EE' },
 ];
 
 export default function QuickStartSection() {
@@ -41,9 +41,9 @@ export default function QuickStartSection() {
             >
               <div
                 className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
-                style={{ backgroundColor: `${feature.color}30` }}
+                style={{ backgroundColor: `${feature.color}40` }}
               >
-                <feature.icon className="w-5 h-5" style={{ color: feature.color }} strokeWidth={2.2} />
+                <feature.icon className="w-5 h-5" style={{ color: feature.color, filter: 'brightness(1.15)' }} strokeWidth={2.4} />
               </div>
               <div className="min-w-0">
                 <p className="text-sm font-medium text-white/90 leading-tight">
