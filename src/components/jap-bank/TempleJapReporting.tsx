@@ -6,7 +6,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { Send, Building2, Clock, Copy, CheckCircle2, Plus } from 'lucide-react';
+import { Send, Building2, Clock, Copy, CheckCircle2, Plus, Sparkles } from 'lucide-react';
 import { temples } from '@/data/templeStreams';
 import { PRESET_MANTRAS } from '@/hooks/useJapBank';
 import { supabase } from '@/integrations/supabase/client';
@@ -25,6 +25,8 @@ interface TempleReport {
   reference_id: string;
   status: string;
   created_at: string;
+  acknowledged_at: string | null;
+  blessing_message: string | null;
 }
 
 interface TempleJapReportingProps {
@@ -43,6 +45,17 @@ const TempleJapReporting = ({ userId }: TempleJapReportingProps) => {
   const [deadline, setDeadline] = useState('');
 
   const templeOptions = temples.map(t => ({ id: t.id, name: t.name, location: t.location }));
+
+  // Auto-acknowledge old submissions on load
+  useQuery({
+    queryKey: ['auto-acknowledge-temple'],
+    queryFn: async () => {
+      await supabase.rpc('auto_acknowledge_temple_reports');
+      return null;
+    },
+    enabled: !!userId,
+    staleTime: 60000,
+  });
 
   const { data: reports = [] } = useQuery({
     queryKey: ['temple-jap-reports', userId],
@@ -226,8 +239,15 @@ const TempleJapReporting = ({ userId }: TempleJapReportingProps) => {
                     <p className="font-semibold text-foreground text-sm">{report.temple_name}</p>
                     <p className="text-xs text-muted-foreground">{report.mantra_name}</p>
                   </div>
-                  <Badge variant="outline" className="bg-green-500/10 text-green-400 border-green-500/20 text-[10px]">
-                    {report.status}
+                  <Badge 
+                    variant="outline" 
+                    className={`text-[10px] ${
+                      report.status === 'acknowledged' 
+                        ? 'bg-primary/10 text-primary border-primary/20' 
+                        : 'bg-muted text-muted-foreground border-border'
+                    }`}
+                  >
+                    {report.status === 'acknowledged' ? '✨ Acknowledged' : '⏳ Submitted'}
                   </Badge>
                 </div>
 
@@ -242,6 +262,22 @@ const TempleJapReporting = ({ userId }: TempleJapReportingProps) => {
 
                 {report.dedication && (
                   <p className="text-xs text-muted-foreground italic">🕉️ {report.dedication}</p>
+                )}
+
+                {report.blessing_message && (
+                  <div className="rounded-lg bg-primary/5 border border-primary/10 p-3 space-y-1">
+                    <p className="text-[10px] font-semibold text-primary flex items-center gap-1">
+                      <Sparkles className="w-3 h-3" /> Temple Blessing
+                    </p>
+                    <p className="text-xs text-foreground/80 italic leading-relaxed">
+                      {report.blessing_message}
+                    </p>
+                    {report.acknowledged_at && (
+                      <p className="text-[9px] text-muted-foreground/60">
+                        Received {new Date(report.acknowledged_at).toLocaleString()}
+                      </p>
+                    )}
+                  </div>
                 )}
 
                 <Separator className="bg-primary/10" />

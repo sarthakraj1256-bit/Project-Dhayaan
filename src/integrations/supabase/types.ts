@@ -584,6 +584,8 @@ export type Database = {
       }
       temple_jap_reports: {
         Row: {
+          acknowledged_at: string | null
+          blessing_message: string | null
           chant_count: number
           created_at: string
           deadline: string | null
@@ -598,6 +600,8 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          acknowledged_at?: string | null
+          blessing_message?: string | null
           chant_count?: number
           created_at?: string
           deadline?: string | null
@@ -612,6 +616,8 @@ export type Database = {
           user_id: string
         }
         Update: {
+          acknowledged_at?: string | null
+          blessing_message?: string | null
           chant_count?: number
           created_at?: string
           deadline?: string | null
@@ -749,6 +755,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      auto_acknowledge_temple_reports: { Args: never; Returns: undefined }
       check_auto_complete_requests: { Args: never; Returns: undefined }
       check_expired_requests: { Args: never; Returns: undefined }
       get_garden_leaderboard: {
