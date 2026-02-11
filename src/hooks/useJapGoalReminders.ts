@@ -3,7 +3,7 @@ import { toast } from 'sonner';
 import type { JapGoal } from '@/hooks/useJapBank';
 
 const REMINDER_KEY = 'jap-goal-reminder-last';
-const REMINDER_INTERVAL_MS = 4 * 60 * 60 * 1000; // 4 hours between reminders
+const REMINDER_INTERVAL_MS = 12 * 60 * 60 * 1000; // 12 hours between reminders
 
 function getDaysUntil(deadline: string | null): number | null {
   if (!deadline) return null;
