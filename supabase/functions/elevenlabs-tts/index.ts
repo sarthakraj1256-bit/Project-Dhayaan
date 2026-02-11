@@ -30,7 +30,12 @@ serve(async (req) => {
 
     const { text, voiceId } = await req.json();
 
-    if (!text || typeof text !== 'string' || text.length > 1000) {
+    // Sanitize and validate text input
+    const sanitizedText = typeof text === 'string' 
+      ? text.replace(/<[^>]*>/g, '').replace(/javascript:/gi, '').trim() 
+      : '';
+
+    if (!sanitizedText || sanitizedText.length === 0 || sanitizedText.length > 1000) {
       return new Response(JSON.stringify({ error: 'Text is required and must be under 1000 characters' }), { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
  
@@ -46,8 +51,8 @@ serve(async (req) => {
            'xi-api-key': ELEVENLABS_API_KEY,
            'Content-Type': 'application/json',
          },
-         body: JSON.stringify({
-           text,
+          body: JSON.stringify({
+            text: sanitizedText,
            model_id: 'eleven_multilingual_v2',
            voice_settings: {
              stability: 0.75,
