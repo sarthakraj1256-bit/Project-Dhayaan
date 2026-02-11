@@ -6,7 +6,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { Send, Building2, Clock, Copy, CheckCircle2, Plus, Sparkles } from 'lucide-react';
+import { Send, Building2, Clock, Copy, CheckCircle2, Plus, Sparkles, Share2 } from 'lucide-react';
+import ShareOfferingModal from './ShareOfferingModal';
 import { temples } from '@/data/templeStreams';
 import { PRESET_MANTRAS } from '@/hooks/useJapBank';
 import { supabase } from '@/integrations/supabase/client';
@@ -36,6 +37,7 @@ interface TempleJapReportingProps {
 const TempleJapReporting = ({ userId }: TempleJapReportingProps) => {
   const queryClient = useQueryClient();
   const [showForm, setShowForm] = useState(false);
+  const [shareReport, setShareReport] = useState<TempleReport | null>(null);
   const [templeId, setTempleId] = useState('');
   const [mantra, setMantra] = useState(PRESET_MANTRAS[0]);
   const [customMantra, setCustomMantra] = useState('');
@@ -299,6 +301,15 @@ const TempleJapReporting = ({ userId }: TempleJapReportingProps) => {
                 <p className="text-[9px] text-muted-foreground/60">
                   Submitted {new Date(report.created_at).toLocaleString()}
                 </p>
+
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full mt-1 h-7 text-[10px] border-primary/20 text-primary hover:bg-primary/10"
+                  onClick={() => setShareReport(report)}
+                >
+                  <Share2 className="w-3 h-3 mr-1" /> Share Offering
+                </Button>
               </CardContent>
             </Card>
           ))}
@@ -312,6 +323,44 @@ const TempleJapReporting = ({ userId }: TempleJapReportingProps) => {
             No temple offerings yet. Submit your completed chants to a temple.
           </p>
         </div>
+      )}
+
+      {/* Share Modal */}
+      {shareReport && (
+        <ShareOfferingModal
+          isOpen={!!shareReport}
+          onClose={() => setShareReport(null)}
+          title="Share Temple Offering"
+          shareText={`🙏 Temple Jap Offering\n\n🏛️ ${shareReport.temple_name}\n📿 ${shareReport.mantra_name}\n🔢 ${shareReport.chant_count.toLocaleString()} chants${shareReport.dedication ? `\n💝 ${shareReport.dedication}` : ''}${shareReport.blessing_message ? `\n\n✨ Blessing: "${shareReport.blessing_message}"` : ''}\n\nRef: ${shareReport.reference_id}`}
+        >
+          <Card className="border-primary/30 bg-gradient-to-b from-card to-card/80 overflow-hidden">
+            <div
+              className="px-4 py-3 text-center"
+              style={{
+                background: 'linear-gradient(135deg, hsl(var(--gold) / 0.2), hsl(var(--primary) / 0.15))',
+                borderBottom: '1px solid hsl(var(--gold) / 0.3)',
+              }}
+            >
+              <p className="text-[10px] uppercase tracking-[0.2em] text-primary/70">🏛️ Temple Offering</p>
+              <h3 className="text-base font-bold text-primary font-[Cinzel] mt-1">{shareReport.temple_name}</h3>
+            </div>
+            <CardContent className="p-4 space-y-2">
+              <p className="text-sm text-foreground">{shareReport.mantra_name}</p>
+              <p className="text-lg font-bold text-primary font-[Cinzel]">{shareReport.chant_count.toLocaleString()} chants</p>
+              {shareReport.dedication && <p className="text-xs italic text-muted-foreground">🕉️ {shareReport.dedication}</p>}
+              {shareReport.blessing_message && (
+                <div className="rounded-lg bg-primary/5 border border-primary/10 p-3 mt-2">
+                  <p className="text-[10px] font-semibold text-primary flex items-center gap-1">
+                    <Sparkles className="w-3 h-3" /> Temple Blessing
+                  </p>
+                  <p className="text-xs text-foreground/80 italic">{shareReport.blessing_message}</p>
+                </div>
+              )}
+              <p className="text-[9px] text-center text-muted-foreground/60 font-mono mt-2">Ref: {shareReport.reference_id}</p>
+              <p className="text-[9px] text-center text-muted-foreground/60 italic">"सर्वे भवन्तु सुखिनः"</p>
+            </CardContent>
+          </Card>
+        </ShareOfferingModal>
       )}
     </div>
   );

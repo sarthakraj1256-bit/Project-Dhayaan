@@ -1,7 +1,10 @@
+import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
-import { ScrollText, User, BookOpen, Clock, Heart } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { ScrollText, User, BookOpen, Clock, Heart, Share2 } from 'lucide-react';
+import ShareOfferingModal from './ShareOfferingModal';
 
 interface SankalpaReceiptProps {
   receipt: {
@@ -19,7 +22,12 @@ interface SankalpaReceiptProps {
 }
 
 const SankalpaReceipt = ({ receipt }: SankalpaReceiptProps) => {
+  const [shareOpen, setShareOpen] = useState(false);
+
+  const shareText = `🙏 Sankalpa Receipt — Dhyaan Seva\n\n📿 Mantra: ${receipt.mantra}\n🔢 Count: ${receipt.count.toLocaleString()}\n${receipt.dedicated_to ? `💝 Dedicated to: ${receipt.dedicated_to}\n` : ''}✨ Karma: ${receipt.karma_reward}\n\n"सर्वे भवन्तु सुखिनः" — May all beings be happy`;
+
   return (
+    <>
     <Card className="border-primary/30 bg-gradient-to-b from-card to-card/80 overflow-hidden">
       {/* Header with saffron/gold gradient */}
       <div
@@ -111,8 +119,48 @@ const SankalpaReceipt = ({ receipt }: SankalpaReceiptProps) => {
         <p className="text-[9px] text-center text-muted-foreground/60 italic mt-2">
           "सर्वे भवन्तु सुखिनः" — May all beings be happy
         </p>
+
+        <Button
+          variant="outline"
+          size="sm"
+          className="w-full mt-2 border-primary/20 text-primary hover:bg-primary/10"
+          onClick={() => setShareOpen(true)}
+        >
+          <Share2 className="w-3.5 h-3.5 mr-2" />
+          Share Sankalpa Receipt
+        </Button>
       </CardContent>
     </Card>
+
+    <ShareOfferingModal
+      isOpen={shareOpen}
+      onClose={() => setShareOpen(false)}
+      shareText={shareText}
+      title="Share Sankalpa Receipt"
+    >
+      {/* Render a static copy of the receipt for capture */}
+      <Card className="border-primary/30 bg-gradient-to-b from-card to-card/80 overflow-hidden">
+        <div
+          className="px-4 py-3 text-center"
+          style={{
+            background: 'linear-gradient(135deg, hsl(var(--gold) / 0.2), hsl(var(--primary) / 0.15))',
+            borderBottom: '1px solid hsl(var(--gold) / 0.3)',
+          }}
+        >
+          <p className="text-[10px] uppercase tracking-[0.2em] text-primary/70">ॐ Sankalpa Receipt ॐ</p>
+          <h3 className="text-lg font-bold text-primary font-[Cinzel] mt-1">Dhyaan Spiritual Seva</h3>
+        </div>
+        <CardContent className="p-4 space-y-2">
+          <p className="text-sm"><span className="text-muted-foreground text-xs">Devotee:</span> {receipt.devotee_name || 'Devotee'}</p>
+          <p className="text-sm"><span className="text-muted-foreground text-xs">Mantra:</span> {receipt.mantra}</p>
+          <p className="text-sm font-bold text-primary">{receipt.count.toLocaleString()} chants</p>
+          {receipt.dedicated_to && <p className="text-xs italic">💝 {receipt.dedicated_to}</p>}
+          <p className="text-lg font-bold text-primary font-[Cinzel] text-center mt-2">{receipt.karma_reward} Karma</p>
+          <p className="text-[9px] text-center text-muted-foreground/60 italic">"सर्वे भवन्तु सुखिनः"</p>
+        </CardContent>
+      </Card>
+    </ShareOfferingModal>
+    </>
   );
 };
 
