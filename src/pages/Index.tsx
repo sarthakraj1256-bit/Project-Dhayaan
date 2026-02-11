@@ -36,7 +36,7 @@ const Index = () => {
   return (
     <div className="homepage-theme relative min-h-screen bg-background overflow-x-hidden">
       <main className="relative pb-24 md:pb-0">
-        <HeroSection />
+        <HeroSection user={user} />
         <QuickStartSection />
 
         <div className="mx-6 h-px bg-border/60" />
