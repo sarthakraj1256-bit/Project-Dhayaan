@@ -6,12 +6,12 @@ import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
 const features = [
-  { icon: Waves, label: 'Sonic Lab', description: 'Healing frequencies', href: '/sonic-lab', color: '#0D9488' },
-  { icon: Play, label: 'Live Darshan', description: 'Temple streams', href: '/live-darshan', color: '#0D9488' },
-  { icon: BookOpen, label: 'Mantrochar', description: 'Learn mantras', href: '/mantrochar', color: '#4F46E5' },
-  { icon: ScrollText, label: 'Jap Seva', description: 'Chanting log', href: '/jap-bank', color: '#4F46E5' },
-  { icon: Sparkles, label: 'Lakshya', description: 'Spiritual progress', href: '/lakshya', color: '#0D9488' },
-  { icon: Eye, label: 'Immersive', description: '360° darshan', href: '/immersive-darshan', color: '#4F46E5' },
+  { icon: Waves, label: 'Sonic Lab', description: 'Healing frequencies', href: '/sonic-lab', color: '#005871' },
+  { icon: Play, label: 'Live Darshan', description: 'Temple streams', href: '/live-darshan', color: '#33BECC' },
+  { icon: BookOpen, label: 'Mantrochar', description: 'Learn mantras', href: '/mantrochar', color: '#389365' },
+  { icon: ScrollText, label: 'Jap Seva', description: 'Chanting log', href: '/jap-bank', color: '#FFC875' },
+  { icon: Sparkles, label: 'Lakshya', description: 'Spiritual progress', href: '/lakshya', color: '#706FD3' },
+  { icon: Eye, label: 'Immersive', description: '360° darshan', href: '/immersive-darshan', color: '#33BECC' },
 ];
 
 export default function QuickStartSection() {
