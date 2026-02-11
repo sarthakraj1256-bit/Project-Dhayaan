@@ -1,6 +1,10 @@
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 
 export default function WavyBackground() {
+  const { scrollY } = useScroll();
+  const topY = useTransform(scrollY, [0, 600], [0, -80]);
+  const bottomY = useTransform(scrollY, [0, 600], [0, 80]);
+
   return (
     <>
       {/* Top Green/Cyan Wave */}
@@ -8,8 +12,8 @@ export default function WavyBackground() {
         initial={{ y: '-100%' }}
         animate={{ y: 0 }}
         transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+        style={{ height: '35vh', y: topY }}
         className="fixed top-0 left-0 right-0 z-0 pointer-events-none"
-        style={{ height: '35vh' }}
       >
         <div
           className="absolute inset-0"
@@ -44,8 +48,8 @@ export default function WavyBackground() {
         initial={{ y: '100%' }}
         animate={{ y: 0 }}
         transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+        style={{ height: '30vh', y: bottomY }}
         className="fixed bottom-0 left-0 right-0 z-0 pointer-events-none"
-        style={{ height: '30vh' }}
       >
         {/* Wavy top edge */}
         <svg
