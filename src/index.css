@@ -74,24 +74,25 @@
   }
 
   /* Homepage-only warm brown palette */
+  /* Homepage-only Graphite & Sand palette */
   .homepage-theme {
-    --background: 30 30% 90%;
-    --foreground: 24 30% 25%;
-    --card: 33 35% 85%;
-    --card-foreground: 24 30% 25%;
-    --popover: 33 35% 85%;
-    --popover-foreground: 24 30% 25%;
-    --primary: 24 35% 42%;
-    --primary-foreground: 30 30% 95%;
-    --secondary: 33 30% 80%;
-    --secondary-foreground: 24 30% 30%;
-    --muted: 33 25% 82%;
-    --muted-foreground: 24 15% 48%;
-    --accent: 24 35% 42%;
-    --accent-foreground: 30 30% 95%;
-    --border: 30 20% 78%;
-    --input: 33 30% 80%;
-    --ring: 24 35% 42%;
+    --background: 30 18% 96%;       /* #F8F5F2 Soft Sand */
+    --foreground: 0 0% 18%;         /* #2D2D2D Deep Graphite */
+    --card: 0 0% 100%;             /* #FFFFFF Pure White */
+    --card-foreground: 0 0% 18%;    /* #2D2D2D */
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 18%;
+    --primary: 24 10% 49%;          /* #8B7E74 Muted Taupe */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 30 18% 94%;
+    --secondary-foreground: 0 0% 18%;
+    --muted: 30 14% 92%;
+    --muted-foreground: 0 0% 42%;
+    --accent: 24 10% 49%;           /* #8B7E74 */
+    --accent-foreground: 0 0% 100%;
+    --border: 30 14% 89%;           /* #E5E1DA Light Grey-Beige */
+    --input: 30 14% 89%;
+    --ring: 24 10% 49%;
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 98%;
   }
