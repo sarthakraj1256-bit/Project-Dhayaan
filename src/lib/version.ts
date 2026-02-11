@@ -8,7 +8,7 @@
  *   - "feat:" or "feature:" or "minor:" → minor version bump (1.0.0 → 1.1.0)
  *   - Any other commit → patch version bump (1.0.0 → 1.0.1)
  */
-export const APP_VERSION = '1.0.0';
+export const APP_VERSION = '1.1.0';
 
 /**
  * Build number - unique identifier for each production build.
