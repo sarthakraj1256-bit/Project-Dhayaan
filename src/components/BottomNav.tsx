@@ -14,7 +14,7 @@ const navItems: NavItem[] = [
   { path: '/', label: 'Home', icon: Home },
   { path: '/sonic-lab', label: 'Sonic', icon: Radio },
   { path: '/mantrochar', label: 'Mantra', icon: BookOpen },
-  { path: '/jap-bank', label: 'Jap', icon: ScrollText },
+  { path: '/jap-bank', label: 'Jap Seva', icon: ScrollText },
   { path: '/lakshya', label: 'Lakshya', icon: Sparkles },
   { path: '/live-darshan', label: 'Darshan', icon: Play },
 ];

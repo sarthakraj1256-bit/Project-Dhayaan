@@ -225,50 +225,68 @@ export type Database = {
       }
       jap_requests: {
         Row: {
+          auto_complete_at: string | null
           completed_count: number
           created_at: string
           deadline: string | null
           dedicated_to: string | null
+          escrow_amount: number | null
+          escrow_status: string | null
           feedback: string | null
           id: string
           karma_reward: number
           mantra_name: string
           performer_id: string | null
+          performer_terms_accepted_at: string | null
           rating: number | null
           requester_id: string
+          requester_terms_accepted_at: string | null
           required_count: number
+          sankalpa_receipt: Json | null
           status: string
           updated_at: string
         }
         Insert: {
+          auto_complete_at?: string | null
           completed_count?: number
           created_at?: string
           deadline?: string | null
           dedicated_to?: string | null
+          escrow_amount?: number | null
+          escrow_status?: string | null
           feedback?: string | null
           id?: string
           karma_reward?: number
           mantra_name: string
           performer_id?: string | null
+          performer_terms_accepted_at?: string | null
           rating?: number | null
           requester_id: string
+          requester_terms_accepted_at?: string | null
           required_count: number
+          sankalpa_receipt?: Json | null
           status?: string
           updated_at?: string
         }
         Update: {
+          auto_complete_at?: string | null
           completed_count?: number
           created_at?: string
           deadline?: string | null
           dedicated_to?: string | null
+          escrow_amount?: number | null
+          escrow_status?: string | null
           feedback?: string | null
           id?: string
           karma_reward?: number
           mantra_name?: string
           performer_id?: string | null
+          performer_terms_accepted_at?: string | null
           rating?: number | null
           requester_id?: string
+          requester_terms_accepted_at?: string | null
           required_count?: number
+          sankalpa_receipt?: Json | null
           status?: string
           updated_at?: string
         }
@@ -686,6 +704,8 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      check_auto_complete_requests: { Args: never; Returns: undefined }
+      check_expired_requests: { Args: never; Returns: undefined }
       get_garden_leaderboard: {
         Args: { limit_count?: number }
         Returns: {
