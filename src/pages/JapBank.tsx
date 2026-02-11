@@ -1,6 +1,6 @@
 import { Suspense, lazy } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowLeft, BookOpen, Target, HandHeart, Trophy } from 'lucide-react';
+import { ArrowLeft, BookOpen, Target, HandHeart, Trophy, Building2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -13,6 +13,7 @@ const JapLedger = lazy(() => import('@/components/jap-bank/JapLedger'));
 const JapGoals = lazy(() => import('@/components/jap-bank/JapGoals'));
 const JapLeaderboard = lazy(() => import('@/components/jap-bank/JapLeaderboard'));
 const JapRequests = lazy(() => import('@/components/jap-bank/JapRequests'));
+const TempleJapReporting = lazy(() => import('@/components/jap-bank/TempleJapReporting'));
 
 const Fallback = () => <Skeleton className="h-40 w-full bg-muted/30 rounded-lg" />;
 
@@ -72,16 +73,19 @@ const JapBank = () => {
         <div className="px-4 mt-4">
           <Tabs defaultValue="bank">
             <TabsList className="w-full flex overflow-x-auto gap-1 h-auto flex-wrap">
-              <TabsTrigger value="bank" className="flex-1 min-w-[70px] text-xs gap-1">
+              <TabsTrigger value="bank" className="flex-1 min-w-[60px] text-xs gap-1">
                 <BookOpen className="w-3.5 h-3.5" /> Bank
               </TabsTrigger>
-              <TabsTrigger value="goals" className="flex-1 min-w-[70px] text-xs gap-1">
+              <TabsTrigger value="goals" className="flex-1 min-w-[60px] text-xs gap-1">
                 <Target className="w-3.5 h-3.5" /> Goals
               </TabsTrigger>
-              <TabsTrigger value="requests" className="flex-1 min-w-[70px] text-xs gap-1">
+              <TabsTrigger value="temple" className="flex-1 min-w-[60px] text-xs gap-1">
+                <Building2 className="w-3.5 h-3.5" /> Temple
+              </TabsTrigger>
+              <TabsTrigger value="requests" className="flex-1 min-w-[60px] text-xs gap-1">
                 <HandHeart className="w-3.5 h-3.5" /> Delegate
               </TabsTrigger>
-              <TabsTrigger value="leaderboard" className="flex-1 min-w-[70px] text-xs gap-1">
+              <TabsTrigger value="leaderboard" className="flex-1 min-w-[60px] text-xs gap-1">
                 <Trophy className="w-3.5 h-3.5" /> Leaders
               </TabsTrigger>
             </TabsList>
@@ -108,6 +112,12 @@ const JapBank = () => {
                   onCreateGoal={g => createGoal.mutate(g)}
                   isCreating={createGoal.isPending}
                 />
+              </Suspense>
+            </TabsContent>
+
+            <TabsContent value="temple" className="mt-4">
+              <Suspense fallback={<Fallback />}>
+                <TempleJapReporting userId={userId} />
               </Suspense>
             </TabsContent>
 
