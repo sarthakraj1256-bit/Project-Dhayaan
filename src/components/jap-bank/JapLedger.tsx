@@ -37,7 +37,7 @@ const JapLedger = ({ entries, lifetimeTotal, todayTotal, getTotalForMantra }: Ja
     return s;
   }, [entries]);
 
-  // Heatmap: last 7 weeks (49 days)
+  // Heatmap: last 7 full weeks aligned to Monday
   const heatmapData = useMemo(() => {
     const dailyCounts: Record<string, number> = {};
     entries.forEach(e => {
@@ -45,13 +45,30 @@ const JapLedger = ({ entries, lifetimeTotal, todayTotal, getTotalForMantra }: Ja
       dailyCounts[key] = (dailyCounts[key] || 0) + e.chant_count;
     });
 
-    const days: { date: Date; dateStr: string; count: number }[] = [];
+    // Find the Monday that starts the grid (7 weeks back from this week's Monday)
     const today = new Date();
-    for (let i = 48; i >= 0; i--) {
-      const d = new Date(today);
-      d.setDate(d.getDate() - i);
+    const todayDow = today.getDay(); // 0=Sun
+    const mondayOffset = todayDow === 0 ? 6 : todayDow - 1;
+    const thisMonday = new Date(today);
+    thisMonday.setDate(today.getDate() - mondayOffset);
+    thisMonday.setHours(0, 0, 0, 0);
+
+    const startMonday = new Date(thisMonday);
+    startMonday.setDate(startMonday.getDate() - 6 * 7); // 7 weeks total
+
+    const days: { dateStr: string; count: number; isToday: boolean; isFuture: boolean }[] = [];
+    const todayStr = today.toISOString().slice(0, 10);
+
+    for (let i = 0; i < 7 * 7; i++) {
+      const d = new Date(startMonday);
+      d.setDate(d.getDate() + i);
       const dateStr = d.toISOString().slice(0, 10);
-      days.push({ date: d, dateStr, count: dailyCounts[dateStr] || 0 });
+      days.push({
+        dateStr,
+        count: dailyCounts[dateStr] || 0,
+        isToday: dateStr === todayStr,
+        isFuture: d > today,
+      });
     }
     const maxCount = Math.max(...days.map(d => d.count), 1);
     return { days, maxCount };
@@ -120,8 +137,14 @@ const JapLedger = ({ entries, lifetimeTotal, todayTotal, getTotalForMantra }: Ja
             {heatmapData.days.map(d => (
               <div
                 key={d.dateStr}
-                title={`${d.dateStr}: ${d.count.toLocaleString()} chants`}
-                className={`aspect-square rounded-sm ${getHeatColor(d.count, heatmapData.maxCount)} transition-colors`}
+                title={d.isFuture ? '' : `${d.dateStr}: ${d.count.toLocaleString()} chants`}
+                className={`aspect-square rounded-sm transition-colors ${
+                  d.isFuture
+                    ? 'bg-transparent'
+                    : d.isToday
+                    ? `${getHeatColor(d.count, heatmapData.maxCount)} ring-1 ring-primary`
+                    : getHeatColor(d.count, heatmapData.maxCount)
+                }`}
               />
             ))}
           </div>
