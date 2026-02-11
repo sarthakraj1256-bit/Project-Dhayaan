@@ -73,25 +73,25 @@
     --sidebar-ring: 38 75% 55%;
   }
 
-  /* Homepage-only Deep Midnight palette */
+  /* Homepage-only Obsidian & Amber Glow palette */
   .homepage-theme {
-    --background: 222 47% 11%;       /* #0F172A Deep Midnight */
-    --foreground: 210 20% 98%;       /* #F9FAFB Ice White */
-    --card: 210 40% 98%;             /* #F8FAFC Soft Porcelain */
-    --card-foreground: 222 47% 11%;  /* #0F172A Dark text on light cards */
-    --popover: 210 40% 98%;
-    --popover-foreground: 222 47% 11%;
-    --primary: 210 40% 98%;          /* #F8FAFC */
-    --primary-foreground: 222 47% 11%;
-    --secondary: 222 40% 16%;
-    --secondary-foreground: 210 20% 90%;
-    --muted: 222 40% 14%;
-    --muted-foreground: 215 15% 55%;
-    --accent: 222 35% 18%;
-    --accent-foreground: 210 20% 98%;
-    --border: 220 20% 88%;
-    --input: 220 20% 88%;
-    --ring: 210 20% 98%;
+    --background: 0 0% 5%;           /* #0D0D0D Obsidian */
+    --foreground: 0 0% 94%;          /* #F0F0F0 Off-White */
+    --card: 216 7% 11%;              /* #1A1C1E Deep Navy-Grey */
+    --card-foreground: 0 0% 94%;     /* #F0F0F0 */
+    --popover: 216 7% 11%;
+    --popover-foreground: 0 0% 94%;
+    --primary: 35 100% 73%;          /* #FFC875 Amber Glow */
+    --primary-foreground: 0 0% 5%;
+    --secondary: 184 59% 50%;        /* #33BECC Blue Curacao */
+    --secondary-foreground: 0 0% 94%;
+    --muted: 210 4% 14%;
+    --muted-foreground: 210 6% 65%;  /* #9FA6AD Cool Grey */
+    --accent: 184 59% 50%;           /* #33BECC Blue Curacao */
+    --accent-foreground: 0 0% 5%;
+    --border: 195 7% 21%;            /* #2D3436 Carbon */
+    --input: 195 7% 21%;
+    --ring: 35 100% 73%;
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 98%;
   }
