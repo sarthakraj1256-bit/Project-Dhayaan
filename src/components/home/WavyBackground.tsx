@@ -43,6 +43,16 @@ export default function WavyBackground() {
         />
       </svg>
 
+      {/* Layer 3.5 — Dark blue mid-section fill */}
+      <div
+        className="absolute left-0 w-full"
+        style={{
+          top: '30vh',
+          height: '40vh',
+          background: '#1E3A5F',
+        }}
+      />
+
       {/* Layer 4 — Coral / peach band (bottom sweep) */}
       <svg
         className="absolute bottom-0 left-0 w-full"
