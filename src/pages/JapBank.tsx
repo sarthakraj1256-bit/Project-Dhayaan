@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useJapBank } from '@/hooks/useJapBank';
+import { useJapGoalReminders } from '@/hooks/useJapGoalReminders';
 import BottomNav from '@/components/BottomNav';
 
 const JapCounter = lazy(() => import('@/components/jap-bank/JapCounter'));
@@ -23,6 +24,8 @@ const JapBank = () => {
     addEntry, createGoal, createRequest,
     acceptRequest, submitProof, completeRequest,
   } = useJapBank();
+
+  useJapGoalReminders(goals, isAuthenticated);
 
   return (
     <div className="min-h-screen bg-background pb-28">
