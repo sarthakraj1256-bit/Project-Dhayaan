@@ -30,9 +30,9 @@ const BottomNav = () => {
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 md:hidden safe-bottom">
       <div
-        className="mx-0 overflow-hidden touch-manipulation border-t border-border"
+        className="mx-0 overflow-hidden touch-manipulation border-t border-border/30"
         style={{
-          background: 'hsl(var(--background) / 0.92)',
+          background: 'hsl(222 47% 11% / 0.95)',
           backdropFilter: 'blur(16px)',
           WebkitBackdropFilter: 'blur(16px)',
         }}
