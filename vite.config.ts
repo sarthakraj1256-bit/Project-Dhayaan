@@ -191,16 +191,17 @@ export default defineConfig(({ mode }) => ({
               networkTimeoutSeconds: 10
             }
           },
-          // JS/CSS chunks - Stale While Revalidate
+          // JS/CSS chunks - Network First so updates show immediately
           {
             urlPattern: /\.(?:js|css)$/i,
-            handler: 'StaleWhileRevalidate',
+            handler: 'NetworkFirst',
             options: {
               cacheName: 'static-resources',
               expiration: {
                 maxEntries: 100,
                 maxAgeSeconds: 60 * 60 * 24 * 7 // 7 days
-              }
+              },
+              networkTimeoutSeconds: 5
             }
           }
         ]
