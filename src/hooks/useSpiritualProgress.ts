@@ -59,14 +59,17 @@ export function getNextLevelThreshold(currentLevel: SpiritualLevel): number {
 export function useSpiritualProgress() {
   const queryClient = useQueryClient();
   const [userId, setUserId] = useState<string | null>(null);
+  const [authLoading, setAuthLoading] = useState(true);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUserId(session?.user?.id || null);
+      setAuthLoading(false);
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setUserId(session?.user?.id || null);
+      setAuthLoading(false);
     });
 
     return () => subscription.unsubscribe();
@@ -184,7 +187,7 @@ export function useSpiritualProgress() {
 
   return {
     progress,
-    isLoading,
+    isLoading: isLoading || authLoading,
     userId,
     addKarma,
     isAddingKarma: addKarmaMutation.isPending,
