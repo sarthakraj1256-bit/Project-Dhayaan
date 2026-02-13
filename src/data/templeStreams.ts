@@ -32,7 +32,7 @@ export interface Temple {
 export interface SpiritualContent {
   id: string;
   title: string;
-  type: 'bhajan' | 'discourse' | 'aarti' | 'meditation' | 'short';
+  type: 'bhajan' | 'discourse' | 'aarti' | 'meditation' | 'short' | 'mantra' | 'pravachan';
   youtubeVideoId: string;
   duration: string;
   speaker?: string;
@@ -722,7 +722,7 @@ export const spiritualContent: SpiritualContent[] = [
     id: 'shiv-tandav',
     title: 'Shiv Tandav Stotram',
     type: 'bhajan',
-    youtubeVideoId: 'Rk_Z1kLJvnc',
+    youtubeVideoId: 'hMBKmQEPNzI',
     duration: '8:32',
     thumbnail: 'https://images.unsplash.com/photo-1590766940554-634c4a6b0fc4?w=400'
   },
@@ -730,7 +730,7 @@ export const spiritualContent: SpiritualContent[] = [
     id: 'vishnu-sahasranamam',
     title: 'Vishnu Sahasranamam',
     type: 'bhajan',
-    youtubeVideoId: 'T_9FVrw-Omg',
+    youtubeVideoId: 'zKC17254flc',
     duration: '28:15',
     thumbnail: 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?w=400'
   },
@@ -739,7 +739,7 @@ export const spiritualContent: SpiritualContent[] = [
     id: 'om-jai-jagdish',
     title: 'Om Jai Jagdish Hare Aarti',
     type: 'aarti',
-    youtubeVideoId: 'q8mWMlQBdFE',
+    youtubeVideoId: 'NE3SWh9_vR4',
     duration: '7:20',
     thumbnail: 'https://images.unsplash.com/photo-1544735716-392fe2489ffa?w=400'
   },
@@ -747,18 +747,18 @@ export const spiritualContent: SpiritualContent[] = [
     id: 'ganga-aarti',
     title: 'Ganga Aarti - Varanasi',
     type: 'aarti',
-    youtubeVideoId: 'W2YsBMdJEKM',
-    duration: '12:45',
+    youtubeVideoId: 'I8HNi91OKcs',
+    duration: 'Live',
     thumbnail: 'https://images.unsplash.com/photo-1561361513-2d000a50f0dc?w=400'
   },
   // Discourses
   {
     id: 'premanand-wisdom-1',
-    title: 'Life Wisdom - Premanand Maharaj',
-    type: 'discourse',
-    youtubeVideoId: 'RfV6dPqbKZQ',
+    title: 'Premanand Ji Maharaj',
+    type: 'pravachan',
+    youtubeVideoId: 'Uv9hn_9yEpg',
     duration: '15:30',
-    speaker: 'Premanand Maharaj',
+    speaker: 'Premanand Ji Maharaj',
     thumbnail: 'https://images.unsplash.com/photo-1609619385076-36a873425636?w=400'
   },
   {
@@ -795,6 +795,79 @@ export const spiritualContent: SpiritualContent[] = [
     youtubeVideoId: 'LBaF7ypRVXM',
     duration: '0:45',
     thumbnail: 'https://images.unsplash.com/photo-1514222134-b57cbb8ce073?w=400'
+  },
+  // New additions
+  {
+    id: 'manglacharan-nirankari',
+    title: 'Manglacharan Nirankari Mission',
+    type: 'bhajan',
+    youtubeVideoId: 'fNWJV8bERZc',
+    duration: '12:00',
+    thumbnail: 'https://images.unsplash.com/photo-1609619385076-36a873425636?w=400'
+  },
+  {
+    id: 'dhuni-nirankari',
+    title: 'Dhuni Nirankari Mission',
+    type: 'bhajan',
+    youtubeVideoId: 'Bc0ZPaZ5OFE',
+    duration: '10:00',
+    thumbnail: 'https://images.unsplash.com/photo-1605649487212-47bdab064df7?w=400'
+  },
+  {
+    id: 'all-aarti-morning',
+    title: 'All Aarti (Morning)',
+    type: 'aarti',
+    youtubeVideoId: 'q8lcgclUVSQ',
+    duration: '45:00',
+    thumbnail: 'https://images.unsplash.com/photo-1544735716-392fe2489ffa?w=400'
+  },
+  {
+    id: 'panchdev-aarti',
+    title: 'Panchdev Aarti',
+    type: 'aarti',
+    youtubeVideoId: 'zysW2tnJy30',
+    duration: '15:00',
+    thumbnail: 'https://images.unsplash.com/photo-1561361513-2d000a50f0dc?w=400'
+  },
+  {
+    id: 'bajrang-baan',
+    title: 'Bajrang Baan',
+    type: 'bhajan',
+    youtubeVideoId: 'dXl2NdlmeIE',
+    duration: '12:30',
+    thumbnail: 'https://images.unsplash.com/photo-1609619385076-36a873425636?w=400'
+  },
+  {
+    id: 'iskcon-morning-aarti',
+    title: 'ISKCON Morning Aarti',
+    type: 'aarti',
+    youtubeVideoId: 'W9D2mJaEI2Y',
+    duration: '20:00',
+    thumbnail: 'https://images.unsplash.com/photo-1600100830012-d0ea5d40aa89?w=400'
+  },
+  {
+    id: 'shiv-amritwani',
+    title: 'Shiv Amritwani',
+    type: 'bhajan',
+    youtubeVideoId: 'kYFriF5zHMM',
+    duration: '35:00',
+    thumbnail: 'https://images.unsplash.com/photo-1590766940554-634c4a6b0fc4?w=400'
+  },
+  {
+    id: 'hanuman-amritwani',
+    title: 'Shri Hanuman Amritwani',
+    type: 'bhajan',
+    youtubeVideoId: 'ksPEwPcFGbU',
+    duration: '40:00',
+    thumbnail: 'https://images.unsplash.com/photo-1609619385076-36a873425636?w=400'
+  },
+  {
+    id: 'mahamrityunjay-mantra',
+    title: 'Mahamrityunjay Mantra',
+    type: 'mantra',
+    youtubeVideoId: 'adyjwFgXRNY',
+    duration: '30:00',
+    thumbnail: 'https://images.unsplash.com/photo-1544735716-392fe2489ffa?w=400'
   }
 ];
 

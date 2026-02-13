@@ -17,7 +17,9 @@ const typeLabels: Record<SpiritualContent['type'], string> = {
   discourse: '📖 Discourse',
   aarti: '🪔 Aarti',
   meditation: '🧘 Meditation',
-  short: '📱 Short'
+  short: '📱 Short',
+  mantra: '🕉️ Mantra',
+  pravachan: '🎙️ Pravachan'
 };
 
 const ContentVideoModal = ({ content, onClose }: ContentVideoModalProps) => {

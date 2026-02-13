@@ -283,6 +283,8 @@ const LiveDarshan = () => {
                 { value: 'all', label: '✨ All', icon: Sparkles },
                 { value: 'bhajan', label: '🎵 Bhajans', icon: Music },
                 { value: 'aarti', label: '🪔 Aarti', icon: Zap },
+                { value: 'mantra', label: '🕉️ Mantras', icon: Sparkles },
+                { value: 'pravachan', label: '🎙️ Pravachan', icon: BookOpen },
                 { value: 'discourse', label: '📖 Discourses', icon: BookOpen },
                 { value: 'meditation', label: '🧘 Meditation', icon: Sparkles },
                 { value: 'short', label: '📱 Shorts', icon: Video }
