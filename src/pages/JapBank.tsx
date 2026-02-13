@@ -241,7 +241,7 @@ const JapBank = () => {
 
             <TabsContent value="leaderboard" className="mt-4">
               <Suspense fallback={<Fallback />}>
-                <JapLeaderboard leaderboard={leaderboard} currentUserId={userId} />
+                <JapLeaderboard leaderboard={leaderboard} />
               </Suspense>
             </TabsContent>
           </Tabs>
