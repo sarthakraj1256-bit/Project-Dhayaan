@@ -29,10 +29,8 @@ const SharedGarden = () => {
       }
 
       const { data, error: fetchError } = await supabase
-        .from('shared_gardens')
-        .select('*')
-        .eq('id', id)
-        .single();
+        .rpc('get_shared_garden', { garden_id: id })
+        .maybeSingle();
 
       if (fetchError || !data) {
         setError('Garden not found');
