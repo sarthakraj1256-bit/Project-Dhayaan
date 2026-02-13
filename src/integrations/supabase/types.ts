@@ -783,6 +783,19 @@ export type Database = {
           user_id: string
         }[]
       }
+      get_shared_garden: {
+        Args: { garden_id: string }
+        Returns: {
+          created_at: string
+          flourishing_count: number
+          garden_level: number
+          id: string
+          plant_count: number
+          screenshot_url: string
+          share_message: string
+          total_karma_earned: number
+        }[]
+      }
       get_stress_statistics: {
         Args: never
         Returns: {
