@@ -1,3 +1,4 @@
+import PageTransition from '@/components/PageTransition';
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
@@ -121,6 +122,7 @@ const Lakshya = () => {
   }
 
   return (
+    <PageTransition>
     <div className="min-h-screen bg-background relative overflow-hidden">
       <CosmicBackground />
       
@@ -432,6 +434,7 @@ const Lakshya = () => {
         <BottomNav />
       </div>
     </div>
+    </PageTransition>
   );
 };
 

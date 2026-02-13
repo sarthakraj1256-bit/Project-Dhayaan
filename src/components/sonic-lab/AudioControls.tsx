@@ -269,7 +269,7 @@ const AudioControls = forwardRef<HTMLDivElement, AudioControlsProps>(({
 
           {/* Mini-player bar (always visible) */}
           <div
-            className="px-3 pb-[calc(env(safe-area-inset-bottom,0px)+4.5rem)]"
+            className="px-3 pb-[calc(env(safe-area-inset-bottom,0px)+4.5rem)] max-h-[60px]"
             style={{
               background: 'linear-gradient(180deg, hsl(var(--void-light) / 0.95), hsl(var(--void) / 0.98))',
               borderTop: '1px solid hsl(var(--gold) / 0.15)',
