@@ -778,9 +778,9 @@ export type Database = {
         Returns: {
           avatar_url: string
           display_name: string
+          id: string
           mantra_name: string
           total_chants: number
-          user_id: string
         }[]
       }
       get_shared_garden: {

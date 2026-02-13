@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Trophy, Medal, Award } from 'lucide-react';
 
 interface LeaderboardEntry {
-  user_id: string;
+  id: string;
   display_name: string;
   avatar_url: string;
   total_chants: number;
@@ -11,7 +11,6 @@ interface LeaderboardEntry {
 
 interface JapLeaderboardProps {
   leaderboard: LeaderboardEntry[];
-  currentUserId: string | null;
 }
 
 const rankIcons = [
@@ -20,7 +19,7 @@ const rankIcons = [
   <Award className="w-5 h-5 text-primary" />,
 ];
 
-const JapLeaderboard = ({ leaderboard, currentUserId }: JapLeaderboardProps) => {
+const JapLeaderboard = ({ leaderboard }: JapLeaderboardProps) => {
   return (
     <Card className="border-primary/20 bg-card/80">
       <CardHeader className="pb-2">
@@ -33,13 +32,10 @@ const JapLeaderboard = ({ leaderboard, currentUserId }: JapLeaderboardProps) => 
           </p>
         )}
         {leaderboard.map((entry, i) => {
-          const isMe = entry.user_id === currentUserId;
           return (
             <div
-              key={`${entry.user_id}-${entry.mantra_name}`}
-              className={`flex items-center gap-3 p-3 rounded-lg transition-colors ${
-                isMe ? 'bg-primary/10 border border-primary/30' : 'bg-muted/40'
-              }`}
+              key={`${entry.id}-${entry.mantra_name}`}
+              className="flex items-center gap-3 p-3 rounded-lg transition-colors bg-muted/40"
             >
               <div className="w-8 flex-shrink-0 text-center">
                 {i < 3 ? rankIcons[i] : (
@@ -57,7 +53,7 @@ const JapLeaderboard = ({ leaderboard, currentUserId }: JapLeaderboardProps) => 
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-semibold text-foreground truncate">
-                  {entry.display_name || 'Devotee'} {isMe && <span className="text-primary">(You)</span>}
+                  {entry.display_name || 'Devotee'}
                 </p>
                 <p className="text-xs text-muted-foreground truncate">{entry.mantra_name}</p>
               </div>

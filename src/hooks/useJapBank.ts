@@ -328,7 +328,7 @@ export function useJapBank() {
     queryFn: async () => {
       const { data, error } = await supabase.rpc('get_jap_leaderboard', { limit_count: 20 });
       if (error) { console.error(error); return []; }
-      return data as { user_id: string; display_name: string; avatar_url: string; total_chants: number; mantra_name: string }[];
+      return data as { id: string; display_name: string; avatar_url: string; total_chants: number; mantra_name: string }[];
     },
   });
 

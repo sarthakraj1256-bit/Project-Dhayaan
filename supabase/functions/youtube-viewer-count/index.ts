@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -19,17 +20,40 @@ interface YouTubeVideoResponse {
 }
 
 serve(async (req) => {
-  // Handle CORS preflight
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
+    // Auth check
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader?.startsWith('Bearer ')) {
+      return new Response(
+        JSON.stringify({ error: 'Unauthorized' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    const supabaseClient = createClient(
+      Deno.env.get('SUPABASE_URL')!,
+      Deno.env.get('SUPABASE_ANON_KEY')!,
+      { global: { headers: { Authorization: authHeader } } }
+    );
+
+    const token = authHeader.replace('Bearer ', '');
+    const { data: claimsData, error: claimsError } = await supabaseClient.auth.getClaims(token);
+    if (claimsError || !claimsData?.claims) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid session' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
     const { videoId } = await req.json();
     
-    if (!videoId) {
+    if (!videoId || typeof videoId !== 'string' || videoId.length > 20 || !/^[a-zA-Z0-9_-]+$/.test(videoId)) {
       return new Response(
-        JSON.stringify({ error: 'videoId is required' }),
+        JSON.stringify({ error: 'Invalid videoId' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
@@ -43,7 +67,6 @@ serve(async (req) => {
       );
     }
 
-    // Fetch video details including live streaming info
     const url = new URL('https://www.googleapis.com/youtube/v3/videos');
     url.searchParams.set('part', 'liveStreamingDetails,snippet');
     url.searchParams.set('id', videoId);
@@ -52,10 +75,9 @@ serve(async (req) => {
     const response = await fetch(url.toString());
     
     if (!response.ok) {
-      const errorText = await response.text();
-      console.error('[youtube-viewer-count] YouTube API error:', errorText);
+      console.error('[youtube-viewer-count] YouTube API error:', response.status);
       return new Response(
-        JSON.stringify({ error: 'Failed to fetch video data', details: errorText }),
+        JSON.stringify({ error: 'Failed to fetch video data' }),
         { status: response.status, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
