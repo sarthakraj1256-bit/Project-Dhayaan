@@ -76,6 +76,30 @@ const Lakshya = () => {
     setTimeout(() => setShowKarmaAnimation(false), 2500);
   }, [applyMultiplier, totalMultiplier, incrementSessionGames, sessionGamesCompleted]);
 
+  // Show loading while auth state is being determined
+  if (isLoading && !userId) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="text-center"
+        >
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+            className="w-16 h-16 mx-auto mb-4"
+          >
+            <Sparkles className="w-full h-full text-primary" />
+          </motion.div>
+          <p className="text-muted-foreground text-sm tracking-widest animate-pulse">
+            Loading your journey...
+          </p>
+        </motion.div>
+      </div>
+    );
+  }
+
   if (!userId) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
