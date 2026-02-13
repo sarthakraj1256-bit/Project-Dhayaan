@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Share2, Twitter, Facebook, Linkedin, Link2, Check, Loader2, Download, Camera } from 'lucide-react';
+import { X, Share2, Twitter, Facebook, Linkedin, Link2, Check, Loader2, Download, Camera, EyeOff, Eye } from 'lucide-react';
 import html2canvas from 'html2canvas';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
@@ -29,6 +29,7 @@ const ShareGardenModal = ({
   const [screenshotUrl, setScreenshotUrl] = useState<string | null>(null);
   const [shareUrl, setShareUrl] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const [isAnonymous, setIsAnonymous] = useState(false);
   const previewRef = useRef<HTMLImageElement>(null);
 
   const captureGarden = useCallback(async () => {
@@ -84,6 +85,7 @@ const ShareGardenModal = ({
               flourishing_count: gardenStats.flourishingCount,
               garden_level: gardenStats.gardenLevel,
               total_karma_earned: gardenStats.totalKarmaEarned,
+              is_anonymous: isAnonymous,
             })
             .select()
             .single();
@@ -104,7 +106,7 @@ const ShareGardenModal = ({
     } finally {
       setIsCapturing(false);
     }
-  }, [gardenRef, userId, gardenStats]);
+  }, [gardenRef, userId, gardenStats, isAnonymous]);
 
   const copyLink = useCallback(async () => {
     const link = shareUrl || window.location.href;
@@ -125,6 +127,9 @@ const ShareGardenModal = ({
   }, [screenshotUrl]);
 
   const getShareText = () => {
+    if (isAnonymous) {
+      return `🌱 An Inner Calm Garden on Dhyaan\n\nGrow your own peaceful digital garden through meditation! 🧘‍♀️`;
+    }
     return `🌱 My Inner Calm Garden on Dhyaan\n\n🪴 ${gardenStats.plantCount} plants growing\n🌸 ${gardenStats.flourishingCount} flourishing\n✨ ${gardenStats.totalKarmaEarned} Karma earned\n\nGrow your own peaceful digital garden through meditation! 🧘‍♀️`;
   };
 
@@ -226,16 +231,61 @@ const ShareGardenModal = ({
               </button>
             )}
 
+            {/* Anonymize Toggle */}
+            {userId && (
+              <button
+                onClick={() => setIsAnonymous(!isAnonymous)}
+                className={`w-full flex items-center justify-between p-3 rounded-xl border transition-colors ${
+                  isAnonymous
+                    ? 'bg-amber-500/10 border-amber-500/30'
+                    : 'bg-white/5 border-white/10'
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  {isAnonymous ? (
+                    <EyeOff className="w-5 h-5 text-amber-400" />
+                  ) : (
+                    <Eye className="w-5 h-5 text-muted-foreground" />
+                  )}
+                  <div className="text-left">
+                    <p className="text-sm text-foreground">
+                      {isAnonymous ? 'Anonymous Mode On' : 'Anonymous Mode Off'}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      {isAnonymous
+                        ? 'Stats will be hidden from public view'
+                        : 'Stats are visible in shared link'}
+                    </p>
+                  </div>
+                </div>
+                <div
+                  className={`w-10 h-6 rounded-full relative transition-colors ${
+                    isAnonymous ? 'bg-amber-500' : 'bg-white/20'
+                  }`}
+                >
+                  <div
+                    className={`absolute top-1 w-4 h-4 rounded-full bg-white transition-transform ${
+                      isAnonymous ? 'translate-x-5' : 'translate-x-1'
+                    }`}
+                  />
+                </div>
+              </button>
+            )}
+
             {/* Garden Stats */}
             <div className="grid grid-cols-2 gap-3">
               <div className="p-3 rounded-lg bg-white/5 text-center">
                 <p className="text-2xl">🪴</p>
-                <p className="text-lg font-display text-foreground">{gardenStats.plantCount}</p>
+                <p className="text-lg font-display text-foreground">
+                  {isAnonymous ? '••' : gardenStats.plantCount}
+                </p>
                 <p className="text-xs text-muted-foreground">Plants</p>
               </div>
               <div className="p-3 rounded-lg bg-white/5 text-center">
                 <p className="text-2xl">🌸</p>
-                <p className="text-lg font-display text-foreground">{gardenStats.flourishingCount}</p>
+                <p className="text-lg font-display text-foreground">
+                  {isAnonymous ? '••' : gardenStats.flourishingCount}
+                </p>
                 <p className="text-xs text-muted-foreground">Flourishing</p>
               </div>
             </div>

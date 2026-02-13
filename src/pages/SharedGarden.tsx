@@ -7,11 +7,12 @@ import { supabase } from '@/integrations/supabase/client';
 interface SharedGardenData {
   id: string;
   screenshot_url: string;
-  plant_count: number;
-  flourishing_count: number;
-  garden_level: number;
-  total_karma_earned: number;
+  plant_count: number | null;
+  flourishing_count: number | null;
+  garden_level: number | null;
+  total_karma_earned: number | null;
   created_at: string;
+  is_anonymous: boolean;
 }
 
 const SharedGarden = () => {
@@ -119,33 +120,46 @@ const SharedGarden = () => {
         </motion.div>
 
         {/* Stats */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="grid grid-cols-4 gap-3 mb-8"
-        >
-          <div className="p-4 rounded-xl bg-white/5 border border-white/10 text-center">
-            <TreeDeciduous className="w-6 h-6 text-emerald-400 mx-auto mb-2" />
-            <p className="text-xl font-display text-foreground">{garden.plant_count}</p>
-            <p className="text-xs text-muted-foreground">Plants</p>
-          </div>
-          <div className="p-4 rounded-xl bg-white/5 border border-white/10 text-center">
-            <Flower2 className="w-6 h-6 text-pink-400 mx-auto mb-2" />
-            <p className="text-xl font-display text-foreground">{garden.flourishing_count}</p>
-            <p className="text-xs text-muted-foreground">Flourishing</p>
-          </div>
-          <div className="p-4 rounded-xl bg-white/5 border border-white/10 text-center">
-            <Heart className="w-6 h-6 text-rose-400 mx-auto mb-2" />
-            <p className="text-xl font-display text-foreground">Lv.{garden.garden_level}</p>
-            <p className="text-xs text-muted-foreground">Level</p>
-          </div>
-          <div className="p-4 rounded-xl bg-white/5 border border-white/10 text-center">
-            <Sparkles className="w-6 h-6 text-amber-400 mx-auto mb-2" />
-            <p className="text-xl font-display text-foreground">{garden.total_karma_earned}</p>
-            <p className="text-xs text-muted-foreground">Karma</p>
-          </div>
-        </motion.div>
+        {garden.is_anonymous ? (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="mb-8 p-6 rounded-xl bg-white/5 border border-white/10 text-center"
+          >
+            <p className="text-muted-foreground text-sm">
+              🔒 This gardener chose to share anonymously
+            </p>
+          </motion.div>
+        ) : (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="grid grid-cols-4 gap-3 mb-8"
+          >
+            <div className="p-4 rounded-xl bg-white/5 border border-white/10 text-center">
+              <TreeDeciduous className="w-6 h-6 text-emerald-400 mx-auto mb-2" />
+              <p className="text-xl font-display text-foreground">{garden.plant_count}</p>
+              <p className="text-xs text-muted-foreground">Plants</p>
+            </div>
+            <div className="p-4 rounded-xl bg-white/5 border border-white/10 text-center">
+              <Flower2 className="w-6 h-6 text-pink-400 mx-auto mb-2" />
+              <p className="text-xl font-display text-foreground">{garden.flourishing_count}</p>
+              <p className="text-xs text-muted-foreground">Flourishing</p>
+            </div>
+            <div className="p-4 rounded-xl bg-white/5 border border-white/10 text-center">
+              <Heart className="w-6 h-6 text-rose-400 mx-auto mb-2" />
+              <p className="text-xl font-display text-foreground">Lv.{garden.garden_level}</p>
+              <p className="text-xs text-muted-foreground">Level</p>
+            </div>
+            <div className="p-4 rounded-xl bg-white/5 border border-white/10 text-center">
+              <Sparkles className="w-6 h-6 text-amber-400 mx-auto mb-2" />
+              <p className="text-xl font-display text-foreground">{garden.total_karma_earned}</p>
+              <p className="text-xs text-muted-foreground">Karma</p>
+            </div>
+          </motion.div>
+        )}
 
         {/* CTA */}
         <motion.div

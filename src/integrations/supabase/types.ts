@@ -790,6 +790,7 @@ export type Database = {
           flourishing_count: number
           garden_level: number
           id: string
+          is_anonymous: boolean
           plant_count: number
           screenshot_url: string
           share_message: string
