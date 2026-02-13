@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, forwardRef } from 'react';
 import { motion, AnimatePresence, useDragControls, PanInfo } from 'framer-motion';
 import { Volume2, VolumeX, Layers, Loader2, Check, Cloud, Timer, Heart, ChevronUp, Square, GripHorizontal } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
@@ -140,7 +140,7 @@ const ExpandedControls = ({
   </div>
 );
 
-const AudioControls = ({
+const AudioControls = forwardRef<HTMLDivElement, AudioControlsProps>(({
   isPlaying,
   currentFrequency,
   currentFrequencyName,
@@ -159,7 +159,7 @@ const AudioControls = ({
   onAtmosphereVolumeChange,
   onAtmosphereChange,
   onStop,
-}: AudioControlsProps) => {
+}, _ref) => {
   const [expanded, setExpanded] = useState(false);
   const sheetRef = useRef<HTMLDivElement>(null);
 
@@ -407,6 +407,8 @@ const AudioControls = ({
       </motion.div>
     </>
   );
-};
+});
+
+AudioControls.displayName = 'AudioControls';
 
 export default AudioControls;
