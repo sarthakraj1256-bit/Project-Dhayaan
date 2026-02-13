@@ -365,7 +365,7 @@ const Auth = () => {
       case "reset":
         return "RESTORE PASSWORD";
       case "login":
-        return "ENTER SANCTUM";
+        return "AWAKEN";
       default:
         return "BEGIN JOURNEY";
     }
@@ -581,7 +581,7 @@ const Auth = () => {
                   }}
                   className="text-sm text-muted-foreground hover:text-gold transition-colors font-body tracking-wide"
                 >
-                  Lost your path?
+                  Forgot password?
                 </button>
               </motion.div>
             )}
