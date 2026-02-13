@@ -31,12 +31,12 @@ export default function QuickStartSection() {
             <Link
               to={feature.href}
               className={cn(
-                'flex items-center gap-3 p-4 rounded-2xl',
+                'flex items-center gap-3 px-4 py-[14px] rounded-2xl',
                 'bg-white/[0.07] backdrop-blur-md border border-white/[0.12]',
                 'shadow-[0_2px_16px_rgba(0,0,0,0.2)]',
                 'hover:shadow-[0_4px_24px_rgba(0,0,0,0.3)] hover:bg-white/[0.12]',
                 'transition-all duration-200 active:scale-[0.96]',
-                'min-h-[72px]'
+                'h-[72px]'
               )}
             >
               <div
@@ -45,11 +45,11 @@ export default function QuickStartSection() {
               >
                 <feature.icon className="w-5 h-5" style={{ color: feature.color, filter: 'brightness(1.15)' }} strokeWidth={2.4} />
               </div>
-              <div className="min-w-0">
-                <p className="text-sm font-medium text-white/90 leading-tight">
+              <div className="min-w-0 flex flex-col justify-center">
+                <p className="text-[13px] font-semibold text-white/90 leading-none tracking-tight">
                   {feature.label}
                 </p>
-                <p className="text-[11px] text-white/45 mt-0.5 leading-tight">
+                <p className="text-[11px] font-normal text-white/45 leading-none mt-[5px]">
                   {feature.description}
                 </p>
               </div>
