@@ -43,8 +43,8 @@ export default defineConfig(({ mode }) => ({
     react(),
     mode === "development" && componentTagger(),
     VitePWA({
-      registerType: 'prompt', // Changed to prompt so we control the update flow
-      injectRegister: false, // Disable auto-injection, we handle registration manually
+      registerType: 'autoUpdate',
+      injectRegister: 'auto',
       includeAssets: ['favicon.ico', 'og-image.png', 'robots.txt', 'pwa-icon-192.png', 'pwa-icon-512.png', 'sw-custom.js'],
       manifest: {
         name: 'Dhyaan - Temple Darshan & Spiritual Wellness',
@@ -116,6 +116,8 @@ export default defineConfig(({ mode }) => ({
         ]
       },
       workbox: {
+        skipWaiting: true,
+        clientsClaim: true,
         navigateFallbackDenylist: [/^\/~oauth/],
         maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, // 5MB limit
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2,woff}'],
