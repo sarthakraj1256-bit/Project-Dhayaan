@@ -52,18 +52,17 @@
  const FrequencyCard = ({ frequency, isActive, categoryColor, onPlay, onStop }: FrequencyCardProps) => {
    const colors = colorMap[categoryColor] || colorMap.cyan;
  
-   return (
-     <motion.div
-       initial={{ opacity: 0, scale: 0.9 }}
-       animate={{ opacity: 1, scale: 1 }}
-       whileHover={{ scale: 1.02 }}
-       className={`
-         relative min-w-[200px] p-5 rounded-xl cursor-pointer transition-all duration-500
-         bg-gradient-to-br ${colors.bg}
-         border ${isActive ? colors.border : 'border-white/10'}
-         ${isActive ? colors.glow : 'hover:border-white/20'}
-         backdrop-blur-sm
-       `}
+    return (
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        whileHover={{ scale: 1.02 }}
+        className={`
+          relative min-w-[200px] p-5 rounded-xl cursor-pointer transition-all duration-500
+          bg-gradient-to-br ${colors.bg}
+          border-2 ${isActive ? 'border-gold shadow-[0_0_24px_4px_hsl(var(--gold)/0.45)]' : 'border-white/10 hover:border-white/20'}
+          backdrop-blur-sm
+        `}
        onClick={isActive ? onStop : onPlay}
      >
        {/* Waveform Animation - Only visible when active */}

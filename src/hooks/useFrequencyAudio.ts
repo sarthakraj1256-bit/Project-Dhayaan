@@ -43,64 +43,60 @@
    }, []);
  
    // Play a frequency
-   const playFrequency = useCallback((frequency: number) => {
-     const ctx = initAudioContext();
-     
-     // Stop existing oscillator
-     if (oscillatorRef.current) {
-       oscillatorRef.current.stop();
-       oscillatorRef.current.disconnect();
-     }
-     if (lfoRef.current) {
-       lfoRef.current.stop();
-       lfoRef.current.disconnect();
-     }
- 
-     // Create main oscillator
-     const oscillator = ctx.createOscillator();
-     const gainNode = ctx.createGain();
-     
-     // Create LFO for subtle vibrato
-     const lfo = ctx.createOscillator();
-     const lfoGain = ctx.createGain();
-     
-     // Configure oscillator
-     oscillator.type = 'sine';
-     oscillator.frequency.setValueAtTime(frequency, ctx.currentTime);
-     
-     // Configure LFO for subtle pulsing
-     lfo.type = 'sine';
-     lfo.frequency.setValueAtTime(0.2, ctx.currentTime); // Slow pulse
-     lfoGain.gain.setValueAtTime(frequency * 0.01, ctx.currentTime); // Subtle vibrato
-     
-     // Connect LFO to main oscillator frequency
-     lfo.connect(lfoGain);
-     lfoGain.connect(oscillator.frequency);
-     
-     // Set volume with fade in
-     gainNode.gain.setValueAtTime(0, ctx.currentTime);
-     gainNode.gain.linearRampToValueAtTime(audioState.frequencyVolume, ctx.currentTime + 0.5);
-     
-     // Connect to analyser and output
-     oscillator.connect(gainNode);
-     gainNode.connect(analyserRef.current!);
-     
-     // Start oscillators
-     oscillator.start();
-     lfo.start();
-     
-     // Store refs
-     oscillatorRef.current = oscillator;
-     gainNodeRef.current = gainNode;
-     lfoRef.current = lfo;
-     lfoGainRef.current = lfoGain;
-     
-     setAudioState((prev) => ({
-       ...prev,
-       isPlaying: true,
-       currentFrequency: frequency,
-     }));
-   }, [initAudioContext, audioState.frequencyVolume]);
+    const playFrequency = useCallback((frequency: number) => {
+      const ctx = initAudioContext();
+
+      // Cross-fade: fade out old oscillator over 400ms then clean up
+      if (oscillatorRef.current && gainNodeRef.current) {
+        const oldOsc = oscillatorRef.current;
+        const oldGain = gainNodeRef.current;
+        const oldLfo = lfoRef.current;
+        oldGain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.4);
+        setTimeout(() => {
+          try { oldOsc.stop(); oldOsc.disconnect(); } catch {}
+          try { oldLfo?.stop(); oldLfo?.disconnect(); } catch {}
+        }, 450);
+      }
+
+      // Create main oscillator
+      const oscillator = ctx.createOscillator();
+      const gainNode = ctx.createGain();
+      
+      // Create LFO for subtle vibrato
+      const lfo = ctx.createOscillator();
+      const lfoGain = ctx.createGain();
+      
+      oscillator.type = 'sine';
+      oscillator.frequency.setValueAtTime(frequency, ctx.currentTime);
+      
+      lfo.type = 'sine';
+      lfo.frequency.setValueAtTime(0.2, ctx.currentTime);
+      lfoGain.gain.setValueAtTime(frequency * 0.01, ctx.currentTime);
+      
+      lfo.connect(lfoGain);
+      lfoGain.connect(oscillator.frequency);
+      
+      // Fade in over 400ms for smooth cross-fade
+      gainNode.gain.setValueAtTime(0, ctx.currentTime);
+      gainNode.gain.linearRampToValueAtTime(audioState.frequencyVolume, ctx.currentTime + 0.4);
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(analyserRef.current!);
+      
+      oscillator.start();
+      lfo.start();
+      
+      oscillatorRef.current = oscillator;
+      gainNodeRef.current = gainNode;
+      lfoRef.current = lfo;
+      lfoGainRef.current = lfoGain;
+      
+      setAudioState((prev) => ({
+        ...prev,
+        isPlaying: true,
+        currentFrequency: frequency,
+      }));
+    }, [initAudioContext, audioState.frequencyVolume]);
  
    // Stop frequency
    const stopFrequency = useCallback(() => {
