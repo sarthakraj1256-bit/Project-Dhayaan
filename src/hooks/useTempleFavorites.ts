@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
@@ -9,10 +10,11 @@ interface TempleFavorite {
   created_at: string;
 }
 
+const FAVORITES_QUERY_KEY = ['temple-favorites'];
+
 export const useTempleFavorites = () => {
-  const [favorites, setFavorites] = useState<TempleFavorite[]>([]);
-  const [loading, setLoading] = useState(true);
   const [userId, setUserId] = useState<string | null>(null);
+  const queryClient = useQueryClient();
 
   // Check auth state
   useEffect(() => {
@@ -30,40 +32,35 @@ export const useTempleFavorites = () => {
     return () => subscription.unsubscribe();
   }, []);
 
-  // Load favorites
-  useEffect(() => {
-    const loadFavorites = async () => {
+  // Use react-query to deduplicate requests across all component instances
+  const { data: favorites = [], isLoading: loading } = useQuery({
+    queryKey: [...FAVORITES_QUERY_KEY, userId],
+    queryFn: async () => {
       if (!userId) {
         // Load from localStorage for non-authenticated users
         const stored = localStorage.getItem('temple_favorites');
         if (stored) {
           try {
-            setFavorites(JSON.parse(stored));
+            return JSON.parse(stored) as TempleFavorite[];
           } catch {
-            setFavorites([]);
+            return [];
           }
         }
-        setLoading(false);
-        return;
+        return [];
       }
 
-      try {
-        const { data, error } = await supabase
-          .from('temple_favorites')
-          .select('*')
-          .eq('user_id', userId);
+      const { data, error } = await supabase
+        .from('temple_favorites')
+        .select('*')
+        .eq('user_id', userId);
 
-        if (error) throw error;
-        setFavorites(data || []);
-      } catch (error) {
-        console.error('Error loading favorites:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadFavorites();
-  }, [userId]);
+      if (error) throw error;
+      return (data || []) as TempleFavorite[];
+    },
+    staleTime: 5 * 60 * 1000, // 5 minutes - prevents refetching
+    gcTime: 10 * 60 * 1000,
+    refetchOnWindowFocus: false,
+  });
 
   // Save to localStorage for non-authenticated users
   useEffect(() => {
@@ -94,14 +91,18 @@ export const useTempleFavorites = () => {
             .eq('id', existing.id);
 
           if (error) throw error;
-          setFavorites(prev => prev.filter(f => f.id !== existing.id));
+          queryClient.setQueryData([...FAVORITES_QUERY_KEY, userId], (old: TempleFavorite[] | undefined) =>
+            (old || []).filter(f => f.id !== existing.id)
+          );
           toast.success('Removed from favorites');
         } catch (error) {
           console.error('Error removing favorite:', error);
           toast.error('Failed to remove favorite');
         }
       } else {
-        setFavorites(prev => prev.filter(f => f.temple_id !== templeId));
+        queryClient.setQueryData([...FAVORITES_QUERY_KEY, userId], (old: TempleFavorite[] | undefined) =>
+          (old || []).filter(f => f.temple_id !== templeId)
+        );
         toast.success('Removed from favorites');
       }
     } else {
@@ -126,18 +127,22 @@ export const useTempleFavorites = () => {
             .single();
 
           if (error) throw error;
-          setFavorites(prev => [...prev, data]);
+          queryClient.setQueryData([...FAVORITES_QUERY_KEY, userId], (old: TempleFavorite[] | undefined) =>
+            [...(old || []), data]
+          );
           toast.success('Added to favorites with notifications enabled');
         } catch (error) {
           console.error('Error adding favorite:', error);
           toast.error('Failed to add favorite');
         }
       } else {
-        setFavorites(prev => [...prev, newFavorite]);
+        queryClient.setQueryData([...FAVORITES_QUERY_KEY, userId], (old: TempleFavorite[] | undefined) =>
+          [...(old || []), newFavorite]
+        );
         toast.success('Added to favorites');
       }
     }
-  }, [favorites, userId]);
+  }, [favorites, userId, queryClient]);
 
   const toggleNotifications = useCallback(async (templeId: string) => {
     const existing = favorites.find(f => f.temple_id === templeId);
@@ -153,21 +158,25 @@ export const useTempleFavorites = () => {
           .eq('id', existing.id);
 
         if (error) throw error;
-        setFavorites(prev => prev.map(f => 
-          f.id === existing.id ? { ...f, notifications_enabled: newValue } : f
-        ));
+        queryClient.setQueryData([...FAVORITES_QUERY_KEY, userId], (old: TempleFavorite[] | undefined) =>
+          (old || []).map(f =>
+            f.id === existing.id ? { ...f, notifications_enabled: newValue } : f
+          )
+        );
         toast.success(newValue ? 'Notifications enabled' : 'Notifications disabled');
       } catch (error) {
         console.error('Error updating notifications:', error);
         toast.error('Failed to update notifications');
       }
     } else {
-      setFavorites(prev => prev.map(f => 
-        f.temple_id === templeId ? { ...f, notifications_enabled: newValue } : f
-      ));
+      queryClient.setQueryData([...FAVORITES_QUERY_KEY, userId], (old: TempleFavorite[] | undefined) =>
+        (old || []).map(f =>
+          f.temple_id === templeId ? { ...f, notifications_enabled: newValue } : f
+        )
+      );
       toast.success(newValue ? 'Notifications enabled' : 'Notifications disabled');
     }
-  }, [favorites, userId]);
+  }, [favorites, userId, queryClient]);
 
   return {
     favorites,

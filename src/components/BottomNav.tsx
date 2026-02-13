@@ -1,3 +1,4 @@
+import { forwardRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Home, Radio, BookOpen, Sparkles, Play, User } from 'lucide-react';
@@ -18,7 +19,7 @@ const navItems: NavItem[] = [
   { path: '/profile', label: 'Profile', icon: User },
 ];
 
-const BottomNav = () => {
+const BottomNav = forwardRef<HTMLElement>((_, ref) => {
   const location = useLocation();
 
   const handleNavClick = (path: string) => {
@@ -28,7 +29,7 @@ const BottomNav = () => {
   };
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 md:hidden safe-bottom">
+    <nav ref={ref} className="fixed bottom-0 left-0 right-0 z-50 md:hidden safe-bottom">
       <div
         className="mx-0 overflow-hidden touch-manipulation border-t border-border/30"
         style={{
@@ -80,6 +81,8 @@ const BottomNav = () => {
       </div>
     </nav>
   );
-};
+});
+
+BottomNav.displayName = 'BottomNav';
 
 export default BottomNav;

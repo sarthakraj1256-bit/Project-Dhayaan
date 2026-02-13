@@ -1,4 +1,3 @@
-import { forwardRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
  import { Heart, X, Play, Trash2, Star } from 'lucide-react';
  import { Favorite } from '@/hooks/useFavorites';
@@ -14,19 +13,15 @@ import { motion, AnimatePresence } from 'framer-motion';
    onRemoveFavorite: (id: string) => void;
  }
  
-const FavoritesPanel = forwardRef<HTMLDivElement, FavoritesPanelProps>(
-  (
-    {
-      isOpen,
-      favorites,
-      isLoading,
-      isAuthenticated,
-      onClose,
-      onPlayFavorite,
-      onRemoveFavorite,
-    },
-    ref
-  ) => {
+const FavoritesPanel = ({
+  isOpen,
+  favorites,
+  isLoading,
+  isAuthenticated,
+  onClose,
+  onPlayFavorite,
+  onRemoveFavorite,
+}: FavoritesPanelProps) => {
    const getAtmosphereName = (id: string) => {
      return atmospheres.find((a) => a.id === id)?.name || 'None';
    };
@@ -51,7 +46,7 @@ const FavoritesPanel = forwardRef<HTMLDivElement, FavoritesPanelProps>(
    return (
     <AnimatePresence mode="wait">
        {isOpen && (
-        <div ref={ref}>
+        <div>
            {/* Backdrop */}
            <motion.div
              initial={{ opacity: 0 }}
@@ -167,9 +162,6 @@ const FavoritesPanel = forwardRef<HTMLDivElement, FavoritesPanelProps>(
        )}
      </AnimatePresence>
    );
-  }
-);
-
-FavoritesPanel.displayName = 'FavoritesPanel';
+};
  
- export default FavoritesPanel;
+export default FavoritesPanel;
