@@ -2,10 +2,21 @@ import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { supabase } from '@/integrations/backend/client';
 import { User } from '@supabase/supabase-js';
+import { Radio, BookOpen, Flame, Play, Sparkles } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 interface HeroSectionProps {
   user?: User | null;
 }
+
+const masonryItems = [
+  { label: 'Sonic Lab', icon: Radio, to: '/sonic-lab', h: 'h-28', color: '#34D9A8' },
+  { label: 'Live Darshan', icon: Play, to: '/live-darshan', h: 'h-36', color: '#F5816E' },
+  { label: 'Mantrochar', icon: BookOpen, to: '/mantrochar', h: 'h-32', color: '#7EC8E3' },
+  { label: 'Jap Bank', icon: Flame, to: '/jap-bank', h: 'h-28', color: '#FBBF24' },
+  { label: 'Lakshya', icon: Sparkles, to: '/lakshya', h: 'h-36', color: '#C084FC' },
+  { label: 'Dashboard', icon: Radio, to: '/dashboard', h: 'h-24', color: '#34D9A8' },
+];
 
 export default function HeroSection({ user }: HeroSectionProps) {
   const [displayName, setDisplayName] = useState<string | null>(null);
@@ -48,7 +59,6 @@ export default function HeroSection({ user }: HeroSectionProps) {
           >
             Dhyaan
           </span>
-          {/* Decorative dot */}
           <motion.span
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
@@ -56,7 +66,6 @@ export default function HeroSection({ user }: HeroSectionProps) {
             className="inline-block w-2 h-2 rounded-full ml-1 align-super"
             style={{ background: '#34D9A8', boxShadow: '0 0 10px 3px rgba(52,217,168,0.4)' }}
           />
-          {/* Shimmer line */}
           <motion.div
             initial={{ scaleX: 0 }}
             animate={{ scaleX: 1 }}
@@ -73,6 +82,33 @@ export default function HeroSection({ user }: HeroSectionProps) {
           Your space for calm and connection.
         </p>
       </motion.div>
+
+      {/* Masonry Quick-Access Grid */}
+      <div className="mt-6 columns-2 gap-3 space-y-3">
+        {masonryItems.map((item, i) => {
+          const Icon = item.icon;
+          return (
+            <Link key={item.label} to={item.to} className="block break-inside-avoid">
+              <motion.div
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.15 + i * 0.06, duration: 0.35 }}
+                className={`${item.h} rounded-2xl p-4 flex flex-col justify-between`}
+                style={{
+                  background: `linear-gradient(145deg, ${item.color}18, ${item.color}08)`,
+                  border: `1px solid ${item.color}25`,
+                  backdropFilter: 'blur(8px)',
+                }}
+              >
+                <Icon className="w-5 h-5" style={{ color: item.color }} strokeWidth={2} />
+                <span className="text-xs font-semibold tracking-wide" style={{ color: '#1a1a1a' }}>
+                  {item.label}
+                </span>
+              </motion.div>
+            </Link>
+          );
+        })}
+      </div>
     </section>
   );
 }
