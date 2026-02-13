@@ -15,6 +15,7 @@ import {
   PhilosophySection,
   FinalCTASection,
 } from '@/components/home';
+import SectionNav from '@/components/home/SectionNav';
 import WavyBackground from '@/components/home/WavyBackground';
 
 const Index = () => {
@@ -37,15 +38,14 @@ const Index = () => {
   return (
     <div className="homepage-theme relative min-h-screen bg-background overflow-x-hidden">
       <WavyBackground />
+      <SectionNav />
       <main className="relative z-10 pb-24 md:pb-0">
-        <HeroSection user={user} />
-        <QuickStartSection />
-        <RelaxationSection />
-        <DarshanSection />
-
-
-        <DailyHighlightsSection />
-        <PhilosophySection />
+        <div id="hero"><HeroSection user={user} /></div>
+        <div id="explore"><QuickStartSection /></div>
+        <div id="relaxation"><RelaxationSection /></div>
+        <div id="darshan"><DarshanSection /></div>
+        <div id="highlights"><DailyHighlightsSection /></div>
+        <div id="philosophy"><PhilosophySection /></div>
         <FinalCTASection />
       </main>
 
