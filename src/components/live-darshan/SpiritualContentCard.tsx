@@ -15,7 +15,9 @@ const typeLabels: Record<SpiritualContent['type'], { label: string; color: strin
   discourse: { label: '📖 Discourse', color: 'bg-blue-600' },
   aarti: { label: '🪔 Aarti', color: 'bg-orange-600' },
   meditation: { label: '🧘 Meditation', color: 'bg-green-600' },
-  short: { label: '📱 Short', color: 'bg-pink-600' }
+  short: { label: '📱 Short', color: 'bg-pink-600' },
+  mantra: { label: '🕉️ Mantra', color: 'bg-amber-600' },
+  pravachan: { label: '🎙️ Pravachan', color: 'bg-teal-600' },
 };
 
 const SpiritualContentCard = ({ content, onSelect }: SpiritualContentCardProps) => {
