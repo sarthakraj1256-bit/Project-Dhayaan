@@ -34,16 +34,46 @@ const Auth = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  // Check for password reset token in URL
+  // Check for password reset token or OAuth status in URL
   useEffect(() => {
     const type = searchParams.get("type");
     const accessToken = searchParams.get("access_token");
+    const oauthStatus = searchParams.get("oauth_status");
+    const oauthError = searchParams.get("oauth_error");
     
     // Handle password recovery redirect
     if (type === "recovery" || accessToken) {
       setMode("reset");
     }
-  }, [searchParams]);
+
+    // Show OAuth result feedback
+    if (oauthStatus === "error") {
+      const errorMsg = oauthError
+        ? decodeURIComponent(oauthError)
+        : "Google sign-in could not be completed.";
+      toast({
+        title: "Sign-in unsuccessful",
+        description: errorMsg === "no_session" 
+          ? "No session was returned. Please try again." 
+          : errorMsg,
+        variant: "destructive",
+      });
+    } else if (oauthStatus === "timeout") {
+      toast({
+        title: "Connection timed out",
+        description: "The sign-in took too long. Please try again.",
+        variant: "destructive",
+      });
+    }
+
+    // Clean up URL params
+    if (oauthStatus) {
+      const newParams = new URLSearchParams(searchParams);
+      newParams.delete("oauth_status");
+      newParams.delete("oauth_error");
+      window.history.replaceState({}, "", `${window.location.pathname}${newParams.toString() ? `?${newParams}` : ""}`);
+    }
+  }, [searchParams, toast]);
 
   // Check if user is already logged in
   useEffect(() => {
