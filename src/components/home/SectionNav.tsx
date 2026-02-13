@@ -7,7 +7,6 @@ const sections = [
   { id: 'relaxation', label: 'Relax' },
   { id: 'darshan', label: 'Darshan' },
   { id: 'highlights', label: 'Highlights' },
-  { id: 'philosophy', label: 'Philosophy' },
 ];
 
 export default function SectionNav() {
