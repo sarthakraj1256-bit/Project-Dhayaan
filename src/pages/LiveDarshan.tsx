@@ -1,3 +1,4 @@
+import PageTransition from '@/components/PageTransition';
 import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
@@ -76,8 +77,9 @@ const LiveDarshan = () => {
   const featuredTemples = temples.filter(t => t.isFeatured && t.isLive).slice(0, 3);
   const trendingTemples = [...temples].sort((a, b) => (b.viewerCount || 0) - (a.viewerCount || 0)).slice(0, 4);
 
-  return (
-    <div className="min-h-screen bg-background sacred-pattern">
+   return (
+     <PageTransition>
+     <div className="min-h-screen bg-background sacred-pattern">
       {/* Video Player Modal */}
       {selectedTemple && (
         <VideoPlayer 
@@ -335,6 +337,7 @@ const LiveDarshan = () => {
       {/* Mobile Bottom Navigation */}
       <BottomNav />
     </div>
+    </PageTransition>
   );
 };
 

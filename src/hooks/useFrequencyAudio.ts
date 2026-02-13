@@ -51,11 +51,11 @@
         const oldOsc = oscillatorRef.current;
         const oldGain = gainNodeRef.current;
         const oldLfo = lfoRef.current;
-        oldGain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.4);
-        setTimeout(() => {
-          try { oldOsc.stop(); oldOsc.disconnect(); } catch {}
-          try { oldLfo?.stop(); oldLfo?.disconnect(); } catch {}
-        }, 450);
+      oldGain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.5);
+      setTimeout(() => {
+        try { oldOsc.stop(); oldOsc.disconnect(); } catch {}
+        try { oldLfo?.stop(); oldLfo?.disconnect(); } catch {}
+      }, 520);
       }
 
       // Create main oscillator
@@ -76,9 +76,9 @@
       lfo.connect(lfoGain);
       lfoGain.connect(oscillator.frequency);
       
-      // Fade in over 400ms for smooth cross-fade
+      // Fade in over 500ms for smooth cross-fade
       gainNode.gain.setValueAtTime(0, ctx.currentTime);
-      gainNode.gain.linearRampToValueAtTime(audioState.frequencyVolume, ctx.currentTime + 0.4);
+      gainNode.gain.linearRampToValueAtTime(audioState.frequencyVolume, ctx.currentTime + 0.5);
       
       oscillator.connect(gainNode);
       gainNode.connect(analyserRef.current!);

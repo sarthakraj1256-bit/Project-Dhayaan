@@ -1,7 +1,9 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Radio, Star, BarChart3 } from 'lucide-react';
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
+import PageTransition from '@/components/PageTransition';
+import { useSessionPersistence } from '@/hooks/useSessionPersistence';
 import { categories, getFrequenciesByCategory } from '@/data/soundLibrary';
 import { useFrequencyAudio } from '@/hooks/useFrequencyAudio';
 import { useSessionTimer } from '@/hooks/useSessionTimer';
@@ -29,6 +31,7 @@ import BottomNav from '@/components/BottomNav';
   
   // Track session start time
   const sessionStartRef = useRef<Date | null>(null);
+  const { persist, clear: clearPersisted, restore } = useSessionPersistence();
  
    const {
      audioState,
@@ -84,10 +87,11 @@ import BottomNav from '@/components/BottomNav';
      playFrequency(frequency);
      if (name && category) {
        setCurrentFrequencyMeta({ name, category });
+       persist(frequency, name, category, audioState.currentAtmosphere || 'none');
      }
     // Track session start time
     sessionStartRef.current = new Date();
-   }, [playFrequency]);
+   }, [playFrequency, persist, audioState.currentAtmosphere]);
  
   // Handle stop and save session
   const handleStop = useCallback(() => {
@@ -115,8 +119,21 @@ import BottomNav from '@/components/BottomNav';
       });
     }
     sessionStartRef.current = null;
+    clearPersisted();
     stopFrequency();
-  }, [audioState.currentFrequency, audioState.currentAtmosphere, currentFrequencyMeta, saveSession, stopFrequency, refetchGoals, checkAndUnlockAchievements]);
+  }, [audioState.currentFrequency, audioState.currentAtmosphere, currentFrequencyMeta, saveSession, stopFrequency, refetchGoals, checkAndUnlockAchievements, clearPersisted]);
+
+  // Restore persisted session on mount
+  useEffect(() => {
+    const session = restore();
+    if (session) {
+      handlePlayFrequency(session.frequency, session.frequencyName, session.frequencyCategory);
+      if (session.atmosphere !== 'none') {
+        setAtmosphere(session.atmosphere);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
    const handleSaveFavorite = useCallback(() => {
      if (audioState.currentFrequency && currentFrequencyMeta) {
@@ -146,6 +163,7 @@ import BottomNav from '@/components/BottomNav';
      : false;
  
    return (
+     <PageTransition>
      <div className="min-h-screen bg-void relative overflow-hidden">
        {/* Background Elements */}
        <div className="fixed inset-0 z-0">
@@ -328,7 +346,7 @@ import BottomNav from '@/components/BottomNav';
          </section>
  
         {/* Frequency Categories */}
-          <main className="px-6 pb-40 md:pb-36 max-w-7xl mx-auto mb-16 md:mb-0">
+          <main className="px-6 pb-40 md:pb-36 max-w-7xl mx-auto mb-16 md:mb-0" style={{ pointerEvents: 'auto' }}>
             {categories.map((category) => (
               <CategorySection
                 key={category.id}
@@ -384,8 +402,9 @@ import BottomNav from '@/components/BottomNav';
 
       {/* Mobile Bottom Navigation */}
       <BottomNav />
-    </div>
-  );
-};
+     </div>
+     </PageTransition>
+   );
+ };
 
 export default SonicLab;

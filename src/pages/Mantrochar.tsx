@@ -1,3 +1,4 @@
+import PageTransition from '@/components/PageTransition';
 import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
@@ -75,6 +76,7 @@ const difficultyOrder = ['beginner', 'intermediate', 'advanced', 'mastery'] as c
    }
  
    return (
+     <PageTransition>
      <div className="min-h-screen bg-void relative overflow-hidden">
        {/* Background */}
        <div className="fixed inset-0 z-0">
@@ -281,6 +283,7 @@ const difficultyOrder = ['beginner', 'intermediate', 'advanced', 'mastery'] as c
         <BottomNav />
       </div>
     </div>
+    </PageTransition>
   );
 };
 
