@@ -596,6 +596,30 @@ const Auth = () => {
               </SanctumButton>
             </div>
           </form>
+
+          {/* Demo Login for presentation */}
+          {(mode === "login" || mode === "signup") && (
+            <div className="mt-4">
+              <button
+                type="button"
+                onClick={async () => {
+                  setIsLoading(true);
+                  const demoEmail = `demo_${Date.now()}@dhyaan.app`;
+                  const demoPass = "demo123456";
+                  const { error } = await supabase.auth.signUp({ email: demoEmail, password: demoPass });
+                  if (!error) {
+                    navigate("/");
+                  } else {
+                    toast({ title: "Demo login failed", description: error.message, variant: "destructive" });
+                  }
+                  setIsLoading(false);
+                }}
+                className="w-full py-3 rounded-md text-sm font-body tracking-widest text-gold/70 hover:text-gold border border-gold/20 hover:border-gold/40 transition-colors"
+              >
+                🚀 QUICK DEMO LOGIN
+              </button>
+            </div>
+          )}
           
           {/* Divider and Social Login - only show for login/signup */}
           {(mode === "login" || mode === "signup") && (
