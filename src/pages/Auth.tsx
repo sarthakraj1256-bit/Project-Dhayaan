@@ -367,7 +367,7 @@ const Auth = () => {
       case "login":
         return "AWAKEN";
       default:
-        return "BEGIN JOURNEY";
+        return "AWAKEN";
     }
   };
 
