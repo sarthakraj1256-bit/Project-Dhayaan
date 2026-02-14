@@ -797,6 +797,14 @@ export type Database = {
           total_karma_earned: number
         }[]
       }
+      get_story_reaction_counts: {
+        Args: { story_ids: string[] }
+        Returns: {
+          reaction_count: number
+          reaction_type: string
+          story_id: string
+        }[]
+      }
       get_stress_statistics: {
         Args: never
         Returns: {

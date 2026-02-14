@@ -58,6 +58,13 @@ const ChartContainer = React.forwardRef<
 });
 ChartContainer.displayName = "Chart";
 
+// Validate CSS color values to prevent injection
+const isValidCssColor = (color: string): boolean =>
+  /^(#[0-9a-fA-F]{3,8}|rgb\(|rgba\(|hsl\(|hsla\(|var\(--[a-zA-Z0-9-]+\)|[a-z]{3,20})$/i.test(color.trim());
+
+const sanitizeCssKey = (key: string): string =>
+  key.replace(/[^a-zA-Z0-9-_]/g, '');
+
 const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
   const colorConfig = Object.entries(config).filter(([_, config]) => config.theme || config.color);
 
@@ -75,8 +82,11 @@ ${prefix} [data-chart=${id}] {
 ${colorConfig
   .map(([key, itemConfig]) => {
     const color = itemConfig.theme?.[theme as keyof typeof itemConfig.theme] || itemConfig.color;
-    return color ? `  --color-${key}: ${color};` : null;
+    if (!color || !isValidCssColor(color)) return null;
+    const safeKey = sanitizeCssKey(key);
+    return `  --color-${safeKey}: ${color};`;
   })
+  .filter(Boolean)
   .join("\n")}
 }
 `,
