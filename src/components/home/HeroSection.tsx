@@ -9,9 +9,19 @@ interface HeroSectionProps {
 
 export default function HeroSection({ user }: HeroSectionProps) {
   const [displayName, setDisplayName] = useState<string | null>(null);
-  const hour = new Date().getHours();
-  const greeting =
-    hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+  const [greeting, setGreeting] = useState(() => {
+    const h = new Date().getHours();
+    return h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
+  });
+
+  useEffect(() => {
+    const update = () => {
+      const h = new Date().getHours();
+      setGreeting(h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening');
+    };
+    const id = setInterval(update, 60_000);
+    return () => clearInterval(id);
+  }, []);
 
   useEffect(() => {
     if (!user) { setDisplayName(null); return; }
