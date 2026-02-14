@@ -309,7 +309,7 @@ const AudioControls = forwardRef<HTMLDivElement, AudioControlsProps>(
             style={glassStyle}
           >
             <div
-              className="flex items-center gap-3 px-3 py-2.5 cursor-pointer select-none"
+              className="flex items-center gap-3 px-4 py-3.5 cursor-pointer select-none"
               onClick={() => setExpanded((v) => !v)}
             >
               {/* Pulsing dot */}
