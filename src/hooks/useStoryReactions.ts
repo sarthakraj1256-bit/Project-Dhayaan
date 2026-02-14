@@ -2,15 +2,14 @@ import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
-interface StoryReaction {
-  id: string;
+interface ReactionCount {
   story_id: string;
-  user_id: string;
   reaction_type: string;
+  reaction_count: number;
 }
 
 export const useStoryReactions = (storyIds: string[]) => {
-  const [reactions, setReactions] = useState<Map<string, StoryReaction[]>>(new Map());
+  const [reactionCounts, setReactionCounts] = useState<Map<string, number>>(new Map());
   const [userReactions, setUserReactions] = useState<Map<string, string>>(new Map());
   const [userId, setUserId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -37,28 +36,34 @@ export const useStoryReactions = (storyIds: string[]) => {
     }
 
     try {
-      const { data, error } = await supabase
-        .from('story_reactions')
-        .select('*')
-        .in('story_id', storyIds);
+      // Use RPC for aggregate counts (no user_id exposed)
+      const { data: counts, error: countsError } = await supabase
+        .rpc('get_story_reaction_counts', { story_ids: storyIds });
 
-      if (error) throw error;
+      if (countsError) throw countsError;
 
-      // Group reactions by story_id
-      const reactionsMap = new Map<string, StoryReaction[]>();
-      const userReactionsMap = new Map<string, string>();
-
-      (data || []).forEach(reaction => {
-        const existing = reactionsMap.get(reaction.story_id) || [];
-        reactionsMap.set(reaction.story_id, [...existing, reaction]);
-        
-        if (userId && reaction.user_id === userId) {
-          userReactionsMap.set(reaction.story_id, reaction.reaction_type);
-        }
+      const countsMap = new Map<string, number>();
+      (counts || []).forEach((c: ReactionCount) => {
+        const existing = countsMap.get(c.story_id) || 0;
+        countsMap.set(c.story_id, existing + Number(c.reaction_count));
       });
+      setReactionCounts(countsMap);
 
-      setReactions(reactionsMap);
-      setUserReactions(userReactionsMap);
+      // Fetch only the current user's own reactions (RLS restricts to own)
+      if (userId) {
+        const { data: ownReactions, error: ownError } = await supabase
+          .from('story_reactions')
+          .select('story_id, reaction_type')
+          .in('story_id', storyIds);
+
+        if (ownError) throw ownError;
+
+        const userReactionsMap = new Map<string, string>();
+        (ownReactions || []).forEach(r => {
+          userReactionsMap.set(r.story_id, r.reaction_type);
+        });
+        setUserReactions(userReactionsMap);
+      }
     } catch (error) {
       console.error('Error fetching reactions:', error);
     } finally {
@@ -80,7 +85,6 @@ export const useStoryReactions = (storyIds: string[]) => {
     
     try {
       if (currentReaction) {
-        // Remove existing reaction
         const { error } = await supabase
           .from('story_reactions')
           .delete()
@@ -89,44 +93,35 @@ export const useStoryReactions = (storyIds: string[]) => {
 
         if (error) throw error;
 
-        // Update local state
         setUserReactions(prev => {
           const next = new Map(prev);
           next.delete(storyId);
           return next;
         });
-        
-        setReactions(prev => {
+        setReactionCounts(prev => {
           const next = new Map(prev);
-          const storyReactions = (next.get(storyId) || []).filter(r => r.user_id !== userId);
-          next.set(storyId, storyReactions);
+          next.set(storyId, Math.max(0, (next.get(storyId) || 1) - 1));
           return next;
         });
       } else {
-        // Add new reaction
-        const { data, error } = await supabase
+        const { error } = await supabase
           .from('story_reactions')
           .insert({
             story_id: storyId,
             user_id: userId,
             reaction_type: reactionType
-          })
-          .select()
-          .single();
+          });
 
         if (error) throw error;
 
-        // Update local state
         setUserReactions(prev => {
           const next = new Map(prev);
           next.set(storyId, reactionType);
           return next;
         });
-        
-        setReactions(prev => {
+        setReactionCounts(prev => {
           const next = new Map(prev);
-          const storyReactions = next.get(storyId) || [];
-          next.set(storyId, [...storyReactions, data]);
+          next.set(storyId, (next.get(storyId) || 0) + 1);
           return next;
         });
       }
@@ -137,15 +132,15 @@ export const useStoryReactions = (storyIds: string[]) => {
   }, [userId, userReactions]);
 
   const getReactionCount = useCallback((storyId: string) => {
-    return reactions.get(storyId)?.length || 0;
-  }, [reactions]);
+    return reactionCounts.get(storyId) || 0;
+  }, [reactionCounts]);
 
   const hasUserReacted = useCallback((storyId: string) => {
     return userReactions.has(storyId);
   }, [userReactions]);
 
   return {
-    reactions,
+    reactions: reactionCounts,
     userReactions,
     loading,
     toggleReaction,
