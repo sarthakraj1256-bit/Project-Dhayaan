@@ -308,58 +308,58 @@ const AudioControls = forwardRef<HTMLDivElement, AudioControlsProps>(
             className="mx-2 rounded-xl overflow-hidden"
             style={glassStyle}
           >
-            <div
-              className="flex items-center gap-3 px-4 py-3.5 cursor-pointer select-none"
-              onClick={() => setExpanded((v) => !v)}
-            >
-              {/* Pulsing dot */}
-              <motion.div
-                animate={{ scale: [1, 1.4, 1], opacity: [1, 0.4, 1] }}
-                transition={{ duration: 2, repeat: Infinity }}
-                className="w-2.5 h-2.5 rounded-full bg-primary shrink-0"
-              />
+          <div
+            className="flex items-center gap-3 px-4 py-4 cursor-pointer select-none min-h-[56px]"
+            onClick={() => setExpanded((v) => !v)}
+          >
+            {/* Pulsing dot */}
+            <motion.div
+              animate={{ scale: [1, 1.4, 1], opacity: [1, 0.4, 1] }}
+              transition={{ duration: 2, repeat: Infinity }}
+              className="w-3 h-3 rounded-full bg-primary shrink-0"
+            />
 
-              {/* Info */}
-              <div className="flex-1 min-w-0">
-                <p className="font-display text-sm tracking-wider text-foreground truncate">
-                  {currentFrequency}Hz
-                  {currentFrequencyName && (
-                    <span className="text-muted-foreground text-xs ml-1.5 font-body">
-                      {currentFrequencyName}
-                    </span>
-                  )}
-                </p>
-              </div>
-
-              {/* Timer */}
-              <div className="flex items-center gap-1 text-muted-foreground">
-                <Timer className="w-3 h-3 text-primary/60" />
-                <span className="font-mono text-xs tracking-wider">
-                  {sessionTime}
-                </span>
-              </div>
-
-              {/* Stop */}
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onStop();
-                }}
-                className="p-1.5 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 transition-colors"
-                aria-label="Stop"
-              >
-                <Square className="w-3 h-3 text-foreground/80" />
-              </button>
-
-              {/* Chevron */}
-              <motion.div
-                animate={{ rotate: expanded ? 180 : 0 }}
-                transition={{ duration: 0.2 }}
-                className="text-muted-foreground"
-              >
-                <ChevronUp className="w-4 h-4" />
-              </motion.div>
+            {/* Info */}
+            <div className="flex-1 min-w-0">
+              <p className="font-display text-base tracking-wider text-foreground truncate">
+                {currentFrequency}Hz
+                {currentFrequencyName && (
+                  <span className="text-muted-foreground text-xs ml-1.5 font-body">
+                    {currentFrequencyName}
+                  </span>
+                )}
+              </p>
             </div>
+
+            {/* Timer */}
+            <div className="flex items-center gap-1.5 text-muted-foreground">
+              <Timer className="w-4 h-4 text-primary/60" />
+              <span className="font-mono text-sm tracking-wider">
+                {sessionTime}
+              </span>
+            </div>
+
+            {/* Stop */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onStop();
+              }}
+              className="p-2.5 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 transition-colors"
+              aria-label="Stop"
+            >
+              <Square className="w-4 h-4 text-foreground/80" />
+            </button>
+
+            {/* Chevron */}
+            <motion.div
+              animate={{ rotate: expanded ? 180 : 0 }}
+              transition={{ duration: 0.2 }}
+              className="text-muted-foreground"
+            >
+              <ChevronUp className="w-5 h-5" />
+            </motion.div>
+          </div>
           </div>
         </div>
 
