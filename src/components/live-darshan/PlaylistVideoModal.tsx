@@ -10,7 +10,8 @@ interface PlaylistVideoModalProps {
 }
 
 const PlaylistVideoModal = ({ title, playlistId, onClose }: PlaylistVideoModalProps) => {
-  const embedUrl = `https://www.youtube.com/embed/videoseries?list=${playlistId}&autoplay=1&rel=0&modestbranding=1`;
+  // Use key-based isolation: each unique playlistId gets its own iframe instance
+  const embedUrl = `https://www.youtube.com/embed/videoseries?list=${playlistId}&autoplay=1&rel=0&modestbranding=1&playsinline=1`;
 
   return (
     <AnimatePresence>

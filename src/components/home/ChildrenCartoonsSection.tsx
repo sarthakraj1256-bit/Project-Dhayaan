@@ -55,6 +55,7 @@ export default function ChildrenCartoonsSection() {
       )}
       {selectedPlaylist && (
         <PlaylistVideoModal
+          key={selectedPlaylist.playlistId}
           title={selectedPlaylist.title}
           playlistId={selectedPlaylist.playlistId}
           onClose={() => setSelectedPlaylist(null)}

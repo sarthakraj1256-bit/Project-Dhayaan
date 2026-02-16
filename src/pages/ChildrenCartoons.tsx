@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Play, Clock, ListVideo } from 'lucide-react';
+import { ArrowLeft, Play, Clock } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { standaloneCartoons, playlistCartoons, CartoonVideo } from '@/data/childrenCartoons';
 import { Badge } from '@/components/ui/badge';
@@ -52,7 +52,7 @@ export default function ChildrenCartoons() {
         {/* Playlists */}
         <section>
           <h2 className="text-xs font-semibold text-white/40 uppercase tracking-widest mb-3">Playlists</h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+          <div className="flex flex-col gap-3">
             {playlistCartoons.map((item, i) => (
               <VideoCard key={item.id} item={item} index={i} onSelect={handleSelect} />
             ))}
@@ -65,6 +65,7 @@ export default function ChildrenCartoons() {
       )}
       {selectedPlaylist && (
         <PlaylistVideoModal
+          key={selectedPlaylist.playlistId}
           title={selectedPlaylist.title}
           playlistId={selectedPlaylist.playlistId}
           onClose={() => setSelectedPlaylist(null)}
@@ -80,36 +81,41 @@ function VideoCard({ item, index, onSelect }: { item: CartoonVideo; index: numbe
   const isPlaylist = item.source === 'playlist';
 
   return (
-    <motion.button
-      type="button"
+    <motion.div
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.04 }}
-      aria-label={isPlaylist ? `Open playlist: ${item.title}` : `Play ${item.title}`}
-      onClick={() => onSelect(item)}
-      className="text-left rounded-2xl overflow-hidden bg-white/[0.07] backdrop-blur-md border border-white/[0.12] shadow-[0_2px_16px_rgba(0,0,0,0.2)] hover:shadow-[0_4px_24px_rgba(0,0,0,0.3)] hover:bg-white/[0.12] transition-all duration-200 active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-primary outline-none"
     >
-      <div className="aspect-[16/9] relative overflow-hidden bg-muted">
-        <img src={item.thumbnail} alt={item.title} className="w-full h-full object-cover" loading="lazy" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-        <div className="absolute top-1.5 left-1.5">
-          <Badge className={`${isPlaylist ? 'bg-indigo-600' : 'bg-pink-600'} text-white border-0 text-[9px] px-1.5 py-0.5 leading-none`}>
-            {isPlaylist ? '📚 Playlist' : '🎬 Video'}
-          </Badge>
-        </div>
-        <div className="absolute bottom-1.5 right-1.5 flex items-center gap-0.5 bg-black/50 backdrop-blur-sm px-1.5 py-0.5 rounded text-[10px] text-white/80">
-          {isPlaylist ? <ListVideo className="w-2.5 h-2.5" /> : <Clock className="w-2.5 h-2.5" />}
-          {item.duration}
-        </div>
-        <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
-          <div className="w-9 h-9 rounded-full bg-primary/80 flex items-center justify-center">
-            <Play className="w-4 h-4 text-primary-foreground ml-0.5" />
+      <button
+        type="button"
+        aria-label={isPlaylist ? `Open playlist: ${item.title}` : `Play ${item.title}`}
+        onClick={() => onSelect(item)}
+        className={`w-full text-left rounded-2xl overflow-hidden bg-white/[0.07] backdrop-blur-md border border-white/[0.12] shadow-[0_2px_16px_rgba(0,0,0,0.2)] hover:shadow-[0_4px_24px_rgba(0,0,0,0.3)] hover:bg-white/[0.12] transition-all duration-200 active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-primary outline-none ${isPlaylist ? 'flex flex-row items-center' : ''}`}
+      >
+        <div className={`${isPlaylist ? 'w-32 shrink-0' : 'w-full'} aspect-[16/9] relative overflow-hidden bg-muted`}>
+          <img src={item.thumbnail} alt={item.title} className="w-full h-full object-cover" loading="lazy" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+          <div className="absolute top-1.5 left-1.5">
+            <Badge className={`${isPlaylist ? 'bg-indigo-600' : 'bg-pink-600'} text-white border-0 text-[9px] px-1.5 py-0.5 leading-none`}>
+              {isPlaylist ? '📚 Playlist' : '🎬 Video'}
+            </Badge>
+          </div>
+          {!isPlaylist && (
+            <div className="absolute bottom-1.5 right-1.5 flex items-center gap-0.5 bg-black/50 backdrop-blur-sm px-1.5 py-0.5 rounded text-[10px] text-white/80">
+              <Clock className="w-2.5 h-2.5" />
+              {item.duration}
+            </div>
+          )}
+          <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
+            <div className="w-9 h-9 rounded-full bg-primary/80 flex items-center justify-center">
+              <Play className="w-4 h-4 text-primary-foreground ml-0.5" />
+            </div>
           </div>
         </div>
-      </div>
-      <div className="p-2.5">
-        <p className="text-xs font-medium text-white/90 line-clamp-2 leading-snug">{item.title}</p>
-      </div>
-    </motion.button>
+        <div className="p-2.5">
+          <p className="text-xs font-medium text-white/90 line-clamp-2 leading-snug">{item.title}</p>
+        </div>
+      </button>
+    </motion.div>
   );
 }
