@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Play, Clock } from 'lucide-react';
+import { ArrowLeft, Play, Clock, ListVideo, ChevronRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { standaloneCartoons, playlistCartoons, CartoonVideo } from '@/data/childrenCartoons';
 import { Badge } from '@/components/ui/badge';
@@ -9,15 +9,36 @@ import PlaylistVideoModal from '@/components/live-darshan/PlaylistVideoModal';
 import { SpiritualContent } from '@/data/templeStreams';
 import BottomNav from '@/components/BottomNav';
 
+// Stable, de-duplicated data derived once
+const deduplicatedVideos = (() => {
+  const seen = new Set<string>();
+  return standaloneCartoons.filter((v) => {
+    if (seen.has(v.id)) return false;
+    seen.add(v.id);
+    return true;
+  });
+})();
+
+const deduplicatedPlaylists = (() => {
+  const seen = new Set<string>();
+  return playlistCartoons.filter((p) => {
+    const key = p.playlistId ?? p.id;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+})();
+
 export default function ChildrenCartoons() {
   const [selectedVideo, setSelectedVideo] = useState<SpiritualContent | null>(null);
   const [selectedPlaylist, setSelectedPlaylist] = useState<{ title: string; playlistId: string } | null>(null);
 
-  const handleSelect = (item: CartoonVideo) => {
-    if (item.source === 'playlist' && item.playlistId) {
-      setSelectedPlaylist({ title: item.title, playlistId: item.playlistId });
-      return;
-    }
+  // Memoize to prevent re-creation on renders
+  const videos = useMemo(() => deduplicatedVideos, []);
+  const playlists = useMemo(() => deduplicatedPlaylists, []);
+
+  const handleVideoSelect = useCallback((item: CartoonVideo) => {
+    setSelectedPlaylist(null); // clear any open playlist
     setSelectedVideo({
       id: item.id,
       title: item.title,
@@ -26,7 +47,13 @@ export default function ChildrenCartoons() {
       duration: item.duration,
       thumbnail: item.thumbnail,
     });
-  };
+  }, []);
+
+  const handlePlaylistSelect = useCallback((item: CartoonVideo) => {
+    if (!item.playlistId) return;
+    setSelectedVideo(null); // clear any open video
+    setSelectedPlaylist({ title: item.title, playlistId: item.playlistId });
+  }, []);
 
   return (
     <div className="min-h-screen bg-background pb-24 md:pb-8">
@@ -39,22 +66,25 @@ export default function ChildrenCartoons() {
       </header>
 
       <main className="px-4 py-6 max-w-4xl mx-auto space-y-8">
-        {/* Standalone Videos */}
+        {/* Featured Videos — grid */}
         <section>
           <h2 className="text-xs font-semibold text-white/40 uppercase tracking-widest mb-3">Featured Videos</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-            {standaloneCartoons.map((item, i) => (
-              <VideoCard key={item.id} item={item} index={i} onSelect={handleSelect} />
+            {videos.map((item, i) => (
+              <VideoCard key={item.id} item={item} index={i} onSelect={handleVideoSelect} />
             ))}
           </div>
         </section>
 
-        {/* Playlists */}
+        {/* Playlists — dedicated vertical panel */}
         <section>
-          <h2 className="text-xs font-semibold text-white/40 uppercase tracking-widest mb-3">Playlists</h2>
-          <div className="flex flex-col gap-3">
-            {playlistCartoons.map((item, i) => (
-              <VideoCard key={item.id} item={item} index={i} onSelect={handleSelect} />
+          <h2 className="text-xs font-semibold text-white/40 uppercase tracking-widest mb-3">
+            <ListVideo className="w-3.5 h-3.5 inline-block mr-1.5 -mt-0.5" />
+            Playlists
+          </h2>
+          <div className="flex flex-col gap-2">
+            {playlists.map((item, i) => (
+              <PlaylistRow key={item.id} item={item} index={i} onSelect={handlePlaylistSelect} />
             ))}
           </div>
         </section>
@@ -77,9 +107,8 @@ export default function ChildrenCartoons() {
   );
 }
 
+/* ── Video Card (grid) ─────────────────────────────── */
 function VideoCard({ item, index, onSelect }: { item: CartoonVideo; index: number; onSelect: (v: CartoonVideo) => void }) {
-  const isPlaylist = item.source === 'playlist';
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 12 }}
@@ -88,24 +117,20 @@ function VideoCard({ item, index, onSelect }: { item: CartoonVideo; index: numbe
     >
       <button
         type="button"
-        aria-label={isPlaylist ? `Open playlist: ${item.title}` : `Play ${item.title}`}
+        aria-label={`Play ${item.title}`}
         onClick={() => onSelect(item)}
-        className={`w-full text-left rounded-2xl overflow-hidden bg-white/[0.07] backdrop-blur-md border border-white/[0.12] shadow-[0_2px_16px_rgba(0,0,0,0.2)] hover:shadow-[0_4px_24px_rgba(0,0,0,0.3)] hover:bg-white/[0.12] transition-all duration-200 active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-primary outline-none ${isPlaylist ? 'flex flex-row items-center' : ''}`}
+        className="w-full text-left rounded-2xl overflow-hidden bg-white/[0.07] backdrop-blur-md border border-white/[0.12] shadow-[0_2px_16px_rgba(0,0,0,0.2)] hover:shadow-[0_4px_24px_rgba(0,0,0,0.3)] hover:bg-white/[0.12] transition-all duration-200 active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-primary outline-none"
       >
-        <div className={`${isPlaylist ? 'w-32 shrink-0' : 'w-full'} aspect-[16/9] relative overflow-hidden bg-muted`}>
+        <div className="w-full aspect-[16/9] relative overflow-hidden bg-muted">
           <img src={item.thumbnail} alt={item.title} className="w-full h-full object-cover" loading="lazy" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
           <div className="absolute top-1.5 left-1.5">
-            <Badge className={`${isPlaylist ? 'bg-indigo-600' : 'bg-pink-600'} text-white border-0 text-[9px] px-1.5 py-0.5 leading-none`}>
-              {isPlaylist ? '📚 Playlist' : '🎬 Video'}
-            </Badge>
+            <Badge className="bg-pink-600 text-white border-0 text-[9px] px-1.5 py-0.5 leading-none">🎬 Video</Badge>
           </div>
-          {!isPlaylist && (
-            <div className="absolute bottom-1.5 right-1.5 flex items-center gap-0.5 bg-black/50 backdrop-blur-sm px-1.5 py-0.5 rounded text-[10px] text-white/80">
-              <Clock className="w-2.5 h-2.5" />
-              {item.duration}
-            </div>
-          )}
+          <div className="absolute bottom-1.5 right-1.5 flex items-center gap-0.5 bg-black/50 backdrop-blur-sm px-1.5 py-0.5 rounded text-[10px] text-white/80">
+            <Clock className="w-2.5 h-2.5" />
+            {item.duration}
+          </div>
           <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
             <div className="w-9 h-9 rounded-full bg-primary/80 flex items-center justify-center">
               <Play className="w-4 h-4 text-primary-foreground ml-0.5" />
@@ -115,6 +140,45 @@ function VideoCard({ item, index, onSelect }: { item: CartoonVideo; index: numbe
         <div className="p-2.5">
           <p className="text-xs font-medium text-white/90 line-clamp-2 leading-snug">{item.title}</p>
         </div>
+      </button>
+    </motion.div>
+  );
+}
+
+/* ── Playlist Row (vertical list) ──────────────────── */
+function PlaylistRow({ item, index, onSelect }: { item: CartoonVideo; index: number; onSelect: (v: CartoonVideo) => void }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: -8 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ delay: index * 0.04 }}
+    >
+      <button
+        type="button"
+        aria-label={`Open playlist: ${item.title}`}
+        onClick={() => onSelect(item)}
+        className="w-full flex items-center gap-3 rounded-2xl bg-white/[0.07] backdrop-blur-md border border-white/[0.12] shadow-[0_2px_16px_rgba(0,0,0,0.2)] hover:shadow-[0_4px_24px_rgba(0,0,0,0.3)] hover:bg-white/[0.12] transition-all duration-200 active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-primary outline-none overflow-hidden"
+      >
+        {/* Thumbnail */}
+        <div className="w-28 shrink-0 aspect-[16/9] relative overflow-hidden bg-muted">
+          <img src={item.thumbnail} alt={item.title} className="w-full h-full object-cover" loading="lazy" />
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent to-black/30" />
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="w-7 h-7 rounded-full bg-primary/80 flex items-center justify-center">
+              <Play className="w-3.5 h-3.5 text-primary-foreground ml-0.5" />
+            </div>
+          </div>
+        </div>
+
+        {/* Info */}
+        <div className="flex-1 py-2.5 pr-1 min-w-0">
+          <p className="text-xs font-medium text-white/90 line-clamp-1 leading-snug">{item.title}</p>
+          <div className="flex items-center gap-1.5 mt-1">
+            <Badge className="bg-indigo-600 text-white border-0 text-[8px] px-1.5 py-0 leading-relaxed">📚 Playlist</Badge>
+          </div>
+        </div>
+
+        <ChevronRight className="w-4 h-4 text-white/30 mr-3 shrink-0" />
       </button>
     </motion.div>
   );
