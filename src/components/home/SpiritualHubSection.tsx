@@ -51,7 +51,7 @@ export default function SpiritualHubSection() {
             Daily Aarti
           </h2>
           <Link
-            to="/live-darshan"
+            to="/live-darshan?tab=content"
             className="text-xs text-primary font-medium flex items-center gap-1 hover:underline"
           >
             Explore all <ArrowRight className="w-3 h-3" />
@@ -82,7 +82,7 @@ function AartiCard({ item, index }: { item: SpiritualContent; index: number }) {
       className="shrink-0 w-[172px]"
     >
       <Link
-        to="/live-darshan"
+        to="/live-darshan?tab=content"
         aria-label={`Play ${item.title}`}
         onKeyDown={(e) => {
           if (e.key === ' ') {
