@@ -42,10 +42,10 @@ const Index = () => {
       <SectionNav />
       <main className="relative z-10 pb-24 md:pb-0">
         <div id="hero"><HeroSection user={user} /></div>
+        <div id="daily-aarti"><SpiritualHubSection /></div>
         <div id="explore"><QuickStartSection /></div>
         <div id="relaxation"><RelaxationSection /></div>
         <div id="darshan"><DarshanSection /></div>
-        <div id="spiritual-hub"><SpiritualHubSection /></div>
         <div id="highlights"><DailyHighlightsSection /></div>
         <div id="philosophy"><PhilosophySection /></div>
         <FinalCTASection />
