@@ -32,8 +32,17 @@ const SpiritualContentCard = ({ content, onSelect }: SpiritualContentCardProps) 
       transition={{ duration: 0.3 }}
     >
       <Card
-        className="cursor-pointer overflow-hidden glass-card border border-border/50 hover:border-primary/50 transition-all duration-300"
+        tabIndex={0}
+        role="button"
+        aria-label={`Play ${content.title}`}
+        className="cursor-pointer overflow-hidden glass-card border border-border/50 hover:border-primary/50 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background outline-none transition-all duration-300"
         onClick={() => onSelect(content)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            onSelect(content);
+          }
+        }}
       >
         <div className="relative">
           <AspectRatio ratio={16 / 9}>
