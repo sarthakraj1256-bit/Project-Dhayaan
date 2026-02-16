@@ -47,8 +47,8 @@ const Index = () => {
         <div id="relaxation"><RelaxationSection /></div>
         <div id="darshan"><DarshanSection /></div>
         <div id="daily-aarti"><SpiritualHubSection /></div>
-        <div id="highlights"><DailyHighlightsSection /></div>
         <div id="cartoons"><ChildrenCartoonsSection /></div>
+        <div id="highlights"><DailyHighlightsSection /></div>
         <div id="philosophy"><PhilosophySection /></div>
         <FinalCTASection />
       </main>
