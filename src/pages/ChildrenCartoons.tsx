@@ -1,14 +1,15 @@
 import { useState, useMemo, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Play, Clock } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { ArrowLeft, Play, Clock, ListVideo, X } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { standaloneCartoons, rollNo21Cartoons, CartoonVideo } from '@/data/childrenCartoons';
 import { Badge } from '@/components/ui/badge';
 import ContentVideoModal from '@/components/live-darshan/ContentVideoModal';
 import { SpiritualContent } from '@/data/templeStreams';
+import { AspectRatio } from '@/components/ui/aspect-ratio';
+import { Button } from '@/components/ui/button';
 import BottomNav from '@/components/BottomNav';
 
-// Stable, de-duplicated data derived once
 const deduplicatedVideos = (() => {
   const seen = new Set<string>();
   return standaloneCartoons.filter((v) => {
@@ -20,6 +21,7 @@ const deduplicatedVideos = (() => {
 
 export default function ChildrenCartoons() {
   const [selectedVideo, setSelectedVideo] = useState<SpiritualContent | null>(null);
+  const [showRollNo21, setShowRollNo21] = useState(false);
 
   const videos = useMemo(() => deduplicatedVideos, []);
 
@@ -44,21 +46,18 @@ export default function ChildrenCartoons() {
       </header>
 
       <main className="px-4 py-6 max-w-4xl mx-auto space-y-8">
+        {/* Roll No 21 Playlist Card */}
+        <section>
+          <h2 className="text-xs font-semibold text-white/40 uppercase tracking-widest mb-3">Playlists</h2>
+          <RollNo21PlaylistCard onOpen={() => setShowRollNo21(true)} />
+        </section>
+
+        {/* Featured Videos */}
         <section>
           <h2 className="text-xs font-semibold text-white/40 uppercase tracking-widest mb-3">Featured Videos</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
             {videos.map((item, i) => (
               <VideoCard key={item.id} item={item} index={i} onSelect={handleVideoSelect} />
-            ))}
-          </div>
-        </section>
-
-        {/* Roll No 21 – vertical list */}
-        <section>
-          <h2 className="text-xs font-semibold text-white/40 uppercase tracking-widest mb-3">Roll No 21</h2>
-          <div className="flex flex-col gap-3">
-            {rollNo21Cartoons.map((item, i) => (
-              <VideoCard key={item.youtubeVideoId} item={item} index={i} onSelect={handleVideoSelect} />
             ))}
           </div>
         </section>
@@ -68,8 +67,94 @@ export default function ChildrenCartoons() {
         <ContentVideoModal content={selectedVideo} onClose={() => setSelectedVideo(null)} />
       )}
 
+      {showRollNo21 && (
+        <RollNo21Modal
+          onClose={() => setShowRollNo21(false)}
+          onSelectVideo={(item) => { handleVideoSelect(item); setShowRollNo21(false); }}
+        />
+      )}
+
       <BottomNav />
     </div>
+  );
+}
+
+function RollNo21PlaylistCard({ onOpen }: { onOpen: () => void }) {
+  const thumb = `https://img.youtube.com/vi/${rollNo21Cartoons[0]?.youtubeVideoId}/hqdefault.jpg`;
+  return (
+    <button
+      type="button"
+      aria-label="Open Roll No 21 playlist"
+      onClick={onOpen}
+      className="w-full text-left rounded-2xl overflow-hidden bg-white/[0.07] backdrop-blur-md border border-white/[0.12] shadow-[0_2px_16px_rgba(0,0,0,0.2)] hover:shadow-[0_4px_24px_rgba(0,0,0,0.3)] hover:bg-white/[0.12] transition-all duration-200 active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-primary outline-none"
+    >
+      <div className="flex gap-3 p-2">
+        <div className="w-36 shrink-0 rounded-xl overflow-hidden">
+          <AspectRatio ratio={16 / 9}>
+            <img src={thumb} alt="Roll No 21" className="w-full h-full object-cover" loading="lazy" />
+          </AspectRatio>
+        </div>
+        <div className="flex flex-col justify-center min-w-0 py-1">
+          <p className="text-sm font-medium text-white/90 leading-snug">Roll No 21</p>
+          <div className="flex items-center gap-1 mt-1 text-white/50 text-xs">
+            <ListVideo className="w-3 h-3" />
+            <span>{rollNo21Cartoons.length} Episodes</span>
+          </div>
+        </div>
+      </div>
+    </button>
+  );
+}
+
+function RollNo21Modal({ onClose, onSelectVideo }: { onClose: () => void; onSelectVideo: (v: CartoonVideo) => void }) {
+  return (
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 z-50 bg-background/95 backdrop-blur-xl overflow-y-auto"
+        onClick={onClose}
+      >
+        <motion.div
+          initial={{ y: 40, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ y: 40, opacity: 0 }}
+          className="w-full max-w-2xl mx-auto p-4 md:p-8"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="font-display text-lg md:text-xl text-foreground">Roll No 21</h2>
+            <Button variant="ghost" size="icon" onClick={onClose} className="hover:bg-destructive/20">
+              <X className="w-5 h-5" />
+            </Button>
+          </div>
+          <div className="flex flex-col gap-3">
+            {rollNo21Cartoons.map((item, i) => (
+              <button
+                key={item.youtubeVideoId}
+                type="button"
+                aria-label={`Play Episode ${i + 1}`}
+                onClick={() => onSelectVideo(item)}
+                className="w-full text-left rounded-2xl overflow-hidden bg-white/[0.07] backdrop-blur-md border border-white/[0.12] shadow-[0_2px_16px_rgba(0,0,0,0.2)] hover:shadow-[0_4px_24px_rgba(0,0,0,0.3)] hover:bg-white/[0.12] transition-all duration-200 active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-primary outline-none"
+              >
+                <div className="flex gap-3 p-2">
+                  <div className="w-36 shrink-0 rounded-xl overflow-hidden">
+                    <AspectRatio ratio={16 / 9}>
+                      <img src={item.thumbnail} alt={`Episode ${i + 1}`} className="w-full h-full object-cover" loading="lazy" />
+                    </AspectRatio>
+                  </div>
+                  <div className="flex flex-col justify-center min-w-0 py-1">
+                    <p className="text-sm font-medium text-white/90 leading-snug">Episode {i + 1}</p>
+                    <span className="text-xs text-white/50 mt-0.5">Roll No 21</span>
+                  </div>
+                </div>
+              </button>
+            ))}
+          </div>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
   );
 }
 
