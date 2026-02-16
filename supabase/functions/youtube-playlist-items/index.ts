@@ -20,7 +20,15 @@ serve(async (req) => {
 
   try {
     const url = new URL(req.url);
-    const playlistId = url.searchParams.get("playlistId");
+    let playlistId = url.searchParams.get("playlistId");
+
+    // Also support POST body
+    if (!playlistId && req.method === "POST") {
+      try {
+        const body = await req.json();
+        playlistId = body.playlistId || null;
+      } catch { /* ignore parse errors */ }
+    }
 
     if (!playlistId) {
       return new Response(JSON.stringify({ error: "playlistId is required" }), {
