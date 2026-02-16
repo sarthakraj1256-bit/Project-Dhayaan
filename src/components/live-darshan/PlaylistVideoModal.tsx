@@ -130,31 +130,46 @@ const PlaylistVideoModal = ({ title, playlistId, onClose }: PlaylistVideoModalPr
             </div>
           </div>
 
-          {/* Video list */}
+          {/* Video list — full-width vertical stack */}
           <div className="flex-1 overflow-y-auto px-4 py-3 min-h-0">
-            <p className="text-xs text-muted-foreground mb-2">{items.length} videos</p>
-            <div className="flex flex-col gap-1.5">
+            <p className="text-xs text-muted-foreground mb-3">{items.length} videos</p>
+            <div className="flex flex-col gap-3">
               {items.map((video, i) => (
                 <button
                   key={video.id}
                   type="button"
                   onClick={() => setActiveVideoId(video.videoId)}
-                  className={`flex items-center gap-3 rounded-xl px-2 py-1.5 text-left transition-colors ${
+                  className={`w-full text-left rounded-2xl overflow-hidden bg-white/[0.07] backdrop-blur-md border shadow-[0_2px_16px_rgba(0,0,0,0.2)] hover:shadow-[0_4px_24px_rgba(0,0,0,0.3)] hover:bg-white/[0.12] transition-all duration-200 active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-primary outline-none ${
                     activeVideoId === video.videoId
-                      ? 'bg-primary/15 border border-primary/30'
-                      : 'hover:bg-white/[0.05] border border-transparent'
+                      ? 'border-primary/50 bg-primary/10'
+                      : 'border-white/[0.12]'
                   }`}
                 >
-                  <span className="text-[10px] text-muted-foreground w-5 text-right shrink-0">{i + 1}</span>
-                  <div className="w-20 shrink-0 aspect-[16/9] relative overflow-hidden rounded-md bg-muted">
+                  {/* Full-width thumbnail */}
+                  <div className="w-full aspect-[16/9] relative overflow-hidden bg-muted">
                     <img src={video.thumbnail} alt={video.title} className="w-full h-full object-cover" loading="lazy" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                    {/* Position number */}
+                    <div className="absolute top-1.5 left-1.5 w-6 h-6 rounded-full bg-black/60 flex items-center justify-center text-[10px] font-medium text-white/90">
+                      {i + 1}
+                    </div>
+                    {/* Now playing indicator */}
                     {activeVideoId === video.videoId && (
-                      <div className="absolute inset-0 bg-primary/20 flex items-center justify-center">
-                        <Play className="w-4 h-4 text-primary-foreground" />
+                      <div className="absolute top-1.5 right-1.5">
+                        <span className="px-2 py-0.5 rounded-full bg-primary text-primary-foreground text-[9px] font-semibold">▶ Now Playing</span>
                       </div>
                     )}
+                    {/* Play overlay */}
+                    <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
+                      <div className="w-10 h-10 rounded-full bg-primary/80 flex items-center justify-center">
+                        <Play className="w-5 h-5 text-primary-foreground ml-0.5" />
+                      </div>
+                    </div>
                   </div>
-                  <p className="text-xs text-white/85 line-clamp-2 flex-1 leading-snug">{video.title}</p>
+                  {/* Title */}
+                  <div className="p-3">
+                    <p className="text-sm font-medium text-white/90 line-clamp-2 leading-snug">{video.title}</p>
+                  </div>
                 </button>
               ))}
             </div>
