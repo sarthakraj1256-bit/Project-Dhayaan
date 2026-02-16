@@ -5,15 +5,17 @@ import { motion } from 'framer-motion';
 import { standaloneCartoons, playlistCartoons, CartoonVideo } from '@/data/childrenCartoons';
 import { Badge } from '@/components/ui/badge';
 import ContentVideoModal from '@/components/live-darshan/ContentVideoModal';
+import PlaylistVideoModal from '@/components/live-darshan/PlaylistVideoModal';
 import { SpiritualContent } from '@/data/templeStreams';
 import BottomNav from '@/components/BottomNav';
 
 export default function ChildrenCartoons() {
   const [selectedVideo, setSelectedVideo] = useState<SpiritualContent | null>(null);
+  const [selectedPlaylist, setSelectedPlaylist] = useState<{ title: string; playlistId: string } | null>(null);
 
   const handleSelect = (item: CartoonVideo) => {
     if (item.source === 'playlist' && item.playlistId) {
-      window.open(`https://www.youtube.com/playlist?list=${item.playlistId}`, '_blank', 'noopener,noreferrer');
+      setSelectedPlaylist({ title: item.title, playlistId: item.playlistId });
       return;
     }
     setSelectedVideo({
@@ -60,6 +62,13 @@ export default function ChildrenCartoons() {
 
       {selectedVideo && (
         <ContentVideoModal content={selectedVideo} onClose={() => setSelectedVideo(null)} />
+      )}
+      {selectedPlaylist && (
+        <PlaylistVideoModal
+          title={selectedPlaylist.title}
+          playlistId={selectedPlaylist.playlistId}
+          onClose={() => setSelectedPlaylist(null)}
+        />
       )}
 
       <BottomNav />
