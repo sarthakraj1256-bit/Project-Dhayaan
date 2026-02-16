@@ -11,6 +11,7 @@ import {
   QuickStartSection,
   RelaxationSection,
   DarshanSection,
+  SpiritualHubSection,
   DailyHighlightsSection,
   PhilosophySection,
   FinalCTASection,
@@ -44,6 +45,7 @@ const Index = () => {
         <div id="explore"><QuickStartSection /></div>
         <div id="relaxation"><RelaxationSection /></div>
         <div id="darshan"><DarshanSection /></div>
+        <div id="spiritual-hub"><SpiritualHubSection /></div>
         <div id="highlights"><DailyHighlightsSection /></div>
         <div id="philosophy"><PhilosophySection /></div>
         <FinalCTASection />
