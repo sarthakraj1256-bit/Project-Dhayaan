@@ -1,7 +1,7 @@
 import PageTransition from '@/components/PageTransition';
 import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { 
   ArrowLeft, 
   Radio, 
@@ -39,6 +39,8 @@ import AartiReminderSettings from '@/components/live-darshan/AartiReminderSettin
 import { useFavoriteAartiNotifications } from '@/hooks/useFavoriteAartiNotifications';
 
 const LiveDarshan = () => {
+  const [searchParams] = useSearchParams();
+  const initialTab = searchParams.get('tab') === 'content' ? 'content' : 'temples';
   const [selectedTemple, setSelectedTemple] = useState<Temple | null>(null);
   const [selectedContent, setSelectedContent] = useState<SpiritualContent | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -163,7 +165,7 @@ const LiveDarshan = () => {
         </div>
 
         {/* Main Tabs */}
-        <Tabs defaultValue="temples" className="space-y-8">
+        <Tabs defaultValue={initialTab} className="space-y-8">
           <TabsList className="bg-card border border-border/50">
             <TabsTrigger value="temples" className="gap-2">
               <Play className="w-4 h-4" />
