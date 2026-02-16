@@ -173,7 +173,7 @@ const LiveDarshan = () => {
             </TabsTrigger>
             <TabsTrigger value="content" className="gap-2">
               <Video className="w-4 h-4" />
-              Spiritual Hub
+              Daily Aarti
             </TabsTrigger>
           </TabsList>
 
