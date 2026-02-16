@@ -27,7 +27,7 @@ export default function SpiritualHubSection() {
     <section className="px-6 py-5">
       <div className="flex items-center justify-between mb-3">
         <h2 className="text-xs font-semibold text-white/40 uppercase tracking-widest">
-          Spiritual Hub
+          Daily Aarti
         </h2>
         <Link
           to="/live-darshan"
