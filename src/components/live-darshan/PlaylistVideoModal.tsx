@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, ExternalLink, Play, Clock, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
+import { supabase } from '@/integrations/supabase/client';
 
 interface PlaylistItem {
   id: string;
@@ -28,19 +29,13 @@ const PlaylistVideoModal = ({ title, playlistId, onClose }: PlaylistVideoModalPr
     setLoading(true);
     setError(null);
     try {
-      // Use query params via fetch for GET request
-
-      // Use supabase functions invoke with GET-style query params
-      const url = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/youtube-playlist-items?playlistId=${encodeURIComponent(playlistId)}`;
-      const response = await fetch(url, {
-        headers: {
-          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-          'apikey': import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
-        },
+      const { data: result, error: fnError } = await supabase.functions.invoke('youtube-playlist-items', {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+        body: { playlistId },
       });
 
-      if (!response.ok) throw new Error(`Failed to fetch playlist (${response.status})`);
-      const result = await response.json();
+      if (fnError) throw fnError;
 
       if (result.items && result.items.length > 0) {
         setItems(result.items);
