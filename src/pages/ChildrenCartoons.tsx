@@ -1,11 +1,10 @@
 import { useState, useMemo, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Play, Clock, ListVideo, ChevronRight } from 'lucide-react';
+import { ArrowLeft, Play, Clock } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { standaloneCartoons, playlistCartoons, CartoonVideo } from '@/data/childrenCartoons';
+import { standaloneCartoons, CartoonVideo } from '@/data/childrenCartoons';
 import { Badge } from '@/components/ui/badge';
 import ContentVideoModal from '@/components/live-darshan/ContentVideoModal';
-import PlaylistVideoModal from '@/components/live-darshan/PlaylistVideoModal';
 import { SpiritualContent } from '@/data/templeStreams';
 import BottomNav from '@/components/BottomNav';
 
@@ -19,26 +18,12 @@ const deduplicatedVideos = (() => {
   });
 })();
 
-const deduplicatedPlaylists = (() => {
-  const seen = new Set<string>();
-  return playlistCartoons.filter((p) => {
-    const key = p.playlistId ?? p.id;
-    if (seen.has(key)) return false;
-    seen.add(key);
-    return true;
-  });
-})();
-
 export default function ChildrenCartoons() {
   const [selectedVideo, setSelectedVideo] = useState<SpiritualContent | null>(null);
-  const [selectedPlaylist, setSelectedPlaylist] = useState<{ title: string; playlistId: string } | null>(null);
 
-  // Memoize to prevent re-creation on renders
   const videos = useMemo(() => deduplicatedVideos, []);
-  const playlists = useMemo(() => deduplicatedPlaylists, []);
 
   const handleVideoSelect = useCallback((item: CartoonVideo) => {
-    setSelectedPlaylist(null); // clear any open playlist
     setSelectedVideo({
       id: item.id,
       title: item.title,
@@ -49,15 +34,8 @@ export default function ChildrenCartoons() {
     });
   }, []);
 
-  const handlePlaylistSelect = useCallback((item: CartoonVideo) => {
-    if (!item.playlistId) return;
-    setSelectedVideo(null); // clear any open video
-    setSelectedPlaylist({ title: item.title, playlistId: item.playlistId });
-  }, []);
-
   return (
     <div className="min-h-screen bg-background pb-24 md:pb-8">
-      {/* Header */}
       <header className="sticky top-0 z-40 px-4 py-3 flex items-center gap-3 border-b border-border/30" style={{ background: '#0B1D3A' }}>
         <Link to="/" className="p-2 -ml-2 rounded-full hover:bg-white/10 transition-colors">
           <ArrowLeft className="w-5 h-5 text-white/80" />
@@ -66,7 +44,6 @@ export default function ChildrenCartoons() {
       </header>
 
       <main className="px-4 py-6 max-w-4xl mx-auto space-y-8">
-        {/* Featured Videos — grid */}
         <section>
           <h2 className="text-xs font-semibold text-white/40 uppercase tracking-widest mb-3">Featured Videos</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
@@ -75,31 +52,10 @@ export default function ChildrenCartoons() {
             ))}
           </div>
         </section>
-
-        {/* Playlists — dedicated vertical panel */}
-        <section>
-          <h2 className="text-xs font-semibold text-white/40 uppercase tracking-widest mb-3">
-            <ListVideo className="w-3.5 h-3.5 inline-block mr-1.5 -mt-0.5" />
-            Playlists
-          </h2>
-          <div className="flex flex-col gap-2">
-            {playlists.map((item, i) => (
-              <PlaylistRow key={item.id} item={item} index={i} onSelect={handlePlaylistSelect} />
-            ))}
-          </div>
-        </section>
       </main>
 
       {selectedVideo && (
         <ContentVideoModal content={selectedVideo} onClose={() => setSelectedVideo(null)} />
-      )}
-      {selectedPlaylist && (
-        <PlaylistVideoModal
-          key={selectedPlaylist.playlistId}
-          title={selectedPlaylist.title}
-          playlistId={selectedPlaylist.playlistId}
-          onClose={() => setSelectedPlaylist(null)}
-        />
       )}
 
       <BottomNav />
@@ -107,7 +63,6 @@ export default function ChildrenCartoons() {
   );
 }
 
-/* ── Video Card (grid) ─────────────────────────────── */
 function VideoCard({ item, index, onSelect }: { item: CartoonVideo; index: number; onSelect: (v: CartoonVideo) => void }) {
   return (
     <motion.div
@@ -140,45 +95,6 @@ function VideoCard({ item, index, onSelect }: { item: CartoonVideo; index: numbe
         <div className="p-2.5">
           <p className="text-xs font-medium text-white/90 line-clamp-2 leading-snug">{item.title}</p>
         </div>
-      </button>
-    </motion.div>
-  );
-}
-
-/* ── Playlist Row (vertical list) ──────────────────── */
-function PlaylistRow({ item, index, onSelect }: { item: CartoonVideo; index: number; onSelect: (v: CartoonVideo) => void }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, x: -8 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ delay: index * 0.04 }}
-    >
-      <button
-        type="button"
-        aria-label={`Open playlist: ${item.title}`}
-        onClick={() => onSelect(item)}
-        className="w-full flex items-center gap-3 rounded-2xl bg-white/[0.07] backdrop-blur-md border border-white/[0.12] shadow-[0_2px_16px_rgba(0,0,0,0.2)] hover:shadow-[0_4px_24px_rgba(0,0,0,0.3)] hover:bg-white/[0.12] transition-all duration-200 active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-primary outline-none overflow-hidden"
-      >
-        {/* Thumbnail */}
-        <div className="w-28 shrink-0 aspect-[16/9] relative overflow-hidden bg-muted">
-          <img src={item.thumbnail} alt={item.title} className="w-full h-full object-cover" loading="lazy" />
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent to-black/30" />
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-7 h-7 rounded-full bg-primary/80 flex items-center justify-center">
-              <Play className="w-3.5 h-3.5 text-primary-foreground ml-0.5" />
-            </div>
-          </div>
-        </div>
-
-        {/* Info */}
-        <div className="flex-1 py-2.5 pr-1 min-w-0">
-          <p className="text-xs font-medium text-white/90 line-clamp-1 leading-snug">{item.title}</p>
-          <div className="flex items-center gap-1.5 mt-1">
-            <Badge className="bg-indigo-600 text-white border-0 text-[8px] px-1.5 py-0 leading-relaxed">📚 Playlist</Badge>
-          </div>
-        </div>
-
-        <ChevronRight className="w-4 h-4 text-white/30 mr-3 shrink-0" />
       </button>
     </motion.div>
   );
