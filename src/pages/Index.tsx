@@ -16,6 +16,7 @@ import {
   PhilosophySection,
   FinalCTASection,
 } from '@/components/home';
+import ChildrenCartoonsSection from '@/components/home/ChildrenCartoonsSection';
 import SectionNav from '@/components/home/SectionNav';
 import WavyBackground from '@/components/home/WavyBackground';
 
@@ -47,6 +48,7 @@ const Index = () => {
         <div id="darshan"><DarshanSection /></div>
         <div id="daily-aarti"><SpiritualHubSection /></div>
         <div id="highlights"><DailyHighlightsSection /></div>
+        <div id="cartoons"><ChildrenCartoonsSection /></div>
         <div id="philosophy"><PhilosophySection /></div>
         <FinalCTASection />
       </main>
