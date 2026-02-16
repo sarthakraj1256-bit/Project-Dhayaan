@@ -2,7 +2,7 @@ import { useState, useMemo, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Play, Clock } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { standaloneCartoons, CartoonVideo } from '@/data/childrenCartoons';
+import { standaloneCartoons, rollNo21Cartoons, CartoonVideo } from '@/data/childrenCartoons';
 import { Badge } from '@/components/ui/badge';
 import ContentVideoModal from '@/components/live-darshan/ContentVideoModal';
 import { SpiritualContent } from '@/data/templeStreams';
@@ -49,6 +49,16 @@ export default function ChildrenCartoons() {
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
             {videos.map((item, i) => (
               <VideoCard key={item.id} item={item} index={i} onSelect={handleVideoSelect} />
+            ))}
+          </div>
+        </section>
+
+        {/* Roll No 21 – vertical list */}
+        <section>
+          <h2 className="text-xs font-semibold text-white/40 uppercase tracking-widest mb-3">Roll No 21</h2>
+          <div className="flex flex-col gap-3">
+            {rollNo21Cartoons.map((item, i) => (
+              <VideoCard key={item.youtubeVideoId} item={item} index={i} onSelect={handleVideoSelect} />
             ))}
           </div>
         </section>

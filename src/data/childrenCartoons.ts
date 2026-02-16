@@ -103,4 +103,30 @@ export const playlistCartoons: CartoonVideo[] = [
   },
 ];
 
+// Roll No 21 – standalone section
+const rollNo21VideoIds = [
+  'RaA3R_UoGtI','DW6u7rGMcZg','Hx1V2zT_b4s','mUoHWNz2JUE','gUOUFLL-l-k',
+  'De8Xd5Jh4mg','Zys0_6bi_QM','XPqn24i_H74','ZfPyu4yPcqc','XteUdGK9fHs',
+  '4Ey3nbUCGyE','g0zHpqGVsQA','auW9wvGUjvw','S13OtIWh1ZU','eea-7lI7oOY',
+  '8ZRgzrXvMtA','v4bDeGjJV80','KUguqFk0txg','UL08Nna-NTk','UqzRlOa65Hw',
+];
+
+export const rollNo21Cartoons: CartoonVideo[] = (() => {
+  const seen = new Set<string>();
+  return rollNo21VideoIds
+    .filter((vid) => {
+      if (seen.has(vid)) return false;
+      seen.add(vid);
+      return true;
+    })
+    .map((vid) => ({
+      id: `rollno21-${vid}`,
+      title: `Roll No 21`,
+      youtubeVideoId: vid,
+      thumbnail: `https://img.youtube.com/vi/${vid}/hqdefault.jpg`,
+      duration: '',
+      source: 'video' as const,
+    }));
+})();
+
 export const allCartoons = [...standaloneCartoons, ...playlistCartoons];
