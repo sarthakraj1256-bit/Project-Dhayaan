@@ -761,24 +761,6 @@ export const spiritualContent: SpiritualContent[] = [
     speaker: 'Premanand Ji Maharaj',
     thumbnail: 'https://img.youtube.com/vi/Uv9hn_9yEpg/hqdefault.jpg'
   },
-  {
-    id: 'bhakti-guidance',
-    title: 'Path of Bhakti - Spiritual Guidance',
-    type: 'discourse',
-    youtubeVideoId: 'Rk_Z1kLJvnc',
-    duration: '22:10',
-    speaker: 'Spiritual Master',
-    thumbnail: 'https://img.youtube.com/vi/Rk_Z1kLJvnc/hqdefault.jpg'
-  },
-  // Meditation
-  {
-    id: 'chakra-meditation',
-    title: 'Chakra Healing Meditation',
-    type: 'meditation',
-    youtubeVideoId: 'W2YsBMdJEKM',
-    duration: '30:00',
-    thumbnail: 'https://img.youtube.com/vi/W2YsBMdJEKM/hqdefault.jpg'
-  },
   // Shorts
   {
     id: 'morning-mantra',
@@ -787,14 +769,6 @@ export const spiritualContent: SpiritualContent[] = [
     youtubeVideoId: 'AETFvQonfV8',
     duration: '0:60',
     thumbnail: 'https://img.youtube.com/vi/AETFvQonfV8/hqdefault.jpg'
-  },
-  {
-    id: 'quick-darshan',
-    title: 'Quick Temple Darshan',
-    type: 'short',
-    youtubeVideoId: 'LBaF7ypRVXM',
-    duration: '0:45',
-    thumbnail: 'https://img.youtube.com/vi/LBaF7ypRVXM/hqdefault.jpg'
   },
   // New additions
   {
