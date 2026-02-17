@@ -6,7 +6,10 @@ const sections = [
   { id: 'explore', label: 'Explore' },
   { id: 'relaxation', label: 'Relax' },
   { id: 'darshan', label: 'Darshan' },
+  { id: 'daily-aarti', label: 'Aarti' },
+  { id: 'cartoons', label: 'Cartoons' },
   { id: 'highlights', label: 'Highlights' },
+  { id: 'philosophy', label: 'Philosophy' },
 ];
 
 export default function SectionNav() {
