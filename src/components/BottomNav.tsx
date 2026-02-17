@@ -29,13 +29,14 @@ const BottomNav = forwardRef<HTMLElement>((_, ref) => {
   };
 
   return (
-    <nav ref={ref} className="fixed bottom-0 left-0 right-0 z-50 md:hidden safe-bottom">
+    <nav ref={ref} className="fixed bottom-0 left-0 right-0 z-50 md:hidden">
       <div
         className="mx-0 overflow-hidden touch-manipulation border-t border-border/30"
         style={{
           background: '#0B1D3A',
           backdropFilter: 'blur(16px)',
           WebkitBackdropFilter: 'blur(16px)',
+          paddingBottom: 'env(safe-area-inset-bottom, 0px)',
         }}
       >
         <div className="flex items-center justify-around py-2 px-1">

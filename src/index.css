@@ -100,15 +100,26 @@
 @layer base {
   * {
     @apply border-border;
+    -webkit-tap-highlight-color: transparent;
   }
 
   html {
     scroll-behavior: smooth;
+    /* Prevent iOS overscroll bounce on the page shell */
+    overscroll-behavior-y: none;
   }
 
   body {
     @apply bg-background text-foreground antialiased;
     font-family: 'Inter', 'system-ui', sans-serif;
+    /* Kill iOS rubber-band on body */
+    overscroll-behavior-y: none;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* Global touch-action: manipulation removes 300ms tap delay in Safari */
+  button, a, [role="button"], input, select, textarea, label {
+    touch-action: manipulation;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -131,11 +142,11 @@
 }
 
 @layer components {
-  /* Glassmorphism Card */
+  /* Glassmorphism Card — with WebKit prefix for Safari/iOS */
   .glass-card {
     background: var(--glass-bg);
-    backdrop-filter: blur(var(--glass-blur));
     -webkit-backdrop-filter: blur(var(--glass-blur));
+    backdrop-filter: blur(var(--glass-blur));
     border: 1px solid var(--glass-border);
     @apply rounded-lg;
   }
