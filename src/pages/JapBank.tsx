@@ -61,24 +61,16 @@ const JapBank = () => {
     <div className="min-h-screen bg-background pb-28">
       <Suspense fallback={null}><GoalConfetti /></Suspense>
 
-      {/* Compact Header */}
-      <div
-        className="relative px-4 pt-10 pb-4 safe-top"
-        style={{ background: 'linear-gradient(180deg, hsl(var(--void)), hsl(var(--void-light)))' }}
-      >
-        <Link to="/" className="absolute top-4 left-4 p-2 text-muted-foreground hover:text-foreground safe-top">
-          <ArrowLeft className="w-5 h-5" />
+      {/* Header */}
+      <header className="sticky top-0 z-40 h-14 px-4 flex items-center justify-between bg-background/80 backdrop-blur-xl border-b border-border/30">
+        <Link to="/" className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors">
+          <ArrowLeft className="w-5 h-5 text-muted-foreground" />
         </Link>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center"
-        >
-          <h1 className="text-xl font-bold text-primary font-[Cinzel] tracking-wide">
-            📿 Jap Seva
-          </h1>
-        </motion.div>
-      </div>
+        <h1 className="font-display text-lg tracking-wider text-primary">
+          📿 Jap Seva
+        </h1>
+        <div className="w-9" />
+      </header>
 
       {!isAuthenticated ? (
         <div className="px-4 py-12 text-center">

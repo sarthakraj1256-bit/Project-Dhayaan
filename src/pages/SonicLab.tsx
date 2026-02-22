@@ -189,54 +189,47 @@ import BottomNav from '@/components/BottomNav';
        {/* Content */}
        <div className="relative z-10">
          {/* Header */}
-         <header className="sticky top-0 z-40 px-6 py-4 bg-void/80 backdrop-blur-xl border-b border-white/5">
-           <div className="max-w-7xl mx-auto flex items-center justify-between">
-             <Link
-               to="/"
-               className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
-             >
-               <ArrowLeft className="w-4 h-4" />
-               <span className="text-sm tracking-wider">Back</span>
-             </Link>
- 
-             <div className="flex items-center gap-3">
-               <Radio className="w-5 h-5 text-primary" />
-               <h1 className="font-display text-xl tracking-[0.2em] text-gold-gradient">
-                 THE SONIC LAB
-               </h1>
-             </div>
- 
-             {/* Favorites Button */}
-             <button
-                onClick={() => {
-                  setShowFavorites(true);
-                  setShowStats(false);
-                }}
-               className="flex items-center gap-2 px-3 py-2 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 transition-colors"
-             >
-               <Star className="w-4 h-4 text-primary" />
-               <span className="text-sm text-foreground/80 hidden sm:inline">Favorites</span>
-               {favorites.length > 0 && (
-                 <span className="w-5 h-5 rounded-full bg-primary/20 text-primary text-xs flex items-center justify-center">
-                   {favorites.length}
-                 </span>
-               )}
-             </button>
-
-              {/* Stats Toggle */}
-              <button
-                onClick={() => setShowStats(!showStats)}
-                className={`p-2 rounded-full transition-colors ${
-                  showStats 
-                    ? 'bg-primary/20 text-primary' 
-                    : 'bg-white/5 border border-white/10 hover:bg-white/10 text-foreground/80'
-                }`}
-                title="Session Stats"
+        <header className="sticky top-0 z-40 h-14 px-4 flex items-center justify-between bg-void/80 backdrop-blur-xl border-b border-border/30">
+              <Link
+                to="/"
+                className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors"
               >
-                <BarChart3 className="w-4 h-4" />
+                <ArrowLeft className="w-5 h-5 text-muted-foreground" />
+              </Link>
+  
+              <div className="flex items-center gap-2">
+                <Radio className="w-5 h-5 text-primary" />
+                <h1 className="font-display text-lg tracking-[0.2em] text-gold-gradient">
+                  THE SONIC LAB
+                </h1>
+              </div>
+  
+              <div className="flex items-center gap-1">
+              {/* Favorites Button */}
+              <button
+                 onClick={() => {
+                   setShowFavorites(true);
+                   setShowStats(false);
+                 }}
+                className="w-9 h-9 rounded-full flex items-center justify-center bg-white/5 border border-white/10 hover:bg-white/10 transition-colors"
+              >
+                <Star className="w-5 h-5 text-primary" />
               </button>
-           </div>
-         </header>
+
+               {/* Stats Toggle */}
+               <button
+                 onClick={() => setShowStats(!showStats)}
+                 className={`w-9 h-9 rounded-full flex items-center justify-center transition-colors ${
+                   showStats 
+                     ? 'bg-primary/20 text-primary' 
+                     : 'bg-white/5 border border-white/10 hover:bg-white/10 text-foreground/80'
+                 }`}
+                 title="Session Stats"
+               >
+                 <BarChart3 className="w-5 h-5" />
+               </button>
+              </div>
+          </header>
  
           {/* Session Stats Panel */}
           {showStats && (

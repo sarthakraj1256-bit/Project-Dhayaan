@@ -183,29 +183,25 @@ const Profile = () => {
       {/* Sacred Pattern Overlay */}
       <div className="fixed inset-0 sacred-pattern pointer-events-none opacity-20 z-0" />
 
-      <div className="relative z-10 max-w-2xl mx-auto px-6 py-12">
-        {/* Back Button */}
+      {/* Sticky Header */}
+      <header className="sticky top-0 z-40 h-14 px-4 flex items-center justify-between bg-background/80 backdrop-blur-xl border-b border-border/30">
         <button
           onClick={() => navigate(-1)}
-          className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-8"
+          className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors"
         >
-          <ArrowLeft className="w-4 h-4" />
-          <span className="text-sm tracking-wider">Back</span>
+          <ArrowLeft className="w-5 h-5 text-muted-foreground" />
         </button>
+        <h1 className="font-display text-lg tracking-wider text-foreground">
+          Profile
+        </h1>
+        <div className="w-9" />
+      </header>
 
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="font-display text-3xl tracking-wider text-foreground mb-2">
-            Your Profile
-          </h1>
-          <p className="text-muted-foreground font-body">
-            Customize your sacred presence
-          </p>
-        </div>
+      <div className="relative z-10 max-w-2xl mx-auto px-4 py-6">
 
         {/* Profile Card */}
         <div
-          className="rounded-2xl p-8 mb-6"
+          className="rounded-xl p-4 sm:p-5 md:p-6 mb-6"
           style={{
             background: 'hsl(var(--void-light) / 0.4)',
             backdropFilter: 'blur(16px)',
@@ -305,7 +301,7 @@ const Profile = () => {
 
         {/* Storage Settings Card */}
         <div
-          className="rounded-2xl p-6"
+          className="rounded-xl p-4 sm:p-5 md:p-6"
           style={{
             background: 'hsl(var(--void-light) / 0.4)',
             backdropFilter: 'blur(16px)',

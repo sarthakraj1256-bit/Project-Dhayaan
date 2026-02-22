@@ -99,48 +99,25 @@ const LiveDarshan = () => {
       )}
 
       {/* Header */}
-      <header className="sticky top-0 z-40 backdrop-blur-xl bg-background/80 border-b border-border/50">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Link to="/">
-                <Button variant="ghost" size="icon">
-                  <ArrowLeft className="w-5 h-5" />
-                </Button>
+      <header className="sticky top-0 z-40 h-14 px-4 flex items-center justify-between backdrop-blur-xl bg-background/80 border-b border-border/30">
+            <div className="flex items-center gap-3">
+              <Link to="/" className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors">
+                <ArrowLeft className="w-5 h-5 text-muted-foreground" />
               </Link>
-              <div>
-                <h1 className="font-display text-2xl md:text-3xl text-gold-gradient">
-                  Live Darshan
-                </h1>
-                <p className="text-muted-foreground text-sm">
-                  Mandir aapke phone mein
-                </p>
-              </div>
+              <h1 className="font-display text-lg text-gold-gradient tracking-wider">
+                Live Darshan
+              </h1>
             </div>
             
-            {/* Right side controls */}
-            <div className="flex items-center gap-2 md:gap-3">
-              {/* Stories Panel */}
+            <div className="flex items-center gap-1">
               <TempleStoriesPanel />
-              
-              {/* Favorites Panel */}
               <FavoritesPanel onSelectTemple={setSelectedTemple} />
-              
-              {/* Schedule Link */}
               <Link to="/aarti-schedule">
-                <Button variant="outline" size="sm" className="gap-2 hidden md:flex">
-                  <Calendar className="w-4 h-4" />
-                  Schedule
-                </Button>
-                <Button variant="outline" size="icon" className="md:hidden">
-                  <Calendar className="w-4 h-4" />
-                </Button>
+                <button className="w-9 h-9 rounded-full flex items-center justify-center bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
+                  <Calendar className="w-5 h-5 text-muted-foreground" />
+                </button>
               </Link>
-              
-              {/* Reminder Settings */}
               <AartiReminderSettings />
-              
-              {/* Live Counter */}
               <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-destructive/20 rounded-full">
                 <Radio className="w-4 h-4 text-destructive animate-pulse" />
                 <span className="text-sm text-destructive">
@@ -148,8 +125,6 @@ const LiveDarshan = () => {
                 </span>
               </div>
             </div>
-          </div>
-        </div>
       </header>
 
       <main className="container mx-auto px-4 py-8 pb-24 md:pb-8">
