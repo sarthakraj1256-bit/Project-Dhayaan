@@ -6,12 +6,14 @@ import { User } from "@supabase/supabase-js";
 import { Button } from "@/components/ui/button";
 import { LogOut, User as UserIcon, Mail, Calendar } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const Dashboard = () => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { t } = useLanguage();
 
   useEffect(() => {
     const getUser = async () => {
@@ -62,7 +64,7 @@ const Dashboard = () => {
               <span className="text-primary font-display text-sm">ॐ</span>
             </div>
             <h1 className="font-display text-lg text-gold-gradient tracking-wider">
-              Dashboard
+              {t('page.dashboard')}
             </h1>
           </div>
 

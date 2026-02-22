@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { supabase } from '@/integrations/backend/client';
 import { User } from '@supabase/supabase-js';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface HeroSectionProps {
   user?: User | null;
@@ -9,19 +10,25 @@ interface HeroSectionProps {
 
 export default function HeroSection({ user }: HeroSectionProps) {
   const [displayName, setDisplayName] = useState<string | null>(null);
-  const [greeting, setGreeting] = useState(() => {
+  const { t } = useLanguage();
+
+  const getGreeting = () => {
     const h = new Date().getHours();
-    return h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
-  });
+    return h < 12 ? t('greeting.morning') : h < 17 ? t('greeting.afternoon') : t('greeting.evening');
+  };
+
+  const [greeting, setGreeting] = useState(getGreeting);
 
   useEffect(() => {
-    const update = () => {
-      const h = new Date().getHours();
-      setGreeting(h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening');
-    };
+    const update = () => setGreeting(getGreeting());
     const id = setInterval(update, 60_000);
     return () => clearInterval(id);
-  }, []);
+  }, [t]);
+
+  // Update greeting when language changes
+  useEffect(() => {
+    setGreeting(getGreeting());
+  }, [t]);
 
   useEffect(() => {
     if (!user) { setDisplayName(null); return; }
@@ -78,7 +85,7 @@ export default function HeroSection({ user }: HeroSectionProps) {
         </h1>
 
         <p className="text-sm mt-3 leading-relaxed tracking-wide" style={{ color: '#222222' }}>
-          Your space for calm and connection.
+          {t('hero.tagline')}
         </p>
       </motion.div>
     </section>

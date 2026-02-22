@@ -4,6 +4,7 @@
  import { LayoutDashboard, LogOut, ChevronDown, UserCircle } from 'lucide-react';
  import { supabase } from '@/integrations/backend/client';
  import { toast } from 'sonner';
+ import { useLanguage } from '@/contexts/LanguageContext';
  import {
    DropdownMenu,
    DropdownMenuContent,
@@ -23,6 +24,7 @@
    const [isLoggingOut, setIsLoggingOut] = useState(false);
    const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
    const [displayName, setDisplayName] = useState<string | null>(null);
+   const { t } = useLanguage();
  
    useEffect(() => {
      const fetchProfile = async () => {
@@ -51,7 +53,6 @@
      }
    };
  
-   // Get initials from email
    const getInitials = () => {
      if (displayName) {
        return displayName.slice(0, 2).toUpperCase();
@@ -73,7 +74,6 @@
              boxShadow: '0 0 20px hsl(var(--gold) / 0.1)',
            }}
          >
-           {/* Avatar */}
            <Avatar className="w-8 h-8 border border-gold/50">
              <AvatarImage src={avatarUrl || undefined} />
              <AvatarFallback
@@ -106,7 +106,7 @@
              className="flex items-center gap-2 cursor-pointer text-foreground hover:text-gold focus:text-gold"
            >
              <UserCircle className="w-4 h-4" />
-             <span>Profile</span>
+             <span>{t('menu.profile')}</span>
            </Link>
          </DropdownMenuItem>
          <DropdownMenuItem asChild>
@@ -115,7 +115,7 @@
              className="flex items-center gap-2 cursor-pointer text-foreground hover:text-gold focus:text-gold"
            >
              <LayoutDashboard className="w-4 h-4" />
-             <span>Dashboard</span>
+             <span>{t('menu.dashboard')}</span>
            </Link>
          </DropdownMenuItem>
          <DropdownMenuSeparator className="bg-gold/20" />
@@ -125,7 +125,7 @@
            className="flex items-center gap-2 cursor-pointer text-foreground hover:text-destructive focus:text-destructive"
          >
            <LogOut className="w-4 h-4" />
-           <span>{isLoggingOut ? 'Signing out...' : 'Sign Out'}</span>
+           <span>{isLoggingOut ? t('auth.signingOut') : t('auth.signOut')}</span>
          </DropdownMenuItem>
        </DropdownMenuContent>
      </DropdownMenu>

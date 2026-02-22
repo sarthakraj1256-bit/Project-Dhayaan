@@ -11,6 +11,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { logError } from '@/lib/logger';
 import { clearTTSCache, clearAudioCache, getCacheSize, formatBytes, getLastCleanupStats, type CleanupStats } from '@/lib/audioCache';
 import { formatDistanceToNow } from 'date-fns';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface Profile {
   id: string;
@@ -21,6 +22,7 @@ interface Profile {
 
 const Profile = () => {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
@@ -192,7 +194,7 @@ const Profile = () => {
           <ArrowLeft className="w-5 h-5 text-muted-foreground" />
         </button>
         <h1 className="font-display text-lg tracking-wider text-foreground">
-          Profile
+          {t('page.profile')}
         </h1>
         <div className="w-9" />
       </header>

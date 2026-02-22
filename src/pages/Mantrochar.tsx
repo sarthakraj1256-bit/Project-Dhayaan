@@ -3,6 +3,7 @@ import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, BookOpen, Radio, Flame, GraduationCap, Loader2, LogIn } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { mantras, getMantrasByDifficulty, type Mantra } from '@/data/mantraLibrary';
 import MantraCard from '@/components/mantrochar/MantraCard';
 import MantraLesson from '@/components/mantrochar/MantraLesson';
@@ -15,6 +16,7 @@ import { CardSkeleton } from '@/components/LazyCard';
 const difficultyOrder = ['beginner', 'intermediate', 'advanced', 'mastery'] as const;
  
  const Mantrochar = () => {
+   const { t } = useLanguage();
    const [selectedMantra, setSelectedMantra] = useState<Mantra | null>(null);
    const [activeFilter, setActiveFilter] = useState<'all' | 'beginner' | 'intermediate' | 'advanced'>('all');
    
@@ -105,7 +107,7 @@ const difficultyOrder = ['beginner', 'intermediate', 'advanced', 'mastery'] as c
               <div className="flex items-center gap-2">
                 <BookOpen className="w-5 h-5 text-primary" />
                 <h1 className="font-display text-lg tracking-[0.2em] text-gold-gradient">
-                  MANTROCHAR
+                  {t('page.mantrochar').toUpperCase()}
                 </h1>
               </div>
   

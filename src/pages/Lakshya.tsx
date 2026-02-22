@@ -3,6 +3,7 @@ import { useState, useCallback, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Sparkles, Wind, Gamepad2, Trophy, Star, Zap, Puzzle, Flower2, Grid3X3 } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { useSpiritualProgress, LEVEL_THRESHOLDS, getNextLevelThreshold, CHAKRA_THRESHOLDS, type SpiritualLevel } from '@/hooks/useSpiritualProgress';
 import { useKarmaMultiplier } from '@/hooks/useKarmaMultiplier';
 import BreathFlowGame from '@/components/lakshya/BreathFlowGame';
@@ -22,6 +23,7 @@ import BottomNav from '@/components/BottomNav';
 
 const Lakshya = () => {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const { progress, isLoading, userId } = useSpiritualProgress();
   const [activeGame, setActiveGame] = useState<string | null>(null);
   const [showKarmaAnimation, setShowKarmaAnimation] = useState(false);
@@ -151,7 +153,7 @@ const Lakshya = () => {
           </button>
           
           <h1 className="font-display text-lg tracking-wider text-foreground">
-            <span className="text-primary">लक्ष्य</span> Lakshya
+            <span className="text-primary">लक्ष्य</span> {t('page.lakshya')}
           </h1>
           
           <div className="w-9" />

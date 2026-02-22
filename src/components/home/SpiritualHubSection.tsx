@@ -9,25 +9,37 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { TranslationKey } from '@/i18n/translations';
 
-const typeLabels: Record<string, { label: string; color: string }> = {
-  bhajan: { label: '🎵 Bhajan', color: 'bg-purple-600' },
-  aarti: { label: '🪔 Aarti', color: 'bg-orange-600' },
-  meditation: { label: '🧘 Meditation', color: 'bg-green-600' },
-  mantra: { label: '🕉️ Mantra', color: 'bg-amber-600' },
-  pravachan: { label: '🎙️ Pravachan', color: 'bg-teal-600' },
-  discourse: { label: '📖 Discourse', color: 'bg-blue-600' },
-  short: { label: '📱 Short', color: 'bg-pink-600' },
+const typeLabels: Record<string, TranslationKey> = {
+  bhajan: 'content.bhajan',
+  aarti: 'content.aarti',
+  meditation: 'content.meditation',
+  mantra: 'content.mantra',
+  pravachan: 'content.pravachan',
+  discourse: 'content.discourse',
+  short: 'content.short',
 };
 
-const descriptions: Record<string, string> = {
-  bhajan: 'Devotional hymns to uplift your spirit and connect with the divine.',
-  aarti: 'Sacred lamp ceremony performed to honor and worship the deity.',
-  meditation: 'Guided meditation for inner peace and chakra alignment.',
-  mantra: 'Ancient Sanskrit chants for spiritual energy and focus.',
-  pravachan: 'Spiritual discourse sharing timeless wisdom and teachings.',
-  discourse: 'Insightful talks on the path of devotion and self-realization.',
-  short: 'Quick spiritual moments for your daily dose of divinity.',
+const typeColors: Record<string, string> = {
+  bhajan: 'bg-purple-600',
+  aarti: 'bg-orange-600',
+  meditation: 'bg-green-600',
+  mantra: 'bg-amber-600',
+  pravachan: 'bg-teal-600',
+  discourse: 'bg-blue-600',
+  short: 'bg-pink-600',
+};
+
+const descriptionKeys: Record<string, TranslationKey> = {
+  bhajan: 'contentDesc.bhajan',
+  aarti: 'contentDesc.aarti',
+  meditation: 'contentDesc.meditation',
+  mantra: 'contentDesc.mantra',
+  pravachan: 'contentDesc.pravachan',
+  discourse: 'contentDesc.discourse',
+  short: 'contentDesc.short',
 };
 
 const speakerBios: Record<string, string> = {
@@ -36,6 +48,8 @@ const speakerBios: Record<string, string> = {
 };
 
 export default function SpiritualHubSection() {
+  const { t } = useLanguage();
+
   const seen = new Set<string>();
   const preview = spiritualContent.filter((c) => {
     if (seen.has(c.type) || seen.size >= 6) return false;
@@ -48,13 +62,13 @@ export default function SpiritualHubSection() {
       <section className="px-6 py-5">
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-xs font-semibold text-white/40 uppercase tracking-widest">
-            Daily Aarti
+            {t('section.dailyAarti')}
           </h2>
           <Link
             to="/live-darshan?tab=content"
             className="text-xs text-primary font-medium flex items-center gap-1 hover:underline"
           >
-            Explore all <ArrowRight className="w-3 h-3" />
+            {t('link.exploreAll')} <ArrowRight className="w-3 h-3" />
           </Link>
         </div>
 
@@ -69,8 +83,12 @@ export default function SpiritualHubSection() {
 }
 
 function AartiCard({ item, index }: { item: SpiritualContent; index: number }) {
-  const info = typeLabels[item.type] ?? { label: item.type, color: 'bg-muted' };
-  const desc = descriptions[item.type] ?? '';
+  const { t } = useLanguage();
+  const labelKey = typeLabels[item.type];
+  const label = labelKey ? t(labelKey) : item.type;
+  const color = typeColors[item.type] ?? 'bg-muted';
+  const descKey = descriptionKeys[item.type];
+  const desc = descKey ? t(descKey) : '';
   const bio = item.speaker ? speakerBios[item.speaker] : null;
 
   return (
@@ -103,8 +121,8 @@ function AartiCard({ item, index }: { item: SpiritualContent; index: number }) {
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
           <div className="absolute top-1.5 left-1.5">
-            <Badge className={`${info.color} text-white border-0 text-[9px] px-1.5 py-0.5 leading-none`}>
-              {info.label}
+            <Badge className={`${color} text-white border-0 text-[9px] px-1.5 py-0.5 leading-none`}>
+              {label}
             </Badge>
           </div>
 
@@ -126,14 +144,12 @@ function AartiCard({ item, index }: { item: SpiritualContent; index: number }) {
             {item.title}
           </p>
 
-          {/* Short description */}
           {desc && (
             <p className="text-[10px] text-white/35 line-clamp-2 leading-relaxed">
               {desc}
             </p>
           )}
 
-          {/* Speaker with bio tooltip */}
           {item.speaker && (
             <Tooltip>
               <TooltipTrigger asChild>

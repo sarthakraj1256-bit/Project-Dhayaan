@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import BottomNav from '@/components/BottomNav';
 import { useWatchedEpisodes } from '@/hooks/useWatchedEpisodes';
 import { cn } from '@/lib/utils';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const deduplicatedVideos = (() => {
   const seen = new Set<string>();
@@ -22,6 +23,7 @@ const deduplicatedVideos = (() => {
 })();
 
 export default function ChildrenCartoons() {
+  const { t } = useLanguage();
   const [selectedVideo, setSelectedVideo] = useState<SpiritualContent | null>(null);
   const [showRollNo21, setShowRollNo21] = useState(false);
   const [showBheemKrishna, setShowBheemKrishna] = useState(false);
@@ -57,7 +59,7 @@ export default function ChildrenCartoons() {
         <Link to="/" className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors">
           <ArrowLeft className="w-5 h-5 text-muted-foreground" />
         </Link>
-        <h1 className="font-display text-lg tracking-wider text-foreground">Spiritual Cartoons</h1>
+        <h1 className="font-display text-lg tracking-wider text-foreground">{t('page.childrenCartoons')}</h1>
       </header>
 
       <main className="px-4 py-6 max-w-4xl mx-auto space-y-6">

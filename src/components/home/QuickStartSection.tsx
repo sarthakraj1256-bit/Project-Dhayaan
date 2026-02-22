@@ -4,28 +4,32 @@ import {
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { TranslationKey } from '@/i18n/translations';
 
 const features = [
-  { icon: Waves, label: 'Sonic Lab', description: 'Healing frequencies', href: '/sonic-lab', color: '#2EEAB4' },
-  { icon: Play, label: 'Live Darshan', description: 'Temple streams', href: '/live-darshan', color: '#FF7A65' },
-  { icon: BookOpen, label: 'Mantrochar', description: 'Learn mantras', href: '/mantrochar', color: '#3ED88A' },
-  { icon: ScrollText, label: 'Jap Seva', description: 'Chanting log', href: '/jap-bank', color: '#FFB07A' },
-  { icon: Sparkles, label: 'Lakshya', description: 'Spiritual progress', href: '/lakshya', color: '#B8A4F0' },
-  { icon: Eye, label: 'Immersive', description: '360° darshan', href: '/immersive-darshan', color: '#5DD8EE' },
-  { icon: Flame, label: 'Daily Aarti', description: 'Devotional videos', href: '/live-darshan?tab=content', color: '#FF9F43' },
-  { icon: Tv, label: 'Kids Cartoons', description: 'Spiritual stories', href: '/children-cartoons', color: '#FF6B81' },
+  { icon: Waves, labelKey: 'feature.sonicLab' as TranslationKey, descKey: 'feature.sonicLabDesc' as TranslationKey, href: '/sonic-lab', color: '#2EEAB4' },
+  { icon: Play, labelKey: 'feature.liveDarshan' as TranslationKey, descKey: 'feature.liveDarshanDesc' as TranslationKey, href: '/live-darshan', color: '#FF7A65' },
+  { icon: BookOpen, labelKey: 'feature.mantrochar' as TranslationKey, descKey: 'feature.mantrocharDesc' as TranslationKey, href: '/mantrochar', color: '#3ED88A' },
+  { icon: ScrollText, labelKey: 'feature.japSeva' as TranslationKey, descKey: 'feature.japSevaDesc' as TranslationKey, href: '/jap-bank', color: '#FFB07A' },
+  { icon: Sparkles, labelKey: 'feature.lakshya' as TranslationKey, descKey: 'feature.lakshyaDesc' as TranslationKey, href: '/lakshya', color: '#B8A4F0' },
+  { icon: Eye, labelKey: 'feature.immersive' as TranslationKey, descKey: 'feature.immersiveDesc' as TranslationKey, href: '/immersive-darshan', color: '#5DD8EE' },
+  { icon: Flame, labelKey: 'feature.dailyAarti' as TranslationKey, descKey: 'feature.dailyAartiDesc' as TranslationKey, href: '/live-darshan?tab=content', color: '#FF9F43' },
+  { icon: Tv, labelKey: 'feature.kidsCartoons' as TranslationKey, descKey: 'feature.kidsCartoonsDesc' as TranslationKey, href: '/children-cartoons', color: '#FF6B81' },
 ];
 
 export default function QuickStartSection() {
+  const { t } = useLanguage();
+
   return (
     <section className="px-5 py-5">
       <h2 className="text-xs font-semibold text-white/40 uppercase tracking-widest mb-4">
-        Explore
+        {t('section.explore')}
       </h2>
       <div className="grid grid-cols-2 gap-3">
         {features.map((feature, index) => (
           <motion.div
-            key={feature.label}
+            key={feature.labelKey}
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.04, duration: 0.3 }}
@@ -49,10 +53,10 @@ export default function QuickStartSection() {
               </div>
               <div className="min-w-0 flex flex-col justify-center">
                 <p className="text-[13px] font-semibold text-white/90 leading-none tracking-tight">
-                  {feature.label}
+                  {t(feature.labelKey)}
                 </p>
                 <p className="text-[11px] font-normal text-white/45 leading-none mt-[5px]">
-                  {feature.description}
+                  {t(feature.descKey)}
                 </p>
               </div>
             </Link>

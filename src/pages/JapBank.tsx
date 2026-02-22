@@ -2,6 +2,7 @@ import { Suspense, lazy, useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowLeft, BookOpen, Target, HandHeart, Trophy, Building2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
@@ -23,6 +24,7 @@ const GoalConfetti = lazy(() => import('@/components/jap-bank/GoalConfetti'));
 const Fallback = () => <Skeleton className="h-40 w-full bg-muted/30 rounded-lg" />;
 
 const JapBank = () => {
+  const { t } = useLanguage();
   const {
     userId, isAuthenticated,
     entries, goals, requests, leaderboard,
@@ -67,7 +69,7 @@ const JapBank = () => {
           <ArrowLeft className="w-5 h-5 text-muted-foreground" />
         </Link>
         <h1 className="font-display text-lg tracking-wider text-primary">
-          📿 Jap Seva
+          📿 {t('page.japBank')}
         </h1>
         <div className="w-9" />
       </header>
