@@ -157,4 +157,37 @@ export const chhotaBheemKrishnaCartoons: CartoonVideo[] = (() => {
     }));
 })();
 
+// Selfie with Bajrangi
+const selfieWithBajrangiVideoIds = [
+  'dal8W0M9bQA','zFll8NJ_nj4','Oj7r9Yg_Ef8','T-g24b06C3s','hnWAXCj3Tjg',
+  'RjK9q8zM-k4','cu7nLKHdAO4','X2kaOfhtkhM','gjv795ZPXk0','8U1W5xH2rd4',
+  'ZnZCkLhasuA','u0hgZxGaWBg','NjdijYFyY4c','7f-uEibcyPs','BdlCHOWHzaI',
+  '6ty6q-WKx7s','3r0vULmETRw','zKNQ9u_0gHQ','ysce7I_C70c','r86Fi29i3bk',
+  'hoIQYG0ED9I','8BmRfYL7404','DBPXANkOLgE','E65M3JFAfMY','HEqz7JWfjjE',
+  'bZaQt5gtbi8','2L9ZRKkpQIQ','MoA07zWndZs','82TKSiaCF24','hBxNmxvzyEk',
+  'PrK5b8VY8fY','zSxtEyBIfh8','VEG4jhAKOwU','4Zjvio08fOU','nnIDe_qs4Zc',
+  'bM9GDApjtOY','k6ChMionEvw','kj2EthhY-cE','BS0mee0QxWA','x6G_p_cUW8M',
+  '3M2ASPM_ER8','pH9BXN2zVAY','SuSPwb-uXG0','SeRbnAvPVxI','jexuXzH6kb0',
+  'aySgknPP4CE','8UyXneL2Bfw','ORJDpX8BedE','NWjUxfXPXDA','h8OG2L0e1A0',
+  'MJa13fktfxo',
+];
+
+export const selfieWithBajrangiCartoons: CartoonVideo[] = (() => {
+  const seen = new Set<string>();
+  return selfieWithBajrangiVideoIds
+    .filter((vid) => {
+      if (seen.has(vid)) return false;
+      seen.add(vid);
+      return true;
+    })
+    .map((vid) => ({
+      id: `selfie-bajrangi-${vid}`,
+      title: `Selfie with Bajrangi`,
+      youtubeVideoId: vid,
+      thumbnail: `https://img.youtube.com/vi/${vid}/hqdefault.jpg`,
+      duration: '',
+      source: 'video' as const,
+    }));
+})();
+
 export const allCartoons = [...standaloneCartoons, ...playlistCartoons];
