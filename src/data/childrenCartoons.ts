@@ -190,4 +190,32 @@ export const selfieWithBajrangiCartoons: CartoonVideo[] = (() => {
     }));
 })();
 
+// Jay Jagannath
+const jayJagannathVideoIds = [
+  'ZxH8bq8tm5E','Ee90nD0_Uw8','CDGFHmyONxA','gkLf3uIT-WM','yvluHi8nEVg',
+  'fL9uudlSJx8','fwemYRegllU','zdIeVxuKM1I','cw56Epe2sdI','WnAE1W_0nk8',
+  'aAuSHD6PKXE','Pc0sm1n2Fyo','La-G2TgWdC0','STkZRuUtu5M','AG4ys3mdBDI',
+  'itITJwYfAXw','gSxZMVAYdW0','24TQB2O7TzM','NzTnQHYTzIM','gNvoteyjS0k',
+  'ZhhmthC4Hxs','XH8ljIvW8_c','O_59YCwN0hc','GjOrabHt1jA','ZsHN1QtvFss',
+  'Xxo8kMjwyww','Elrd6-3aSeo',
+];
+
+export const jayJagannathCartoons: CartoonVideo[] = (() => {
+  const seen = new Set<string>();
+  return jayJagannathVideoIds
+    .filter((vid) => {
+      if (seen.has(vid)) return false;
+      seen.add(vid);
+      return true;
+    })
+    .map((vid) => ({
+      id: `jay-jagannath-${vid}`,
+      title: `Jay Jagannath`,
+      youtubeVideoId: vid,
+      thumbnail: `https://img.youtube.com/vi/${vid}/hqdefault.jpg`,
+      duration: '',
+      source: 'video' as const,
+    }));
+})();
+
 export const allCartoons = [...standaloneCartoons, ...playlistCartoons];
