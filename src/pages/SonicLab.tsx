@@ -243,7 +243,7 @@ import BottomNav from '@/components/BottomNav';
             >
               <div className="max-w-4xl mx-auto">
                 <h3 className="font-display text-sm tracking-widest text-muted-foreground mb-3">
-                  YOUR MEDITATION JOURNEY
+                   {t('sonic.meditationJourney')}
                 </h3>
                 <SessionStats
                   stats={sessionStats}
@@ -253,8 +253,8 @@ import BottomNav from '@/components/BottomNav';
               
               {/* Goals Section */}
               <div className="mt-6">
-                <h3 className="font-display text-sm tracking-widest text-muted-foreground mb-3">
-                  MEDITATION GOALS
+                 <h3 className="font-display text-sm tracking-widest text-muted-foreground mb-3">
+                   {t('sonic.meditationGoals')}
                 </h3>
                 <GoalsPanel
                   weeklyProgress={weeklyProgress}
@@ -268,8 +268,8 @@ import BottomNav from '@/components/BottomNav';
 
               {/* Achievements Section */}
               <div className="mt-6">
-                <h3 className="font-display text-sm tracking-widest text-muted-foreground mb-3">
-                  ACHIEVEMENTS
+                 <h3 className="font-display text-sm tracking-widest text-muted-foreground mb-3">
+                   {t('sonic.achievements')}
                 </h3>
                 <AchievementsPanel
                   achievements={achievements}
@@ -282,8 +282,8 @@ import BottomNav from '@/components/BottomNav';
 
               {/* Meditation Calendar */}
               <div className="mt-6">
-                <h3 className="font-display text-sm tracking-widest text-muted-foreground mb-3">
-                  MEDITATION CALENDAR
+                 <h3 className="font-display text-sm tracking-widest text-muted-foreground mb-3">
+                   {t('sonic.meditationCalendar')}
                 </h3>
                 <MeditationCalendar
                   sessions={sessions}
@@ -294,8 +294,8 @@ import BottomNav from '@/components/BottomNav';
 
               {/* Session History List */}
               <div className="mt-6">
-                <h3 className="font-display text-sm tracking-widest text-muted-foreground mb-3">
-                  RECENT SESSIONS
+                 <h3 className="font-display text-sm tracking-widest text-muted-foreground mb-3">
+                   {t('sonic.recentSessions')}
                 </h3>
                 <SessionHistoryList
                   sessions={sessions}
@@ -316,12 +316,11 @@ import BottomNav from '@/components/BottomNav';
              transition={{ duration: 0.8 }}
              className="max-w-3xl mx-auto"
            >
-             <h2 className="font-display text-4xl md:text-5xl tracking-wider text-foreground mb-4">
-               <span className="text-gold-gradient">Frequency</span> Pharmacy
-             </h2>
-             <p className="text-muted-foreground font-body text-lg leading-relaxed">
-               Select sound frequencies based on what you want to feel, heal, or achieve.
-               Each frequency is a purposeful tool for your wellbeing.
+              <h2 className="font-display text-4xl md:text-5xl tracking-wider text-foreground mb-4">
+                <span className="text-gold-gradient">{t('sonic.frequencyPharmacy').split(' ')[0]}</span> {t('sonic.frequencyPharmacy').split(' ').slice(1).join(' ')}
+              </h2>
+              <p className="text-muted-foreground font-body text-lg leading-relaxed">
+                {t('sonic.frequencyPharmacyDesc')}
              </p>
            </motion.div>
  
@@ -391,7 +390,7 @@ import BottomNav from '@/components/BottomNav';
        {/* Footer */}
        <footer className="relative z-10 border-t border-border/30 px-6 py-8 text-center">
         <p className="text-xs text-muted-foreground/50">
-          "नाद ब्रह्म" — Sound is the Divine
+          {t('sonic.soundDivine')}
         </p>
       </footer>
 

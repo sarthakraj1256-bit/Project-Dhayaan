@@ -189,7 +189,7 @@ const Profile = () => {
       <header className="sticky top-0 z-40 h-14 px-4 flex items-center justify-between bg-background/80 backdrop-blur-xl border-b border-border/30">
         <button
           onClick={() => navigate(-1)}
-          className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors"
+          className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-foreground/5 transition-colors"
         >
           <ArrowLeft className="w-5 h-5 text-muted-foreground" />
         </button>
@@ -325,7 +325,7 @@ const Profile = () => {
             </div>
           </div>
 
-          <div className="p-4 rounded-xl bg-white/5 border border-white/10 mb-4">
+          <div className="p-4 rounded-xl bg-foreground/5 border border-border/50 mb-4">
             <div className="flex items-start justify-between gap-4">
               <div className="flex-1">
                 <div className="flex items-center justify-between mb-2">
@@ -345,7 +345,7 @@ const Profile = () => {
                 
                 {/* Detailed breakdown */}
                 {cacheSize && cacheSize.total > 0 && (
-                  <div className="grid grid-cols-2 gap-3 pt-3 border-t border-white/10">
+                  <div className="grid grid-cols-2 gap-3 pt-3 border-t border-border/30">
                     <div className="flex items-center justify-between">
                       <span className="text-xs text-muted-foreground">Guru Voice (TTS)</span>
                       <span className="text-xs font-mono text-foreground">{formatBytes(cacheSize.tts)}</span>
@@ -359,7 +359,7 @@ const Profile = () => {
                 
                 {/* Last cleanup stats */}
                 {cleanupStats && (
-                  <div className="pt-3 mt-3 border-t border-white/10">
+                  <div className="pt-3 mt-3 border-t border-border/30">
                     <div className="flex items-center justify-between text-xs">
                       <span className="text-muted-foreground">Last auto-cleanup</span>
                       <span className="text-foreground/70">

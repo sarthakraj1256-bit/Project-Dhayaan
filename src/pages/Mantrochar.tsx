@@ -270,7 +270,7 @@ const difficultyOrder = ['beginner', 'intermediate', 'advanced', 'mastery'] as c
          </section>
  
          {/* Footer */}
-        <footer className="border-t border-white/5 px-6 py-8 text-center">
+        <footer className="border-t border-border/30 px-6 py-8 text-center">
           <p className="text-xs text-muted-foreground/50">
             "मन्त्र साधना" — The Practice of Sacred Sound
           </p>

@@ -73,7 +73,7 @@ const ExpandedControls = ({
           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs transition-all ${
             isFavorited
               ? 'bg-primary/20 text-primary cursor-default'
-              : 'bg-white/5 border border-white/10 hover:bg-primary/20 hover:text-primary text-muted-foreground'
+              : 'bg-foreground/5 border border-border/50 hover:bg-primary/20 hover:text-primary text-muted-foreground'
           }`}
         >
           <Heart className={`w-3.5 h-3.5 ${isFavorited ? 'fill-primary' : ''}`} />
@@ -100,7 +100,7 @@ const ExpandedControls = ({
     </div>
 
     {/* Atmosphere Layer */}
-    <div className="pt-3 border-t border-white/10">
+    <div className="pt-3 border-t border-border/30">
       <div className="flex items-center gap-2 mb-3">
         <Layers className="w-4 h-4 text-primary" />
         <p className="text-xs text-muted-foreground uppercase tracking-widest">
@@ -117,7 +117,7 @@ const ExpandedControls = ({
             className={`px-2.5 py-1.5 rounded-full text-xs transition-all flex items-center gap-1 ${
               currentAtmosphere === atm.id
                 ? 'bg-primary/20 border border-primary/50 text-primary'
-                : 'bg-white/5 border border-white/10 text-foreground/70 hover:bg-white/10'
+                : 'bg-foreground/5 border border-border/50 text-foreground/70 hover:bg-foreground/10'
             } ${
               atmosphereLoading && currentAtmosphere !== atm.id
                 ? 'opacity-50 cursor-not-allowed'
@@ -219,13 +219,11 @@ const AudioControls = forwardRef<HTMLDivElement, AudioControlsProps>(
 
     /* ── Glassmorphism mini-bar (shared style) ── */
     const glassStyle = {
-      background:
-        'linear-gradient(135deg, rgba(11,29,58,0.82), rgba(6,16,36,0.92))',
+      background: 'hsl(var(--void-light) / 0.92)',
       backdropFilter: 'blur(24px)',
       WebkitBackdropFilter: 'blur(24px)',
-      borderTop: '1px solid hsl(var(--gold) / 0.18)',
-      boxShadow:
-        '0 -4px 32px -8px hsl(var(--gold) / 0.18), inset 0 1px 0 0 hsl(var(--gold) / 0.08)',
+      borderTop: '1px solid hsl(var(--border))',
+      boxShadow: '0 -4px 24px -8px hsl(var(--gold) / 0.1), 0 1px 3px hsl(24 10% 15% / 0.06)',
     } as React.CSSProperties;
 
     return (
@@ -270,7 +268,7 @@ const AudioControls = forwardRef<HTMLDivElement, AudioControlsProps>(
               >
                 {/* Drag handle */}
                 <div className="flex justify-center pt-3 pb-1">
-                  <div className="w-10 h-1 rounded-full bg-white/20" />
+                  <div className="w-10 h-1 rounded-full bg-foreground/15" />
                 </div>
 
                 {/* Header inside sheet */}
@@ -288,7 +286,7 @@ const AudioControls = forwardRef<HTMLDivElement, AudioControlsProps>(
                       )}
                     </p>
                   </div>
-                  <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10">
+                  <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-foreground/5 border border-border/50">
                     <Timer className="w-3.5 h-3.5 text-primary/70" />
                     <span className="font-mono text-sm tracking-wider text-foreground">
                       {sessionTime}
@@ -296,7 +294,7 @@ const AudioControls = forwardRef<HTMLDivElement, AudioControlsProps>(
                   </div>
                 </div>
 
-                <div className="border-t border-white/5">
+                <div className="border-t border-border/30">
                   <ExpandedControls {...sharedControlProps} />
                 </div>
               </motion.div>
@@ -345,7 +343,7 @@ const AudioControls = forwardRef<HTMLDivElement, AudioControlsProps>(
                 e.stopPropagation();
                 onStop();
               }}
-              className="p-2.5 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 transition-colors"
+              className="p-2.5 rounded-full bg-foreground/5 border border-border/50 hover:bg-foreground/10 transition-colors"
               aria-label="Stop"
             >
               <Square className="w-4 h-4 text-foreground/80" />
@@ -398,7 +396,7 @@ const AudioControls = forwardRef<HTMLDivElement, AudioControlsProps>(
             {/* Bar */}
             <div
               className={`flex items-center gap-3 px-4 py-3 cursor-pointer select-none ${
-                expanded ? 'border-t border-white/5' : ''
+                expanded ? 'border-t border-border/30' : ''
               }`}
               onClick={() => setExpanded((v) => !v)}
             >
@@ -431,7 +429,7 @@ const AudioControls = forwardRef<HTMLDivElement, AudioControlsProps>(
                   e.stopPropagation();
                   onStop();
                 }}
-                className="p-2 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 transition-colors"
+                className="p-2 rounded-full bg-foreground/5 border border-border/50 hover:bg-foreground/10 transition-colors"
                 aria-label="Stop"
               >
                 <Square className="w-3.5 h-3.5 text-foreground/80" />

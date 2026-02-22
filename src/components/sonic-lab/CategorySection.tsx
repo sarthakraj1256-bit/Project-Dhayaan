@@ -55,13 +55,13 @@
          <div className="hidden sm:flex items-center gap-2">
            <button
              onClick={() => scroll('left')}
-             className="p-2 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 transition-colors"
-           >
-             <ChevronLeft className="w-4 h-4 text-foreground/70" />
-           </button>
-           <button
-             onClick={() => scroll('right')}
-             className="p-2 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 transition-colors"
+              className="p-2 rounded-full bg-foreground/5 border border-border/50 hover:bg-foreground/10 transition-colors"
+            >
+              <ChevronLeft className="w-4 h-4 text-foreground/70" />
+            </button>
+            <button
+              onClick={() => scroll('right')}
+              className="p-2 rounded-full bg-foreground/5 border border-border/50 hover:bg-foreground/10 transition-colors"
            >
              <ChevronRight className="w-4 h-4 text-foreground/70" />
            </button>
@@ -71,7 +71,7 @@
        {/* Horizontal Scrollable Grid */}
        <div
          ref={scrollRef}
-         className="flex gap-4 overflow-x-auto pb-4 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-white/10"
+         className="flex gap-4 overflow-x-auto pb-4 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-foreground/10"
          style={{
            scrollbarWidth: 'thin',
            msOverflowStyle: 'none',

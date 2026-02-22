@@ -60,7 +60,7 @@
         className={`
           relative min-w-[200px] p-5 rounded-xl cursor-pointer transition-all duration-500
           bg-gradient-to-br ${colors.bg}
-          border-2 ${isActive ? 'border-gold shadow-[0_0_24px_4px_hsl(var(--gold)/0.45)]' : 'border-white/10 hover:border-white/20'}
+          border-2 ${isActive ? 'border-gold shadow-[0_0_24px_4px_hsl(var(--gold)/0.25)]' : 'border-border/50 hover:border-border'}
           backdrop-blur-sm
         `}
        onClick={isActive ? onStop : onPlay}
@@ -115,7 +115,7 @@
                p-2 rounded-full transition-all duration-300
                ${isActive
                  ? `bg-gradient-to-r ${colors.bg} ${colors.border} border`
-                 : 'bg-white/5 border border-white/10 hover:bg-white/10'
+                 : 'bg-foreground/5 border border-border/50 hover:bg-foreground/10'
                }
              `}
            >
