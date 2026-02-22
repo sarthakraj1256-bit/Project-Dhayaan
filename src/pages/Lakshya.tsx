@@ -147,7 +147,7 @@ const Lakshya = () => {
       <header className="sticky top-0 z-40 h-14 px-4 flex items-center justify-between bg-background/80 backdrop-blur-xl border-b border-border/30">
           <button
             onClick={() => navigate(-1)}
-            className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors"
+            className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-foreground/5 transition-colors"
           >
             <ArrowLeft className="w-5 h-5 text-muted-foreground" />
           </button>
@@ -202,28 +202,28 @@ const Lakshya = () => {
 
                 {isLoading ? (
                   <div className="animate-pulse space-y-4">
-                    <div className="h-8 bg-white/10 rounded" />
-                    <div className="h-4 bg-white/10 rounded w-2/3" />
+                    <div className="h-8 bg-foreground/10 rounded" />
+                    <div className="h-4 bg-foreground/10 rounded w-2/3" />
                   </div>
                 ) : progress && (
                   <>
                     <LiquidGoldProgressBar progress={progress} showShimmer={showKarmaAnimation} />
                     
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6">
-                      <div className="text-center p-3 rounded-lg bg-white/5">
+                      <div className="text-center p-3 rounded-lg bg-foreground/5">
                         <p className="text-2xl font-display text-foreground">{progress.total_meditation_minutes}</p>
                         <p className="text-xs text-muted-foreground">Meditation Mins</p>
                       </div>
-                      <div className="text-center p-3 rounded-lg bg-white/5">
+                      <div className="text-center p-3 rounded-lg bg-foreground/5">
                         <p className="text-2xl font-display text-foreground">{progress.total_mantra_lessons}</p>
                         <p className="text-xs text-muted-foreground">Mantras Learned</p>
                       </div>
-                      <div className="text-center p-3 rounded-lg bg-white/5">
+                      <div className="text-center p-3 rounded-lg bg-foreground/5">
                         <p className="text-2xl font-display text-foreground">{progress.total_games_played}</p>
                         <p className="text-xs text-muted-foreground">Games Played</p>
                       </div>
                       {/* Interactive Sadhana Flame */}
-                      <div className="flex items-center justify-center p-3 rounded-lg bg-white/5">
+                      <div className="flex items-center justify-center p-3 rounded-lg bg-foreground/5">
                         <SadhanaFlame streak={progress.current_streak} />
                       </div>
                     </div>

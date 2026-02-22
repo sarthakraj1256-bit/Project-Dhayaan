@@ -134,10 +134,10 @@ const PlaylistVideoModal = ({ title, playlistId, onClose }: PlaylistVideoModalPr
                   key={video.id}
                   type="button"
                   onClick={() => setActiveVideoId(video.videoId)}
-                  className={`w-full text-left rounded-2xl overflow-hidden bg-white/[0.07] backdrop-blur-md border shadow-[0_2px_16px_rgba(0,0,0,0.2)] hover:shadow-[0_4px_24px_rgba(0,0,0,0.3)] hover:bg-white/[0.12] transition-all duration-200 active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-primary outline-none ${
+                  className={`w-full text-left rounded-2xl overflow-hidden bg-card border shadow-sm hover:shadow-md transition-all duration-200 active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-primary outline-none ${
                     activeVideoId === video.videoId
                       ? 'border-primary/50 bg-primary/10'
-                      : 'border-white/[0.12]'
+                      : 'border-border/60'
                   }`}
                 >
                   {/* Full-width thumbnail */}
@@ -145,7 +145,7 @@ const PlaylistVideoModal = ({ title, playlistId, onClose }: PlaylistVideoModalPr
                     <img src={video.thumbnail} alt={video.title} className="w-full h-full object-cover" loading="lazy" />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                     {/* Position number */}
-                    <div className="absolute top-1.5 left-1.5 w-6 h-6 rounded-full bg-black/60 flex items-center justify-center text-[10px] font-medium text-white/90">
+                    <div className="absolute top-1.5 left-1.5 w-6 h-6 rounded-full bg-black/50 flex items-center justify-center text-[10px] font-medium text-white">
                       {i + 1}
                     </div>
                     {/* Now playing indicator */}
@@ -163,7 +163,7 @@ const PlaylistVideoModal = ({ title, playlistId, onClose }: PlaylistVideoModalPr
                   </div>
                   {/* Title */}
                   <div className="p-3">
-                    <p className="text-sm font-medium text-white/90 line-clamp-2 leading-snug">{video.title}</p>
+                    <p className="text-sm font-medium text-foreground/90 line-clamp-2 leading-snug">{video.title}</p>
                   </div>
                 </button>
               ))}

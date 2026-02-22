@@ -152,7 +152,7 @@
         <button
           onClick={exportToCSV}
           disabled={exporting || sessions.length === 0}
-          className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 transition-colors text-sm text-muted-foreground hover:text-foreground disabled:opacity-50 disabled:cursor-not-allowed"
+          className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-foreground/5 border border-border/50 hover:bg-foreground/10 transition-colors text-sm text-muted-foreground hover:text-foreground disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {exporting ? (
             <div className="w-4 h-4 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
@@ -167,11 +167,11 @@
          <div key={dateKey}>
            {/* Date Header */}
            <div className="flex items-center gap-2 mb-2">
-             <div className="h-px flex-1 bg-white/10" />
-             <span className="text-xs text-muted-foreground px-2">
-               {format(new Date(dateKey), 'EEEE, MMMM d, yyyy')}
-             </span>
-             <div className="h-px flex-1 bg-white/10" />
+              <div className="h-px flex-1 bg-border/50" />
+              <span className="text-xs text-muted-foreground px-2">
+                {format(new Date(dateKey), 'EEEE, MMMM d, yyyy')}
+              </span>
+              <div className="h-px flex-1 bg-border/50" />
            </div>
  
            {/* Sessions for this date */}
@@ -183,7 +183,7 @@
                    initial={{ opacity: 0, y: -10 }}
                    animate={{ opacity: 1, y: 0 }}
                    exit={{ opacity: 0, x: -20 }}
-                   className="group relative p-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/[0.07] transition-colors"
+                   className="group relative p-3 rounded-xl bg-card border border-border/50 hover:bg-accent/30 transition-colors"
                  >
                    <div className="flex items-center gap-4">
                      {/* Frequency Icon */}
@@ -200,7 +200,7 @@
                          <span className="text-xs text-primary/80">
                            {session.frequency_value}Hz
                          </span>
-                         <span className="text-xs px-2 py-0.5 rounded-full bg-white/5 text-muted-foreground">
+                         <span className="text-xs px-2 py-0.5 rounded-full bg-foreground/5 text-muted-foreground">
                            {session.frequency_category}
                          </span>
                        </div>
