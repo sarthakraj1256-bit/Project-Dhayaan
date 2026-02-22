@@ -61,7 +61,7 @@ export default function SpiritualHubSection() {
     <TooltipProvider delayDuration={300}>
       <section className="px-6 py-5">
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-xs font-semibold text-white/40 uppercase tracking-widest">
+          <h2 className="text-xs font-semibold text-foreground/40 uppercase tracking-widest">
             {t('section.dailyAarti')}
           </h2>
           <Link
@@ -102,71 +102,36 @@ function AartiCard({ item, index }: { item: SpiritualContent; index: number }) {
       <Link
         to="/live-darshan?tab=content"
         aria-label={`Play ${item.title}`}
-        onKeyDown={(e) => {
-          if (e.key === ' ') {
-            e.preventDefault();
-            e.currentTarget.click();
-          }
-        }}
-        className="block rounded-2xl overflow-hidden bg-white/[0.07] backdrop-blur-md border border-white/[0.12] shadow-[0_2px_16px_rgba(0,0,0,0.2)] hover:shadow-[0_4px_24px_rgba(0,0,0,0.3)] hover:bg-white/[0.12] transition-all duration-200 active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background outline-none"
+        className="block rounded-2xl overflow-hidden light-card transition-all duration-200 active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-primary outline-none"
       >
-        {/* Thumbnail */}
         <div className="aspect-[16/9] relative overflow-hidden bg-muted">
-          <img
-            src={item.thumbnail}
-            alt={item.title}
-            className="w-full h-full object-cover"
-            loading="lazy"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-
+          <img src={item.thumbnail} alt={item.title} className="w-full h-full object-cover" loading="lazy" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
           <div className="absolute top-1.5 left-1.5">
-            <Badge className={`${color} text-white border-0 text-[9px] px-1.5 py-0.5 leading-none`}>
-              {label}
-            </Badge>
+            <Badge className={`${color} text-white border-0 text-[9px] px-1.5 py-0.5 leading-none`}>{label}</Badge>
           </div>
-
           <div className="absolute bottom-1.5 right-1.5 flex items-center gap-0.5 bg-black/50 backdrop-blur-sm px-1.5 py-0.5 rounded text-[10px] text-white/80">
-            <Clock className="w-2.5 h-2.5" />
-            {item.duration}
+            <Clock className="w-2.5 h-2.5" />{item.duration}
           </div>
-
           <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
             <div className="w-9 h-9 rounded-full bg-primary/80 flex items-center justify-center">
               <Play className="w-4 h-4 text-primary-foreground ml-0.5" />
             </div>
           </div>
         </div>
-
-        {/* Info */}
         <div className="p-2.5 space-y-1">
-          <p className="text-xs font-medium text-white/90 line-clamp-2 leading-snug">
-            {item.title}
-          </p>
-
-          {desc && (
-            <p className="text-[10px] text-white/35 line-clamp-2 leading-relaxed">
-              {desc}
-            </p>
-          )}
-
+          <p className="text-xs font-medium text-foreground/85 line-clamp-2 leading-snug">{item.title}</p>
+          {desc && <p className="text-[10px] text-muted-foreground line-clamp-2 leading-relaxed">{desc}</p>}
           {item.speaker && (
             <Tooltip>
               <TooltipTrigger asChild>
-                <span
-                  className="inline-flex items-center gap-1 text-[10px] text-white/50 hover:text-white/70 transition-colors cursor-default"
-                  onClick={(e) => e.preventDefault()}
-                >
-                  <User className="w-2.5 h-2.5" />
-                  {item.speaker}
+                <span className="inline-flex items-center gap-1 text-[10px] text-foreground/40 hover:text-foreground/60 transition-colors cursor-default" onClick={(e) => e.preventDefault()}>
+                  <User className="w-2.5 h-2.5" />{item.speaker}
                 </span>
               </TooltipTrigger>
               {bio && (
-                <TooltipContent
-                  side="top"
-                  className="max-w-[200px] bg-[hsl(216,55%,14%)] border-white/10 text-white/80 text-[11px]"
-                >
-                  <p className="font-medium text-white/90 mb-0.5">{item.speaker}</p>
+                <TooltipContent side="top" className="max-w-[200px] bg-card border-border text-foreground/80 text-[11px]">
+                  <p className="font-medium text-foreground/90 mb-0.5">{item.speaker}</p>
                   <p className="leading-snug">{bio}</p>
                 </TooltipContent>
               )}

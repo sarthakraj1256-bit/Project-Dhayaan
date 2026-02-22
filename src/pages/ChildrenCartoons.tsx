@@ -55,8 +55,8 @@ export default function ChildrenCartoons() {
 
   return (
     <div className="min-h-screen bg-background pb-24 md:pb-8">
-      <header className="sticky top-0 z-40 h-14 px-4 flex items-center gap-3 border-b border-border/30 bg-background/80 backdrop-blur-xl">
-        <Link to="/" className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors">
+       <header className="sticky top-0 z-40 h-14 px-4 flex items-center gap-3 border-b border-border/50 bg-background/85 backdrop-blur-xl">
+        <Link to="/" className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-foreground/5 transition-colors">
           <ArrowLeft className="w-5 h-5 text-muted-foreground" />
         </Link>
         <h1 className="font-display text-lg tracking-wider text-foreground">{t('page.childrenCartoons')}</h1>
@@ -64,12 +64,12 @@ export default function ChildrenCartoons() {
 
       <main className="px-4 py-6 max-w-4xl mx-auto space-y-6">
         {/* Progress Bar */}
-        <div className="rounded-2xl bg-white/[0.07] backdrop-blur-md border border-white/[0.12] p-4">
+         <div className="rounded-2xl light-card p-4">
           <div className="flex items-center justify-between mb-2">
-            <p className="text-xs font-semibold text-white/60 uppercase tracking-wider">Watch Progress</p>
-            <span className="text-xs text-white/50">{watchedCount} / {totalEpisodes} watched</span>
+            <p className="text-xs font-semibold text-foreground/50 uppercase tracking-wider">Watch Progress</p>
+            <span className="text-xs text-muted-foreground">{watchedCount} / {totalEpisodes} watched</span>
           </div>
-          <div className="h-2 rounded-full bg-white/10 overflow-hidden">
+          <div className="h-2 rounded-full bg-foreground/10 overflow-hidden">
             <motion.div
               className="h-full rounded-full bg-gradient-to-r from-primary to-emerald-400"
               initial={{ width: 0 }}
@@ -81,7 +81,7 @@ export default function ChildrenCartoons() {
             <button
               type="button"
               onClick={() => setHideWatched(!hideWatched)}
-              className="flex items-center gap-1.5 text-[11px] text-white/50 hover:text-white/70 transition-colors"
+              className="flex items-center gap-1.5 text-[11px] text-muted-foreground hover:text-foreground/70 transition-colors"
             >
               {hideWatched ? <Eye className="w-3 h-3" /> : <EyeOff className="w-3 h-3" />}
               {hideWatched ? 'Show watched' : 'Hide watched'}
@@ -91,7 +91,7 @@ export default function ChildrenCartoons() {
 
         {/* Roll No 21 Playlist Card */}
         <section>
-          <h2 className="text-xs font-semibold text-white/40 uppercase tracking-widest mb-3">Playlists</h2>
+          <h2 className="text-xs font-semibold text-foreground/40 uppercase tracking-widest mb-3">Playlists</h2>
           <div className="space-y-3">
             <RollNo21PlaylistCard
               onOpen={() => setShowRollNo21(true)}
@@ -124,9 +124,9 @@ export default function ChildrenCartoons() {
 
         {/* Featured Videos */}
         <section>
-          <h2 className="text-xs font-semibold text-white/40 uppercase tracking-widest mb-3">Featured Videos</h2>
+           <h2 className="text-xs font-semibold text-foreground/40 uppercase tracking-widest mb-3">Featured Videos</h2>
           {filteredVideos.length === 0 ? (
-            <div className="text-center py-8 text-white/40 text-sm">
+            <div className="text-center py-8 text-muted-foreground text-sm">
               All videos watched! 🎉
               <button type="button" onClick={() => setHideWatched(false)} className="block mx-auto mt-2 text-primary text-xs hover:underline">
                 Show all

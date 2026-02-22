@@ -62,7 +62,7 @@ export default function SectionNav() {
           : '-translate-y-full opacity-0 pointer-events-none'
       )}
     >
-      <div className="bg-[hsl(216,55%,14%)]/80 backdrop-blur-xl border-b border-white/[0.08]">
+      <div className="bg-background/85 backdrop-blur-xl border-b border-border/50">
         <div
           ref={navRef}
           className="flex items-center gap-1.5 px-4 py-2.5 overflow-x-auto scrollbar-hide"
@@ -75,8 +75,8 @@ export default function SectionNav() {
               className={cn(
                 'shrink-0 px-3.5 py-1.5 rounded-full text-xs font-medium transition-all duration-200 whitespace-nowrap',
                 active === section.id
-                  ? 'bg-white/[0.15] text-white shadow-[0_0_12px_rgba(255,255,255,0.08)]'
-                  : 'text-white/40 hover:text-white/60 hover:bg-white/[0.06]'
+                  ? 'bg-primary/15 text-primary shadow-sm'
+                  : 'text-foreground/40 hover:text-foreground/60 hover:bg-foreground/[0.04]'
               )}
             >
               {t(section.labelKey)}

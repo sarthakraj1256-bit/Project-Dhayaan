@@ -51,10 +51,10 @@ const difficultyOrder = ['beginner', 'intermediate', 'advanced', 'mastery'] as c
    // If a mantra is selected, show the lesson view
    if (selectedMantra) {
      return (
-       <div className="min-h-screen bg-void relative overflow-hidden">
-         {/* Background */}
-         <div className="fixed inset-0 z-0">
-           <div className="absolute inset-0 bg-gradient-to-b from-void via-void-light/20 to-void" />
+        <div className="min-h-screen bg-background relative overflow-hidden">
+          {/* Background */}
+          <div className="fixed inset-0 z-0">
+            <div className="absolute inset-0 bg-gradient-to-b from-background via-card/20 to-background" />
            <div 
              className="absolute inset-0 opacity-[0.02]"
              style={{
@@ -79,10 +79,10 @@ const difficultyOrder = ['beginner', 'intermediate', 'advanced', 'mastery'] as c
  
    return (
      <PageTransition>
-     <div className="min-h-screen bg-void relative overflow-hidden">
-       {/* Background */}
-       <div className="fixed inset-0 z-0">
-         <div className="absolute inset-0 bg-gradient-to-b from-void via-void-light/20 to-void" />
+      <div className="min-h-screen bg-background relative overflow-hidden">
+        {/* Background */}
+        <div className="fixed inset-0 z-0">
+          <div className="absolute inset-0 bg-gradient-to-b from-background via-card/20 to-background" />
          <div 
            className="absolute inset-0 opacity-[0.02]"
            style={{
@@ -96,27 +96,27 @@ const difficultyOrder = ['beginner', 'intermediate', 'advanced', 'mastery'] as c
        {/* Content */}
        <div className="relative z-10 pb-24 md:pb-0">
          {/* Header */}
-        <header className="sticky top-0 z-40 h-14 px-4 flex items-center justify-between bg-void/80 backdrop-blur-xl border-b border-border/30">
-              <Link
-                to="/"
-                className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors"
-              >
-                <ArrowLeft className="w-5 h-5 text-muted-foreground" />
-              </Link>
+         <header className="sticky top-0 z-40 h-14 px-4 flex items-center justify-between bg-background/85 backdrop-blur-xl border-b border-border/50">
+               <Link
+                 to="/"
+                 className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-foreground/5 transition-colors"
+               >
+                 <ArrowLeft className="w-5 h-5 text-muted-foreground" />
+               </Link>
   
-              <div className="flex items-center gap-2">
-                <BookOpen className="w-5 h-5 text-primary" />
-                <h1 className="font-display text-lg tracking-[0.2em] text-gold-gradient">
-                  {t('page.mantrochar').toUpperCase()}
-                </h1>
-              </div>
+               <div className="flex items-center gap-2">
+                 <BookOpen className="w-5 h-5 text-primary" />
+                 <h1 className="font-display text-lg tracking-[0.2em] text-gold-gradient">
+                   {t('page.mantrochar').toUpperCase()}
+                 </h1>
+               </div>
   
-              <Link
-                to="/sonic-lab"
-                className="w-9 h-9 rounded-full flex items-center justify-center bg-white/5 border border-white/10 hover:bg-white/10 transition-colors"
-              >
-                <Radio className="w-5 h-5 text-primary" />
-              </Link>
+               <Link
+                 to="/sonic-lab"
+                 className="w-9 h-9 rounded-full flex items-center justify-center bg-foreground/5 border border-border/50 hover:bg-foreground/10 transition-colors"
+               >
+                 <Radio className="w-5 h-5 text-primary" />
+               </Link>
           </header>
  
          {/* Hero */}
@@ -188,7 +188,7 @@ const difficultyOrder = ['beginner', 'intermediate', 'advanced', 'mastery'] as c
                    px-4 py-2 rounded-full text-sm whitespace-nowrap transition-all
                    ${activeFilter === filter 
                      ? 'bg-primary/20 border border-primary/50 text-primary' 
-                     : 'bg-white/5 border border-white/10 text-muted-foreground hover:bg-white/10'
+                     : 'bg-foreground/5 border border-border/50 text-muted-foreground hover:bg-foreground/10'
                    }
                  `}
                >
@@ -216,7 +216,7 @@ const difficultyOrder = ['beginner', 'intermediate', 'advanced', 'mastery'] as c
                    <h3 className="font-display text-sm tracking-widest text-muted-foreground uppercase">
                      {difficulty}
                    </h3>
-                   <div className="h-px flex-1 bg-white/10" />
+                   <div className="h-px flex-1 bg-border" />
                    <span className="text-xs text-muted-foreground">
                      {mantrasInDifficulty.length} mantras
                    </span>

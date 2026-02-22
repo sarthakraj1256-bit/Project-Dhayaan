@@ -64,8 +64,8 @@ const JapBank = () => {
       <Suspense fallback={null}><GoalConfetti /></Suspense>
 
       {/* Header */}
-      <header className="sticky top-0 z-40 h-14 px-4 flex items-center justify-between bg-background/80 backdrop-blur-xl border-b border-border/30">
-        <Link to="/" className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors">
+       <header className="sticky top-0 z-40 h-14 px-4 flex items-center justify-between bg-background/85 backdrop-blur-xl border-b border-border/50">
+        <Link to="/" className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-foreground/5 transition-colors">
           <ArrowLeft className="w-5 h-5 text-muted-foreground" />
         </Link>
         <h1 className="font-display text-lg tracking-wider text-primary">

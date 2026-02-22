@@ -34,9 +34,9 @@ const BottomNav = forwardRef<HTMLElement>((_, ref) => {
   return (
     <nav ref={ref} className="fixed bottom-0 left-0 right-0 z-50 md:hidden">
       <div
-        className="mx-0 overflow-hidden touch-manipulation border-t border-border/30"
+        className="mx-0 overflow-hidden touch-manipulation border-t border-border/50"
         style={{
-          background: '#0B1D3A',
+          background: 'hsl(36, 33%, 97%)',
           backdropFilter: 'blur(16px)',
           WebkitBackdropFilter: 'blur(16px)',
           paddingBottom: 'env(safe-area-inset-bottom, 0px)',
@@ -57,7 +57,7 @@ const BottomNav = forwardRef<HTMLElement>((_, ref) => {
                 {isActive && (
                   <motion.div
                     layoutId="bottomNavDot"
-                    className="absolute -top-0.5 w-1 h-1 rounded-full" style={{ background: '#34D9A8' }}
+                    className="absolute -top-0.5 w-1 h-1 rounded-full bg-primary"
                     transition={{ type: 'spring', stiffness: 500, damping: 30 }}
                   />
                 )}
@@ -65,14 +65,14 @@ const BottomNav = forwardRef<HTMLElement>((_, ref) => {
                  <Icon
                    className={cn(
                      'w-5 h-5 transition-colors duration-150',
-                     isActive ? 'text-white' : 'text-white/35'
+                     isActive ? 'text-primary' : 'text-foreground/30'
                    )}
                 />
 
                 <span
                   className={cn(
                      'text-[10px] mt-0.5 font-medium transition-colors duration-150',
-                     isActive ? 'text-white' : 'text-white/35'
+                     isActive ? 'text-primary' : 'text-foreground/30'
                   )}
                 >
                   {t(item.labelKey)}

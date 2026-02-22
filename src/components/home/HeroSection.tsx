@@ -25,7 +25,6 @@ export default function HeroSection({ user }: HeroSectionProps) {
     return () => clearInterval(id);
   }, [t]);
 
-  // Update greeting when language changes
   useEffect(() => {
     setGreeting(getGreeting());
   }, [t]);
@@ -51,16 +50,15 @@ export default function HeroSection({ user }: HeroSectionProps) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <p className="text-xs uppercase tracking-[0.2em] font-medium" style={{ color: '#111111' }}>
+        <p className="text-xs uppercase tracking-[0.2em] font-medium text-muted-foreground">
           {greetingText}
         </p>
 
         <h1 className="mt-3 relative">
           <span
-            className="text-5xl font-extralight italic tracking-[0.12em]"
+            className="text-5xl font-extralight italic tracking-[0.12em] text-gold-gradient"
             style={{
               fontFamily: "'Georgia', 'Times New Roman', serif",
-              color: '#000000',
             }}
           >
             Dhyaan
@@ -69,8 +67,8 @@ export default function HeroSection({ user }: HeroSectionProps) {
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ delay: 0.6, type: 'spring', stiffness: 300 }}
-            className="inline-block w-2 h-2 rounded-full ml-1 align-super"
-            style={{ background: '#34D9A8', boxShadow: '0 0 10px 3px rgba(52,217,168,0.4)' }}
+            className="inline-block w-2 h-2 rounded-full ml-1 align-super bg-primary"
+            style={{ boxShadow: '0 0 10px 3px hsl(35 80% 52% / 0.3)' }}
           />
           <motion.div
             initial={{ scaleX: 0 }}
@@ -78,13 +76,13 @@ export default function HeroSection({ user }: HeroSectionProps) {
             transition={{ delay: 0.4, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             className="h-[1.5px] mt-1.5 origin-left rounded-full"
             style={{
-              background: 'linear-gradient(90deg, #34D9A8 0%, #F5816E 50%, transparent 100%)',
+              background: 'linear-gradient(90deg, hsl(35 80% 52%) 0%, hsl(12 65% 68%) 50%, transparent 100%)',
               maxWidth: '160px',
             }}
           />
         </h1>
 
-        <p className="text-sm mt-3 leading-relaxed tracking-wide" style={{ color: '#222222' }}>
+        <p className="text-sm mt-3 leading-relaxed tracking-wide text-foreground/70">
           {t('hero.tagline')}
         </p>
       </motion.div>
