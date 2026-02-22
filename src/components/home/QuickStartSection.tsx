@@ -12,7 +12,7 @@ const features = [
   { icon: ScrollText, label: 'Jap Seva', description: 'Chanting log', href: '/jap-bank', color: '#FFB07A' },
   { icon: Sparkles, label: 'Lakshya', description: 'Spiritual progress', href: '/lakshya', color: '#B8A4F0' },
   { icon: Eye, label: 'Immersive', description: '360° darshan', href: '/immersive-darshan', color: '#5DD8EE' },
-  { icon: Flame, label: 'Daily Aarti', description: 'Devotional videos', href: '/live-darshan?tab=aarti', color: '#FF9F43' },
+  { icon: Flame, label: 'Daily Aarti', description: 'Devotional videos', href: '/live-darshan?tab=content', color: '#FF9F43' },
   { icon: Tv, label: 'Kids Cartoons', description: 'Spiritual stories', href: '/children-cartoons', color: '#FF6B81' },
 ];
 
