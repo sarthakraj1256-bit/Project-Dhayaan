@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Radio, Star, BarChart3 } from 'lucide-react';
 import { useState, useCallback, useRef, useEffect } from 'react';
+import { useLanguage } from '@/contexts/LanguageContext';
 import PageTransition from '@/components/PageTransition';
 import { useSessionPersistence } from '@/hooks/useSessionPersistence';
 import { categories, getFrequenciesByCategory } from '@/data/soundLibrary';
@@ -22,6 +23,7 @@ import MeditationCalendar from '@/components/sonic-lab/MeditationCalendar';
 import SessionHistoryList from '@/components/sonic-lab/SessionHistoryList';
 import BottomNav from '@/components/BottomNav';
  const SonicLab = () => {
+   const { t } = useLanguage();
    const [showFavorites, setShowFavorites] = useState(false);
   const [showStats, setShowStats] = useState(false);
    const [currentFrequencyMeta, setCurrentFrequencyMeta] = useState<{
@@ -200,7 +202,7 @@ import BottomNav from '@/components/BottomNav';
               <div className="flex items-center gap-2">
                 <Radio className="w-5 h-5 text-primary" />
                 <h1 className="font-display text-lg tracking-[0.2em] text-gold-gradient">
-                  THE SONIC LAB
+                  {t('page.sonicLab').toUpperCase()}
                 </h1>
               </div>
   

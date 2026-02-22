@@ -6,6 +6,8 @@ import { User } from '@supabase/supabase-js';
 import UserMenu from '@/components/UserMenu';
 import BottomNav from '@/components/BottomNav';
 import { PWAInstallPrompt } from '@/components/pwa/PWAInstallPrompt';
+import LanguageToggle from '@/components/LanguageToggle';
+import { useLanguage } from '@/contexts/LanguageContext';
 import {
   HeroSection,
   QuickStartSection,
@@ -22,6 +24,7 @@ import WavyBackground from '@/components/home/WavyBackground';
 
 const Index = () => {
   const [user, setUser] = useState<User | null>(null);
+  const { t } = useLanguage();
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
@@ -55,6 +58,7 @@ const Index = () => {
 
       {/* Navigation - Fixed Top Right */}
       <div className="fixed top-4 right-4 z-50 flex items-center gap-2">
+         <LanguageToggle />
          {user ? (
            <UserMenu user={user} />
          ) : (
@@ -63,7 +67,7 @@ const Index = () => {
              className="flex items-center gap-2 px-3.5 py-2 rounded-full bg-white/[0.1] backdrop-blur-md border border-white/[0.15] text-sm font-medium text-white/90 shadow-[0_2px_12px_rgba(0,0,0,0.2)] transition-all duration-200 hover:bg-white/[0.18] active:scale-95"
            >
              <LogIn className="w-4 h-4" style={{ color: '#34D9A8' }} />
-             Sign in
+             {t('auth.signIn')}
            </Link>
          )}
       </div>

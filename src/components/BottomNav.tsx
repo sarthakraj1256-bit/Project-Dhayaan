@@ -4,23 +4,26 @@ import { motion } from 'framer-motion';
 import { Home, Radio, BookOpen, Sparkles, Play, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { triggerHaptic } from '@/hooks/useHapticFeedback';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { TranslationKey } from '@/i18n/translations';
 
 interface NavItem {
   path: string;
-  label: string;
+  labelKey: TranslationKey;
   icon: React.ElementType;
 }
 
 const navItems: NavItem[] = [
-  { path: '/', label: 'Home', icon: Home },
-  { path: '/sonic-lab', label: 'Sonic', icon: Radio },
-  { path: '/live-darshan', label: 'Darshan', icon: Play },
-  { path: '/lakshya', label: 'Lakshya', icon: Sparkles },
-  { path: '/profile', label: 'Profile', icon: User },
+  { path: '/', labelKey: 'nav.home', icon: Home },
+  { path: '/sonic-lab', labelKey: 'nav.sonic', icon: Radio },
+  { path: '/live-darshan', labelKey: 'nav.darshan', icon: Play },
+  { path: '/lakshya', labelKey: 'nav.lakshya', icon: Sparkles },
+  { path: '/profile', labelKey: 'nav.profile', icon: User },
 ];
 
 const BottomNav = forwardRef<HTMLElement>((_, ref) => {
   const location = useLocation();
+  const { t } = useLanguage();
 
   const handleNavClick = (path: string) => {
     if (location.pathname !== path) {
@@ -51,7 +54,6 @@ const BottomNav = forwardRef<HTMLElement>((_, ref) => {
                 onClick={() => handleNavClick(item.path)}
                 className="relative flex flex-col items-center justify-center py-1.5 px-3 min-w-[56px] min-h-[44px] touch-target tap-transparent select-none"
               >
-                {/* Active indicator dot */}
                 {isActive && (
                   <motion.div
                     layoutId="bottomNavDot"
@@ -73,7 +75,7 @@ const BottomNav = forwardRef<HTMLElement>((_, ref) => {
                      isActive ? 'text-white' : 'text-white/35'
                   )}
                 >
-                  {item.label}
+                  {t(item.labelKey)}
                 </span>
               </Link>
             );

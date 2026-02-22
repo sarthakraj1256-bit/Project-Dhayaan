@@ -1,5 +1,6 @@
 import PageTransition from '@/components/PageTransition';
 import { useState, useMemo } from 'react';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { motion } from 'framer-motion';
 import { Link, useSearchParams } from 'react-router-dom';
 import { 
@@ -39,6 +40,7 @@ import AartiReminderSettings from '@/components/live-darshan/AartiReminderSettin
 import { useFavoriteAartiNotifications } from '@/hooks/useFavoriteAartiNotifications';
 
 const LiveDarshan = () => {
+  const { t } = useLanguage();
   const [searchParams] = useSearchParams();
   const initialTab = searchParams.get('tab') === 'content' ? 'content' : 'temples';
   const [selectedTemple, setSelectedTemple] = useState<Temple | null>(null);
@@ -105,7 +107,7 @@ const LiveDarshan = () => {
                 <ArrowLeft className="w-5 h-5 text-muted-foreground" />
               </Link>
               <h1 className="font-display text-lg text-gold-gradient tracking-wider">
-                Live Darshan
+                {t('page.liveDarshan')}
               </h1>
             </div>
             

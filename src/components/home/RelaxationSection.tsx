@@ -1,16 +1,19 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight, Waves } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export default function RelaxationSection() {
+  const { t } = useLanguage();
+
   return (
     <section className="px-6 py-5">
       <div className="flex items-center justify-between mb-3">
         <h2 className="text-xs font-semibold text-white/40 uppercase tracking-widest">
-          Quick Calm
+          {t('section.quickCalm')}
         </h2>
         <Link to="/sonic-lab" className="text-xs text-primary font-medium flex items-center gap-1 hover:underline">
-          See all <ArrowRight className="w-3 h-3" />
+          {t('link.seeAll')} <ArrowRight className="w-3 h-3" />
         </Link>
       </div>
       <motion.div
@@ -27,9 +30,9 @@ export default function RelaxationSection() {
                <Waves className="w-6 h-6" style={{ color: '#34D9A8' }} strokeWidth={2} />
             </div>
             <div className="flex-1 min-w-0">
-               <p className="font-medium text-white/90">Healing Frequencies</p>
+               <p className="font-medium text-white/90">{t('relax.title')}</p>
                <p className="text-sm text-white/45 mt-0.5">
-                Relax, focus, or sleep with therapeutic sound
+                {t('relax.desc')}
               </p>
             </div>
             <ArrowRight className="w-4 h-4 text-white/40 shrink-0" />

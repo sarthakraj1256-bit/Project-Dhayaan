@@ -1,5 +1,6 @@
 import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Play, Search, Filter, MapPin, Star, Eye } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -20,6 +21,7 @@ import { useDevotionalAudio } from '@/hooks/useDevotionalAudio';
 import BottomNav from '@/components/BottomNav';
 
 const ImmersiveDarshan = () => {
+  const { t } = useLanguage();
   const [selectedTemple, setSelectedTemple] = useState<ImmersiveTemple | null>(null);
   const [currentZoneId, setCurrentZoneId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -133,7 +135,7 @@ const ImmersiveDarshan = () => {
                 <ArrowLeft className="w-5 h-5 text-muted-foreground" />
               </Link>
               <h1 className="font-display text-lg text-gold-gradient tracking-wider">
-                360° Darshan
+                {t('page.immersiveDarshan')}
               </h1>
             </div>
 

@@ -1,18 +1,22 @@
 import { Link } from 'react-router-dom';
 import { Sparkles, Building2, Waves } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { TranslationKey } from '@/i18n/translations';
 
 const highlights = [
-  { icon: Sparkles, label: "Today's Pick", title: 'Kashi Ganga Aarti', href: '/live-darshan' },
-  { icon: Waves, label: 'Recommended', title: '528 Hz Healing', href: '/sonic-lab' },
-  { icon: Building2, label: 'Featured Temple', title: 'Tirupati Balaji', href: '/live-darshan' },
+  { icon: Sparkles, labelKey: 'highlights.todaysPick' as TranslationKey, title: 'Kashi Ganga Aarti', href: '/live-darshan' },
+  { icon: Waves, labelKey: 'highlights.recommended' as TranslationKey, title: '528 Hz Healing', href: '/sonic-lab' },
+  { icon: Building2, labelKey: 'highlights.featuredTemple' as TranslationKey, title: 'Tirupati Balaji', href: '/live-darshan' },
 ];
 
 export default function DailyHighlightsSection() {
+  const { t } = useLanguage();
+
   return (
     <section className="px-6 py-5">
       <h2 className="text-xs font-semibold text-white/40 uppercase tracking-widest mb-3">
-        Highlights
+        {t('section.highlights')}
       </h2>
       <div className="space-y-2.5">
         {highlights.map((item, index) => (
@@ -32,7 +36,7 @@ export default function DailyHighlightsSection() {
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-[10px] text-white/40 uppercase tracking-wide font-medium">
-                  {item.label}
+                  {t(item.labelKey)}
                 </p>
                 <p className="text-sm font-medium text-white/90 truncate">
                   {item.title}

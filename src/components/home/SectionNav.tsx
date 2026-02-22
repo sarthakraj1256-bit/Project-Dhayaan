@@ -1,15 +1,17 @@
 import { useEffect, useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { TranslationKey } from '@/i18n/translations';
 
 const sections = [
-  { id: 'hero', label: 'Home' },
-  { id: 'explore', label: 'Explore' },
-  { id: 'relaxation', label: 'Relax' },
-  { id: 'darshan', label: 'Darshan' },
-  { id: 'daily-aarti', label: 'Aarti' },
-  { id: 'cartoons', label: 'Cartoons' },
-  { id: 'highlights', label: 'Highlights' },
-  { id: 'philosophy', label: 'Philosophy' },
+  { id: 'hero', labelKey: 'sectionNav.home' as TranslationKey },
+  { id: 'explore', labelKey: 'sectionNav.explore' as TranslationKey },
+  { id: 'relaxation', labelKey: 'sectionNav.relax' as TranslationKey },
+  { id: 'darshan', labelKey: 'sectionNav.darshan' as TranslationKey },
+  { id: 'daily-aarti', labelKey: 'sectionNav.aarti' as TranslationKey },
+  { id: 'cartoons', labelKey: 'sectionNav.cartoons' as TranslationKey },
+  { id: 'highlights', labelKey: 'sectionNav.highlights' as TranslationKey },
+  { id: 'philosophy', labelKey: 'sectionNav.philosophy' as TranslationKey },
 ];
 
 export default function SectionNav() {
@@ -17,13 +19,11 @@ export default function SectionNav() {
   const [visible, setVisible] = useState(false);
   const navRef = useRef<HTMLDivElement>(null);
   const pillRefs = useRef<Record<string, HTMLButtonElement | null>>({});
+  const { t } = useLanguage();
 
   useEffect(() => {
     const handleScroll = () => {
-      // Show nav after scrolling past hero
       setVisible(window.scrollY > 120);
-
-      // Find current section
       let current = 'hero';
       for (const section of sections) {
         const el = document.getElementById(section.id);
@@ -39,7 +39,6 @@ export default function SectionNav() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Scroll active pill into view
   useEffect(() => {
     const btn = pillRefs.current[active];
     if (btn && navRef.current) {
@@ -80,7 +79,7 @@ export default function SectionNav() {
                   : 'text-white/40 hover:text-white/60 hover:bg-white/[0.06]'
               )}
             >
-              {section.label}
+              {t(section.labelKey)}
             </button>
           ))}
         </div>
