@@ -11,7 +11,7 @@ export default function DarshanSection() {
   return (
     <section className="px-6 py-5">
       <div className="flex items-center justify-between mb-3">
-        <h2 className="text-xs font-semibold text-white/40 uppercase tracking-widest">
+        <h2 className="text-xs font-semibold text-foreground/40 uppercase tracking-widest">
           {t('section.templeDarshan')}
         </h2>
         <Link to="/live-darshan" className="text-xs text-primary font-medium flex items-center gap-1 hover:underline">
@@ -31,7 +31,7 @@ export default function DarshanSection() {
           >
             <Link
               to="/live-darshan"
-              className="block rounded-2xl overflow-hidden bg-white/[0.07] backdrop-blur-md border border-white/[0.12] shadow-[0_2px_16px_rgba(0,0,0,0.2)] hover:shadow-[0_4px_24px_rgba(0,0,0,0.3)] hover:bg-white/[0.12] transition-all duration-200 active:scale-[0.98]"
+              className="block rounded-2xl overflow-hidden light-card transition-all duration-200 active:scale-[0.98]"
             >
               <div className="aspect-[4/3] bg-muted relative overflow-hidden">
                 <img
@@ -48,10 +48,10 @@ export default function DarshanSection() {
                 </div>
               </div>
               <div className="p-2.5">
-                <p className="text-xs font-medium text-white/90 truncate">
+                <p className="text-xs font-medium text-foreground/85 truncate">
                   {temple.name}
                 </p>
-                <p className="text-[11px] text-white/45 truncate">
+                <p className="text-[11px] text-muted-foreground truncate">
                   {temple.location}
                 </p>
               </div>

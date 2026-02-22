@@ -65,45 +65,30 @@
      <DropdownMenu>
        <DropdownMenuTrigger asChild>
          <button
-           className="flex items-center gap-2 px-3 py-2 rounded-full transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-gold/50"
-           style={{
-             background: 'hsl(var(--void-light) / 0.6)',
-             backdropFilter: 'blur(12px)',
-             WebkitBackdropFilter: 'blur(12px)',
-             border: '1px solid hsl(var(--gold) / 0.3)',
-             boxShadow: '0 0 20px hsl(var(--gold) / 0.1)',
-           }}
+           className="flex items-center gap-2 px-3 py-2 rounded-full transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary/30 bg-card/80 backdrop-blur-sm border border-border/60 shadow-sm"
          >
-           <Avatar className="w-8 h-8 border border-gold/50">
+           <Avatar className="w-8 h-8 border border-primary/30">
              <AvatarImage src={avatarUrl || undefined} />
              <AvatarFallback
-               className="text-xs font-display tracking-wider"
-               style={{
-                 background: 'linear-gradient(135deg, hsl(var(--gold) / 0.3), hsl(var(--gold) / 0.1))',
-                 color: 'hsl(var(--gold))',
-               }}
+               className="text-xs font-display tracking-wider bg-primary/10 text-primary"
              >
                {getInitials()}
              </AvatarFallback>
            </Avatar>
-           <ChevronDown className="w-4 h-4 text-gold" />
+           <ChevronDown className="w-4 h-4 text-primary" />
          </button>
        </DropdownMenuTrigger>
        <DropdownMenuContent
          align="end"
-         className="w-48 bg-void-dark border-gold/30 shadow-xl z-50"
-         style={{
-           backdropFilter: 'blur(16px)',
-           WebkitBackdropFilter: 'blur(16px)',
-         }}
+         className="w-48 bg-card border-border shadow-xl z-50"
        >
-         <div className="px-3 py-2 text-xs text-muted-foreground truncate border-b border-gold/20">
+         <div className="px-3 py-2 text-xs text-muted-foreground truncate border-b border-border">
            {displayName || user.email}
          </div>
          <DropdownMenuItem asChild>
            <Link
              to="/profile"
-             className="flex items-center gap-2 cursor-pointer text-foreground hover:text-gold focus:text-gold"
+             className="flex items-center gap-2 cursor-pointer text-foreground hover:text-primary focus:text-primary"
            >
              <UserCircle className="w-4 h-4" />
              <span>{t('menu.profile')}</span>
@@ -112,13 +97,13 @@
          <DropdownMenuItem asChild>
            <Link
              to="/dashboard"
-             className="flex items-center gap-2 cursor-pointer text-foreground hover:text-gold focus:text-gold"
+             className="flex items-center gap-2 cursor-pointer text-foreground hover:text-primary focus:text-primary"
            >
              <LayoutDashboard className="w-4 h-4" />
              <span>{t('menu.dashboard')}</span>
            </Link>
          </DropdownMenuItem>
-         <DropdownMenuSeparator className="bg-gold/20" />
+         <DropdownMenuSeparator className="bg-border" />
          <DropdownMenuItem
            onClick={handleLogout}
            disabled={isLoggingOut}

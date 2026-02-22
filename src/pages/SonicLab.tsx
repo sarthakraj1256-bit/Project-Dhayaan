@@ -166,38 +166,38 @@ import BottomNav from '@/components/BottomNav';
  
    return (
      <PageTransition>
-     <div className="min-h-screen bg-void relative overflow-hidden">
-       {/* Background Elements */}
-       <div className="fixed inset-0 z-0">
-         {/* Gradient overlay */}
-         <div className="absolute inset-0 bg-gradient-to-b from-void via-void-light/20 to-void" />
-         
-         {/* Grid pattern */}
-         <div 
-           className="absolute inset-0 opacity-[0.03]"
-           style={{
-             backgroundImage: `
-               linear-gradient(rgba(212, 175, 55, 0.3) 1px, transparent 1px),
-               linear-gradient(90deg, rgba(212, 175, 55, 0.3) 1px, transparent 1px)
-             `,
-             backgroundSize: '50px 50px',
-           }}
-         />
- 
-         {/* Radial glow */}
-         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-primary/5 rounded-full blur-[150px]" />
-       </div>
- 
-       {/* Content */}
-       <div className="relative z-10">
-         {/* Header */}
-        <header className="sticky top-0 z-40 h-14 px-4 flex items-center justify-between bg-void/80 backdrop-blur-xl border-b border-border/30">
-              <Link
-                to="/"
-                className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors"
-              >
-                <ArrowLeft className="w-5 h-5 text-muted-foreground" />
-              </Link>
+      <div className="min-h-screen bg-background relative overflow-hidden">
+        {/* Background Elements */}
+        <div className="fixed inset-0 z-0">
+          {/* Gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-b from-background via-card/20 to-background" />
+          
+          {/* Grid pattern */}
+          <div 
+            className="absolute inset-0 opacity-[0.03]"
+            style={{
+              backgroundImage: `
+                linear-gradient(hsl(var(--primary) / 0.2) 1px, transparent 1px),
+                linear-gradient(90deg, hsl(var(--primary) / 0.2) 1px, transparent 1px)
+              `,
+              backgroundSize: '50px 50px',
+            }}
+          />
+  
+          {/* Radial glow */}
+          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-primary/5 rounded-full blur-[150px]" />
+        </div>
+  
+        {/* Content */}
+        <div className="relative z-10">
+          {/* Header */}
+         <header className="sticky top-0 z-40 h-14 px-4 flex items-center justify-between bg-background/85 backdrop-blur-xl border-b border-border/50">
+               <Link
+                 to="/"
+                 className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-foreground/5 transition-colors"
+               >
+                 <ArrowLeft className="w-5 h-5 text-muted-foreground" />
+               </Link>
   
               <div className="flex items-center gap-2">
                 <Radio className="w-5 h-5 text-primary" />
@@ -213,7 +213,7 @@ import BottomNav from '@/components/BottomNav';
                    setShowFavorites(true);
                    setShowStats(false);
                  }}
-                className="w-9 h-9 rounded-full flex items-center justify-center bg-white/5 border border-white/10 hover:bg-white/10 transition-colors"
+                className="w-9 h-9 rounded-full flex items-center justify-center bg-foreground/5 border border-border/50 hover:bg-foreground/10 transition-colors"
               >
                 <Star className="w-5 h-5 text-primary" />
               </button>
@@ -224,7 +224,7 @@ import BottomNav from '@/components/BottomNav';
                  className={`w-9 h-9 rounded-full flex items-center justify-center transition-colors ${
                    showStats 
                      ? 'bg-primary/20 text-primary' 
-                     : 'bg-white/5 border border-white/10 hover:bg-white/10 text-foreground/80'
+                     : 'bg-foreground/5 border border-border/50 hover:bg-foreground/10 text-foreground/80'
                  }`}
                  title="Session Stats"
                >
@@ -239,7 +239,7 @@ import BottomNav from '@/components/BottomNav';
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
-              className="px-6 py-4 border-b border-white/5 bg-void/50"
+              className="px-6 py-4 border-b border-border/30 bg-card/50"
             >
               <div className="max-w-4xl mx-auto">
                 <h3 className="font-display text-sm tracking-widest text-muted-foreground mb-3">
@@ -389,7 +389,7 @@ import BottomNav from '@/components/BottomNav';
        />
  
        {/* Footer */}
-       <footer className="relative z-10 border-t border-white/5 px-6 py-8 text-center">
+       <footer className="relative z-10 border-t border-border/30 px-6 py-8 text-center">
         <p className="text-xs text-muted-foreground/50">
           "नाद ब्रह्म" — Sound is the Divine
         </p>

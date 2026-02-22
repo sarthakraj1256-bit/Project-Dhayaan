@@ -1,7 +1,7 @@
 import { useRef, useEffect } from 'react';
 
 /**
- * Canvas-based parallax background — zero React re-renders on scroll.
+ * Light spiritual background — soft warm gradient with subtle golden curves.
  * Uses requestAnimationFrame + CSS will-change for GPU compositing.
  * Respects prefers-reduced-motion.
  */
@@ -70,19 +70,24 @@ export default function WavyBackground() {
       const h = window.innerHeight;
       const sy = prefersReducedMotion ? 0 : scrollRef.current;
 
-      // Clear
-      ctx.fillStyle = '#0B1D3A';
+      // Warm cream base
+      ctx.fillStyle = '#FAF6F0';
       ctx.fillRect(0, 0, w, h);
 
-      // Top layers — slide down with negative parallax
-      drawWave(h * 0.28 + sy * -0.04, 60, 6, 0.5, '#0F2847', 1, 'down', w, h);
-      drawWave(h * 0.20 + sy * -0.06, 50, 5, 1.2, '#2DD4BF', 0.85, 'down', w, h);
-      drawWave(h * 0.13 + sy * -0.07, 35, 7, 2.0, '#99F6E4', 0.7, 'down', w, h);
+      // Soft warm beige top waves
+      drawWave(h * 0.22 + sy * -0.03, 40, 5, 0.5, '#F5EDE0', 0.6, 'down', w, h);
+      drawWave(h * 0.16 + sy * -0.04, 30, 6, 1.2, '#EDE4D3', 0.4, 'down', w, h);
 
-      // Bottom layers — slide up with positive parallax
-      drawWave(h * 0.68 + sy * 0.04, 55, 5, 3.5, '#F87171', 0.5, 'up', w, h);
-      drawWave(h * 0.75 + sy * 0.06, 40, 6, 4.2, '#FBBF24', 0.28, 'up', w, h);
-      drawWave(h * 0.82 + sy * 0.07, 35, 7, 5.0, '#FB923C', 0.35, 'up', w, h);
+      // Subtle golden glow — radial center
+      const grd = ctx.createRadialGradient(w * 0.5, h * 0.35, 0, w * 0.5, h * 0.35, w * 0.6);
+      grd.addColorStop(0, 'rgba(212, 175, 55, 0.06)');
+      grd.addColorStop(1, 'rgba(212, 175, 55, 0)');
+      ctx.fillStyle = grd;
+      ctx.fillRect(0, 0, w, h);
+
+      // Bottom warm waves
+      drawWave(h * 0.75 + sy * 0.03, 35, 5, 3.0, '#F0E6D6', 0.35, 'up', w, h);
+      drawWave(h * 0.82 + sy * 0.04, 25, 6, 4.0, '#E8DCC8', 0.25, 'up', w, h);
 
       rafRef.current = requestAnimationFrame(draw);
     };
