@@ -461,15 +461,14 @@ const TempleStoriesPanel = ({ templeId }: TempleStoriesPanelProps) => {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="outline" size="sm" className="gap-2">
-          <MessageSquare className="w-4 h-4" />
-          <span className="hidden sm:inline">Stories</span>
+        <button className="w-9 h-9 rounded-full flex items-center justify-center bg-white/5 border border-white/10 hover:bg-white/10 transition-colors relative">
+          <MessageSquare className="w-5 h-5 text-muted-foreground" />
           {stories.length > 0 && (
-            <Badge className="h-5 min-w-5 p-0 flex items-center justify-center text-xs">
+            <Badge className="absolute -top-1.5 -right-1.5 h-4 min-w-4 p-0 flex items-center justify-center text-[10px]">
               {stories.length}
             </Badge>
           )}
-        </Button>
+        </button>
       </SheetTrigger>
       
       <SheetContent className="w-full sm:max-w-lg">
