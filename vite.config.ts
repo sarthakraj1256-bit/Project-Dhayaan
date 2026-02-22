@@ -112,6 +112,13 @@ export default defineConfig(({ mode }) => ({
             type: 'image/png',
             form_factor: 'wide',
             label: 'Dhyaan Home Screen'
+          },
+          {
+            src: '/pwa-icon-512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            form_factor: 'narrow',
+            label: 'Dhyaan Mobile'
           }
         ]
       },
