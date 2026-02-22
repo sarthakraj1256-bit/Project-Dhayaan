@@ -9,6 +9,7 @@ import EnvHealthCheck from "./components/EnvHealthCheck";
 import { PWASplashScreen } from "./components/pwa/PWASplashScreen";
 import { OfflineIndicator } from "./components/pwa/OfflineIndicator";
 import { LanguageProvider } from "./contexts/LanguageContext";
+import { PWAInstallPrompt } from "./components/pwa/PWAInstallPrompt";
 
 // Critical routes - loaded immediately
 import Index from "./pages/Index";
@@ -67,6 +68,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <EnvHealthCheck />
+      <PWAInstallPrompt />
       <BrowserRouter>
         <Suspense fallback={<PageSkeleton />}>
           <Routes>
