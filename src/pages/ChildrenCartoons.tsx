@@ -2,7 +2,7 @@ import { useState, useMemo, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Play, Clock, ListVideo, X, CheckCircle2, Circle, Eye, EyeOff } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { standaloneCartoons, rollNo21Cartoons, CartoonVideo } from '@/data/childrenCartoons';
+import { standaloneCartoons, rollNo21Cartoons, chhotaBheemKrishnaCartoons, CartoonVideo } from '@/data/childrenCartoons';
 import { Badge } from '@/components/ui/badge';
 import ContentVideoModal from '@/components/live-darshan/ContentVideoModal';
 import { SpiritualContent } from '@/data/templeStreams';
@@ -24,6 +24,7 @@ const deduplicatedVideos = (() => {
 export default function ChildrenCartoons() {
   const [selectedVideo, setSelectedVideo] = useState<SpiritualContent | null>(null);
   const [showRollNo21, setShowRollNo21] = useState(false);
+  const [showBheemKrishna, setShowBheemKrishna] = useState(false);
   const [hideWatched, setHideWatched] = useState(false);
   const { isWatched, toggleWatched, markWatched, watchedCount } = useWatchedEpisodes();
 
@@ -34,7 +35,7 @@ export default function ChildrenCartoons() {
     [videos, hideWatched, isWatched]
   );
 
-  const totalEpisodes = videos.length + rollNo21Cartoons.length;
+  const totalEpisodes = videos.length + rollNo21Cartoons.length + chhotaBheemKrishnaCartoons.length;
 
   const handleVideoSelect = useCallback((item: CartoonVideo) => {
     markWatched(item.id);
@@ -87,11 +88,20 @@ export default function ChildrenCartoons() {
         {/* Roll No 21 Playlist Card */}
         <section>
           <h2 className="text-xs font-semibold text-white/40 uppercase tracking-widest mb-3">Playlists</h2>
-          <RollNo21PlaylistCard
-            onOpen={() => setShowRollNo21(true)}
-            watchedCount={rollNo21Cartoons.filter((v) => isWatched(v.id)).length}
-            totalCount={rollNo21Cartoons.length}
-          />
+          <div className="space-y-3">
+            <RollNo21PlaylistCard
+              onOpen={() => setShowRollNo21(true)}
+              watchedCount={rollNo21Cartoons.filter((v) => isWatched(v.id)).length}
+              totalCount={rollNo21Cartoons.length}
+            />
+            <GenericPlaylistCard
+              title="Chhota Bheem aur Krishna ki Jodi"
+              episodes={chhotaBheemKrishnaCartoons}
+              onOpen={() => setShowBheemKrishna(true)}
+              watchedCount={chhotaBheemKrishnaCartoons.filter((v) => isWatched(v.id)).length}
+              totalCount={chhotaBheemKrishnaCartoons.length}
+            />
+          </div>
         </section>
 
         {/* Featured Videos */}
@@ -129,6 +139,17 @@ export default function ChildrenCartoons() {
         <RollNo21Modal
           onClose={() => setShowRollNo21(false)}
           onSelectVideo={(item) => { handleVideoSelect(item); setShowRollNo21(false); }}
+          isWatched={isWatched}
+          onToggleWatched={toggleWatched}
+        />
+      )}
+
+      {showBheemKrishna && (
+        <GenericEpisodeModal
+          title="Chhota Bheem aur Krishna ki Jodi"
+          episodes={chhotaBheemKrishnaCartoons}
+          onClose={() => setShowBheemKrishna(false)}
+          onSelectVideo={(item) => { handleVideoSelect(item); setShowBheemKrishna(false); }}
           isWatched={isWatched}
           onToggleWatched={toggleWatched}
         />
@@ -335,5 +356,133 @@ function VideoCard({
         </div>
       </div>
     </motion.div>
+  );
+}
+
+/* Generic playlist card with progress */
+function GenericPlaylistCard({ title, episodes, onOpen, watchedCount, totalCount }: { title: string; episodes: CartoonVideo[]; onOpen: () => void; watchedCount: number; totalCount: number }) {
+  const thumb = `https://img.youtube.com/vi/${episodes[0]?.youtubeVideoId}/hqdefault.jpg`;
+  return (
+    <button
+      type="button"
+      aria-label={`Open ${title} playlist`}
+      onClick={onOpen}
+      className="w-full text-left rounded-2xl overflow-hidden bg-white/[0.07] backdrop-blur-md border border-white/[0.12] shadow-[0_2px_16px_rgba(0,0,0,0.2)] hover:shadow-[0_4px_24px_rgba(0,0,0,0.3)] hover:bg-white/[0.12] transition-all duration-200 active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-primary outline-none"
+    >
+      <div className="flex gap-3 p-2">
+        <div className="w-36 shrink-0 rounded-xl overflow-hidden">
+          <AspectRatio ratio={16 / 9}>
+            <img src={thumb} alt={title} className="w-full h-full object-cover" loading="lazy" />
+          </AspectRatio>
+        </div>
+        <div className="flex flex-col justify-center min-w-0 py-1 flex-1">
+          <p className="text-sm font-medium text-white/90 leading-snug">{title}</p>
+          <div className="flex items-center gap-1 mt-1 text-white/50 text-xs">
+            <ListVideo className="w-3 h-3" />
+            <span>{totalCount} Episodes</span>
+          </div>
+          {watchedCount > 0 && (
+            <div className="mt-2">
+              <div className="h-1 rounded-full bg-white/10 overflow-hidden w-full max-w-[120px]">
+                <div className="h-full rounded-full bg-primary" style={{ width: `${(watchedCount / totalCount) * 100}%` }} />
+              </div>
+              <span className="text-[10px] text-white/40 mt-0.5">{watchedCount}/{totalCount} watched</span>
+            </div>
+          )}
+        </div>
+      </div>
+    </button>
+  );
+}
+
+/* Generic episode modal with watched state */
+function GenericEpisodeModal({
+  title,
+  episodes,
+  onClose,
+  onSelectVideo,
+  isWatched,
+  onToggleWatched,
+}: {
+  title: string;
+  episodes: CartoonVideo[];
+  onClose: () => void;
+  onSelectVideo: (v: CartoonVideo) => void;
+  isWatched: (id: string) => boolean;
+  onToggleWatched: (id: string) => void;
+}) {
+  return (
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 z-50 bg-background/95 backdrop-blur-xl overflow-y-auto"
+        onClick={onClose}
+      >
+        <motion.div
+          initial={{ y: 40, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ y: 40, opacity: 0 }}
+          className="w-full max-w-2xl mx-auto p-4 md:p-8"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="font-display text-lg md:text-xl text-foreground">{title}</h2>
+            <Button variant="ghost" size="icon" onClick={onClose} className="hover:bg-destructive/20">
+              <X className="w-5 h-5" />
+            </Button>
+          </div>
+          <div className="flex flex-col gap-3">
+            {episodes.map((item, i) => {
+              const watched = isWatched(item.id);
+              return (
+                <div
+                  key={item.youtubeVideoId}
+                  className={cn(
+                    'flex items-center gap-2 rounded-2xl overflow-hidden bg-white/[0.07] backdrop-blur-md border border-white/[0.12] shadow-[0_2px_16px_rgba(0,0,0,0.2)] transition-all duration-200',
+                    watched && 'opacity-60'
+                  )}
+                >
+                  <button
+                    type="button"
+                    aria-label={`Play Episode ${i + 1}`}
+                    onClick={() => onSelectVideo(item)}
+                    className="flex-1 flex gap-3 p-2 text-left hover:bg-white/[0.06] active:scale-[0.98] transition-all outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                  >
+                    <div className="w-28 shrink-0 rounded-xl overflow-hidden relative">
+                      <AspectRatio ratio={16 / 9}>
+                        <img src={item.thumbnail} alt={`Episode ${i + 1}`} className="w-full h-full object-cover" loading="lazy" />
+                      </AspectRatio>
+                      {watched && (
+                        <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                          <CheckCircle2 className="w-5 h-5 text-primary" />
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex flex-col justify-center min-w-0 py-1">
+                      <p className="text-sm font-medium text-white/90 leading-snug">Episode {i + 1}</p>
+                      <span className="text-xs text-white/50 mt-0.5">{title}</span>
+                    </div>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={(e) => { e.stopPropagation(); onToggleWatched(item.id); }}
+                    className="p-3 hover:bg-white/10 rounded-full transition-colors mr-1 shrink-0"
+                    aria-label={watched ? 'Mark as unwatched' : 'Mark as watched'}
+                  >
+                    {watched ? (
+                      <CheckCircle2 className="w-5 h-5 text-primary" />
+                    ) : (
+                      <Circle className="w-5 h-5 text-white/30" />
+                    )}
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
   );
 }
