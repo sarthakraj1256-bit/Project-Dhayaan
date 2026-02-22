@@ -76,15 +76,14 @@ const FavoritesPanel = ({ onSelectTemple }: FavoritesPanelProps) => {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="outline" size="sm" className="gap-2 relative">
-          <Heart className={`w-4 h-4 ${favoriteTemples.length > 0 ? 'fill-destructive text-destructive' : ''}`} />
-          <span className="hidden md:inline">Favorites</span>
+        <button className="w-9 h-9 rounded-full flex items-center justify-center bg-white/5 border border-white/10 hover:bg-white/10 transition-colors relative">
+          <Heart className={`w-5 h-5 ${favoriteTemples.length > 0 ? 'fill-destructive text-destructive' : 'text-muted-foreground'}`} />
           {favoriteTemples.length > 0 && (
-            <Badge className="absolute -top-2 -right-2 h-5 w-5 p-0 flex items-center justify-center text-xs">
+            <Badge className="absolute -top-1.5 -right-1.5 h-4 w-4 p-0 flex items-center justify-center text-[10px]">
               {favoriteTemples.length}
             </Badge>
           )}
-        </Button>
+        </button>
       </SheetTrigger>
       
       <SheetContent className="w-full sm:max-w-md">

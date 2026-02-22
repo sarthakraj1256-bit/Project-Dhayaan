@@ -62,18 +62,13 @@ const AartiReminderSettings = () => {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button
-          variant="outline"
-          size="sm"
-          className="gap-2"
-        >
+        <button className="w-9 h-9 rounded-full flex items-center justify-center bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
           {notificationsEnabled ? (
-            <Bell className="w-4 h-4 text-primary" />
+            <Bell className="w-5 h-5 text-primary" />
           ) : (
-            <BellOff className="w-4 h-4" />
+            <BellOff className="w-5 h-5 text-muted-foreground" />
           )}
-          <span className="hidden sm:inline">Reminders</span>
-        </Button>
+        </button>
       </DialogTrigger>
 
       <DialogContent className="max-w-md bg-card border-border">
