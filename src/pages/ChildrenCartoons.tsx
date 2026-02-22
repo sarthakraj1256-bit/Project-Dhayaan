@@ -89,7 +89,7 @@ export default function ChildrenCartoons() {
           </div>
         </div>
 
-        {/* Roll No 21 Playlist Card */}
+        {/* Playlists */}
         <section>
           <h2 className="text-xs font-semibold text-foreground/40 uppercase tracking-widest mb-3">Playlists</h2>
           <div className="space-y-3">
@@ -200,16 +200,12 @@ export default function ChildrenCartoons() {
   );
 }
 
-/* Roll No 21 playlist card with progress */
+const lightCardClass = "w-full text-left rounded-2xl overflow-hidden bg-card border border-border/60 shadow-sm hover:shadow-md hover:bg-accent/30 transition-all duration-200 active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-primary outline-none";
+
 function RollNo21PlaylistCard({ onOpen, watchedCount, totalCount }: { onOpen: () => void; watchedCount: number; totalCount: number }) {
   const thumb = `https://img.youtube.com/vi/${rollNo21Cartoons[0]?.youtubeVideoId}/hqdefault.jpg`;
   return (
-    <button
-      type="button"
-      aria-label="Open Roll No 21 playlist"
-      onClick={onOpen}
-      className="w-full text-left rounded-2xl overflow-hidden bg-white/[0.07] backdrop-blur-md border border-white/[0.12] shadow-[0_2px_16px_rgba(0,0,0,0.2)] hover:shadow-[0_4px_24px_rgba(0,0,0,0.3)] hover:bg-white/[0.12] transition-all duration-200 active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-primary outline-none"
-    >
+    <button type="button" aria-label="Open Roll No 21 playlist" onClick={onOpen} className={lightCardClass}>
       <div className="flex gap-3 p-2">
         <div className="w-36 shrink-0 rounded-xl overflow-hidden">
           <AspectRatio ratio={16 / 9}>
@@ -217,20 +213,17 @@ function RollNo21PlaylistCard({ onOpen, watchedCount, totalCount }: { onOpen: ()
           </AspectRatio>
         </div>
         <div className="flex flex-col justify-center min-w-0 py-1 flex-1">
-          <p className="text-sm font-medium text-white/90 leading-snug">Roll No 21</p>
-          <div className="flex items-center gap-1 mt-1 text-white/50 text-xs">
+          <p className="text-sm font-medium text-foreground/90 leading-snug">Roll No 21</p>
+          <div className="flex items-center gap-1 mt-1 text-muted-foreground text-xs">
             <ListVideo className="w-3 h-3" />
             <span>{totalCount} Episodes</span>
           </div>
           {watchedCount > 0 && (
             <div className="mt-2">
-              <div className="h-1 rounded-full bg-white/10 overflow-hidden w-full max-w-[120px]">
-                <div
-                  className="h-full rounded-full bg-primary"
-                  style={{ width: `${(watchedCount / totalCount) * 100}%` }}
-                />
+              <div className="h-1 rounded-full bg-foreground/10 overflow-hidden w-full max-w-[120px]">
+                <div className="h-full rounded-full bg-primary" style={{ width: `${(watchedCount / totalCount) * 100}%` }} />
               </div>
-              <span className="text-[10px] text-white/40 mt-0.5">{watchedCount}/{totalCount} watched</span>
+              <span className="text-[10px] text-muted-foreground mt-0.5">{watchedCount}/{totalCount} watched</span>
             </div>
           )}
         </div>
@@ -239,83 +232,38 @@ function RollNo21PlaylistCard({ onOpen, watchedCount, totalCount }: { onOpen: ()
   );
 }
 
-/* Roll No 21 modal with watched state */
-function RollNo21Modal({
-  onClose,
-  onSelectVideo,
-  isWatched,
-  onToggleWatched,
-}: {
-  onClose: () => void;
-  onSelectVideo: (v: CartoonVideo) => void;
-  isWatched: (id: string) => boolean;
-  onToggleWatched: (id: string) => void;
-}) {
+function RollNo21Modal({ onClose, onSelectVideo, isWatched, onToggleWatched }: { onClose: () => void; onSelectVideo: (v: CartoonVideo) => void; isWatched: (id: string) => boolean; onToggleWatched: (id: string) => void }) {
   return (
     <AnimatePresence>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        className="fixed inset-0 z-50 bg-background/95 backdrop-blur-xl overflow-y-auto"
-        onClick={onClose}
-      >
-        <motion.div
-          initial={{ y: 40, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          exit={{ y: 40, opacity: 0 }}
-          className="w-full max-w-2xl mx-auto p-4 md:p-8"
-          onClick={(e) => e.stopPropagation()}
-        >
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-50 bg-background/95 backdrop-blur-xl overflow-y-auto" onClick={onClose}>
+        <motion.div initial={{ y: 40, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 40, opacity: 0 }} className="w-full max-w-2xl mx-auto p-4 md:p-8" onClick={(e) => e.stopPropagation()}>
           <div className="flex items-center justify-between mb-4">
             <h2 className="font-display text-lg md:text-xl text-foreground">Roll No 21</h2>
-            <Button variant="ghost" size="icon" onClick={onClose} className="hover:bg-destructive/20">
-              <X className="w-5 h-5" />
-            </Button>
+            <Button variant="ghost" size="icon" onClick={onClose} className="hover:bg-destructive/20"><X className="w-5 h-5" /></Button>
           </div>
           <div className="flex flex-col gap-3">
             {rollNo21Cartoons.map((item, i) => {
               const watched = isWatched(item.id);
               return (
-                <div
-                  key={item.youtubeVideoId}
-                  className={cn(
-                    'flex items-center gap-2 rounded-2xl overflow-hidden bg-white/[0.07] backdrop-blur-md border border-white/[0.12] shadow-[0_2px_16px_rgba(0,0,0,0.2)] transition-all duration-200',
-                    watched && 'opacity-60'
-                  )}
-                >
-                  <button
-                    type="button"
-                    aria-label={`Play Episode ${i + 1}`}
-                    onClick={() => onSelectVideo(item)}
-                    className="flex-1 flex gap-3 p-2 text-left hover:bg-white/[0.06] active:scale-[0.98] transition-all outline-none focus-visible:ring-2 focus-visible:ring-primary"
-                  >
+                <div key={item.youtubeVideoId} className={cn('flex items-center gap-2 rounded-2xl overflow-hidden bg-card border border-border/60 shadow-sm transition-all duration-200', watched && 'opacity-60')}>
+                  <button type="button" aria-label={`Play Episode ${i + 1}`} onClick={() => onSelectVideo(item)} className="flex-1 flex gap-3 p-2 text-left hover:bg-accent/30 active:scale-[0.98] transition-all outline-none focus-visible:ring-2 focus-visible:ring-primary">
                     <div className="w-28 shrink-0 rounded-xl overflow-hidden relative">
                       <AspectRatio ratio={16 / 9}>
                         <img src={item.thumbnail} alt={`Episode ${i + 1}`} className="w-full h-full object-cover" loading="lazy" />
                       </AspectRatio>
                       {watched && (
-                        <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                        <div className="absolute inset-0 bg-foreground/20 flex items-center justify-center">
                           <CheckCircle2 className="w-5 h-5 text-primary" />
                         </div>
                       )}
                     </div>
                     <div className="flex flex-col justify-center min-w-0 py-1">
-                      <p className="text-sm font-medium text-white/90 leading-snug">Episode {i + 1}</p>
-                      <span className="text-xs text-white/50 mt-0.5">Roll No 21</span>
+                      <p className="text-sm font-medium text-foreground/90 leading-snug">Episode {i + 1}</p>
+                      <span className="text-xs text-muted-foreground mt-0.5">Roll No 21</span>
                     </div>
                   </button>
-                  <button
-                    type="button"
-                    onClick={(e) => { e.stopPropagation(); onToggleWatched(item.id); }}
-                    className="p-3 hover:bg-white/10 rounded-full transition-colors mr-1 shrink-0"
-                    aria-label={watched ? 'Mark as unwatched' : 'Mark as watched'}
-                  >
-                    {watched ? (
-                      <CheckCircle2 className="w-5 h-5 text-primary" />
-                    ) : (
-                      <Circle className="w-5 h-5 text-white/30" />
-                    )}
+                  <button type="button" onClick={(e) => { e.stopPropagation(); onToggleWatched(item.id); }} className="p-3 hover:bg-accent/50 rounded-full transition-colors mr-1 shrink-0" aria-label={watched ? 'Mark as unwatched' : 'Mark as watched'}>
+                    {watched ? <CheckCircle2 className="w-5 h-5 text-primary" /> : <Circle className="w-5 h-5 text-muted-foreground/40" />}
                   </button>
                 </div>
               );
@@ -327,37 +275,14 @@ function RollNo21Modal({
   );
 }
 
-/* Video card with watched indicator */
-function VideoCard({
-  item,
-  index,
-  onSelect,
-  watched,
-  onToggleWatched,
-}: {
-  item: CartoonVideo;
-  index: number;
-  onSelect: (v: CartoonVideo) => void;
-  watched: boolean;
-  onToggleWatched: () => void;
-}) {
+function VideoCard({ item, index, onSelect, watched, onToggleWatched }: { item: CartoonVideo; index: number; onSelect: (v: CartoonVideo) => void; watched: boolean; onToggleWatched: () => void }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.04 }}
-      className={cn(watched && 'opacity-60')}
-    >
-      <div className="rounded-2xl overflow-hidden bg-white/[0.07] backdrop-blur-md border border-white/[0.12] shadow-[0_2px_16px_rgba(0,0,0,0.2)] hover:shadow-[0_4px_24px_rgba(0,0,0,0.3)] hover:bg-white/[0.12] transition-all duration-200">
-        <button
-          type="button"
-          aria-label={`Play ${item.title}`}
-          onClick={() => onSelect(item)}
-          className="w-full text-left active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-primary outline-none"
-        >
+    <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.04 }} className={cn(watched && 'opacity-60')}>
+      <div className="rounded-2xl overflow-hidden bg-card border border-border/60 shadow-sm hover:shadow-md transition-all duration-200">
+        <button type="button" aria-label={`Play ${item.title}`} onClick={() => onSelect(item)} className="w-full text-left active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-primary outline-none">
           <div className="w-full aspect-[16/9] relative overflow-hidden bg-muted">
             <img src={item.thumbnail} alt={item.title} className="w-full h-full object-cover" loading="lazy" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
             <div className="absolute top-1.5 left-1.5">
               <Badge className="bg-pink-600 text-white border-0 text-[9px] px-1.5 py-0.5 leading-none">🎬 Video</Badge>
             </div>
@@ -366,7 +291,7 @@ function VideoCard({
               {item.duration}
             </div>
             {watched && (
-              <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
+              <div className="absolute inset-0 bg-foreground/20 flex items-center justify-center">
                 <CheckCircle2 className="w-8 h-8 text-primary" />
               </div>
             )}
@@ -380,18 +305,9 @@ function VideoCard({
           </div>
         </button>
         <div className="p-2.5 flex items-center justify-between gap-1">
-          <p className="text-xs font-medium text-white/90 line-clamp-2 leading-snug flex-1">{item.title}</p>
-          <button
-            type="button"
-            onClick={onToggleWatched}
-            className="p-1.5 hover:bg-white/10 rounded-full transition-colors shrink-0"
-            aria-label={watched ? 'Mark as unwatched' : 'Mark as watched'}
-          >
-            {watched ? (
-              <CheckCircle2 className="w-4 h-4 text-primary" />
-            ) : (
-              <Circle className="w-4 h-4 text-white/30" />
-            )}
+          <p className="text-xs font-medium text-foreground/85 line-clamp-2 leading-snug flex-1">{item.title}</p>
+          <button type="button" onClick={onToggleWatched} className="p-1.5 hover:bg-accent/50 rounded-full transition-colors shrink-0" aria-label={watched ? 'Mark as unwatched' : 'Mark as watched'}>
+            {watched ? <CheckCircle2 className="w-4 h-4 text-primary" /> : <Circle className="w-4 h-4 text-muted-foreground/40" />}
           </button>
         </div>
       </div>
@@ -399,16 +315,10 @@ function VideoCard({
   );
 }
 
-/* Generic playlist card with progress */
 function GenericPlaylistCard({ title, episodes, onOpen, watchedCount, totalCount }: { title: string; episodes: CartoonVideo[]; onOpen: () => void; watchedCount: number; totalCount: number }) {
   const thumb = `https://img.youtube.com/vi/${episodes[0]?.youtubeVideoId}/hqdefault.jpg`;
   return (
-    <button
-      type="button"
-      aria-label={`Open ${title} playlist`}
-      onClick={onOpen}
-      className="w-full text-left rounded-2xl overflow-hidden bg-white/[0.07] backdrop-blur-md border border-white/[0.12] shadow-[0_2px_16px_rgba(0,0,0,0.2)] hover:shadow-[0_4px_24px_rgba(0,0,0,0.3)] hover:bg-white/[0.12] transition-all duration-200 active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-primary outline-none"
-    >
+    <button type="button" aria-label={`Open ${title} playlist`} onClick={onOpen} className={lightCardClass}>
       <div className="flex gap-3 p-2">
         <div className="w-36 shrink-0 rounded-xl overflow-hidden">
           <AspectRatio ratio={16 / 9}>
@@ -416,17 +326,17 @@ function GenericPlaylistCard({ title, episodes, onOpen, watchedCount, totalCount
           </AspectRatio>
         </div>
         <div className="flex flex-col justify-center min-w-0 py-1 flex-1">
-          <p className="text-sm font-medium text-white/90 leading-snug">{title}</p>
-          <div className="flex items-center gap-1 mt-1 text-white/50 text-xs">
+          <p className="text-sm font-medium text-foreground/90 leading-snug">{title}</p>
+          <div className="flex items-center gap-1 mt-1 text-muted-foreground text-xs">
             <ListVideo className="w-3 h-3" />
             <span>{totalCount} Episodes</span>
           </div>
           {watchedCount > 0 && (
             <div className="mt-2">
-              <div className="h-1 rounded-full bg-white/10 overflow-hidden w-full max-w-[120px]">
+              <div className="h-1 rounded-full bg-foreground/10 overflow-hidden w-full max-w-[120px]">
                 <div className="h-full rounded-full bg-primary" style={{ width: `${(watchedCount / totalCount) * 100}%` }} />
               </div>
-              <span className="text-[10px] text-white/40 mt-0.5">{watchedCount}/{totalCount} watched</span>
+              <span className="text-[10px] text-muted-foreground mt-0.5">{watchedCount}/{totalCount} watched</span>
             </div>
           )}
         </div>
@@ -435,87 +345,38 @@ function GenericPlaylistCard({ title, episodes, onOpen, watchedCount, totalCount
   );
 }
 
-/* Generic episode modal with watched state */
-function GenericEpisodeModal({
-  title,
-  episodes,
-  onClose,
-  onSelectVideo,
-  isWatched,
-  onToggleWatched,
-}: {
-  title: string;
-  episodes: CartoonVideo[];
-  onClose: () => void;
-  onSelectVideo: (v: CartoonVideo) => void;
-  isWatched: (id: string) => boolean;
-  onToggleWatched: (id: string) => void;
-}) {
+function GenericEpisodeModal({ title, episodes, onClose, onSelectVideo, isWatched, onToggleWatched }: { title: string; episodes: CartoonVideo[]; onClose: () => void; onSelectVideo: (v: CartoonVideo) => void; isWatched: (id: string) => boolean; onToggleWatched: (id: string) => void }) {
   return (
     <AnimatePresence>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        className="fixed inset-0 z-50 bg-background/95 backdrop-blur-xl overflow-y-auto"
-        onClick={onClose}
-      >
-        <motion.div
-          initial={{ y: 40, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          exit={{ y: 40, opacity: 0 }}
-          className="w-full max-w-2xl mx-auto p-4 md:p-8"
-          onClick={(e) => e.stopPropagation()}
-        >
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-50 bg-background/95 backdrop-blur-xl overflow-y-auto" onClick={onClose}>
+        <motion.div initial={{ y: 40, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 40, opacity: 0 }} className="w-full max-w-2xl mx-auto p-4 md:p-8" onClick={(e) => e.stopPropagation()}>
           <div className="flex items-center justify-between mb-4">
             <h2 className="font-display text-lg md:text-xl text-foreground">{title}</h2>
-            <Button variant="ghost" size="icon" onClick={onClose} className="hover:bg-destructive/20">
-              <X className="w-5 h-5" />
-            </Button>
+            <Button variant="ghost" size="icon" onClick={onClose} className="hover:bg-destructive/20"><X className="w-5 h-5" /></Button>
           </div>
           <div className="flex flex-col gap-3">
             {episodes.map((item, i) => {
               const watched = isWatched(item.id);
               return (
-                <div
-                  key={item.youtubeVideoId}
-                  className={cn(
-                    'flex items-center gap-2 rounded-2xl overflow-hidden bg-white/[0.07] backdrop-blur-md border border-white/[0.12] shadow-[0_2px_16px_rgba(0,0,0,0.2)] transition-all duration-200',
-                    watched && 'opacity-60'
-                  )}
-                >
-                  <button
-                    type="button"
-                    aria-label={`Play Episode ${i + 1}`}
-                    onClick={() => onSelectVideo(item)}
-                    className="flex-1 flex gap-3 p-2 text-left hover:bg-white/[0.06] active:scale-[0.98] transition-all outline-none focus-visible:ring-2 focus-visible:ring-primary"
-                  >
+                <div key={item.youtubeVideoId} className={cn('flex items-center gap-2 rounded-2xl overflow-hidden bg-card border border-border/60 shadow-sm transition-all duration-200', watched && 'opacity-60')}>
+                  <button type="button" aria-label={`Play Episode ${i + 1}`} onClick={() => onSelectVideo(item)} className="flex-1 flex gap-3 p-2 text-left hover:bg-accent/30 active:scale-[0.98] transition-all outline-none focus-visible:ring-2 focus-visible:ring-primary">
                     <div className="w-28 shrink-0 rounded-xl overflow-hidden relative">
                       <AspectRatio ratio={16 / 9}>
                         <img src={item.thumbnail} alt={`Episode ${i + 1}`} className="w-full h-full object-cover" loading="lazy" />
                       </AspectRatio>
                       {watched && (
-                        <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                        <div className="absolute inset-0 bg-foreground/20 flex items-center justify-center">
                           <CheckCircle2 className="w-5 h-5 text-primary" />
                         </div>
                       )}
                     </div>
                     <div className="flex flex-col justify-center min-w-0 py-1">
-                      <p className="text-sm font-medium text-white/90 leading-snug">Episode {i + 1}</p>
-                      <span className="text-xs text-white/50 mt-0.5">{title}</span>
+                      <p className="text-sm font-medium text-foreground/90 leading-snug">Episode {i + 1}</p>
+                      <span className="text-xs text-muted-foreground mt-0.5">{title}</span>
                     </div>
                   </button>
-                  <button
-                    type="button"
-                    onClick={(e) => { e.stopPropagation(); onToggleWatched(item.id); }}
-                    className="p-3 hover:bg-white/10 rounded-full transition-colors mr-1 shrink-0"
-                    aria-label={watched ? 'Mark as unwatched' : 'Mark as watched'}
-                  >
-                    {watched ? (
-                      <CheckCircle2 className="w-5 h-5 text-primary" />
-                    ) : (
-                      <Circle className="w-5 h-5 text-white/30" />
-                    )}
+                  <button type="button" onClick={(e) => { e.stopPropagation(); onToggleWatched(item.id); }} className="p-3 hover:bg-accent/50 rounded-full transition-colors mr-1 shrink-0" aria-label={watched ? 'Mark as unwatched' : 'Mark as watched'}>
+                    {watched ? <CheckCircle2 className="w-5 h-5 text-primary" /> : <Circle className="w-5 h-5 text-muted-foreground/40" />}
                   </button>
                 </div>
               );
