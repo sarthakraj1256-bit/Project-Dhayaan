@@ -1,132 +1,85 @@
 
-# Plan: Add Ambient Sound Generation for Atmosphere Layer
+# Global UI Size & Scale Consistency Fix
 
 ## Overview
+Standardize all UI element sizes across every page of the Dhyaan app to eliminate visual inconsistencies and achieve a premium, polished feel.
 
-We'll integrate ElevenLabs Sound Effects API to generate high-quality ambient sounds (rain, river, forest, temple bells, wind chimes) for the Sonic Lab's atmosphere layer. Users will be able to layer these ambient sounds over their frequency sessions.
+## Current Issues Found
 
-## How It Works
+| Element | Current State | Problem |
+|---------|--------------|---------|
+| Header height | Varies per page (py-3 to pt-10) | Feels different on every screen |
+| Header titles | text-base to text-3xl | No consistent hierarchy |
+| Back arrow icons | Mix of w-4/w-5 | Subtle size mismatch |
+| Action buttons | Different padding, radius, sizes | Fat vs thin buttons |
+| Cards | rounded-lg, rounded-xl, rounded-2xl mixed | Inconsistent corners |
+| Card padding | p-4, p-5, p-6, p-8 | Thickness varies |
+| Section spacing | Random gaps between sections | No rhythm |
 
-When a user selects an atmosphere (e.g., "Gentle Rain"), the app will:
-1. Call a backend function that generates the ambient sound using ElevenLabs
-2. Cache the generated audio in browser storage for instant replay
-3. Loop the audio seamlessly during the meditation session
-4. Allow independent volume control from the base frequency
+## Design Tokens (The Ruleset)
 
----
+### 1. Header Standard
+- All pages: `sticky top-0 z-40 px-4 py-3` with blur background
+- Height fixed at h-14 (56px) across all screens
+- Title: `text-lg font-display tracking-wider` (uniform)
+- Back icon: always `w-5 h-5`
 
-## Implementation Steps
+### 2. Icon Sizes
+- Header/nav primary icons: `w-5 h-5` (20px) -- uniform everywhere
+- Small inline icons (badges, labels): `w-4 h-4` (16px)
+- Feature card icons (decorative): `w-6 h-6` inside `w-12 h-12` containers
+- Bottom nav: `w-5 h-5` (already correct)
 
-### Step 1: Connect ElevenLabs
+### 3. Action Buttons
+- Icon-only header buttons: `w-9 h-9 rounded-full` (uniform)
+- Small pill buttons: `px-3 py-1.5 rounded-full text-sm`
+- Standard buttons: use shadcn Button with `size="sm"` or `size="default"`
 
-Set up the ElevenLabs connector to get the API key configured for your project. This will enable sound generation capabilities.
+### 4. Text Scale
+- Page title: `text-lg` (header bar)
+- Section title: `text-lg font-display`
+- Subtitle/description: `text-sm text-muted-foreground`
+- Body: `text-sm` or `text-base`
+- Micro labels: `text-xs`
 
-### Step 2: Create Backend Function
+### 5. Cards & Containers
+- Standard radius: `rounded-xl` everywhere
+- Standard padding: `p-4` (mobile), `p-5` (tablet), `p-6` (desktop) via `p-4 sm:p-5 md:p-6`
+- Border: `border border-white/10` or `border border-border/30`
 
-Build a new backend function (`elevenlabs-sfx`) that:
-- Accepts a prompt describing the ambient sound
-- Calls ElevenLabs Sound Effects API
-- Returns the generated audio as MP3
+### 6. Spacing Scale
+- Small gap: `gap-2` / `mb-2` (8px)
+- Medium gap: `gap-4` / `mb-4` (16px)
+- Large gap: `gap-6` / `mb-6` (24px)
+- Section gap: `gap-8` / `mb-8` (32px)
 
-**Sound Prompts:**
-| Atmosphere | Generation Prompt |
-|------------|-------------------|
-| Gentle Rain | "Soft, gentle rain falling on leaves, peaceful and calming ambient sound for meditation" |
-| River Flow | "Peaceful river stream flowing over rocks, gentle water sounds for relaxation" |
-| Temple Bells | "Tibetan temple bells ringing softly, spiritual meditation ambience" |
-| Forest Ambience | "Peaceful forest soundscape with birds chirping, leaves rustling, nature sounds" |
-| Wind Chimes | "Gentle wind chimes in a light breeze, peaceful and meditative" |
+## Files to Modify
 
-### Step 3: Add Audio Caching
+### Pages (header + layout standardization)
+1. **src/pages/SonicLab.tsx** -- Standardize header to h-14, px-4 py-3, title text-lg, icons w-5
+2. **src/pages/LiveDarshan.tsx** -- Standardize header height, remove text-2xl/3xl title, use text-lg
+3. **src/pages/Lakshya.tsx** -- Add sticky header bar matching standard (currently non-sticky div)
+4. **src/pages/JapBank.tsx** -- Fix header from pt-10 pb-4 to standard h-14, standardize title size
+5. **src/pages/Mantrochar.tsx** -- Already close; just normalize py-4 to py-3, verify icon sizes
+6. **src/pages/ChildrenCartoons.tsx** -- Already close; standardize title text-base to text-lg
+7. **src/pages/ImmersiveDarshan.tsx** -- Standardize header to match pattern
+8. **src/pages/Profile.tsx** -- Add sticky header bar instead of loose back button
+9. **src/pages/Dashboard.tsx** -- Check and standardize
 
-Create a caching system using IndexedDB to store generated sounds locally:
-- First play: Generate and cache
-- Subsequent plays: Load from cache instantly
-- This saves API calls and provides instant playback
+### Components
+10. **src/components/BottomNav.tsx** -- Already consistent, no changes needed
+11. **src/index.css** -- Add utility classes for the design tokens (optional helper classes)
 
-### Step 4: Update Audio Hook
+## Implementation Approach
+- Work page by page, applying the same header template
+- Standardize all card containers to rounded-xl with consistent padding
+- Normalize icon sizes to w-5 h-5 for primary, w-4 h-4 for secondary
+- Use the spacing scale (gap-2, gap-4, gap-6, gap-8) consistently
+- Ensure all action buttons in headers follow the same size pattern
 
-Enhance `useFrequencyAudio.ts` to:
-- Fetch atmosphere audio from the backend function
-- Store in cache after generation
-- Loop playback seamlessly
-- Handle loading states (show spinner while generating)
-- Apply volume control to atmosphere layer
-
-### Step 5: Update UI Components
-
-Modify `AudioControls.tsx` to:
-- Show loading indicator when generating new atmosphere sounds
-- Display "Generating..." state on first use
-- Show cached indicator for previously generated sounds
-
----
-
-## Technical Details
-
-### Backend Function Structure
-
-```text
-supabase/functions/elevenlabs-sfx/
-  index.ts         # Main function handler
-```
-
-The function will:
-- Receive atmosphere ID and prompt
-- Call ElevenLabs API with 20-second duration (for seamless looping)
-- Return raw audio bytes
-
-### Audio Caching Flow
-
-```text
-User selects "Gentle Rain"
-         |
-         v
-  Check IndexedDB cache
-         |
-    +----+----+
-    |         |
- Cached    Not Cached
-    |         |
-    v         v
-  Play     Call backend
- instantly    |
-              v
-          Generate audio
-              |
-              v
-          Save to cache
-              |
-              v
-          Play audio
-```
-
-### New Files
-
-| File | Purpose |
-|------|---------|
-| `supabase/functions/elevenlabs-sfx/index.ts` | Backend function for sound generation |
-| `src/lib/audioCache.ts` | IndexedDB caching utility for generated sounds |
-
-### Modified Files
-
-| File | Changes |
-|------|---------|
-| `src/hooks/useFrequencyAudio.ts` | Add atmosphere loading, caching, and playback |
-| `src/components/sonic-lab/AudioControls.tsx` | Add loading states and visual feedback |
-| `src/data/soundLibrary.ts` | Add generation prompts to atmosphere data |
-
----
-
-## User Experience
-
-1. **First Time**: User selects "Gentle Rain" -> sees "Generating..." -> audio starts after 3-5 seconds -> cached for future
-2. **Repeat Use**: User selects "Gentle Rain" -> plays instantly from cache
-3. **Volume Control**: Independent slider adjusts atmosphere volume in real-time
-4. **Seamless Looping**: Audio loops naturally without gaps during meditation
-
----
-
-## Requirements
-
-Before implementation, you'll need to connect ElevenLabs to enable sound generation. I'll prompt you to set this up when we begin.
+## Expected Result
+- Every page header looks and feels identical
+- Icons are perfectly uniform across the app
+- Cards have the same visual weight
+- Clean visual rhythm from consistent spacing
+- Premium, professional feel throughout
