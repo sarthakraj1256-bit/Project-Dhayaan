@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Play, Clock, ListVideo, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { standaloneCartoons, rollNo21Cartoons, chhotaBheemKrishnaCartoons, selfieWithBajrangiCartoons, CartoonVideo } from '@/data/childrenCartoons';
+import { standaloneCartoons, rollNo21Cartoons, chhotaBheemKrishnaCartoons, selfieWithBajrangiCartoons, jayJagannathCartoons, CartoonVideo } from '@/data/childrenCartoons';
 import { Badge } from '@/components/ui/badge';
 import ContentVideoModal from '@/components/live-darshan/ContentVideoModal';
 import { SpiritualContent } from '@/data/templeStreams';
@@ -14,6 +14,7 @@ export default function ChildrenCartoonsSection() {
   const [showRollNo21, setShowRollNo21] = useState(false);
   const [showBheemKrishna, setShowBheemKrishna] = useState(false);
   const [showSelfieBajrangi, setShowSelfieBajrangi] = useState(false);
+  const [showJayJagannath, setShowJayJagannath] = useState(false);
 
   // Standalone videos + 1 Roll No 21 playlist card
   const previewItems = standaloneCartoons.slice(0, 3);
@@ -62,6 +63,12 @@ export default function ChildrenCartoonsSection() {
             onOpen={() => setShowSelfieBajrangi(true)}
           />
 
+          <PlaylistCard
+            title="Jay Jagannath"
+            episodes={jayJagannathCartoons}
+            onOpen={() => setShowJayJagannath(true)}
+          />
+
           {previewItems.map((item, index) => (
             <CartoonCard key={item.id} item={item} index={index + 2} onSelect={handleSelect} />
           ))}
@@ -95,6 +102,15 @@ export default function ChildrenCartoonsSection() {
           title="Selfie with Bajrangi"
           episodes={selfieWithBajrangiCartoons}
           onClose={() => setShowSelfieBajrangi(false)}
+          onSelectVideo={handleSelect}
+        />
+      )}
+
+      {showJayJagannath && (
+        <EpisodeListModal
+          title="Jay Jagannath"
+          episodes={jayJagannathCartoons}
+          onClose={() => setShowJayJagannath(false)}
           onSelectVideo={handleSelect}
         />
       )}

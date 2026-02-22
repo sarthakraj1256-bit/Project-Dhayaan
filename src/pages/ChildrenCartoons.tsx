@@ -2,7 +2,7 @@ import { useState, useMemo, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Play, Clock, ListVideo, X, CheckCircle2, Circle, Eye, EyeOff } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { standaloneCartoons, rollNo21Cartoons, chhotaBheemKrishnaCartoons, selfieWithBajrangiCartoons, CartoonVideo } from '@/data/childrenCartoons';
+import { standaloneCartoons, rollNo21Cartoons, chhotaBheemKrishnaCartoons, selfieWithBajrangiCartoons, jayJagannathCartoons, CartoonVideo } from '@/data/childrenCartoons';
 import { Badge } from '@/components/ui/badge';
 import ContentVideoModal from '@/components/live-darshan/ContentVideoModal';
 import { SpiritualContent } from '@/data/templeStreams';
@@ -26,6 +26,7 @@ export default function ChildrenCartoons() {
   const [showRollNo21, setShowRollNo21] = useState(false);
   const [showBheemKrishna, setShowBheemKrishna] = useState(false);
   const [showSelfieBajrangi, setShowSelfieBajrangi] = useState(false);
+  const [showJayJagannath, setShowJayJagannath] = useState(false);
   const [hideWatched, setHideWatched] = useState(false);
   const { isWatched, toggleWatched, markWatched, watchedCount } = useWatchedEpisodes();
 
@@ -36,7 +37,7 @@ export default function ChildrenCartoons() {
     [videos, hideWatched, isWatched]
   );
 
-  const totalEpisodes = videos.length + rollNo21Cartoons.length + chhotaBheemKrishnaCartoons.length + selfieWithBajrangiCartoons.length;
+  const totalEpisodes = videos.length + rollNo21Cartoons.length + chhotaBheemKrishnaCartoons.length + selfieWithBajrangiCartoons.length + jayJagannathCartoons.length;
 
   const handleVideoSelect = useCallback((item: CartoonVideo) => {
     markWatched(item.id);
@@ -109,6 +110,13 @@ export default function ChildrenCartoons() {
               watchedCount={selfieWithBajrangiCartoons.filter((v) => isWatched(v.id)).length}
               totalCount={selfieWithBajrangiCartoons.length}
             />
+            <GenericPlaylistCard
+              title="Jay Jagannath"
+              episodes={jayJagannathCartoons}
+              onOpen={() => setShowJayJagannath(true)}
+              watchedCount={jayJagannathCartoons.filter((v) => isWatched(v.id)).length}
+              totalCount={jayJagannathCartoons.length}
+            />
           </div>
         </section>
 
@@ -169,6 +177,17 @@ export default function ChildrenCartoons() {
           episodes={selfieWithBajrangiCartoons}
           onClose={() => setShowSelfieBajrangi(false)}
           onSelectVideo={(item) => { handleVideoSelect(item); setShowSelfieBajrangi(false); }}
+          isWatched={isWatched}
+          onToggleWatched={toggleWatched}
+        />
+      )}
+
+      {showJayJagannath && (
+        <GenericEpisodeModal
+          title="Jay Jagannath"
+          episodes={jayJagannathCartoons}
+          onClose={() => setShowJayJagannath(false)}
+          onSelectVideo={(item) => { handleVideoSelect(item); setShowJayJagannath(false); }}
           isWatched={isWatched}
           onToggleWatched={toggleWatched}
         />
