@@ -129,4 +129,32 @@ export const rollNo21Cartoons: CartoonVideo[] = (() => {
     }));
 })();
 
+// Chhota Bheem aur Krishna ki Jodi
+const chhotaBheemKrishnaVideoIds = [
+  'LGon4ip9Gx0','irgmWZmeNtY','-GSrH3m5Um8','4pgKnPI0x1U','zIWPb7MOf1c',
+  'mdcYKmcekV4','er7qkrXdmbI','pIOP1obB_qk','oCNbhJeT2E8','-O2FYW-ckHo',
+  'mSkriWCK5bs','7UIsbBZlgYk','TwVNImrKkbM','NIA67haL-gE','9tOwbD8_hYU',
+  'yXfxwG5zA8s','7q-E34X-IEg','aiVWDzp0h5o','wkz5IYMJdDM','tGgj7qnM8KM',
+  'LMeRERJRbZI','RBZxGOEdzis','TXbs7hl1AR0','dZx8XAymYIw','HsWksl3UWEM',
+  'lJQ7P7hje-0','dqb6E33_P58','hreUCMkMSZ4',
+];
+
+export const chhotaBheemKrishnaCartoons: CartoonVideo[] = (() => {
+  const seen = new Set<string>();
+  return chhotaBheemKrishnaVideoIds
+    .filter((vid) => {
+      if (seen.has(vid)) return false;
+      seen.add(vid);
+      return true;
+    })
+    .map((vid, i) => ({
+      id: `bheem-krishna-${vid}`,
+      title: `Chhota Bheem aur Krishna ki Jodi`,
+      youtubeVideoId: vid,
+      thumbnail: `https://img.youtube.com/vi/${vid}/hqdefault.jpg`,
+      duration: '',
+      source: 'video' as const,
+    }));
+})();
+
 export const allCartoons = [...standaloneCartoons, ...playlistCartoons];
