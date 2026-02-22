@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { ArrowRight, Play, Clock, ListVideo, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { standaloneCartoons, rollNo21Cartoons, chhotaBheemKrishnaCartoons, selfieWithBajrangiCartoons, jayJagannathCartoons, CartoonVideo } from '@/data/childrenCartoons';
@@ -10,6 +11,7 @@ import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Button } from '@/components/ui/button';
 
 export default function ChildrenCartoonsSection() {
+  const { t } = useLanguage();
   const [selectedVideo, setSelectedVideo] = useState<SpiritualContent | null>(null);
   const [showRollNo21, setShowRollNo21] = useState(false);
   const [showBheemKrishna, setShowBheemKrishna] = useState(false);
@@ -35,13 +37,13 @@ export default function ChildrenCartoonsSection() {
       <section className="px-6 py-5">
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-xs font-semibold text-white/40 uppercase tracking-widest">
-            Spiritual Cartoons for Children
+            {t('section.cartoons')}
           </h2>
           <Link
             to="/children-cartoons"
             className="text-xs text-primary font-medium flex items-center gap-1 hover:underline"
           >
-            View all <ArrowRight className="w-3 h-3" />
+            {t('link.viewAll')} <ArrowRight className="w-3 h-3" />
           </Link>
         </div>
 
