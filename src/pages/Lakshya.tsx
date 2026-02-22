@@ -141,23 +141,23 @@ const Lakshya = () => {
         onComplete={() => setShowLevelUp(false)}
       />
 
-      <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 py-8 pb-24 md:pb-8">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
+      {/* Sticky Header */}
+      <header className="sticky top-0 z-40 h-14 px-4 flex items-center justify-between bg-background/80 backdrop-blur-xl border-b border-border/30">
           <button
             onClick={() => navigate(-1)}
-            className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
+            className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors"
           >
-            <ArrowLeft className="w-4 h-4" />
-            <span className="text-sm tracking-wider">Back</span>
+            <ArrowLeft className="w-5 h-5 text-muted-foreground" />
           </button>
           
-          <h1 className="font-display text-2xl sm:text-3xl tracking-wider text-foreground">
+          <h1 className="font-display text-lg tracking-wider text-foreground">
             <span className="text-primary">लक्ष्य</span> Lakshya
           </h1>
           
-          <div className="w-16" />
-        </div>
+          <div className="w-9" />
+      </header>
+
+      <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 py-6 pb-24 md:pb-8">
 
         {/* Active Game View */}
         {activeGame === 'breath-flow' ? (
@@ -185,7 +185,7 @@ const Lakshya = () => {
             {/* Progress Dashboard */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
               {/* Main Progress Card */}
-              <div className="lg:col-span-2 rounded-2xl p-6 bg-gradient-to-br from-violet-500/10 via-purple-500/5 to-indigo-500/10 border border-violet-500/20 backdrop-blur-sm">
+              <div className="lg:col-span-2 rounded-xl p-4 sm:p-5 md:p-6 bg-gradient-to-br from-violet-500/10 via-purple-500/5 to-indigo-500/10 border border-violet-500/20 backdrop-blur-sm">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="p-2 rounded-lg bg-violet-500/20">
                     <Trophy className="w-5 h-5 text-violet-400" />
@@ -231,7 +231,7 @@ const Lakshya = () => {
 
               {/* Karma Display */}
               <div className="space-y-4">
-                <div className="rounded-2xl p-6 bg-gradient-to-br from-amber-500/10 via-orange-500/5 to-yellow-500/10 border border-amber-500/20 backdrop-blur-sm">
+                <div className="rounded-xl p-4 sm:p-5 md:p-6 bg-gradient-to-br from-amber-500/10 via-orange-500/5 to-yellow-500/10 border border-amber-500/20 backdrop-blur-sm">
                   {progress && <KarmaDisplay progress={progress} />}
                 </div>
                 
@@ -247,7 +247,7 @@ const Lakshya = () => {
             </div>
 
             {/* Chakra Progress */}
-            <div className="rounded-2xl p-6 bg-gradient-to-br from-indigo-500/10 via-purple-500/5 to-pink-500/10 border border-indigo-500/20 backdrop-blur-sm mb-8">
+            <div className="rounded-xl p-4 sm:p-5 md:p-6 bg-gradient-to-br from-indigo-500/10 via-purple-500/5 to-pink-500/10 border border-indigo-500/20 backdrop-blur-sm mb-6">
               <div className="flex items-center gap-3 mb-6">
                 <div className="p-2 rounded-lg bg-indigo-500/20">
                   <Zap className="w-5 h-5 text-indigo-400" />
@@ -264,7 +264,7 @@ const Lakshya = () => {
             </div>
 
             {/* Games Section */}
-            <div className="mb-8">
+            <div className="mb-6">
               <div className="flex items-center gap-3 mb-6">
                 <div className="p-2 rounded-lg bg-emerald-500/20">
                   <Gamepad2 className="w-5 h-5 text-emerald-400" />
@@ -283,7 +283,7 @@ const Lakshya = () => {
                   onClick={() => setActiveGame('breath-flow')}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="group relative p-6 rounded-2xl bg-gradient-to-br from-cyan-500/10 via-blue-500/10 to-indigo-500/10 border border-cyan-500/20 hover:border-cyan-500/40 transition-all text-left overflow-hidden"
+                  className="group relative p-4 sm:p-5 md:p-6 rounded-xl bg-gradient-to-br from-cyan-500/10 via-blue-500/10 to-indigo-500/10 border border-cyan-500/20 hover:border-cyan-500/40 transition-all text-left overflow-hidden"
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                   
@@ -307,7 +307,7 @@ const Lakshya = () => {
                   onClick={() => setActiveGame('chakra-alignment')}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="group relative p-6 rounded-2xl bg-gradient-to-br from-indigo-500/10 via-purple-500/10 to-violet-500/10 border border-indigo-500/20 hover:border-indigo-500/40 transition-all text-left overflow-hidden"
+                  className="group relative p-4 sm:p-5 md:p-6 rounded-xl bg-gradient-to-br from-indigo-500/10 via-purple-500/10 to-violet-500/10 border border-indigo-500/20 hover:border-indigo-500/40 transition-all text-left overflow-hidden"
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                   
@@ -331,7 +331,7 @@ const Lakshya = () => {
                   onClick={() => setActiveGame('divine-match')}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="group relative p-6 rounded-2xl bg-gradient-to-br from-purple-500/10 via-fuchsia-500/10 to-pink-500/10 border border-purple-500/20 hover:border-purple-500/40 transition-all text-left overflow-hidden"
+                  className="group relative p-4 sm:p-5 md:p-6 rounded-xl bg-gradient-to-br from-purple-500/10 via-fuchsia-500/10 to-pink-500/10 border border-purple-500/20 hover:border-purple-500/40 transition-all text-left overflow-hidden"
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                   
@@ -360,7 +360,7 @@ const Lakshya = () => {
                   onClick={() => setActiveGame('inner-garden')}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="group relative p-6 rounded-2xl bg-gradient-to-br from-emerald-500/10 via-green-500/10 to-teal-500/10 border border-emerald-500/20 hover:border-emerald-500/40 transition-all text-left overflow-hidden"
+                  className="group relative p-4 sm:p-5 md:p-6 rounded-xl bg-gradient-to-br from-emerald-500/10 via-green-500/10 to-teal-500/10 border border-emerald-500/20 hover:border-emerald-500/40 transition-all text-left overflow-hidden"
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                   

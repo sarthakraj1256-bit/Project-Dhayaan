@@ -94,33 +94,28 @@ const difficultyOrder = ['beginner', 'intermediate', 'advanced', 'mastery'] as c
        {/* Content */}
        <div className="relative z-10 pb-24 md:pb-0">
          {/* Header */}
-         <header className="sticky top-0 z-40 px-6 py-4 bg-void/80 backdrop-blur-xl border-b border-white/5">
-           <div className="max-w-5xl mx-auto flex items-center justify-between">
-             <Link
-               to="/"
-               className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
-             >
-               <ArrowLeft className="w-4 h-4" />
-               <span className="text-sm tracking-wider">Back</span>
-             </Link>
- 
-             <div className="flex items-center gap-3">
-               <BookOpen className="w-5 h-5 text-primary" />
-               <h1 className="font-display text-xl tracking-[0.2em] text-gold-gradient">
-                 MANTROCHAR
-               </h1>
-             </div>
- 
-             {/* Link to Sonic Lab */}
-             <Link
-               to="/sonic-lab"
-               className="flex items-center gap-2 px-3 py-2 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 transition-colors"
-             >
-               <Radio className="w-4 h-4 text-primary" />
-               <span className="text-sm text-foreground/80 hidden sm:inline">Sonic Lab</span>
-             </Link>
-           </div>
-         </header>
+        <header className="sticky top-0 z-40 h-14 px-4 flex items-center justify-between bg-void/80 backdrop-blur-xl border-b border-border/30">
+              <Link
+                to="/"
+                className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors"
+              >
+                <ArrowLeft className="w-5 h-5 text-muted-foreground" />
+              </Link>
+  
+              <div className="flex items-center gap-2">
+                <BookOpen className="w-5 h-5 text-primary" />
+                <h1 className="font-display text-lg tracking-[0.2em] text-gold-gradient">
+                  MANTROCHAR
+                </h1>
+              </div>
+  
+              <Link
+                to="/sonic-lab"
+                className="w-9 h-9 rounded-full flex items-center justify-center bg-white/5 border border-white/10 hover:bg-white/10 transition-colors"
+              >
+                <Radio className="w-5 h-5 text-primary" />
+              </Link>
+          </header>
  
          {/* Hero */}
          <section className="px-6 py-12 text-center">

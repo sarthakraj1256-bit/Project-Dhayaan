@@ -56,34 +56,24 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="border-b border-border/50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
-        <div className="container mx-auto px-6 py-4 flex items-center justify-between">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="flex items-center gap-3"
-          >
-            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-              <span className="text-primary font-display text-lg">ॐ</span>
+      <header className="sticky top-0 z-40 h-14 px-4 flex items-center justify-between bg-background/80 backdrop-blur-xl border-b border-border/30">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+              <span className="text-primary font-display text-sm">ॐ</span>
             </div>
-            <div>
-              <h1 className="font-display text-xl text-gold-gradient tracking-wider">
-                DHYAAN
-              </h1>
-              <p className="text-xs text-muted-foreground tracking-widest">DASHBOARD</p>
-            </div>
-          </motion.div>
+            <h1 className="font-display text-lg text-gold-gradient tracking-wider">
+              Dashboard
+            </h1>
+          </div>
 
           <Button
             onClick={handleSignOut}
-            variant="outline"
+            variant="ghost"
             size="sm"
-            className="gap-2 border-primary/30 hover:border-primary/50 hover:bg-primary/5"
+            className="gap-2 text-muted-foreground hover:text-foreground"
           >
-            <LogOut className="w-4 h-4" />
-            Sign Out
+            <LogOut className="w-5 h-5" />
           </Button>
-        </div>
       </header>
 
       {/* Main Content */}

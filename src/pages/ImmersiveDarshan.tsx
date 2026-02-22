@@ -127,31 +127,20 @@ const ImmersiveDarshan = () => {
       </AnimatePresence>
 
       {/* Header */}
-      <header className="sticky top-0 z-40 backdrop-blur-xl bg-background/80 border-b border-border/50">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Link to="/live-darshan">
-                <Button variant="ghost" size="icon">
-                  <ArrowLeft className="w-5 h-5" />
-                </Button>
+      <header className="sticky top-0 z-40 h-14 px-4 flex items-center justify-between backdrop-blur-xl bg-background/80 border-b border-border/30">
+            <div className="flex items-center gap-3">
+              <Link to="/live-darshan" className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors">
+                <ArrowLeft className="w-5 h-5 text-muted-foreground" />
               </Link>
-              <div>
-                <h1 className="font-display text-2xl md:text-3xl text-gold-gradient">
-                  360° Immersive Darshan
-                </h1>
-                <p className="text-muted-foreground text-sm">
-                  Experience temples like you're actually there
-                </p>
-              </div>
+              <h1 className="font-display text-lg text-gold-gradient tracking-wider">
+                360° Darshan
+              </h1>
             </div>
 
             <Badge variant="outline" className="hidden sm:flex gap-1 border-primary/50 text-primary">
               <Eye className="w-3 h-3" />
               {allImmersiveTemples.length} Temples
             </Badge>
-          </div>
-        </div>
       </header>
 
       <main className="container mx-auto px-4 py-8 pb-24 md:pb-8">

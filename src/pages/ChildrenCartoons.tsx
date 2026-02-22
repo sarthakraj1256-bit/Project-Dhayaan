@@ -53,11 +53,11 @@ export default function ChildrenCartoons() {
 
   return (
     <div className="min-h-screen bg-background pb-24 md:pb-8">
-      <header className="sticky top-0 z-40 px-4 py-3 flex items-center gap-3 border-b border-border/30" style={{ background: '#0B1D3A' }}>
-        <Link to="/" className="p-2 -ml-2 rounded-full hover:bg-white/10 transition-colors">
-          <ArrowLeft className="w-5 h-5 text-white/80" />
+      <header className="sticky top-0 z-40 h-14 px-4 flex items-center gap-3 border-b border-border/30 bg-background/80 backdrop-blur-xl">
+        <Link to="/" className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors">
+          <ArrowLeft className="w-5 h-5 text-muted-foreground" />
         </Link>
-        <h1 className="text-base font-semibold text-white/90">Spiritual Cartoons for Children</h1>
+        <h1 className="font-display text-lg tracking-wider text-foreground">Spiritual Cartoons</h1>
       </header>
 
       <main className="px-4 py-6 max-w-4xl mx-auto space-y-6">
