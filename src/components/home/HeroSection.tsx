@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { supabase } from '@/integrations/backend/client';
 import { User } from '@supabase/supabase-js';
 import { useLanguage } from '@/contexts/LanguageContext';
+import dhyaanLogo from '@/assets/dhyaan-logo.png';
 
 interface HeroSectionProps {
   user?: User | null;
@@ -54,33 +55,34 @@ export default function HeroSection({ user }: HeroSectionProps) {
           {greetingText}
         </p>
 
-        <h1 className="mt-3 relative">
-          <span
-            className="text-5xl font-extralight italic tracking-[0.12em] text-gold-gradient"
-            style={{
-              fontFamily: "'Georgia', 'Times New Roman', serif",
-            }}
-          >
-            Dhyaan
-          </span>
-          <motion.span
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ delay: 0.6, type: 'spring', stiffness: 300 }}
-            className="inline-block w-2 h-2 rounded-full ml-1 align-super bg-primary"
-            style={{ boxShadow: '0 0 10px 3px hsl(35 80% 52% / 0.3)' }}
+        <div className="mt-3 flex items-center gap-3">
+          <motion.img
+            src={dhyaanLogo}
+            alt="Dhyaan"
+            className="w-12 h-12 object-contain"
+            initial={{ scale: 0, rotate: -30 }}
+            animate={{ scale: 1, rotate: 0 }}
+            transition={{ delay: 0.3, type: 'spring', stiffness: 200 }}
           />
-          <motion.div
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: 1 }}
-            transition={{ delay: 0.4, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-            className="h-[1.5px] mt-1.5 origin-left rounded-full"
-            style={{
-              background: 'linear-gradient(90deg, hsl(35 80% 52%) 0%, hsl(12 65% 68%) 50%, transparent 100%)',
-              maxWidth: '160px',
-            }}
-          />
-        </h1>
+          <h1 className="relative">
+            <span
+              className="text-5xl font-extralight italic tracking-[0.12em] text-gold-gradient"
+              style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}
+            >
+              Dhyaan
+            </span>
+            <motion.div
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: 1 }}
+              transition={{ delay: 0.4, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+              className="h-[1.5px] mt-1.5 origin-left rounded-full"
+              style={{
+                background: 'linear-gradient(90deg, hsl(35 80% 52%) 0%, hsl(12 65% 68%) 50%, transparent 100%)',
+                maxWidth: '160px',
+              }}
+            />
+          </h1>
+        </div>
 
         <p className="text-sm mt-3 leading-relaxed tracking-wide text-foreground/70">
           {t('hero.tagline')}
