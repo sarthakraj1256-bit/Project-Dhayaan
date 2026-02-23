@@ -56,7 +56,7 @@ export default function HeroSection({ user }: HeroSectionProps) {
         </p>
 
         <div className="mt-3">
-          <h1 className="relative">
+          <h1 className="relative inline-block">
             <span
               className="text-5xl font-extralight italic tracking-[0.12em] text-gold-gradient"
               style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}
@@ -70,7 +70,6 @@ export default function HeroSection({ user }: HeroSectionProps) {
               className="h-[1.5px] mt-1.5 origin-left rounded-full"
               style={{
                 background: 'linear-gradient(90deg, hsl(35 80% 52%) 0%, hsl(12 65% 68%) 50%, transparent 100%)',
-                maxWidth: '160px',
               }}
             />
           </h1>
