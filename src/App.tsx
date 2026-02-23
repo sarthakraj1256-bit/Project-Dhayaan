@@ -9,7 +9,8 @@ import EnvHealthCheck from "./components/EnvHealthCheck";
 import { PWASplashScreen } from "./components/pwa/PWASplashScreen";
 import { OfflineIndicator } from "./components/pwa/OfflineIndicator";
 import { LanguageProvider } from "./contexts/LanguageContext";
-
+import { PWAInstallPrompt } from "./components/pwa/PWAInstallPrompt";
+      <PWAInstallPrompt />
 
 // Critical routes - loaded immediately
 import Index from "./pages/Index";
