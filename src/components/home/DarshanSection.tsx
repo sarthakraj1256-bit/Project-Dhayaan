@@ -35,7 +35,7 @@ export default function DarshanSection() {
             >
               <div className="aspect-[4/3] bg-muted relative overflow-hidden">
                 <img
-                  src={`https://img.youtube.com/vi/${temple.youtubeVideoId}/mqdefault.jpg`}
+                  src={temple.thumbnail}
                   alt={temple.name}
                   className="w-full h-full object-cover"
                   loading="lazy"
