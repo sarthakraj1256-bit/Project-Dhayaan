@@ -56,7 +56,7 @@ export const temples: Temple[] = [
     isLive: true,
     isFeatured: true,
     viewerCount: 15420,
-    thumbnail: 'https://img.youtube.com/vi/LBaF7ypRVXM/hqdefault.jpg',
+    thumbnail: '/temples/golden-temple.jpg',
     aartiSchedule: [
       { name: 'Asa Di Var', time: '04:00', duration: 120, description: 'Morning hymns' },
       { name: 'Sukhmani Sahib', time: '08:00', duration: 90 },
@@ -79,7 +79,7 @@ export const temples: Temple[] = [
     isLive: true,
     isFeatured: true,
     viewerCount: 8932,
-    thumbnail: 'https://img.youtube.com/vi/zGDzdps75ns/hqdefault.jpg',
+    thumbnail: '/temples/vaishno-devi.jpg',
     aartiSchedule: [
       { name: 'Mangla Aarti', time: '05:00', duration: 30, description: 'Morning awakening' },
       { name: 'Bhog Aarti', time: '12:00', duration: 30, description: 'Midday offering' },
@@ -102,7 +102,7 @@ export const temples: Temple[] = [
     isLive: true,
     isFeatured: true,
     viewerCount: 12450,
-    thumbnail: 'https://img.youtube.com/vi/6FMPGsGEs7c/hqdefault.jpg',
+    thumbnail: '/temples/kashi-vishwanath.jpg',
     aartiSchedule: [
       { name: 'Mangala Aarti', time: '03:00', duration: 45, description: 'Pre-dawn worship' },
       { name: 'Bhog Aarti', time: '11:30', duration: 30, description: 'Midday offering' },
@@ -126,7 +126,7 @@ export const temples: Temple[] = [
     isLive: true,
     isFeatured: true,
     viewerCount: 25680,
-    thumbnail: 'https://img.youtube.com/vi/pK8fg9WuZxg/hqdefault.jpg',
+    thumbnail: '/temples/tirupati-balaji.jpg',
     aartiSchedule: [
       { name: 'Suprabhatam', time: '03:00', duration: 60, description: 'Divine awakening' },
       { name: 'Thomala Seva', time: '08:00', duration: 45 },
@@ -150,7 +150,7 @@ export const temples: Temple[] = [
     isLive: true,
     isFeatured: false,
     viewerCount: 6780,
-    thumbnail: 'https://img.youtube.com/vi/yfSLuEj99aE/hqdefault.jpg',
+    thumbnail: '/temples/somnath.jpg',
     aartiSchedule: [
       { name: 'Mangala Aarti', time: '06:00', duration: 30 },
       { name: 'Madhyan Aarti', time: '12:00', duration: 20 },
@@ -173,7 +173,7 @@ export const temples: Temple[] = [
     isLive: true,
     isFeatured: true,
     viewerCount: 9340,
-    thumbnail: 'https://img.youtube.com/vi/n3k-D6GdXRc/hqdefault.jpg',
+    thumbnail: '/temples/mahakaleshwar.jpg',
     aartiSchedule: [
       { name: 'Bhasma Aarti', time: '04:00', duration: 60, description: 'Famous ash ceremony' },
       { name: 'Madhyan Aarti', time: '10:30', duration: 30 },
@@ -197,7 +197,7 @@ export const temples: Temple[] = [
     isLive: true,
     isFeatured: false,
     viewerCount: 7820,
-    thumbnail: 'https://img.youtube.com/vi/bEVCHxMgv7E/hqdefault.jpg',
+    thumbnail: '/temples/kedarnath.jpg',
     aartiSchedule: [
       { name: 'Mangala Aarti', time: '04:30', duration: 45, description: 'Himalayan dawn' },
       { name: 'Madhyan Aarti', time: '11:00', duration: 30 },
@@ -220,7 +220,7 @@ export const temples: Temple[] = [
     isLive: false,
     isFeatured: false,
     viewerCount: 3450,
-    thumbnail: 'https://img.youtube.com/vi/RZ1JbWJVhlU/hqdefault.jpg',
+    thumbnail: '/temples/omkareshwar.jpg',
     aartiSchedule: [
       { name: 'Mangala Aarti', time: '05:00', duration: 30 },
       { name: 'Madhyan Aarti', time: '12:00', duration: 20 },
@@ -242,7 +242,7 @@ export const temples: Temple[] = [
     isLive: false,
     isFeatured: false,
     viewerCount: 2890,
-    thumbnail: 'https://img.youtube.com/vi/wKL2_UUG7Ok/hqdefault.jpg',
+    thumbnail: '/temples/trimbakeshwar.jpg',
     aartiSchedule: [
       { name: 'Abhishek', time: '05:30', duration: 60, description: 'Sacred bathing ritual' },
       { name: 'Madhyan Aarti', time: '12:00', duration: 20 },
@@ -265,7 +265,7 @@ export const temples: Temple[] = [
     isLive: true,
     isFeatured: false,
     viewerCount: 4560,
-    thumbnail: 'https://img.youtube.com/vi/QZT4tQxXN-8/hqdefault.jpg',
+    thumbnail: '/temples/kamakhya.jpg',
     aartiSchedule: [
       { name: 'Mangala Aarti', time: '05:30', duration: 45, description: 'Tantric worship' },
       { name: 'Bhog Aarti', time: '11:00', duration: 30 },
@@ -287,7 +287,7 @@ export const temples: Temple[] = [
     isLive: false,
     isFeatured: false,
     viewerCount: 2340,
-    thumbnail: 'https://img.youtube.com/vi/mKh5s_2hC8s/hqdefault.jpg',
+    thumbnail: '/temples/kalighat.jpg',
     aartiSchedule: [
       { name: 'Mangala Aarti', time: '04:00', duration: 30 },
       { name: 'Bhog Aarti', time: '12:00', duration: 30 },
@@ -310,7 +310,7 @@ export const temples: Temple[] = [
     isLive: true,
     isFeatured: false,
     viewerCount: 5670,
-    thumbnail: 'https://img.youtube.com/vi/sWqE-mXiHLI/hqdefault.jpg',
+    thumbnail: '/temples/meenakshi-amman.jpg',
     aartiSchedule: [
       { name: 'Tiruvanandal', time: '05:00', duration: 45, description: 'Morning awakening' },
       { name: 'Kalasandhi Puja', time: '09:00', duration: 30 },
@@ -334,7 +334,7 @@ export const temples: Temple[] = [
     isLive: true,
     isFeatured: false,
     viewerCount: 4890,
-    thumbnail: 'https://img.youtube.com/vi/c-6rq8A7Nzc/hqdefault.jpg',
+    thumbnail: '/temples/jagannath.jpg',
     aartiSchedule: [
       { name: 'Mangala Alati', time: '05:00', duration: 30, description: 'Divine awakening' },
       { name: 'Mailam', time: '06:00', duration: 45 },
@@ -359,7 +359,7 @@ export const temples: Temple[] = [
     isLive: true,
     isFeatured: false,
     viewerCount: 3210,
-    thumbnail: 'https://img.youtube.com/vi/xTBVl3TQS8o/hqdefault.jpg',
+    thumbnail: '/temples/pashupatinath.jpg',
     aartiSchedule: [
       { name: 'Morning Puja', time: '05:00', duration: 60 },
       { name: 'Bagmati Aarti', time: '18:00', duration: 45, description: 'River ceremony' }
@@ -380,7 +380,7 @@ export const temples: Temple[] = [
     isLive: false,
     isFeatured: false,
     viewerCount: 1890,
-    thumbnail: 'https://img.youtube.com/vi/fHE2KqQRSu0/hqdefault.jpg',
+    thumbnail: '/temples/batu-caves.jpg',
     aartiSchedule: [
       { name: 'Morning Puja', time: '06:30', duration: 30 },
       { name: 'Evening Puja', time: '18:30', duration: 30 }
@@ -402,7 +402,7 @@ export const temples: Temple[] = [
     isLive: true,
     isFeatured: true,
     viewerCount: 8760,
-    thumbnail: 'https://img.youtube.com/vi/pzgkpSZ4yYc/hqdefault.jpg',
+    thumbnail: '/temples/iskcon-vrindavan.jpg',
     aartiSchedule: [
       { name: 'Mangala Aarti', time: '04:30', duration: 30, description: 'Pre-dawn kirtan' },
       { name: 'Darshan Aarti', time: '07:15', duration: 15 },
@@ -426,7 +426,7 @@ export const temples: Temple[] = [
     isLive: true,
     isFeatured: false,
     viewerCount: 6540,
-    thumbnail: 'https://img.youtube.com/vi/0s8XG7cBu-I/hqdefault.jpg',
+    thumbnail: '/temples/iskcon-mayapur.jpg',
     aartiSchedule: [
       { name: 'Mangala Aarti', time: '04:30', duration: 45, description: 'Grand ceremony' },
       { name: 'Guru Puja', time: '07:30', duration: 30 },
@@ -450,7 +450,7 @@ export const temples: Temple[] = [
     isLive: true,
     isFeatured: true,
     viewerCount: 11230,
-    thumbnail: 'https://img.youtube.com/vi/J3_xfVlXtZo/hqdefault.jpg',
+    thumbnail: '/temples/badrinath.jpg',
     aartiSchedule: [
       { name: 'Maha Abhishek', time: '04:30', duration: 60, description: 'Sacred bathing' },
       { name: 'Geet Govind Path', time: '18:00', duration: 45 },
@@ -472,7 +472,7 @@ export const temples: Temple[] = [
     isLive: true,
     isFeatured: true,
     viewerCount: 8920,
-    thumbnail: 'https://img.youtube.com/vi/kQD_2Y4SxPs/hqdefault.jpg',
+    thumbnail: '/temples/dwarkadheesh.jpg',
     aartiSchedule: [
       { name: 'Mangala Aarti', time: '06:30', duration: 30 },
       { name: 'Shringar Aarti', time: '10:30', duration: 30 },
@@ -496,7 +496,7 @@ export const temples: Temple[] = [
     isLive: true,
     isFeatured: true,
     viewerCount: 18540,
-    thumbnail: 'https://img.youtube.com/vi/mf7mK1mLqEg/hqdefault.jpg',
+    thumbnail: '/temples/siddhivinayak.jpg',
     aartiSchedule: [
       { name: 'Kakad Aarti', time: '05:30', duration: 30, description: 'Morning awakening' },
       { name: 'Madhyan Aarti', time: '12:00', duration: 20 },
@@ -519,7 +519,7 @@ export const temples: Temple[] = [
     isLive: true,
     isFeatured: true,
     viewerCount: 22340,
-    thumbnail: 'https://img.youtube.com/vi/UtV3pvVmPfM/hqdefault.jpg',
+    thumbnail: '/temples/shirdi-sai.jpg',
     aartiSchedule: [
       { name: 'Kakad Aarti', time: '04:30', duration: 45, description: 'Famous morning aarti' },
       { name: 'Madhyan Aarti', time: '12:00', duration: 30, description: 'Midday prayers' },
@@ -542,7 +542,7 @@ export const temples: Temple[] = [
     isLive: true,
     isFeatured: false,
     viewerCount: 7650,
-    thumbnail: 'https://img.youtube.com/vi/xd9RqLMsQ0A/hqdefault.jpg',
+    thumbnail: '/temples/rameshwaram.jpg',
     aartiSchedule: [
       { name: 'Palliyarai', time: '05:00', duration: 45, description: '22 wells ritual' },
       { name: 'Kalasandhi', time: '09:00', duration: 30 },
@@ -566,7 +566,7 @@ export const temples: Temple[] = [
     isLive: false,
     isFeatured: false,
     viewerCount: 5430,
-    thumbnail: 'https://img.youtube.com/vi/h8VxvqJvL9o/hqdefault.jpg',
+    thumbnail: '/temples/akshardham.jpg',
     aartiSchedule: [
       { name: 'Mangala Aarti', time: '07:00', duration: 30 },
       { name: 'Light & Sound Show', time: '19:45', duration: 25, description: 'Musical fountain' }
@@ -587,7 +587,7 @@ export const temples: Temple[] = [
     isLive: true,
     isFeatured: false,
     viewerCount: 9870,
-    thumbnail: 'https://img.youtube.com/vi/zR4yNZ0SJYU/hqdefault.jpg',
+    thumbnail: '/temples/mathura-krishna.jpg',
     aartiSchedule: [
       { name: 'Mangala Aarti', time: '05:00', duration: 30 },
       { name: 'Shringar Aarti', time: '07:30', duration: 30, description: 'Krishna decoration' },
@@ -611,7 +611,7 @@ export const temples: Temple[] = [
     isLive: true,
     isFeatured: false,
     viewerCount: 6780,
-    thumbnail: 'https://img.youtube.com/vi/K9GhMvzPjCA/hqdefault.jpg',
+    thumbnail: '/temples/sabarimala.jpg',
     aartiSchedule: [
       { name: 'Usha Puja', time: '05:00', duration: 60, description: 'Dawn worship' },
       { name: 'Padi Puja', time: '10:30', duration: 45 },
@@ -633,7 +633,7 @@ export const temples: Temple[] = [
     isLive: true,
     isFeatured: false,
     viewerCount: 4230,
-    thumbnail: 'https://img.youtube.com/vi/wKL2_UUG7Ok/hqdefault.jpg',
+    thumbnail: '/temples/bhimashankar.jpg',
     aartiSchedule: [
       { name: 'Abhishek', time: '04:30', duration: 60, description: 'Forest dawn ritual' },
       { name: 'Madhyan Aarti', time: '11:00', duration: 20 },
@@ -655,7 +655,7 @@ export const temples: Temple[] = [
     isLive: true,
     isFeatured: false,
     viewerCount: 8340,
-    thumbnail: 'https://img.youtube.com/vi/c-6rq8A7Nzc/hqdefault.jpg',
+    thumbnail: '/temples/guruvayur.jpg',
     aartiSchedule: [
       { name: 'Nirmalya Darshan', time: '03:00', duration: 30, description: 'Sacred first darshan' },
       { name: 'Ezhunellippu', time: '06:00', duration: 45, description: 'Elephant procession' },
@@ -679,7 +679,7 @@ export const temples: Temple[] = [
     isLive: false,
     isFeatured: false,
     viewerCount: 3450,
-    thumbnail: 'https://img.youtube.com/vi/bEVCHxMgv7E/hqdefault.jpg',
+    thumbnail: '/temples/gangotri.jpg',
     aartiSchedule: [
       { name: 'Mangala Aarti', time: '06:00', duration: 30, description: 'Himalayan dawn' },
       { name: 'Ganga Aarti', time: '18:30', duration: 45, description: 'Source of Ganga' }
@@ -700,7 +700,7 @@ export const temples: Temple[] = [
     isLive: false,
     isFeatured: false,
     viewerCount: 2890,
-    thumbnail: 'https://img.youtube.com/vi/J3_xfVlXtZo/hqdefault.jpg',
+    thumbnail: '/temples/yamunotri.jpg',
     aartiSchedule: [
       { name: 'Mangala Aarti', time: '06:30', duration: 30 },
       { name: 'Yamuna Aarti', time: '19:00', duration: 30, description: 'Source of Yamuna' }
