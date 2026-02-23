@@ -45,25 +45,28 @@ export default function HeroSection({ user }: HeroSectionProps) {
   const greetingText = displayName ? `${greeting}, ${displayName}` : greeting;
 
   return (
-    <section className="px-6 pt-14 pb-6">
-      <div>
+    <section className="px-5 sm:px-6 pt-16 pb-5">
+      <div className="max-w-lg">
+        {/* Greeting — adaptive, never breaks awkwardly */}
         <motion.p
-          className="text-xs uppercase tracking-[0.2em] font-medium text-muted-foreground"
-          initial={{ opacity: 0, y: 8 }}
+          className="text-[13px] sm:text-sm uppercase tracking-[0.15em] font-medium text-muted-foreground leading-snug truncate max-w-[70vw] sm:max-w-none"
+          initial={{ opacity: 0, y: 6 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: 'easeOut' }}
+          title={greetingText}
         >
           {greetingText}
         </motion.p>
 
-        <div className="mt-3">
+        {/* Brand title */}
+        <div className="mt-4">
           <h1 className="relative inline-block overflow-hidden">
             {"Dhyaan".split("").map((char, i) => (
               <motion.span
                 key={i}
-                className="text-5xl font-extralight italic tracking-[0.12em] text-gold-gradient inline-block"
+                className="text-[2.75rem] sm:text-5xl font-extralight italic tracking-[0.08em] text-gold-gradient inline-block"
                 style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{
                   delay: 0.3 + i * 0.06,
@@ -78,7 +81,7 @@ export default function HeroSection({ user }: HeroSectionProps) {
               initial={{ scaleX: 0 }}
               animate={{ scaleX: 1 }}
               transition={{ delay: 0.7, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-              className="h-[1.5px] mt-1.5 origin-left rounded-full"
+              className="h-[1.5px] mt-2 origin-left rounded-full"
               style={{
                 background: 'linear-gradient(90deg, hsl(35 80% 52%) 0%, hsl(12 65% 68%) 50%, transparent 100%)',
               }}
@@ -86,9 +89,10 @@ export default function HeroSection({ user }: HeroSectionProps) {
           </h1>
         </div>
 
+        {/* Tagline */}
         <motion.p
-          className="text-sm mt-3 leading-relaxed tracking-wide text-foreground/70"
-          initial={{ opacity: 0, y: 8 }}
+          className="text-sm sm:text-[15px] mt-3 leading-relaxed tracking-wide text-foreground/65"
+          initial={{ opacity: 0, y: 6 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8, duration: 0.5, ease: 'easeOut' }}
         >
