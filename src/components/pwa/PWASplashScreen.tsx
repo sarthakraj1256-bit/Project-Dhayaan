@@ -9,7 +9,7 @@ interface PWASplashScreenProps {
 
 export const PWASplashScreen = ({ 
   onComplete, 
-  minDisplayTime = 2000 
+  minDisplayTime = 2500 
 }: PWASplashScreenProps) => {
   const [isVisible, setIsVisible] = useState(true);
   const [isStandalone, setIsStandalone] = useState(false);
@@ -42,124 +42,112 @@ export const PWASplashScreen = ({
     <AnimatePresence>
       {isVisible && (
         <motion.div
-          initial={{ opacity: 1 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.5, ease: 'easeOut' }}
+          transition={{ duration: 0.8, ease: 'easeOut' }}
           className="fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden"
           style={{
-            background: 'linear-gradient(135deg, hsl(30 30% 96%), hsl(35 25% 93%))',
+            background: 'linear-gradient(160deg, hsl(36 35% 96%) 0%, hsl(34 30% 93%) 40%, hsl(32 28% 91%) 70%, hsl(35 32% 94%) 100%)',
           }}
         >
-          {/* Soft radial glow */}
+          {/* Ultra-soft radial warmth — center glow */}
           <motion.div
-            initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: [0, 1.5, 1.2], opacity: [0, 0.4, 0.15] }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             transition={{ duration: 1.5, ease: 'easeOut' }}
-            className="absolute w-80 h-80 rounded-full"
+            className="absolute inset-0"
             style={{
-              background: 'radial-gradient(circle, hsl(35 70% 55% / 0.25), transparent)',
+              background: 'radial-gradient(ellipse 60% 50% at 50% 45%, hsl(35 50% 75% / 0.12), transparent)',
             }}
           />
 
           {/* Main content */}
           <div className="relative flex flex-col items-center">
-            {/* 3D rotating logo */}
+            {/* Logo with breathing aura */}
             <motion.div
-              initial={{ scale: 0.3, opacity: 0, rotateY: -90 }}
-              animate={{ scale: 1, opacity: 1, rotateY: 0 }}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
               transition={{ 
-                duration: 1, 
-                ease: [0.34, 1.56, 0.64, 1],
+                duration: 1.4, 
+                ease: [0.25, 0.1, 0.25, 1],
+                delay: 0.3,
               }}
-              className="relative mb-8"
-              style={{ perspective: '800px' }}
+              className="relative mb-10"
             >
-              {/* Glow behind logo */}
+              {/* Breathing aura — very subtle */}
               <motion.div
                 animate={{ 
-                  scale: [1, 1.15, 1],
-                  opacity: [0.3, 0.6, 0.3],
+                  scale: [1, 1.08, 1],
+                  opacity: [0.15, 0.25, 0.15],
                 }}
-                transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
-                className="absolute inset-[-20px] blur-2xl rounded-full"
+                transition={{ 
+                  duration: 4, 
+                  repeat: Infinity, 
+                  ease: 'easeInOut',
+                }}
+                className="absolute inset-[-32px] rounded-full"
                 style={{
-                  background: 'radial-gradient(circle, hsl(35 70% 55% / 0.4), transparent)',
+                  background: 'radial-gradient(circle, hsl(35 45% 65% / 0.2), hsl(35 40% 70% / 0.05) 60%, transparent 80%)',
                 }}
               />
               
-              {/* 3D spinning logo */}
-              <motion.div
-                animate={{ 
-                  rotateY: [0, 360],
+              {/* Logo — clean, no container */}
+              <img 
+                src={dhyaanLogo} 
+                alt="Dhyaan" 
+                className="w-24 h-24 object-contain relative"
+                style={{
+                  filter: 'drop-shadow(0 2px 12px hsl(35 40% 55% / 0.15))',
                 }}
-                transition={{ 
-                  duration: 6, 
-                  repeat: Infinity, 
-                  ease: 'linear',
-                }}
-                style={{ transformStyle: 'preserve-3d' }}
-              >
-                <img 
-                  src={dhyaanLogo} 
-                  alt="Dhyaan" 
-                  className="w-28 h-28 object-contain drop-shadow-lg"
-                  style={{
-                    filter: 'drop-shadow(0 0 20px hsl(35 70% 55% / 0.3))',
-                  }}
-                />
-              </motion.div>
+              />
             </motion.div>
 
-            {/* App name */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
+            {/* App name — gentle fade */}
+            <motion.h1
+              initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3, duration: 0.6 }}
-              className="flex items-center gap-1"
+              transition={{ delay: 0.9, duration: 1, ease: 'easeOut' }}
+              className="font-display text-3xl tracking-[0.35em] uppercase"
+              style={{
+                color: 'hsl(35 40% 38%)',
+                letterSpacing: '0.35em',
+              }}
             >
-              {'DHYAAN'.split('').map((letter, i) => (
-                <motion.span
-                  key={i}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.4 + i * 0.08, duration: 0.4, ease: 'easeOut' }}
-                  className="font-display text-4xl tracking-[0.3em]"
-                  style={{
-                    color: 'hsl(35 55% 45%)',
-                    textShadow: '0 0 20px hsl(35 70% 55% / 0.3)',
-                  }}
-                >
-                  {letter}
-                </motion.span>
-              ))}
-            </motion.div>
+              Dhyaan
+            </motion.h1>
 
-            {/* Tagline */}
+            {/* Tagline — softest fade */}
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 1, duration: 0.6 }}
-              className="mt-4 font-body text-sm tracking-[0.2em] uppercase"
-              style={{ color: 'hsl(35 20% 55%)' }}
+              transition={{ delay: 1.5, duration: 1.2, ease: 'easeOut' }}
+              className="mt-3 font-body text-xs tracking-[0.25em] uppercase"
+              style={{ color: 'hsl(35 20% 58%)' }}
             >
               The Science of Silence
             </motion.p>
 
-            {/* Loading bar */}
+            {/* Minimal loading indicator — subtle breathing dot */}
             <motion.div
-              initial={{ opacity: 0, scaleX: 0 }}
-              animate={{ opacity: 1, scaleX: 1 }}
-              transition={{ delay: 1.2, duration: 0.8, ease: 'easeOut' }}
-              className="mt-12 w-32 h-0.5 rounded-full overflow-hidden"
-              style={{ background: 'hsl(35 40% 80%)' }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1.8, duration: 0.8 }}
+              className="mt-14"
             >
               <motion.div
-                initial={{ x: '-100%' }}
-                animate={{ x: '100%' }}
-                transition={{ duration: 1, repeat: Infinity, ease: 'easeInOut', repeatDelay: 0.2 }}
-                className="h-full w-1/2 rounded-full"
+                animate={{
+                  scale: [1, 1.4, 1],
+                  opacity: [0.3, 0.6, 0.3],
+                }}
+                transition={{
+                  duration: 2.5,
+                  repeat: Infinity,
+                  ease: 'easeInOut',
+                }}
+                className="w-2 h-2 rounded-full"
                 style={{
-                  background: 'linear-gradient(90deg, transparent, hsl(35 70% 55%), transparent)',
+                  background: 'hsl(35 45% 60%)',
                 }}
               />
             </motion.div>
