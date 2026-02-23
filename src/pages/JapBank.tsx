@@ -24,7 +24,7 @@ const GoalConfetti = lazy(() => import('@/components/jap-bank/GoalConfetti'));
 const Fallback = () => <Skeleton className="h-40 w-full bg-muted/30 rounded-lg" />;
 
 const JapBank = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const {
     userId, isAuthenticated,
     entries, goals, requests, leaderboard,
@@ -41,7 +41,6 @@ const JapBank = () => {
 
   const mantraName = selectedMantra === 'custom' ? customMantra.trim() : selectedMantra;
 
-  // Stats for selected date
   const dateStats = useMemo(() => {
     const dateEntries = entries.filter(e => new Date(e.created_at).toISOString().slice(0, 10) === selectedDate);
     const total = dateEntries.reduce((sum, e) => sum + e.chant_count, 0);
@@ -76,48 +75,47 @@ const JapBank = () => {
 
       {!isAuthenticated ? (
         <div className="px-4 py-12 text-center">
-          <p className="text-muted-foreground mb-4">Sign in to start your jap journey</p>
-          <Link to="/auth" className="text-primary underline font-semibold">Sign In</Link>
+          <p className="text-muted-foreground mb-4">{t('auth.signInToStart')}</p>
+          <Link to="/auth" className="text-primary underline font-semibold">{t('auth.signIn')}</Link>
         </div>
       ) : (
         <div className="px-4 mt-2">
           <Tabs defaultValue="bank">
             <TabsList className="w-full flex overflow-x-auto gap-1 h-auto flex-wrap">
               <TabsTrigger value="bank" className="flex-1 min-w-[60px] text-xs gap-1">
-                <BookOpen className="w-3.5 h-3.5" /> Bank
+                <BookOpen className="w-3.5 h-3.5" /> {t('jap.bank')}
               </TabsTrigger>
               <TabsTrigger value="goals" className="flex-1 min-w-[60px] text-xs gap-1">
-                <Target className="w-3.5 h-3.5" /> Goals
+                <Target className="w-3.5 h-3.5" /> {t('jap.goals')}
               </TabsTrigger>
               <TabsTrigger value="temple" className="flex-1 min-w-[60px] text-xs gap-1">
-                <Building2 className="w-3.5 h-3.5" /> Temple
+                <Building2 className="w-3.5 h-3.5" /> {t('jap.temple')}
               </TabsTrigger>
               <TabsTrigger value="requests" className="flex-1 min-w-[60px] text-xs gap-1">
-                <HandHeart className="w-3.5 h-3.5" /> Delegate
+                <HandHeart className="w-3.5 h-3.5" /> {t('jap.delegate')}
               </TabsTrigger>
               <TabsTrigger value="leaderboard" className="flex-1 min-w-[60px] text-xs gap-1">
-                <Trophy className="w-3.5 h-3.5" /> Leaders
+                <Trophy className="w-3.5 h-3.5" /> {t('jap.leaders')}
               </TabsTrigger>
             </TabsList>
 
             <TabsContent value="bank" className="mt-3 space-y-0">
               <Suspense fallback={<Fallback />}>
-                {/* 1. TOP: Mantra Selection + Breakdown */}
                 <div className="space-y-3 mb-3">
                   <Select value={selectedMantra} onValueChange={setSelectedMantra}>
                     <SelectTrigger className="bg-muted border-border">
-                      <SelectValue placeholder="Select Mantra" />
+                      <SelectValue placeholder={t('jap.selectMantra')} />
                     </SelectTrigger>
                     <SelectContent>
                       {PRESET_MANTRAS.map(m => (
                         <SelectItem key={m} value={m}>{m}</SelectItem>
                       ))}
-                      <SelectItem value="custom">✏️ Custom Mantra</SelectItem>
+                      <SelectItem value="custom">{t('jap.customMantra')}</SelectItem>
                     </SelectContent>
                   </Select>
                   {selectedMantra === 'custom' && (
                     <Input
-                      placeholder="Enter your mantra..."
+                      placeholder={t('jap.enterMantra')}
                       value={customMantra}
                       onChange={e => setCustomMantra(e.target.value)}
                       maxLength={200}
@@ -132,12 +130,10 @@ const JapBank = () => {
                   />
                 </div>
 
-                {/* Soft divider */}
                 <div className="py-1">
                   <div className="h-px w-full" style={{ background: 'linear-gradient(90deg, transparent, hsl(var(--gold) / 0.25), transparent)' }} />
                 </div>
 
-                {/* 2. MIDDLE: Mini Week Calendar */}
                 <MiniWeekCalendar
                   entries={entries}
                   goals={goals}
@@ -145,7 +141,6 @@ const JapBank = () => {
                   onSelectDate={setSelectedDate}
                 />
 
-                {/* Date stats */}
                 {dateStats.total > 0 && (
                   <motion.div
                     key={selectedDate}
@@ -159,10 +154,10 @@ const JapBank = () => {
                   >
                     <div className="flex items-center justify-between">
                       <span className="text-xs text-muted-foreground">
-                        {selectedDate === new Date().toISOString().slice(0, 10) ? 'Today' : new Date(selectedDate + 'T00:00').toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
+                        {selectedDate === new Date().toISOString().slice(0, 10) ? t('jap.today') : new Date(selectedDate + 'T00:00').toLocaleDateString(language === 'hi' ? 'hi-IN' : 'en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
                       </span>
                       <span className="text-sm font-semibold text-primary font-[Cinzel]">
-                        {dateStats.total.toLocaleString()} chants
+                        {dateStats.total.toLocaleString()} {t('jap.chants')}
                       </span>
                     </div>
                     {dateStats.mantras.size > 1 && (
@@ -177,12 +172,10 @@ const JapBank = () => {
                   </motion.div>
                 )}
 
-                {/* Soft divider */}
                 <div className="py-1">
                   <div className="h-px w-full" style={{ background: 'linear-gradient(90deg, transparent, hsl(var(--gold) / 0.25), transparent)' }} />
                 </div>
 
-                {/* 3. BOTTOM: Tap Counter */}
                 <div className="pt-2">
                   <JapCounter
                     onSave={(name, count) => addEntry.mutate({ mantraName: name, count })}
@@ -191,7 +184,6 @@ const JapBank = () => {
                   />
                 </div>
 
-                {/* Ledger below (scrollable) */}
                 <div className="mt-4">
                   <JapLedger
                     entries={entries}

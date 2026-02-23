@@ -68,7 +68,7 @@ const Profile = () => {
       .maybeSingle();
 
     if (error) {
-      toast.error('Failed to load profile');
+      toast.error(t('profile.failedLoad'));
       logError('Profile load error', error);
     } else if (data) {
       setProfile(data);
@@ -87,10 +87,10 @@ const Profile = () => {
       .eq('user_id', user.id);
 
     if (error) {
-      toast.error('Failed to update profile');
+      toast.error(t('profile.failedUpdate'));
       logError('Profile update error', error);
     } else {
-      toast.success('Profile updated successfully');
+      toast.success(t('profile.updateSuccess'));
       setProfile(prev => prev ? { ...prev, display_name: displayName.trim() || null } : null);
     }
     setIsSaving(false);
@@ -100,15 +100,13 @@ const Profile = () => {
     const file = event.target.files?.[0];
     if (!file || !user) return;
 
-    // Validate file type
     if (!file.type.startsWith('image/')) {
-      toast.error('Please upload an image file');
+      toast.error(t('profile.uploadImage'));
       return;
     }
 
-    // Validate file size (max 2MB)
     if (file.size > 2 * 1024 * 1024) {
-      toast.error('Image must be less than 2MB');
+      toast.error(t('profile.imageTooLarge'));
       return;
     }
 
@@ -117,24 +115,21 @@ const Profile = () => {
     const fileExt = file.name.split('.').pop();
     const filePath = `${user.id}/avatar.${fileExt}`;
 
-    // Upload to storage
     const { error: uploadError } = await supabase.storage
       .from('avatars')
       .upload(filePath, file, { upsert: true });
 
     if (uploadError) {
-      toast.error('Failed to upload avatar');
+      toast.error(t('profile.failedUpload'));
       logError('Avatar upload error', uploadError);
       setIsUploading(false);
       return;
     }
 
-    // Get public URL
     const { data: { publicUrl } } = supabase.storage
       .from('avatars')
       .getPublicUrl(filePath);
 
-    // Update profile with new avatar URL (add timestamp to bust cache)
     const avatarUrlWithTimestamp = `${publicUrl}?t=${Date.now()}`;
     const { error: updateError } = await supabase
       .from('profiles')
@@ -142,10 +137,10 @@ const Profile = () => {
       .eq('user_id', user.id);
 
     if (updateError) {
-      toast.error('Failed to update profile');
+      toast.error(t('profile.failedUpdate'));
       logError('Avatar URL update error', updateError);
     } else {
-      toast.success('Avatar updated successfully');
+      toast.success(t('profile.avatarUpdated'));
       setProfile(prev => prev ? { ...prev, avatar_url: avatarUrlWithTimestamp } : null);
     }
 
@@ -156,10 +151,10 @@ const Profile = () => {
     setIsClearingCache(true);
     try {
       await Promise.all([clearTTSCache(), clearAudioCache()]);
-      toast.success('Audio cache cleared successfully');
-      await fetchCacheSize(); // Refresh size after clearing
+      toast.success(t('profile.cacheCleared'));
+      await fetchCacheSize();
     } catch (error) {
-      toast.error('Failed to clear audio cache');
+      toast.error(t('profile.failedClearCache'));
       logError('Cache clear error', error);
     }
     setIsClearingCache(false);
@@ -182,10 +177,8 @@ const Profile = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Sacred Pattern Overlay */}
       <div className="fixed inset-0 sacred-pattern pointer-events-none opacity-20 z-0" />
 
-      {/* Sticky Header */}
       <header className="sticky top-0 z-40 h-14 px-4 flex items-center justify-between bg-background/80 backdrop-blur-xl border-b border-border/30">
         <button
           onClick={() => navigate(-1)}
@@ -200,8 +193,6 @@ const Profile = () => {
       </header>
 
       <div className="relative z-10 max-w-2xl mx-auto px-4 py-6">
-
-        {/* Profile Card */}
         <div
           className="rounded-xl p-4 sm:p-5 md:p-6 mb-6"
           style={{
@@ -211,7 +202,6 @@ const Profile = () => {
             border: '1px solid hsl(var(--gold) / 0.2)',
           }}
         >
-          {/* Avatar Section */}
           <div className="flex flex-col items-center mb-8">
             <div className="relative group">
               <Avatar className="w-24 h-24 border-2 border-gold/30">
@@ -227,7 +217,6 @@ const Profile = () => {
                 </AvatarFallback>
               </Avatar>
 
-              {/* Upload Overlay */}
               <button
                 onClick={() => fileInputRef.current?.click()}
                 disabled={isUploading}
@@ -250,38 +239,34 @@ const Profile = () => {
             </div>
 
             <p className="text-sm text-muted-foreground mt-3">
-              Click to upload avatar
+              {t('profile.clickUpload')}
             </p>
           </div>
 
-          {/* Form */}
           <div className="space-y-6">
-            {/* Email (Read-only) */}
             <div className="space-y-2">
               <Label className="text-muted-foreground text-sm tracking-wider">
-                Email
+                {t('profile.email')}
               </Label>
               <div className="px-4 py-3 rounded-lg bg-void/30 border border-gold/10 text-foreground/70">
                 {user?.email}
               </div>
             </div>
 
-            {/* Display Name */}
             <div className="space-y-2">
               <Label htmlFor="displayName" className="text-muted-foreground text-sm tracking-wider">
-                Display Name
+                {t('profile.displayName')}
               </Label>
               <Input
                 id="displayName"
                 value={displayName}
                 onChange={(e) => setDisplayName(e.target.value)}
-                placeholder="Enter your display name"
+                placeholder={t('profile.enterName')}
                 maxLength={50}
                 className="bg-void/30 border-gold/20 focus:border-gold/50 text-foreground placeholder:text-muted-foreground/50"
               />
             </div>
 
-            {/* Save Button */}
             <Button
               onClick={handleSave}
               disabled={isSaving}
@@ -296,7 +281,7 @@ const Profile = () => {
               ) : (
                 <Save className="w-4 h-4 mr-2" />
               )}
-              {isSaving ? 'Saving...' : 'Save Changes'}
+              {isSaving ? t('profile.saving') : t('profile.saveChanges')}
             </Button>
           </div>
         </div>
@@ -317,10 +302,10 @@ const Profile = () => {
             </div>
             <div>
               <h3 className="font-display text-lg tracking-wider text-foreground">
-                Storage Settings
+                {t('profile.storageSettings')}
               </h3>
               <p className="text-sm text-muted-foreground">
-                Manage cached audio data
+                {t('profile.manageCached')}
               </p>
             </div>
           </div>
@@ -330,7 +315,7 @@ const Profile = () => {
               <div className="flex-1">
                 <div className="flex items-center justify-between mb-2">
                   <p className="text-sm font-medium text-foreground">
-                    Audio Cache
+                    {t('profile.audioCache')}
                   </p>
                   {cacheSize && (
                     <span className={`text-sm font-mono ${cacheSize.total > 0 ? 'text-primary' : 'text-muted-foreground'}`}>
@@ -339,36 +324,33 @@ const Profile = () => {
                   )}
                 </div>
                 <p className="text-xs text-muted-foreground mb-3">
-                  TTS voice audio and atmosphere sounds are cached locally for instant playback. 
-                  Clearing this will require regenerating audio on next play.
+                  {t('profile.cacheDesc')}
                 </p>
                 
-                {/* Detailed breakdown */}
                 {cacheSize && cacheSize.total > 0 && (
                   <div className="grid grid-cols-2 gap-3 pt-3 border-t border-border/30">
                     <div className="flex items-center justify-between">
-                      <span className="text-xs text-muted-foreground">Guru Voice (TTS)</span>
+                      <span className="text-xs text-muted-foreground">{t('profile.ttsVoice')}</span>
                       <span className="text-xs font-mono text-foreground">{formatBytes(cacheSize.tts)}</span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-xs text-muted-foreground">Atmosphere</span>
+                      <span className="text-xs text-muted-foreground">{t('profile.atmosphere')}</span>
                       <span className="text-xs font-mono text-foreground">{formatBytes(cacheSize.atmosphere)}</span>
                     </div>
                   </div>
                 )}
                 
-                {/* Last cleanup stats */}
                 {cleanupStats && (
                   <div className="pt-3 mt-3 border-t border-border/30">
                     <div className="flex items-center justify-between text-xs">
-                      <span className="text-muted-foreground">Last auto-cleanup</span>
+                      <span className="text-muted-foreground">{t('profile.lastAutoCleanup')}</span>
                       <span className="text-foreground/70">
                         {formatDistanceToNow(new Date(cleanupStats.lastCleanupDate), { addSuffix: true })}
                       </span>
                     </div>
                     {cleanupStats.totalRemoved > 0 && (
                       <p className="text-xs text-emerald-400/80 mt-1">
-                        Removed {cleanupStats.totalRemoved} expired {cleanupStats.totalRemoved === 1 ? 'entry' : 'entries'}
+                        {t('profile.removedEntries').replace('{count}', String(cleanupStats.totalRemoved)).replace('{unit}', cleanupStats.totalRemoved === 1 ? t('profile.entry') : t('profile.entries'))}
                       </p>
                     )}
                   </div>
@@ -388,7 +370,7 @@ const Profile = () => {
             ) : (
               <Trash2 className="w-4 h-4 mr-2" />
             )}
-            {isClearingCache ? 'Clearing...' : 'Clear Audio Cache'}
+            {isClearingCache ? t('profile.clearing') : t('profile.clearCache')}
           </Button>
         </div>
       </div>

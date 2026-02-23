@@ -52,7 +52,6 @@ const Lakshya = () => {
     const currentLevel = progress.current_level as SpiritualLevel;
     
     if (previousLevelRef.current && previousLevelRef.current !== currentLevel) {
-      // Level up detected!
       setNewLevel(currentLevel);
       setShowLevelUp(true);
     }
@@ -65,11 +64,10 @@ const Lakshya = () => {
     setKarmaGained(multipliedPoints);
     setMultiplierApplied(totalMultiplier);
     
-    // Set bonus message based on conditions
     if (sessionGamesCompleted >= 3) {
-      setBonusMessage('🔥 Session streak bonus!');
+      setBonusMessage(t('lakshya.sessionStreakBonus'));
     } else if (totalMultiplier >= 2) {
-      setBonusMessage('⚡ Maximum multiplier achieved!');
+      setBonusMessage(t('lakshya.maxMultiplier'));
     } else {
       setBonusMessage(undefined);
     }
@@ -77,9 +75,8 @@ const Lakshya = () => {
     setShowKarmaAnimation(true);
     incrementSessionGames();
     setTimeout(() => setShowKarmaAnimation(false), 2500);
-  }, [applyMultiplier, totalMultiplier, incrementSessionGames, sessionGamesCompleted]);
+  }, [applyMultiplier, totalMultiplier, incrementSessionGames, sessionGamesCompleted, t]);
 
-  // Show loading while auth state is being determined
   if (isLoading && !userId) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -96,7 +93,7 @@ const Lakshya = () => {
             <Sparkles className="w-full h-full text-primary" />
           </motion.div>
           <p className="text-muted-foreground text-sm tracking-widest animate-pulse">
-            Loading your journey...
+            {t('lakshya.loading')}
           </p>
         </motion.div>
       </div>
@@ -108,15 +105,15 @@ const Lakshya = () => {
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center p-8 max-w-md">
           <Sparkles className="w-16 h-16 text-primary mx-auto mb-6" />
-          <h2 className="font-display text-2xl text-foreground mb-4">Begin Your Journey</h2>
+          <h2 className="font-display text-2xl text-foreground mb-4">{t('auth.beginJourney')}</h2>
           <p className="text-muted-foreground mb-6">
-            Sign in to track your spiritual progress and unlock rewards.
+            {t('auth.signInToTrack')}
           </p>
           <button
             onClick={() => navigate('/auth')}
             className="px-6 py-3 rounded-full bg-primary/20 border border-primary/50 text-primary hover:bg-primary/30 transition-colors"
           >
-            Enter the Sanctum
+            {t('auth.enterSanctum')}
           </button>
         </div>
       </div>
@@ -128,7 +125,6 @@ const Lakshya = () => {
     <div className="min-h-screen bg-background relative overflow-hidden">
       <CosmicBackground />
       
-      {/* Enhanced Karma Animation */}
       <KarmaGainAnimation
         isVisible={showKarmaAnimation}
         karmaGained={karmaGained}
@@ -136,7 +132,6 @@ const Lakshya = () => {
         bonusMessage={bonusMessage}
       />
 
-      {/* Level Up Celebration */}
       <LevelUpCelebration
         isVisible={showLevelUp}
         newLevel={newLevel}
@@ -186,7 +181,6 @@ const Lakshya = () => {
           <>
             {/* Progress Dashboard */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-              {/* Main Progress Card */}
               <div className="lg:col-span-2 rounded-xl p-4 sm:p-5 md:p-6 bg-gradient-to-br from-violet-500/10 via-purple-500/5 to-indigo-500/10 border border-violet-500/20 backdrop-blur-sm">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="p-2 rounded-lg bg-violet-500/20">
@@ -194,9 +188,9 @@ const Lakshya = () => {
                   </div>
                   <div>
                     <h2 className="font-display text-lg tracking-wider text-foreground">
-                      Dharmic Growth Path
+                      {t('lakshya.dharmicGrowth')}
                     </h2>
-                    <p className="text-xs text-muted-foreground">Your spiritual journey</p>
+                    <p className="text-xs text-muted-foreground">{t('lakshya.yourJourney')}</p>
                   </div>
                 </div>
 
@@ -212,17 +206,16 @@ const Lakshya = () => {
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6">
                       <div className="text-center p-3 rounded-lg bg-foreground/5">
                         <p className="text-2xl font-display text-foreground">{progress.total_meditation_minutes}</p>
-                        <p className="text-xs text-muted-foreground">Meditation Mins</p>
+                        <p className="text-xs text-muted-foreground">{t('lakshya.meditationMins')}</p>
                       </div>
                       <div className="text-center p-3 rounded-lg bg-foreground/5">
                         <p className="text-2xl font-display text-foreground">{progress.total_mantra_lessons}</p>
-                        <p className="text-xs text-muted-foreground">Mantras Learned</p>
+                        <p className="text-xs text-muted-foreground">{t('lakshya.mantrasLearned')}</p>
                       </div>
                       <div className="text-center p-3 rounded-lg bg-foreground/5">
                         <p className="text-2xl font-display text-foreground">{progress.total_games_played}</p>
-                        <p className="text-xs text-muted-foreground">Games Played</p>
+                        <p className="text-xs text-muted-foreground">{t('lakshya.gamesPlayed')}</p>
                       </div>
-                      {/* Interactive Sadhana Flame */}
                       <div className="flex items-center justify-center p-3 rounded-lg bg-foreground/5">
                         <SadhanaFlame streak={progress.current_streak} />
                       </div>
@@ -231,13 +224,11 @@ const Lakshya = () => {
                 )}
               </div>
 
-              {/* Karma Display */}
               <div className="space-y-4">
                 <div className="rounded-xl p-4 sm:p-5 md:p-6 bg-gradient-to-br from-amber-500/10 via-orange-500/5 to-yellow-500/10 border border-amber-500/20 backdrop-blur-sm">
                   {progress && <KarmaDisplay progress={progress} />}
                 </div>
                 
-                {/* Multiplier Display */}
                 <MultiplierDisplay
                   sessionGamesCompleted={sessionGamesCompleted}
                   currentStreak={progress?.current_streak || 0}
@@ -256,9 +247,9 @@ const Lakshya = () => {
                 </div>
                 <div>
                   <h2 className="font-display text-lg tracking-wider text-foreground">
-                    Chakra Awakening
+                    {t('lakshya.chakraAwakening')}
                   </h2>
-                  <p className="text-xs text-muted-foreground">Unlock chakras as you progress</p>
+                  <p className="text-xs text-muted-foreground">{t('lakshya.unlockChakras')}</p>
                 </div>
               </div>
               
@@ -273,9 +264,9 @@ const Lakshya = () => {
                 </div>
                 <div>
                   <h2 className="font-display text-lg tracking-wider text-foreground">
-                    Peace Meditation Games
+                    {t('lakshya.peaceGames')}
                   </h2>
-                  <p className="text-xs text-muted-foreground">Relaxing games for mindful practice</p>
+                  <p className="text-xs text-muted-foreground">{t('lakshya.peaceGamesDesc')}</p>
                 </div>
               </div>
 
@@ -288,18 +279,17 @@ const Lakshya = () => {
                   className="group relative p-4 sm:p-5 md:p-6 rounded-xl bg-gradient-to-br from-cyan-500/10 via-blue-500/10 to-indigo-500/10 border border-cyan-500/20 hover:border-cyan-500/40 transition-all text-left overflow-hidden"
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                  
                   <div className="relative z-10">
                     <div className="w-12 h-12 rounded-full bg-cyan-500/20 flex items-center justify-center mb-4">
                       <Wind className="w-6 h-6 text-cyan-400" />
                     </div>
-                    <h3 className="font-display text-lg text-foreground mb-2">Breath Flow Journey</h3>
+                    <h3 className="font-display text-lg text-foreground mb-2">{t('lakshya.breathFlow')}</h3>
                     <p className="text-sm text-muted-foreground mb-4">
-                      Control glowing energy with your breathing rhythm
+                      {t('lakshya.breathFlowDesc')}
                     </p>
                     <div className="flex items-center gap-2 text-xs text-cyan-400">
                       <Star className="w-3 h-3" />
-                      <span>+10-50 Karma per session</span>
+                      <span>{t('lakshya.karmaPerSession')}</span>
                     </div>
                   </div>
                 </motion.button>
@@ -312,23 +302,22 @@ const Lakshya = () => {
                   className="group relative p-4 sm:p-5 md:p-6 rounded-xl bg-gradient-to-br from-indigo-500/10 via-purple-500/10 to-violet-500/10 border border-indigo-500/20 hover:border-indigo-500/40 transition-all text-left overflow-hidden"
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                  
                   <div className="relative z-10">
                     <div className="w-12 h-12 rounded-full bg-indigo-500/20 flex items-center justify-center mb-4">
                       <Puzzle className="w-6 h-6 text-indigo-400" />
                     </div>
-                    <h3 className="font-display text-lg text-foreground mb-2">Chakra Alignment</h3>
+                    <h3 className="font-display text-lg text-foreground mb-2">{t('lakshya.chakraAlignment')}</h3>
                     <p className="text-sm text-muted-foreground mb-4">
-                      Align glowing chakra symbols into harmony
+                      {t('lakshya.chakraAlignmentDesc')}
                     </p>
                     <div className="flex items-center gap-2 text-xs text-indigo-400">
                       <Star className="w-3 h-3" />
-                      <span>+15-50 Karma per puzzle</span>
+                      <span>{t('lakshya.karmaPerPuzzle')}</span>
                     </div>
                   </div>
                 </motion.button>
 
-                {/* Divine Match Game - NEW */}
+                {/* Divine Match Game */}
                 <motion.button
                   onClick={() => setActiveGame('divine-match')}
                   whileHover={{ scale: 1.02 }}
@@ -336,23 +325,20 @@ const Lakshya = () => {
                   className="group relative p-4 sm:p-5 md:p-6 rounded-xl bg-gradient-to-br from-purple-500/10 via-fuchsia-500/10 to-pink-500/10 border border-purple-500/20 hover:border-purple-500/40 transition-all text-left overflow-hidden"
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                  
-                  {/* NEW badge */}
                   <div className="absolute top-3 right-3 px-2 py-0.5 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 text-white text-[10px] font-bold">
-                    NEW
+                    {t('common.new')}
                   </div>
-                  
                   <div className="relative z-10">
                     <div className="w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center mb-4">
                       <Grid3X3 className="w-6 h-6 text-purple-400" />
                     </div>
-                    <h3 className="font-display text-lg text-foreground mb-2">Divine Match</h3>
+                    <h3 className="font-display text-lg text-foreground mb-2">{t('lakshya.divineMatch')}</h3>
                     <p className="text-sm text-muted-foreground mb-4">
-                      Match spiritual symbols to clear obstacles
+                      {t('lakshya.divineMatchDesc')}
                     </p>
                     <div className="flex items-center gap-2 text-xs text-purple-400">
                       <Star className="w-3 h-3" />
-                      <span>+25-70 Karma per level</span>
+                      <span>{t('lakshya.karmaPerLevel')}</span>
                     </div>
                   </div>
                 </motion.button>
@@ -365,18 +351,17 @@ const Lakshya = () => {
                   className="group relative p-4 sm:p-5 md:p-6 rounded-xl bg-gradient-to-br from-emerald-500/10 via-green-500/10 to-teal-500/10 border border-emerald-500/20 hover:border-emerald-500/40 transition-all text-left overflow-hidden"
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                  
                   <div className="relative z-10">
                     <div className="w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center mb-4">
                       <Flower2 className="w-6 h-6 text-emerald-400" />
                     </div>
-                    <h3 className="font-display text-lg text-foreground mb-2">Inner Calm Garden</h3>
+                    <h3 className="font-display text-lg text-foreground mb-2">{t('lakshya.innerGarden')}</h3>
                     <p className="text-sm text-muted-foreground mb-4">
-                      Grow a peaceful digital garden through practice
+                      {t('lakshya.gardenGrow')}
                     </p>
                     <div className="flex items-center gap-2 text-xs text-emerald-400">
                       <Star className="w-3 h-3" />
-                      <span>+5-25 Karma per growth</span>
+                      <span>{t('lakshya.karmaPerGrowth')}</span>
                     </div>
                   </div>
                 </motion.button>
@@ -398,8 +383,8 @@ const Lakshya = () => {
                 className="p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors text-center"
               >
                 <span className="text-2xl mb-2 block">🎵</span>
-                <span className="text-sm text-foreground">Sonic Lab</span>
-                <p className="text-xs text-muted-foreground">Earn +10 Karma/min</p>
+                <span className="text-sm text-foreground">{t('feature.sonicLab')}</span>
+                <p className="text-xs text-muted-foreground">{t('lakshya.earnKarmaMin')}</p>
               </button>
               
               <button
@@ -407,8 +392,8 @@ const Lakshya = () => {
                 className="p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors text-center"
               >
                 <span className="text-2xl mb-2 block">🕉️</span>
-                <span className="text-sm text-foreground">Mantrochar</span>
-                <p className="text-xs text-muted-foreground">Earn +25 Karma/lesson</p>
+                <span className="text-sm text-foreground">{t('feature.mantrochar')}</span>
+                <p className="text-xs text-muted-foreground">{t('lakshya.earnKarmaLesson')}</p>
               </button>
               
               <button
@@ -416,8 +401,8 @@ const Lakshya = () => {
                 className="p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors text-center"
               >
                 <span className="text-2xl mb-2 block">📊</span>
-                <span className="text-sm text-foreground">Dashboard</span>
-                <p className="text-xs text-muted-foreground">View full stats</p>
+                <span className="text-sm text-foreground">{t('menu.dashboard')}</span>
+                <p className="text-xs text-muted-foreground">{t('lakshya.viewFullStats')}</p>
               </button>
               
               <button
@@ -425,8 +410,8 @@ const Lakshya = () => {
                 className="p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors text-center"
               >
                 <span className="text-2xl mb-2 block">⚙️</span>
-                <span className="text-sm text-foreground">Settings</span>
-                <p className="text-xs text-muted-foreground">Manage account</p>
+                <span className="text-sm text-foreground">{t('lakshya.settings')}</span>
+                <p className="text-xs text-muted-foreground">{t('lakshya.manageAccount')}</p>
               </button>
             </div>
           </>

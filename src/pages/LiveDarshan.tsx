@@ -54,6 +54,7 @@ const LiveDarshan = () => {
 
   // Initialize favorite aarti notifications
   useFavoriteAartiNotifications();
+
   // Filter temples
   const filteredTemples = useMemo(() => {
     return temples.filter(temple => {
@@ -80,6 +81,17 @@ const LiveDarshan = () => {
   // Featured temples
   const featuredTemples = temples.filter(t => t.isFeatured && t.isLive).slice(0, 3);
   const trendingTemples = [...temples].sort((a, b) => (b.viewerCount || 0) - (a.viewerCount || 0)).slice(0, 4);
+
+  const contentFilters = [
+    { value: 'all', label: t('darshan.contentAll'), icon: Sparkles },
+    { value: 'bhajan', label: t('darshan.contentBhajans'), icon: Music },
+    { value: 'aarti', label: t('darshan.contentAarti'), icon: Zap },
+    { value: 'mantra', label: t('darshan.contentMantras'), icon: Sparkles },
+    { value: 'pravachan', label: t('darshan.contentPravachan'), icon: BookOpen },
+    { value: 'discourse', label: t('darshan.contentDiscourses'), icon: BookOpen },
+    { value: 'meditation', label: t('darshan.contentMeditation'), icon: Sparkles },
+    { value: 'short', label: t('darshan.contentShorts'), icon: Video },
+  ];
 
    return (
      <PageTransition>
@@ -123,7 +135,7 @@ const LiveDarshan = () => {
               <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-destructive/20 rounded-full">
                 <Radio className="w-4 h-4 text-destructive animate-pulse" />
                 <span className="text-sm text-destructive">
-                  {temples.filter(t => t.isLive).length} Live
+                  {temples.filter(t => t.isLive).length} {t('darshan.liveCount')}
                 </span>
               </div>
             </div>
@@ -134,7 +146,7 @@ const LiveDarshan = () => {
         <div className="relative mb-8">
           <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
           <Input
-            placeholder="Search temples, content..."
+            placeholder={t('darshan.searchPlaceholder')}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-12 h-12 bg-card border-border/50 text-lg"
@@ -146,11 +158,11 @@ const LiveDarshan = () => {
           <TabsList className="bg-card border border-border/50">
             <TabsTrigger value="temples" className="gap-2">
               <Play className="w-4 h-4" />
-              Live Temples
+              {t('darshan.liveTemples')}
             </TabsTrigger>
             <TabsTrigger value="content" className="gap-2">
               <Video className="w-4 h-4" />
-              Daily Aarti
+              {t('darshan.dailyAarti')}
             </TabsTrigger>
           </TabsList>
 
@@ -161,7 +173,7 @@ const LiveDarshan = () => {
               <section>
                 <div className="flex items-center gap-2 mb-6">
                   <Sparkles className="w-5 h-5 text-primary" />
-                  <h2 className="font-display text-xl text-foreground">Featured Live</h2>
+                  <h2 className="font-display text-xl text-foreground">{t('darshan.featuredLive')}</h2>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   {featuredTemples.map((temple, index) => (
@@ -187,7 +199,7 @@ const LiveDarshan = () => {
               <section>
                 <div className="flex items-center gap-2 mb-6">
                   <TrendingUp className="w-5 h-5 text-primary" />
-                  <h2 className="font-display text-xl text-foreground">Trending Now</h2>
+                  <h2 className="font-display text-xl text-foreground">{t('darshan.trendingNow')}</h2>
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   {trendingTemples.map((temple, index) => (
@@ -225,10 +237,10 @@ const LiveDarshan = () => {
             <section>
               <div className="flex items-center justify-between mb-6">
                 <h2 className="font-display text-xl text-foreground">
-                  {searchQuery ? 'Search Results' : 'All Temples'}
+                  {searchQuery ? t('darshan.searchResults') : t('darshan.allTemples')}
                 </h2>
                 <span className="text-sm text-muted-foreground">
-                  {filteredTemples.length} temples
+                  {filteredTemples.length} {t('darshan.temples')}
                 </span>
               </div>
               
@@ -250,7 +262,7 @@ const LiveDarshan = () => {
                 </div>
               ) : (
                 <div className="text-center py-16">
-                  <p className="text-muted-foreground">No temples found matching your criteria</p>
+                  <p className="text-muted-foreground">{t('darshan.noTemples')}</p>
                 </div>
               )}
             </section>
@@ -260,16 +272,7 @@ const LiveDarshan = () => {
           <TabsContent value="content" className="space-y-8">
             {/* Content Type Filter */}
             <div className="flex flex-wrap gap-2">
-              {[
-                { value: 'all', label: '✨ All', icon: Sparkles },
-                { value: 'bhajan', label: '🎵 Bhajans', icon: Music },
-                { value: 'aarti', label: '🪔 Aarti', icon: Zap },
-                { value: 'mantra', label: '🕉️ Mantras', icon: Sparkles },
-                { value: 'pravachan', label: '🎙️ Pravachan', icon: BookOpen },
-                { value: 'discourse', label: '📖 Discourses', icon: BookOpen },
-                { value: 'meditation', label: '🧘 Meditation', icon: Sparkles },
-                { value: 'short', label: '📱 Shorts', icon: Video }
-              ].map(({ value, label }) => (
+              {contentFilters.map(({ value, label }) => (
                 <Button
                   key={value}
                   variant={contentType === value ? 'default' : 'outline'}
@@ -300,7 +303,7 @@ const LiveDarshan = () => {
 
             {filteredContent.length === 0 && (
               <div className="text-center py-16">
-                <p className="text-muted-foreground">No content found</p>
+                <p className="text-muted-foreground">{t('darshan.noContent')}</p>
               </div>
             )}
           </TabsContent>
