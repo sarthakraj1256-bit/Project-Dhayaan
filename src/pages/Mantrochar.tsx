@@ -12,8 +12,16 @@ import { useMantraProgress } from '@/hooks/useMantraProgress';
 import BottomNav from '@/components/BottomNav';
 import { useInfiniteScroll } from '@/hooks/useLazyLoad';
 import { CardSkeleton } from '@/components/LazyCard';
+import { TranslationKey } from '@/i18n/translations';
 
 const difficultyOrder = ['beginner', 'intermediate', 'advanced', 'mastery'] as const;
+
+const difficultyKeyMap: Record<string, TranslationKey> = {
+  beginner: 'mantrochar.beginner',
+  intermediate: 'mantrochar.intermediate',
+  advanced: 'mantrochar.advanced',
+  mastery: 'mantrochar.mastery',
+};
  
  const Mantrochar = () => {
    const { t } = useLanguage();
@@ -48,11 +56,9 @@ const difficultyOrder = ['beginner', 'intermediate', 'advanced', 'mastery'] as c
      ? mantras 
      : getMantrasByDifficulty(activeFilter);
  
-   // If a mantra is selected, show the lesson view
    if (selectedMantra) {
      return (
         <div className="min-h-screen bg-background relative overflow-hidden">
-          {/* Background */}
           <div className="fixed inset-0 z-0">
             <div className="absolute inset-0 bg-gradient-to-b from-background via-card/20 to-background" />
            <div 
@@ -76,11 +82,17 @@ const difficultyOrder = ['beginner', 'intermediate', 'advanced', 'mastery'] as c
        </div>
      );
    }
+
+   const filterLabels: Record<string, string> = {
+     all: t('mantrochar.allMantras'),
+     beginner: t('mantrochar.beginner'),
+     intermediate: t('mantrochar.intermediate'),
+     advanced: t('mantrochar.advanced'),
+   };
  
    return (
      <PageTransition>
       <div className="min-h-screen bg-background relative overflow-hidden">
-        {/* Background */}
         <div className="fixed inset-0 z-0">
           <div className="absolute inset-0 bg-gradient-to-b from-background via-card/20 to-background" />
          <div 
@@ -93,7 +105,6 @@ const difficultyOrder = ['beginner', 'intermediate', 'advanced', 'mastery'] as c
          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-primary/5 rounded-full blur-[150px]" />
        </div>
  
-       {/* Content */}
        <div className="relative z-10 pb-24 md:pb-0">
          {/* Header */}
          <header className="sticky top-0 z-40 h-14 px-4 flex items-center justify-between bg-background/85 backdrop-blur-xl border-b border-border/50">
@@ -127,7 +138,7 @@ const difficultyOrder = ['beginner', 'intermediate', 'advanced', 'mastery'] as c
              className="max-w-2xl mx-auto"
            >
               <h2 className="font-display text-3xl md:text-4xl tracking-wider text-foreground mb-4">
-                Learn to <span className="text-gold-gradient">Chant</span> Correctly
+                {t('mantrochar.learnWord')} <span className="text-gold-gradient">{t('mantrochar.chantWord')}</span> {t('mantrochar.correctlyWord')}
               </h2>
             </motion.div>
  
@@ -144,7 +155,7 @@ const difficultyOrder = ['beginner', 'intermediate', 'advanced', 'mastery'] as c
                    {isLoading ? (
                      <Loader2 className="w-3 h-3 animate-spin inline" />
                    ) : (
-                     `${completedMantraIds.length} / ${mantras.length} Learned`
+                     `${completedMantraIds.length} / ${mantras.length} ${t('mantrochar.learned')}`
                    )}
                </span>
              </div>
@@ -152,7 +163,7 @@ const difficultyOrder = ['beginner', 'intermediate', 'advanced', 'mastery'] as c
                <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-amber-500/10 border border-amber-500/20">
                  <Flame className="w-4 h-4 text-amber-400" />
                  <span className="text-sm text-foreground">
-                     {completedMantraIds.length} day streak
+                     {completedMantraIds.length} {t('mantrochar.dayStreak')}
                  </span>
                </div>
              )}
@@ -171,7 +182,7 @@ const difficultyOrder = ['beginner', 'intermediate', 'advanced', 'mastery'] as c
                    className="inline-flex items-center gap-2 text-sm text-primary/70 hover:text-primary transition-colors"
                  >
                    <LogIn className="w-4 h-4" />
-                   Sign in to save your progress
+                   {t('auth.signInToSave')}
                  </Link>
                </motion.div>
              )}
@@ -192,7 +203,7 @@ const difficultyOrder = ['beginner', 'intermediate', 'advanced', 'mastery'] as c
                    }
                  `}
                >
-                 {filter === 'all' ? 'All Mantras' : filter.charAt(0).toUpperCase() + filter.slice(1)}
+                 {filterLabels[filter]}
                </button>
              ))}
            </div>
@@ -200,7 +211,6 @@ const difficultyOrder = ['beginner', 'intermediate', 'advanced', 'mastery'] as c
  
          {/* Mantra Library */}
          <main className="px-6 pb-16 max-w-5xl mx-auto">
-           {/* Group by difficulty */}
            {difficultyOrder.map((difficulty) => {
              const mantrasInDifficulty = filteredMantras.filter(m => m.difficulty === difficulty);
              if (mantrasInDifficulty.length === 0) return null;
@@ -214,11 +224,11 @@ const difficultyOrder = ['beginner', 'intermediate', 'advanced', 'mastery'] as c
                >
                  <div className="flex items-center gap-3 mb-4">
                    <h3 className="font-display text-sm tracking-widest text-muted-foreground uppercase">
-                     {difficulty}
+                     {difficultyKeyMap[difficulty] ? t(difficultyKeyMap[difficulty]) : difficulty}
                    </h3>
                    <div className="h-px flex-1 bg-border" />
                    <span className="text-xs text-muted-foreground">
-                     {mantrasInDifficulty.length} mantras
+                     {mantrasInDifficulty.length} {t('mantrochar.mantras')}
                    </span>
                  </div>
  
@@ -251,18 +261,17 @@ const difficultyOrder = ['beginner', 'intermediate', 'advanced', 'mastery'] as c
                  </div>
                  <div className="flex-1 text-center md:text-left">
                    <h3 className="font-display text-lg text-foreground mb-2">
-                     Enhance with Frequencies
+                     {t('mantrochar.enhanceFreq')}
                    </h3>
                    <p className="text-sm text-muted-foreground">
-                     Combine your mantra practice with healing frequencies from the Sonic Lab.
-                     Try chanting with 432Hz or 528Hz background for deeper resonance.
+                     {t('mantrochar.enhanceDesc')}
                    </p>
                  </div>
                  <Link
                    to="/sonic-lab"
                    className="px-6 py-3 rounded-full bg-primary/20 border border-primary/50 text-primary font-display text-sm tracking-wider hover:bg-primary/30 transition-colors"
                  >
-                   Open Sonic Lab
+                   {t('mantrochar.openSonicLab')}
                  </Link>
                </div>
              </motion.div>
@@ -272,7 +281,7 @@ const difficultyOrder = ['beginner', 'intermediate', 'advanced', 'mastery'] as c
          {/* Footer */}
         <footer className="border-t border-border/30 px-6 py-8 text-center">
           <p className="text-xs text-muted-foreground/50">
-            "मन्त्र साधना" — The Practice of Sacred Sound
+            {t('mantrochar.sacredSound')}
           </p>
         </footer>
 

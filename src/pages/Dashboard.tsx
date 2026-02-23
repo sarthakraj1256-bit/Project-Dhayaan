@@ -13,7 +13,7 @@ const Dashboard = () => {
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
 
   useEffect(() => {
     const getUser = async () => {
@@ -29,14 +29,14 @@ const Dashboard = () => {
     try {
       await supabase.auth.signOut();
       toast({
-        title: "Signed out successfully",
-        description: "You have been logged out of your account.",
+        title: t('dashboard.signedOut'),
+        description: t('dashboard.signedOutDesc'),
       });
       navigate("/auth");
     } catch (error) {
       toast({
-        title: "Sign out failed",
-        description: "There was an error signing out. Please try again.",
+        title: t('dashboard.signOutFailed'),
+        description: t('dashboard.signOutFailedDesc'),
         variant: "destructive",
       });
     }
@@ -49,7 +49,7 @@ const Dashboard = () => {
           <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">
             <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
           </div>
-          <p className="text-muted-foreground font-body">Loading dashboard...</p>
+          <p className="text-muted-foreground font-body">{t('dashboard.loadingDashboard')}</p>
         </div>
       </div>
     );
@@ -89,11 +89,10 @@ const Dashboard = () => {
           {/* Welcome Section */}
           <div className="glass-card p-8 mb-8">
             <h2 className="font-display text-3xl text-foreground mb-4 tracking-wider">
-              Welcome to Your Sacred Space
+              {t('dashboard.welcome')}
             </h2>
             <p className="text-muted-foreground font-body text-lg leading-relaxed">
-              You have successfully accessed the protected dashboard. This demonstrates
-              that the ProtectedRoute wrapper is functioning correctly.
+              {t('dashboard.welcomeDesc')}
             </p>
           </div>
 
@@ -107,7 +106,7 @@ const Dashboard = () => {
             >
               <h3 className="font-display text-xl text-foreground mb-6 tracking-wider flex items-center gap-2">
                 <UserIcon className="w-5 h-5 text-primary" />
-                Your Profile
+                {t('dashboard.yourProfile')}
               </h3>
 
               <div className="space-y-4">
@@ -115,7 +114,7 @@ const Dashboard = () => {
                   <Mail className="w-5 h-5 text-primary/70" />
                   <div>
                     <p className="text-xs text-muted-foreground tracking-wider uppercase mb-1">
-                      Email
+                      {t('profile.email')}
                     </p>
                     <p className="text-foreground font-body">{user.email}</p>
                   </div>
@@ -125,7 +124,7 @@ const Dashboard = () => {
                   <UserIcon className="w-5 h-5 text-primary/70" />
                   <div>
                     <p className="text-xs text-muted-foreground tracking-wider uppercase mb-1">
-                      User ID
+                      {t('dashboard.userId')}
                     </p>
                     <p className="text-foreground font-mono text-sm">{user.id}</p>
                   </div>
@@ -135,10 +134,10 @@ const Dashboard = () => {
                   <Calendar className="w-5 h-5 text-primary/70" />
                   <div>
                     <p className="text-xs text-muted-foreground tracking-wider uppercase mb-1">
-                      Member Since
+                      {t('dashboard.memberSince')}
                     </p>
                     <p className="text-foreground font-body">
-                      {new Date(user.created_at).toLocaleDateString('en-US', {
+                      {new Date(user.created_at).toLocaleDateString(language === 'hi' ? 'hi-IN' : 'en-US', {
                         year: 'numeric',
                         month: 'long',
                         day: 'numeric',
@@ -162,7 +161,7 @@ const Dashboard = () => {
               variant="outline"
               className="border-primary/30 hover:border-primary/50 hover:bg-primary/5"
             >
-              Return to Home
+              {t('dashboard.returnHome')}
             </Button>
           </motion.div>
         </motion.div>
