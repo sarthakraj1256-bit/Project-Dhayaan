@@ -18,6 +18,7 @@ import {
   PhilosophySection,
   FinalCTASection,
 } from '@/components/home';
+import DevoteeExperiences from '@/components/DevoteeExperiences';
 import ChildrenCartoonsSection from '@/components/home/ChildrenCartoonsSection';
 import SectionNav from '@/components/home/SectionNav';
 import WavyBackground from '@/components/home/WavyBackground';
@@ -54,6 +55,7 @@ const Index = () => {
         <div id="highlights"><DailyHighlightsSection /></div>
         <div id="philosophy"><PhilosophySection /></div>
         <FinalCTASection />
+        <div id="reviews"><DevoteeExperiences /></div>
       </main>
 
       {/* Navigation - Fixed Top Right */}
