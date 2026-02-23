@@ -59,14 +59,14 @@ const Index = () => {
       </main>
 
       {/* Navigation - Fixed Top Right */}
-      <div className="fixed top-4 right-4 z-50 flex items-center gap-2">
+      <div className="fixed top-3.5 right-3.5 sm:top-4 sm:right-5 z-50 flex items-center gap-2">
          <LanguageToggle />
          {user ? (
            <UserMenu user={user} />
          ) : (
            <Link
              to="/auth"
-             className="flex items-center gap-2 px-3.5 py-2 rounded-full bg-card/80 backdrop-blur-sm border border-border/60 text-sm font-medium text-foreground/80 shadow-sm transition-all duration-200 hover:bg-card active:scale-95"
+             className="flex items-center gap-2 px-3.5 py-2 rounded-full bg-card/80 backdrop-blur-sm border border-border/50 text-xs sm:text-sm font-medium text-foreground/75 shadow-sm transition-all duration-200 hover:bg-card active:scale-95"
            >
              <LogIn className="w-4 h-4 text-primary" />
              {t('auth.signIn')}
