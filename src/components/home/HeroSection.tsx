@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { supabase } from '@/integrations/backend/client';
 import { User } from '@supabase/supabase-js';
 import { useLanguage } from '@/contexts/LanguageContext';
-import dhyaanLogo from '@/assets/dhyaan-logo.png';
+
 
 interface HeroSectionProps {
   user?: User | null;
@@ -55,15 +55,7 @@ export default function HeroSection({ user }: HeroSectionProps) {
           {greetingText}
         </p>
 
-        <div className="mt-3 flex items-center gap-3">
-          <motion.img
-            src={dhyaanLogo}
-            alt="Dhyaan"
-            className="w-12 h-12 object-contain"
-            initial={{ scale: 0, rotate: -30 }}
-            animate={{ scale: 1, rotate: 0 }}
-            transition={{ delay: 0.3, type: 'spring', stiffness: 200 }}
-          />
+        <div className="mt-3">
           <h1 className="relative">
             <span
               className="text-5xl font-extralight italic tracking-[0.12em] text-gold-gradient"
