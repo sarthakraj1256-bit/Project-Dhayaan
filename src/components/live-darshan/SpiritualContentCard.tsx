@@ -13,7 +13,7 @@ interface SpiritualContentCardProps {
 const typeLabels: Record<SpiritualContent['type'], { label: string; color: string }> = {
   bhajan: { label: '🎵 Bhajan', color: 'bg-purple-600' },
   discourse: { label: '📖 Discourse', color: 'bg-blue-600' },
-  aarti: { label: '🪔 Aarti', color: 'bg-orange-600' },
+  aarti: { label: '🪔 Aarati', color: 'bg-orange-600' },
   meditation: { label: '🧘 Meditation', color: 'bg-green-600' },
   short: { label: '📱 Short', color: 'bg-pink-600' },
   mantra: { label: '🕉️ Mantra', color: 'bg-amber-600' },

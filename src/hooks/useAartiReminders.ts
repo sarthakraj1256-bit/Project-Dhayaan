@@ -20,14 +20,14 @@ interface AartiRemindersState {
 const DEFAULT_STATE: AartiRemindersState = {
   morningReminder: {
     id: 'morning',
-    name: 'Morning Aarti',
+    name: 'Morning Aarati',
     time: '06:00',
     enabled: true,
     temple: 'All Temples'
   },
   eveningReminder: {
     id: 'evening',
-    name: 'Evening Aarti',
+    name: 'Evening Aarati',
     time: '19:00',
     enabled: true,
     temple: 'All Temples'
@@ -96,7 +96,7 @@ export const useAartiReminders = () => {
       }));
       
       if (granted) {
-        toast.success('Notifications enabled! You will receive Aarti reminders.');
+        toast.success('Notifications enabled! You will receive Aarati reminders.');
       } else {
         toast.error('Notification permission denied');
       }

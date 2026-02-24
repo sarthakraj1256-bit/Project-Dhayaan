@@ -25,9 +25,9 @@ const ShareFavoritesButton = ({ favoriteTemples }: ShareFavoritesButtonProps) =>
   
   const shareText = favoriteTemples.length > 0
     ? `🙏 My favorite temples for daily darshan: ${templeNames}${moreCount}. Experience live aarti and spiritual bliss with Dhyaan!`
-    : '🙏 Discover live temple darshan and aarti timings with Dhyaan!';
+    : '🙏 Discover live temple darshan and aarati timings with Dhyaan!';
 
-  const hashtags = 'Dhyaan,LiveDarshan,Temple,Aarti,Spirituality';
+  const hashtags = 'Dhyaan,LiveDarshan,Temple,Aarati,Spirituality';
 
   const shareLinks = {
     twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}&hashtags=${hashtags}`,

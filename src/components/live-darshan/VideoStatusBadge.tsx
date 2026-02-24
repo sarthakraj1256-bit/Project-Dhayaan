@@ -16,7 +16,7 @@ const VideoStatusBadge = ({ streamStatus, templeName, compact = false }: VideoSt
         return {
           icon: Radio,
           text: 'LIVE',
-          label: `Live Aarti from ${templeName}`,
+          label: `Live Aarati from ${templeName}`,
           className: 'bg-destructive text-destructive-foreground',
           animate: true,
         };

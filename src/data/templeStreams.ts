@@ -72,19 +72,19 @@ export const temples: Temple[] = [
     category: 'shakti_peeth',
     region: 'north',
     description: 'One of the holiest Hindu temples dedicated to Goddess Vaishno Devi',
-    liveFeatures: ['Daily Aarti streaming', 'Pilgrim darshan camera', 'Festival ritual broadcasts'],
+    liveFeatures: ['Daily Aarati streaming', 'Pilgrim darshan camera', 'Festival ritual broadcasts'],
     youtubeVideoId: 'zGDzdps75ns', // Live Darshan
-    recordedVideoId: '_WxL5l0vnEA', // Vaishno Devi Bhajan & Aarti Videos
+    recordedVideoId: '_WxL5l0vnEA', // Vaishno Devi Bhajan & Aarati Videos
     backupAmbienceId: 'HaGHAyS6xJc',
     isLive: true,
     isFeatured: true,
     viewerCount: 8932,
     thumbnail: '/temples/vaishno-devi.jpg',
     aartiSchedule: [
-      { name: 'Mangla Aarti', time: '05:00', duration: 30, description: 'Morning awakening' },
-      { name: 'Bhog Aarti', time: '12:00', duration: 30, description: 'Midday offering' },
-      { name: 'Sandhya Aarti', time: '19:00', duration: 30, description: 'Evening ceremony' },
-      { name: 'Shayan Aarti', time: '21:00', duration: 20, description: 'Night closing' }
+      { name: 'Mangla Aarati', time: '05:00', duration: 30, description: 'Morning awakening' },
+      { name: 'Bhog Aarati', time: '12:00', duration: 30, description: 'Midday offering' },
+      { name: 'Sandhya Aarati', time: '19:00', duration: 30, description: 'Evening ceremony' },
+      { name: 'Shayan Aarati', time: '21:00', duration: 20, description: 'Night closing' }
     ]
   },
   {
@@ -95,20 +95,20 @@ export const temples: Temple[] = [
     category: 'jyotirlinga',
     region: 'north',
     description: 'One of the most famous Hindu temples dedicated to Lord Shiva',
-    liveFeatures: ['Mangala Aarti livestream', 'Ganga Aarti connection', 'Shiv Abhishek coverage'],
-    youtubeVideoId: '6FMPGsGEs7c', // Live Ganga & Mangala Aarti
-    recordedVideoId: 'W2YsBMdJEKM', // Kashi Vishwanath Aarti Playlist
+    liveFeatures: ['Mangala Aarati livestream', 'Ganga Aarati connection', 'Shiv Abhishek coverage'],
+    youtubeVideoId: '6FMPGsGEs7c', // Live Ganga & Mangala Aarati
+    recordedVideoId: 'W2YsBMdJEKM', // Kashi Vishwanath Aarati Playlist
     backupAmbienceId: 'q8mWMlQBdFE',
     isLive: true,
     isFeatured: true,
     viewerCount: 12450,
     thumbnail: '/temples/kashi-vishwanath.jpg',
     aartiSchedule: [
-      { name: 'Mangala Aarti', time: '03:00', duration: 45, description: 'Pre-dawn worship' },
-      { name: 'Bhog Aarti', time: '11:30', duration: 30, description: 'Midday offering' },
-      { name: 'Sandhya Aarti', time: '19:00', duration: 45, description: 'Evening Ganga Aarti' },
-      { name: 'Shringar Aarti', time: '21:00', duration: 30, description: 'Night decoration' },
-      { name: 'Shayan Aarti', time: '22:30', duration: 20 }
+      { name: 'Mangala Aarati', time: '03:00', duration: 45, description: 'Pre-dawn worship' },
+      { name: 'Bhog Aarati', time: '11:30', duration: 30, description: 'Midday offering' },
+      { name: 'Sandhya Aarati', time: '19:00', duration: 45, description: 'Evening Ganga Aarati' },
+      { name: 'Shringar Aarati', time: '21:00', duration: 30, description: 'Night decoration' },
+      { name: 'Shayan Aarati', time: '22:30', duration: 20 }
     ]
   },
   {
@@ -143,18 +143,18 @@ export const temples: Temple[] = [
     category: 'jyotirlinga',
     region: 'west',
     description: 'First among the twelve Jyotirlinga shrines of Lord Shiva',
-    liveFeatures: ['Shiv Aarti livestream', 'Ocean temple ambience', 'Mahashivratri special'],
-    youtubeVideoId: 'yfSLuEj99aE', // Somnath Live Aarti
-    recordedVideoId: 'Rk_Z1kLJvnc', // Somnath Evening Aarti Videos
+    liveFeatures: ['Shiv Aarati livestream', 'Ocean temple ambience', 'Mahashivratri special'],
+    youtubeVideoId: 'yfSLuEj99aE', // Somnath Live Aarati
+    recordedVideoId: 'Rk_Z1kLJvnc', // Somnath Evening Aarati Videos
     backupAmbienceId: 'q8mWMlQBdFE',
     isLive: true,
     isFeatured: false,
     viewerCount: 6780,
     thumbnail: '/temples/somnath.jpg',
     aartiSchedule: [
-      { name: 'Mangala Aarti', time: '06:00', duration: 30 },
-      { name: 'Madhyan Aarti', time: '12:00', duration: 20 },
-      { name: 'Sandhya Aarti', time: '19:00', duration: 45, description: 'Sunset by Arabian Sea' },
+      { name: 'Mangala Aarati', time: '06:00', duration: 30 },
+      { name: 'Madhyan Aarati', time: '12:00', duration: 20 },
+      { name: 'Sandhya Aarati', time: '19:00', duration: 45, description: 'Sunset by Arabian Sea' },
       { name: 'Light & Sound Show', time: '20:00', duration: 45 }
     ]
   },
@@ -165,20 +165,20 @@ export const temples: Temple[] = [
     deity: 'shiva',
     category: 'jyotirlinga',
     region: 'west',
-    description: 'Famous for the Bhasma Aarti performed with sacred ash',
-    liveFeatures: ['Famous Bhasma Aarti', 'Daily Shiv worship', 'Festival streams'],
-    youtubeVideoId: 'n3k-D6GdXRc', // Mahakaleshwar Bhasma Aarti Live
-    recordedVideoId: 'Rk_Z1kLJvnc', // Bhasma Aarti Recorded Playlist
+    description: 'Famous for the Bhasma Aarati performed with sacred ash',
+    liveFeatures: ['Famous Bhasma Aarati', 'Daily Shiv worship', 'Festival streams'],
+    youtubeVideoId: 'n3k-D6GdXRc', // Mahakaleshwar Bhasma Aarati Live
+    recordedVideoId: 'Rk_Z1kLJvnc', // Bhasma Aarati Recorded Playlist
     backupAmbienceId: 'q8mWMlQBdFE',
     isLive: true,
     isFeatured: true,
     viewerCount: 9340,
     thumbnail: '/temples/mahakaleshwar.jpg',
     aartiSchedule: [
-      { name: 'Bhasma Aarti', time: '04:00', duration: 60, description: 'Famous ash ceremony' },
-      { name: 'Madhyan Aarti', time: '10:30', duration: 30 },
-      { name: 'Sandhya Aarti', time: '18:30', duration: 30 },
-      { name: 'Shayan Aarti', time: '22:30', duration: 20 }
+      { name: 'Bhasma Aarati', time: '04:00', duration: 60, description: 'Famous ash ceremony' },
+      { name: 'Madhyan Aarati', time: '10:30', duration: 30 },
+      { name: 'Sandhya Aarati', time: '18:30', duration: 30 },
+      { name: 'Shayan Aarati', time: '22:30', duration: 20 }
     ]
   },
   // Jyotirlinga Network
@@ -190,19 +190,19 @@ export const temples: Temple[] = [
     category: 'jyotirlinga',
     region: 'north',
     description: 'Himalayan Jyotirlinga temple at 3,583 meters altitude',
-    liveFeatures: ['Morning Himalayan Aarti', 'Snow-season ambience', 'Pilgrimage coverage'],
-    youtubeVideoId: 'bEVCHxMgv7E', // Kedarnath Live Aarti Stream
-    recordedVideoId: 'Rk_Z1kLJvnc', // Kedarnath Morning & Evening Aarti Playlist
+    liveFeatures: ['Morning Himalayan Aarati', 'Snow-season ambience', 'Pilgrimage coverage'],
+    youtubeVideoId: 'bEVCHxMgv7E', // Kedarnath Live Aarati Stream
+    recordedVideoId: 'Rk_Z1kLJvnc', // Kedarnath Morning & Evening Aarati Playlist
     backupAmbienceId: 'q8mWMlQBdFE',
     isLive: true,
     isFeatured: false,
     viewerCount: 7820,
     thumbnail: '/temples/kedarnath.jpg',
     aartiSchedule: [
-      { name: 'Mangala Aarti', time: '04:30', duration: 45, description: 'Himalayan dawn' },
-      { name: 'Madhyan Aarti', time: '11:00', duration: 30 },
-      { name: 'Sandhya Aarti', time: '18:00', duration: 30, description: 'Mountain sunset' },
-      { name: 'Shayan Aarti', time: '20:30', duration: 20 }
+      { name: 'Mangala Aarati', time: '04:30', duration: 45, description: 'Himalayan dawn' },
+      { name: 'Madhyan Aarati', time: '11:00', duration: 30 },
+      { name: 'Sandhya Aarati', time: '18:00', duration: 30, description: 'Mountain sunset' },
+      { name: 'Shayan Aarati', time: '20:30', duration: 20 }
     ]
   },
   {
@@ -213,18 +213,18 @@ export const temples: Temple[] = [
     category: 'jyotirlinga',
     region: 'west',
     description: 'Island temple shaped like the Om symbol',
-    liveFeatures: ['Daily Aarti stream', 'River view darshan', 'Festival celebrations'],
+    liveFeatures: ['Daily Aarati stream', 'River view darshan', 'Festival celebrations'],
     youtubeVideoId: 'RZ1JbWJVhlU', // Omkareshwar Jyotirlinga Live Darshan
-    recordedVideoId: 'Rk_Z1kLJvnc', // Omkareshwar Recorded Aarti Videos
+    recordedVideoId: 'Rk_Z1kLJvnc', // Omkareshwar Recorded Aarati Videos
     backupAmbienceId: 'q8mWMlQBdFE',
     isLive: false,
     isFeatured: false,
     viewerCount: 3450,
     thumbnail: '/temples/omkareshwar.jpg',
     aartiSchedule: [
-      { name: 'Mangala Aarti', time: '05:00', duration: 30 },
-      { name: 'Madhyan Aarti', time: '12:00', duration: 20 },
-      { name: 'Sandhya Aarti', time: '19:00', duration: 30, description: 'River Narmada view' }
+      { name: 'Mangala Aarati', time: '05:00', duration: 30 },
+      { name: 'Madhyan Aarati', time: '12:00', duration: 20 },
+      { name: 'Sandhya Aarati', time: '19:00', duration: 30, description: 'River Narmada view' }
     ]
   },
   {
@@ -237,7 +237,7 @@ export const temples: Temple[] = [
     description: 'Origin of River Godavari with unique three-faced Shivalinga',
     liveFeatures: ['Morning Abhishek', 'Kumbh Mela coverage', 'Daily darshan'],
     youtubeVideoId: 'wKL2_UUG7Ok', // Trimbakeshwar Live Abhishek
-    recordedVideoId: 'Rk_Z1kLJvnc', // Trimbakeshwar Shiva Aarti Playlist
+    recordedVideoId: 'Rk_Z1kLJvnc', // Trimbakeshwar Shiva Aarati Playlist
     backupAmbienceId: 'q8mWMlQBdFE',
     isLive: false,
     isFeatured: false,
@@ -245,8 +245,8 @@ export const temples: Temple[] = [
     thumbnail: '/temples/trimbakeshwar.jpg',
     aartiSchedule: [
       { name: 'Abhishek', time: '05:30', duration: 60, description: 'Sacred bathing ritual' },
-      { name: 'Madhyan Aarti', time: '12:00', duration: 20 },
-      { name: 'Sandhya Aarti', time: '19:30', duration: 30 }
+      { name: 'Madhyan Aarati', time: '12:00', duration: 20 },
+      { name: 'Sandhya Aarati', time: '19:30', duration: 30 }
     ]
   },
   // Shakti Peeth Network
@@ -260,16 +260,16 @@ export const temples: Temple[] = [
     description: 'Powerful Shakti Peeth dedicated to Goddess Kamakhya',
     liveFeatures: ['Daily Shakti worship', 'Ambubachi Mela coverage', 'Tantric rituals'],
     youtubeVideoId: 'QZT4tQxXN-8', // Kamakhya Temple Live Darshan
-    recordedVideoId: 'AETFvQonfV8', // Kamakhya Devi Recorded Aarti
+    recordedVideoId: 'AETFvQonfV8', // Kamakhya Devi Recorded Aarati
     backupAmbienceId: 'HaGHAyS6xJc',
     isLive: true,
     isFeatured: false,
     viewerCount: 4560,
     thumbnail: '/temples/kamakhya.jpg',
     aartiSchedule: [
-      { name: 'Mangala Aarti', time: '05:30', duration: 45, description: 'Tantric worship' },
-      { name: 'Bhog Aarti', time: '11:00', duration: 30 },
-      { name: 'Sandhya Aarti', time: '18:00', duration: 30 }
+      { name: 'Mangala Aarati', time: '05:30', duration: 45, description: 'Tantric worship' },
+      { name: 'Bhog Aarati', time: '11:00', duration: 30 },
+      { name: 'Sandhya Aarati', time: '18:00', duration: 30 }
     ]
   },
   {
@@ -280,18 +280,18 @@ export const temples: Temple[] = [
     category: 'shakti_peeth',
     region: 'east',
     description: 'One of the 51 Shakti Peethas dedicated to Goddess Kali',
-    liveFeatures: ['Morning Aarti', 'Festival pujas', 'Durga Puja special'],
+    liveFeatures: ['Morning Aarati', 'Festival pujas', 'Durga Puja special'],
     youtubeVideoId: 'mKh5s_2hC8s', // Kalighat Kali Temple Live
-    recordedVideoId: 'AETFvQonfV8', // Kalighat Evening Aarti Videos
+    recordedVideoId: 'AETFvQonfV8', // Kalighat Evening Aarati Videos
     backupAmbienceId: 'HaGHAyS6xJc',
     isLive: false,
     isFeatured: false,
     viewerCount: 2340,
     thumbnail: '/temples/kalighat.jpg',
     aartiSchedule: [
-      { name: 'Mangala Aarti', time: '04:00', duration: 30 },
-      { name: 'Bhog Aarti', time: '12:00', duration: 30 },
-      { name: 'Sandhya Aarti', time: '19:00', duration: 45, description: 'Evening Kali puja' }
+      { name: 'Mangala Aarati', time: '04:00', duration: 30 },
+      { name: 'Bhog Aarati', time: '12:00', duration: 30 },
+      { name: 'Sandhya Aarati', time: '19:00', duration: 45, description: 'Evening Kali puja' }
     ]
   },
   // South Indian Temples
@@ -305,7 +305,7 @@ export const temples: Temple[] = [
     description: 'Historic Hindu temple with stunning Dravidian architecture',
     liveFeatures: ['Classical rituals', 'Devotional music', 'Night ceremony'],
     youtubeVideoId: 'sWqE-mXiHLI', // Meenakshi Temple Live Darshan
-    recordedVideoId: 'T_9FVrw-Omg', // Meenakshi Amman Aarti Playlist
+    recordedVideoId: 'T_9FVrw-Omg', // Meenakshi Amman Aarati Playlist
     backupAmbienceId: 'AETFvQonfV8',
     isLive: true,
     isFeatured: false,
@@ -327,9 +327,9 @@ export const temples: Temple[] = [
     category: 'major',
     region: 'east',
     description: 'Famous for the annual Rath Yatra festival',
-    liveFeatures: ['Rath Yatra festival', 'Daily Aarti', 'Coastal ambience'],
+    liveFeatures: ['Rath Yatra festival', 'Daily Aarati', 'Coastal ambience'],
     youtubeVideoId: 'c-6rq8A7Nzc', // Jagannath Puri Live Darshan
-    recordedVideoId: 'T_9FVrw-Omg', // Jagannath Aarti & Rath Yatra Videos
+    recordedVideoId: 'T_9FVrw-Omg', // Jagannath Aarati & Rath Yatra Videos
     backupAmbienceId: 'AETFvQonfV8',
     isLive: true,
     isFeatured: false,
@@ -339,7 +339,7 @@ export const temples: Temple[] = [
       { name: 'Mangala Alati', time: '05:00', duration: 30, description: 'Divine awakening' },
       { name: 'Mailam', time: '06:00', duration: 45 },
       { name: 'Sakala Dhupa', time: '10:00', duration: 30 },
-      { name: 'Sandhya Aarti', time: '19:00', duration: 45, description: 'Ocean sunset' },
+      { name: 'Sandhya Aarati', time: '19:00', duration: 45, description: 'Ocean sunset' },
       { name: 'Badasinghara', time: '22:00', duration: 30 }
     ]
   },
@@ -352,9 +352,9 @@ export const temples: Temple[] = [
     category: 'international',
     region: 'international',
     description: 'UNESCO World Heritage Site - Sacred temple on Bagmati River',
-    liveFeatures: ['Bagmati River Aarti', 'Maha Shivaratri coverage', 'Daily worship'],
-    youtubeVideoId: 'xTBVl3TQS8o', // Pashupatinath Live Aarti
-    recordedVideoId: 'W2YsBMdJEKM', // Bagmati Aarti Recorded Videos
+    liveFeatures: ['Bagmati River Aarati', 'Maha Shivaratri coverage', 'Daily worship'],
+    youtubeVideoId: 'xTBVl3TQS8o', // Pashupatinath Live Aarati
+    recordedVideoId: 'W2YsBMdJEKM', // Bagmati Aarati Recorded Videos
     backupAmbienceId: 'q8mWMlQBdFE',
     isLive: true,
     isFeatured: false,
@@ -362,7 +362,7 @@ export const temples: Temple[] = [
     thumbnail: '/temples/pashupatinath.jpg',
     aartiSchedule: [
       { name: 'Morning Puja', time: '05:00', duration: 60 },
-      { name: 'Bagmati Aarti', time: '18:00', duration: 45, description: 'River ceremony' }
+      { name: 'Bagmati Aarati', time: '18:00', duration: 45, description: 'River ceremony' }
     ]
   },
   {
@@ -375,7 +375,7 @@ export const temples: Temple[] = [
     description: 'Limestone hill with cave temples dedicated to Lord Murugan',
     liveFeatures: ['Thaipusam festival', 'Tamil devotional events', 'Cave darshan'],
     youtubeVideoId: 'fHE2KqQRSu0',
-    recordedVideoId: 'T_9FVrw-Omg', // Cave temple Aarti recordings
+    recordedVideoId: 'T_9FVrw-Omg', // Cave temple Aarati recordings
     backupAmbienceId: 'AETFvQonfV8',
     isLive: false,
     isFeatured: false,
@@ -395,20 +395,20 @@ export const temples: Temple[] = [
     category: 'iskcon',
     region: 'north',
     description: 'Krishna-Balaram Mandir - Center of Krishna consciousness',
-    liveFeatures: ['Mangala Aarti', 'Hare Krishna kirtan', 'Festival celebrations'],
-    youtubeVideoId: 'pzgkpSZ4yYc', // ISKCON Vrindavan Live Mangala Aarti
-    recordedVideoId: 'T_9FVrw-Omg', // ISKCON Kirtan & Aarti Playlist
+    liveFeatures: ['Mangala Aarati', 'Hare Krishna kirtan', 'Festival celebrations'],
+    youtubeVideoId: 'pzgkpSZ4yYc', // ISKCON Vrindavan Live Mangala Aarati
+    recordedVideoId: 'T_9FVrw-Omg', // ISKCON Kirtan & Aarati Playlist
     backupAmbienceId: 'AETFvQonfV8',
     isLive: true,
     isFeatured: true,
     viewerCount: 8760,
     thumbnail: '/temples/iskcon-vrindavan.jpg',
     aartiSchedule: [
-      { name: 'Mangala Aarti', time: '04:30', duration: 30, description: 'Pre-dawn kirtan' },
-      { name: 'Darshan Aarti', time: '07:15', duration: 15 },
-      { name: 'Raj Bhog Aarti', time: '12:00', duration: 20 },
-      { name: 'Sandhya Aarti', time: '19:00', duration: 30, description: 'Evening kirtan' },
-      { name: 'Shayana Aarti', time: '20:30', duration: 15 }
+      { name: 'Mangala Aarati', time: '04:30', duration: 30, description: 'Pre-dawn kirtan' },
+      { name: 'Darshan Aarati', time: '07:15', duration: 15 },
+      { name: 'Raj Bhog Aarati', time: '12:00', duration: 20 },
+      { name: 'Sandhya Aarati', time: '19:00', duration: 30, description: 'Evening kirtan' },
+      { name: 'Shayana Aarati', time: '20:30', duration: 15 }
     ]
   },
   {
@@ -419,19 +419,19 @@ export const temples: Temple[] = [
     category: 'iskcon',
     region: 'east',
     description: 'World headquarters of ISKCON with Temple of the Vedic Planetarium',
-    liveFeatures: ['Grand Aarti', 'Kirtan mela', 'TOVP darshan'],
+    liveFeatures: ['Grand Aarati', 'Kirtan mela', 'TOVP darshan'],
     youtubeVideoId: '0s8XG7cBu-I', // ISKCON Mayapur Live Darshan
-    recordedVideoId: 'T_9FVrw-Omg', // Mayapur Aarti & Kirtan Playlist
+    recordedVideoId: 'T_9FVrw-Omg', // Mayapur Aarati & Kirtan Playlist
     backupAmbienceId: 'AETFvQonfV8',
     isLive: true,
     isFeatured: false,
     viewerCount: 6540,
     thumbnail: '/temples/iskcon-mayapur.jpg',
     aartiSchedule: [
-      { name: 'Mangala Aarti', time: '04:30', duration: 45, description: 'Grand ceremony' },
+      { name: 'Mangala Aarati', time: '04:30', duration: 45, description: 'Grand ceremony' },
       { name: 'Guru Puja', time: '07:30', duration: 30 },
-      { name: 'Raj Bhog Aarti', time: '12:30', duration: 20 },
-      { name: 'Sandhya Aarti', time: '18:30', duration: 45, description: 'Sunset kirtan' }
+      { name: 'Raj Bhog Aarati', time: '12:30', duration: 20 },
+      { name: 'Sandhya Aarati', time: '18:30', duration: 45, description: 'Sunset kirtan' }
     ]
   },
   // Char Dham & Popular Temples
@@ -445,7 +445,7 @@ export const temples: Temple[] = [
     description: 'One of the Char Dham pilgrimage sites, dedicated to Lord Vishnu in Himalayan heights',
     liveFeatures: ['Morning Abhishek', 'Himalayan darshan', 'Kedarnath connection stream'],
     youtubeVideoId: 'J3_xfVlXtZo', // Badrinath Live Darshan (seasonal)
-    recordedVideoId: 'T_9FVrw-Omg', // Badrinath Morning & Evening Aarti
+    recordedVideoId: 'T_9FVrw-Omg', // Badrinath Morning & Evening Aarati
     backupAmbienceId: 'AETFvQonfV8',
     isLive: true,
     isFeatured: true,
@@ -454,7 +454,7 @@ export const temples: Temple[] = [
     aartiSchedule: [
       { name: 'Maha Abhishek', time: '04:30', duration: 60, description: 'Sacred bathing' },
       { name: 'Geet Govind Path', time: '18:00', duration: 45 },
-      { name: 'Aarti & Shayan', time: '21:00', duration: 30, description: 'Night closing' }
+      { name: 'Aarati & Shayan', time: '21:00', duration: 30, description: 'Night closing' }
     ]
   },
   {
@@ -465,20 +465,20 @@ export const temples: Temple[] = [
     category: 'major',
     region: 'west',
     description: 'Ancient temple dedicated to Lord Krishna as the King of Dwarka, part of Char Dham',
-    liveFeatures: ['Daily Krishna Aarti', 'Janmashtami special', 'Gomti Ghat darshan'],
+    liveFeatures: ['Daily Krishna Aarati', 'Janmashtami special', 'Gomti Ghat darshan'],
     youtubeVideoId: 'kQD_2Y4SxPs', // Dwarka Live Darshan
-    recordedVideoId: 'T_9FVrw-Omg', // Dwarkadhish Aarti Playlist
+    recordedVideoId: 'T_9FVrw-Omg', // Dwarkadhish Aarati Playlist
     backupAmbienceId: 'AETFvQonfV8',
     isLive: true,
     isFeatured: true,
     viewerCount: 8920,
     thumbnail: '/temples/dwarkadheesh.jpg',
     aartiSchedule: [
-      { name: 'Mangala Aarti', time: '06:30', duration: 30 },
-      { name: 'Shringar Aarti', time: '10:30', duration: 30 },
-      { name: 'Raj Bhog Aarti', time: '12:30', duration: 20 },
-      { name: 'Sandhya Aarti', time: '19:00', duration: 45, description: 'Sunset at Gomti' },
-      { name: 'Shayan Aarti', time: '21:30', duration: 20 }
+      { name: 'Mangala Aarati', time: '06:30', duration: 30 },
+      { name: 'Shringar Aarati', time: '10:30', duration: 30 },
+      { name: 'Raj Bhog Aarati', time: '12:30', duration: 20 },
+      { name: 'Sandhya Aarati', time: '19:00', duration: 45, description: 'Sunset at Gomti' },
+      { name: 'Shayan Aarati', time: '21:30', duration: 20 }
     ]
   },
   {
@@ -489,19 +489,19 @@ export const temples: Temple[] = [
     category: 'major',
     region: 'west',
     description: 'Famous Ganesh temple known for wish fulfillment, visited by millions',
-    liveFeatures: ['Morning Kakad Aarti', 'Sandhya Aarti', 'Ganesh Chaturthi special'],
+    liveFeatures: ['Morning Kakad Aarati', 'Sandhya Aarati', 'Ganesh Chaturthi special'],
     youtubeVideoId: 'mf7mK1mLqEg',
-    recordedVideoId: 'AETFvQonfV8', // Siddhivinayak Aarti Playlist
+    recordedVideoId: 'AETFvQonfV8', // Siddhivinayak Aarati Playlist
     backupAmbienceId: 'q8mWMlQBdFE',
     isLive: true,
     isFeatured: true,
     viewerCount: 18540,
     thumbnail: '/temples/siddhivinayak.jpg',
     aartiSchedule: [
-      { name: 'Kakad Aarti', time: '05:30', duration: 30, description: 'Morning awakening' },
-      { name: 'Madhyan Aarti', time: '12:00', duration: 20 },
-      { name: 'Sandhya Aarti', time: '19:30', duration: 45, description: 'Evening ceremony' },
-      { name: 'Shej Aarti', time: '22:00', duration: 20, description: 'Night closing' }
+      { name: 'Kakad Aarati', time: '05:30', duration: 30, description: 'Morning awakening' },
+      { name: 'Madhyan Aarati', time: '12:00', duration: 20 },
+      { name: 'Sandhya Aarati', time: '19:30', duration: 45, description: 'Evening ceremony' },
+      { name: 'Shej Aarati', time: '22:00', duration: 20, description: 'Night closing' }
     ]
   },
   {
@@ -512,19 +512,19 @@ export const temples: Temple[] = [
     category: 'major',
     region: 'west',
     description: 'Sacred shrine of Sai Baba, one of the most visited pilgrimage sites in India',
-    liveFeatures: ['Kakad Aarti', 'Dhoop Aarti', 'Shej Aarti', 'Live samadhi darshan'],
-    youtubeVideoId: 'UtV3pvVmPfM', // Shirdi Live Kakad & Shej Aarti
-    recordedVideoId: 'AETFvQonfV8', // Shirdi Daily Aarti Playlist
+    liveFeatures: ['Kakad Aarati', 'Dhoop Aarati', 'Shej Aarati', 'Live samadhi darshan'],
+    youtubeVideoId: 'UtV3pvVmPfM', // Shirdi Live Kakad & Shej Aarati
+    recordedVideoId: 'AETFvQonfV8', // Shirdi Daily Aarati Playlist
     backupAmbienceId: 'q8mWMlQBdFE',
     isLive: true,
     isFeatured: true,
     viewerCount: 22340,
     thumbnail: '/temples/shirdi-sai.jpg',
     aartiSchedule: [
-      { name: 'Kakad Aarti', time: '04:30', duration: 45, description: 'Famous morning aarti' },
-      { name: 'Madhyan Aarti', time: '12:00', duration: 30, description: 'Midday prayers' },
-      { name: 'Dhoop Aarti', time: '18:00', duration: 30, description: 'Evening incense' },
-      { name: 'Shej Aarti', time: '22:00', duration: 45, description: 'Grand night ceremony' }
+      { name: 'Kakad Aarati', time: '04:30', duration: 45, description: 'Famous morning aarati' },
+      { name: 'Madhyan Aarati', time: '12:00', duration: 30, description: 'Midday prayers' },
+      { name: 'Dhoop Aarati', time: '18:00', duration: 30, description: 'Evening incense' },
+      { name: 'Shej Aarati', time: '22:00', duration: 45, description: 'Grand night ceremony' }
     ]
   },
   {
@@ -535,9 +535,9 @@ export const temples: Temple[] = [
     category: 'jyotirlinga',
     region: 'south',
     description: 'Southernmost Jyotirlinga with the longest temple corridor in India',
-    liveFeatures: ['22 wells Abhishek', 'Morning Aarti', 'Sethu darshan'],
+    liveFeatures: ['22 wells Abhishek', 'Morning Aarati', 'Sethu darshan'],
     youtubeVideoId: 'xd9RqLMsQ0A', // Rameswaram Live Abhishekam
-    recordedVideoId: 'Rk_Z1kLJvnc', // Ramanathaswamy Aarti Videos
+    recordedVideoId: 'Rk_Z1kLJvnc', // Ramanathaswamy Aarati Videos
     backupAmbienceId: 'q8mWMlQBdFE',
     isLive: true,
     isFeatured: false,
@@ -561,14 +561,14 @@ export const temples: Temple[] = [
     description: 'Magnificent modern temple showcasing Indian culture and spirituality',
     liveFeatures: ['Evening light show', 'Musical fountain', 'Exhibition tours'],
     youtubeVideoId: 'h8VxvqJvL9o', // Akshardham Live Events (limited)
-    recordedVideoId: 'T_9FVrw-Omg', // Akshardham Bhajan & Aarti Videos
+    recordedVideoId: 'T_9FVrw-Omg', // Akshardham Bhajan & Aarati Videos
     backupAmbienceId: 'AETFvQonfV8',
     isLive: false,
     isFeatured: false,
     viewerCount: 5430,
     thumbnail: '/temples/akshardham.jpg',
     aartiSchedule: [
-      { name: 'Mangala Aarti', time: '07:00', duration: 30 },
+      { name: 'Mangala Aarati', time: '07:00', duration: 30 },
       { name: 'Light & Sound Show', time: '19:45', duration: 25, description: 'Musical fountain' }
     ]
   },
@@ -580,20 +580,20 @@ export const temples: Temple[] = [
     category: 'major',
     region: 'north',
     description: 'Birthplace of Lord Krishna, one of the most sacred sites in Hinduism',
-    liveFeatures: ['Janmashtami celebrations', 'Daily Krishna Aarti', 'Midnight ceremonies'],
+    liveFeatures: ['Janmashtami celebrations', 'Daily Krishna Aarati', 'Midnight ceremonies'],
     youtubeVideoId: 'zR4yNZ0SJYU', // Janmabhoomi Live Darshan
-    recordedVideoId: 'T_9FVrw-Omg', // Krishna Janmashtami & Daily Aarti
+    recordedVideoId: 'T_9FVrw-Omg', // Krishna Janmashtami & Daily Aarati
     backupAmbienceId: 'AETFvQonfV8',
     isLive: true,
     isFeatured: false,
     viewerCount: 9870,
     thumbnail: '/temples/mathura-krishna.jpg',
     aartiSchedule: [
-      { name: 'Mangala Aarti', time: '05:00', duration: 30 },
-      { name: 'Shringar Aarti', time: '07:30', duration: 30, description: 'Krishna decoration' },
-      { name: 'Raj Bhog Aarti', time: '12:00', duration: 20 },
-      { name: 'Sandhya Aarti', time: '19:00', duration: 45 },
-      { name: 'Midnight Aarti', time: '00:00', duration: 60, description: 'Birth celebration' }
+      { name: 'Mangala Aarati', time: '05:00', duration: 30 },
+      { name: 'Shringar Aarati', time: '07:30', duration: 30, description: 'Krishna decoration' },
+      { name: 'Raj Bhog Aarati', time: '12:00', duration: 20 },
+      { name: 'Sandhya Aarati', time: '19:00', duration: 45 },
+      { name: 'Midnight Aarati', time: '00:00', duration: 60, description: 'Birth celebration' }
     ]
   },
   {
@@ -606,7 +606,7 @@ export const temples: Temple[] = [
     description: 'Hilltop temple dedicated to Lord Ayyappa, famous for Makaravilakku festival',
     liveFeatures: ['Makaravilakku', 'Padi Puja', 'Festival season streams'],
     youtubeVideoId: 'K9GhMvzPjCA', // Sabarimala Live (seasonal)
-    recordedVideoId: 'AETFvQonfV8', // Harivarasanam & Aarti Playlist
+    recordedVideoId: 'AETFvQonfV8', // Harivarasanam & Aarati Playlist
     backupAmbienceId: 'q8mWMlQBdFE',
     isLive: true,
     isFeatured: false,
@@ -628,7 +628,7 @@ export const temples: Temple[] = [
     description: 'Jyotirlinga temple in the Sahyadri hills surrounded by dense forests',
     liveFeatures: ['Morning Abhishek', 'Monsoon special', 'Mahashivratri stream'],
     youtubeVideoId: 'wKL2_UUG7Ok', // Bhimashankar Live Abhishek
-    recordedVideoId: 'Rk_Z1kLJvnc', // Bhimashankar Aarti Videos
+    recordedVideoId: 'Rk_Z1kLJvnc', // Bhimashankar Aarati Videos
     backupAmbienceId: 'q8mWMlQBdFE',
     isLive: true,
     isFeatured: false,
@@ -636,8 +636,8 @@ export const temples: Temple[] = [
     thumbnail: '/temples/bhimashankar.jpg',
     aartiSchedule: [
       { name: 'Abhishek', time: '04:30', duration: 60, description: 'Forest dawn ritual' },
-      { name: 'Madhyan Aarti', time: '11:00', duration: 20 },
-      { name: 'Sandhya Aarti', time: '18:30', duration: 30, description: 'Sahyadri sunset' }
+      { name: 'Madhyan Aarati', time: '11:00', duration: 20 },
+      { name: 'Sandhya Aarati', time: '18:30', duration: 30, description: 'Sahyadri sunset' }
     ]
   },
   {
@@ -650,7 +650,7 @@ export const temples: Temple[] = [
     description: 'One of the most important Krishna temples in India, known as Dwarka of the South',
     liveFeatures: ['Nirmalya darshan', 'Elephant procession', 'Utsavam festivals'],
     youtubeVideoId: 'c-6rq8A7Nzc', // Guruvayur Live Darshan
-    recordedVideoId: 'T_9FVrw-Omg', // Guruvayur Krishna Aarti Playlist
+    recordedVideoId: 'T_9FVrw-Omg', // Guruvayur Krishna Aarati Playlist
     backupAmbienceId: 'AETFvQonfV8',
     isLive: true,
     isFeatured: false,
@@ -672,17 +672,17 @@ export const temples: Temple[] = [
     category: 'major',
     region: 'north',
     description: 'Source of the sacred River Ganges, part of Char Dham pilgrimage',
-    liveFeatures: ['Ganga Aarti at source', 'Himalayan views', 'Pilgrimage season'],
+    liveFeatures: ['Ganga Aarati at source', 'Himalayan views', 'Pilgrimage season'],
     youtubeVideoId: 'bEVCHxMgv7E', // Gangotri Live (seasonal)
-    recordedVideoId: 'W2YsBMdJEKM', // Ganga Aarti & Himalayan Darshan
+    recordedVideoId: 'W2YsBMdJEKM', // Ganga Aarati & Himalayan Darshan
     backupAmbienceId: 'q8mWMlQBdFE',
     isLive: false,
     isFeatured: false,
     viewerCount: 3450,
     thumbnail: '/temples/gangotri.jpg',
     aartiSchedule: [
-      { name: 'Mangala Aarti', time: '06:00', duration: 30, description: 'Himalayan dawn' },
-      { name: 'Ganga Aarti', time: '18:30', duration: 45, description: 'Source of Ganga' }
+      { name: 'Mangala Aarati', time: '06:00', duration: 30, description: 'Himalayan dawn' },
+      { name: 'Ganga Aarati', time: '18:30', duration: 45, description: 'Source of Ganga' }
     ]
   },
   {
@@ -693,17 +693,17 @@ export const temples: Temple[] = [
     category: 'major',
     region: 'north',
     description: 'Source of River Yamuna, the westernmost shrine in the Char Dham pilgrimage',
-    liveFeatures: ['Hot springs darshan', 'Yamuna Aarti', 'Trek views'],
+    liveFeatures: ['Hot springs darshan', 'Yamuna Aarati', 'Trek views'],
     youtubeVideoId: 'J3_xfVlXtZo', // Yamunotri Live (seasonal)
-    recordedVideoId: 'W2YsBMdJEKM', // Yamunotri Aarti Videos
+    recordedVideoId: 'W2YsBMdJEKM', // Yamunotri Aarati Videos
     backupAmbienceId: 'q8mWMlQBdFE',
     isLive: false,
     isFeatured: false,
     viewerCount: 2890,
     thumbnail: '/temples/yamunotri.jpg',
     aartiSchedule: [
-      { name: 'Mangala Aarti', time: '06:30', duration: 30 },
-      { name: 'Yamuna Aarti', time: '19:00', duration: 30, description: 'Source of Yamuna' }
+      { name: 'Mangala Aarati', time: '06:30', duration: 30 },
+      { name: 'Yamuna Aarati', time: '19:00', duration: 30, description: 'Source of Yamuna' }
     ]
   }
 ];
@@ -734,10 +734,10 @@ export const spiritualContent: SpiritualContent[] = [
     duration: '28:15',
     thumbnail: 'https://img.youtube.com/vi/zKC17254flc/hqdefault.jpg'
   },
-  // Aarti
+  // Aarati
   {
     id: 'om-jai-jagdish',
-    title: 'Om Jai Jagdish Hare Aarti',
+    title: 'Om Jai Jagdish Hare Aarati',
     type: 'aarti',
     youtubeVideoId: 'NE3SWh9_vR4',
     duration: '7:20',
@@ -745,7 +745,7 @@ export const spiritualContent: SpiritualContent[] = [
   },
   {
     id: 'ganga-aarti',
-    title: 'Ganga Aarti - Varanasi',
+    title: 'Ganga Aarati - Varanasi',
     type: 'aarti',
     youtubeVideoId: 'I8HNi91OKcs',
     duration: 'Live',
@@ -789,7 +789,7 @@ export const spiritualContent: SpiritualContent[] = [
   },
   {
     id: 'all-aarti-morning',
-    title: 'All Aarti (Morning)',
+    title: 'All Aarati (Morning)',
     type: 'aarti',
     youtubeVideoId: 'q8lcgclUVSQ',
     duration: '45:00',
@@ -797,7 +797,7 @@ export const spiritualContent: SpiritualContent[] = [
   },
   {
     id: 'panchdev-aarti',
-    title: 'Panchdev Aarti',
+    title: 'Panchdev Aarati',
     type: 'aarti',
     youtubeVideoId: 'zysW2tnJy30',
     duration: '15:00',
@@ -813,7 +813,7 @@ export const spiritualContent: SpiritualContent[] = [
   },
   {
     id: 'iskcon-morning-aarti',
-    title: 'ISKCON Morning Aarti',
+    title: 'ISKCON Morning Aarati',
     type: 'aarti',
     youtubeVideoId: 'W9D2mJaEI2Y',
     duration: '20:00',
