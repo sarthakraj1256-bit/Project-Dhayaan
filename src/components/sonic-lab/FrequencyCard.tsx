@@ -1,6 +1,8 @@
- import { motion } from 'framer-motion';
- import { Play, Pause } from 'lucide-react';
- import { FrequencyItem } from '@/data/soundLibrary';
+  import { motion } from 'framer-motion';
+  import { Play, Pause } from 'lucide-react';
+  import { FrequencyItem } from '@/data/soundLibrary';
+  import { useLanguage } from '@/contexts/LanguageContext';
+  import type { TranslationKey } from '@/i18n/translations';
  
  interface FrequencyCardProps {
    frequency: FrequencyItem;
@@ -49,8 +51,13 @@
    },
  };
  
- const FrequencyCard = ({ frequency, isActive, categoryColor, onPlay, onStop }: FrequencyCardProps) => {
-   const colors = colorMap[categoryColor] || colorMap.cyan;
+  const FrequencyCard = ({ frequency, isActive, categoryColor, onPlay, onStop }: FrequencyCardProps) => {
+    const colors = colorMap[categoryColor] || colorMap.cyan;
+    const { t } = useLanguage();
+    const nameKey = `freq.${frequency.category}.${frequency.value}.name` as TranslationKey;
+    const purposeKey = `freq.${frequency.category}.${frequency.value}.purpose` as TranslationKey;
+    const localizedName = t(nameKey) !== nameKey ? t(nameKey) : frequency.name;
+    const localizedPurpose = t(purposeKey) !== purposeKey ? t(purposeKey) : frequency.purpose;
  
     return (
       <motion.div
@@ -96,15 +103,15 @@
            {frequency.freq}
          </div>
  
-         {/* Name */}
-         <div className="font-display text-sm tracking-widest text-foreground/80 mt-1">
-           {frequency.name}
-         </div>
- 
-         {/* Purpose */}
-         <p className="text-xs text-muted-foreground mt-2 leading-relaxed">
-           {frequency.purpose}
-         </p>
+          {/* Name */}
+          <div className="font-display text-sm tracking-widest text-foreground/80 mt-1">
+            {localizedName}
+          </div>
+
+          {/* Purpose */}
+          <p className="text-xs text-muted-foreground mt-2 leading-relaxed">
+            {localizedPurpose}
+          </p>
  
          {/* Play/Pause Button */}
          <div className="mt-4 flex justify-end">

@@ -845,6 +845,31 @@ export const spiritualContent: SpiritualContent[] = [
   }
 ];
 
+export const getCategoryLabels = (t: (key: string) => string): Record<TempleCategory, string> => ({
+  jyotirlinga: t('temple.cat.jyotirlinga'),
+  shakti_peeth: t('temple.cat.shaktiPeeth'),
+  major: t('temple.cat.major'),
+  international: t('temple.cat.international'),
+  iskcon: t('temple.cat.iskcon'),
+});
+
+export const getDeityLabels = (t: (key: string) => string): Record<DeityType, string> => ({
+  shiva: t('temple.deity.shiva'),
+  vishnu: t('temple.deity.vishnu'),
+  devi: t('temple.deity.devi'),
+  guru: t('temple.deity.guru'),
+  multi: t('temple.deity.multi'),
+});
+
+export const getRegionLabels = (t: (key: string) => string): Record<Region, string> => ({
+  north: t('temple.region.north'),
+  south: t('temple.region.south'),
+  east: t('temple.region.east'),
+  west: t('temple.region.west'),
+  international: t('temple.region.international'),
+});
+
+// Keep backward-compatible exports
 export const categoryLabels: Record<TempleCategory, string> = {
   jyotirlinga: '🕉️ Jyotirlinga',
   shakti_peeth: '🔱 Shakti Peeth',
