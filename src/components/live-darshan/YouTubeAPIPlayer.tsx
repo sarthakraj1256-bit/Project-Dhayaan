@@ -141,7 +141,7 @@ const YouTubeAPIPlayer = memo(({
         >
           <div className="bg-secondary/90 backdrop-blur-sm border border-secondary rounded-lg p-3 flex items-center justify-between">
             <p className="text-sm text-secondary-foreground">
-              📹 Recorded Aarti from {templeName}
+              📹 Recorded Aarati from {templeName}
             </p>
             <Button
               variant="ghost"
@@ -258,7 +258,7 @@ const StatusBadge = ({ status, templeName, compact = false }: StatusBadgeProps) 
       return (
         <Badge className="bg-destructive text-destructive-foreground gap-1.5 animate-pulse">
           <span className="w-2 h-2 rounded-full bg-destructive-foreground animate-ping" />
-          {compact ? 'LIVE' : `🔴 LIVE Aarti from ${templeName}`}
+          {compact ? 'LIVE' : `🔴 LIVE Aarati from ${templeName}`}
         </Badge>
       );
     case 'recorded':

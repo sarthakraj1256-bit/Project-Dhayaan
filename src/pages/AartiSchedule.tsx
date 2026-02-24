@@ -169,7 +169,7 @@ const AartiSchedulePage = () => {
               </Link>
               <div>
                 <h1 className="font-display text-2xl md:text-3xl text-gold-gradient">
-                  Aarti Schedule
+                  Aarati Schedule
                 </h1>
                 <p className="text-muted-foreground text-sm">
                   Daily timings across all temples
@@ -181,7 +181,7 @@ const AartiSchedulePage = () => {
             <div className="hidden md:flex items-center gap-4">
               <div className="flex items-center gap-2 px-3 py-1.5 bg-primary/20 rounded-full">
                 <Clock className="w-4 h-4 text-primary" />
-                <span className="text-sm text-primary">{totalAartis} Daily Aartis</span>
+                <span className="text-sm text-primary">{totalAartis} Daily Aaratis</span>
               </div>
               {activeNow > 0 && (
                 <div className="flex items-center gap-2 px-3 py-1.5 bg-destructive/20 rounded-full animate-pulse">
@@ -234,7 +234,7 @@ const AartiSchedulePage = () => {
           <div className="relative flex-1">
             <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
             <Input
-              placeholder="Search temples or aartis..."
+              placeholder="Search temples or aaratis..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-12 h-12 bg-card border-border/50"
@@ -293,7 +293,7 @@ const AartiSchedulePage = () => {
                 </div>
                 <div>
                   <h2 className="font-display text-lg text-foreground">{slotLabel}</h2>
-                  <p className="text-xs text-muted-foreground">{entries.length} aartis</p>
+                  <p className="text-xs text-muted-foreground">{entries.length} aaratis</p>
                 </div>
                 {currentSlot === slotLabel && (
                   <Badge className="ml-auto bg-primary text-primary-foreground">Current</Badge>
@@ -374,7 +374,7 @@ const AartiSchedulePage = () => {
         {filteredEntries.length === 0 && (
           <div className="text-center py-16">
             <Clock className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-            <p className="text-muted-foreground">No aartis found matching your criteria</p>
+            <p className="text-muted-foreground">No aaratis found matching your criteria</p>
           </div>
         )}
       </main>

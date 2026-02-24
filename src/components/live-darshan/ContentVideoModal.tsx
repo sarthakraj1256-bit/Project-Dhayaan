@@ -15,7 +15,7 @@ interface ContentVideoModalProps {
 const typeLabels: Record<SpiritualContent['type'], string> = {
   bhajan: '🎵 Bhajan',
   discourse: '📖 Discourse',
-  aarti: '🪔 Aarti',
+  aarti: '🪔 Aarati',
   meditation: '🧘 Meditation',
   short: '📱 Short',
   mantra: '🕉️ Mantra',

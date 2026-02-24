@@ -34,7 +34,7 @@ const VideoPlayer = ({ temple, onClose }: VideoPlayerProps) => {
     
     // Notify user when live stream becomes available
     if (status === 'live') {
-      toast.success('🔴 Live Aarti is now streaming!', {
+      toast.success('🔴 Live Aarati is now streaming!', {
         description: `Connected to ${temple.name}`,
         duration: 3000,
       });

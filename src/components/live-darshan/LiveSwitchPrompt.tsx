@@ -26,7 +26,7 @@ const LiveSwitchPrompt = ({ show, templeName, onSwitch, onDismiss }: LiveSwitchP
                   <Radio className="w-5 h-5 text-white animate-pulse" />
                 </div>
                 <div>
-                  <h4 className="font-semibold text-white">🔴 Live Aarti Started!</h4>
+                  <h4 className="font-semibold text-white">🔴 Live Aarati Started!</h4>
                   <p className="text-sm text-white/80 mt-0.5">
                     Live stream from {templeName} is now available
                   </p>

@@ -100,7 +100,7 @@ const Install = () => {
             {[
               { icon: '⚡', title: 'Instant Access', desc: 'Launch from home screen' },
               { icon: '📴', title: 'Works Offline', desc: 'Meditate anywhere' },
-              { icon: '🔔', title: 'Notifications', desc: 'Never miss aarti times' },
+              { icon: '🔔', title: 'Notifications', desc: 'Never miss aarati times' },
             ].map((benefit, i) => (
               <motion.div
                 key={benefit.title}

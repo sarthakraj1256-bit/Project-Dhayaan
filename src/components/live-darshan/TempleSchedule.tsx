@@ -91,7 +91,7 @@ const TempleSchedule = ({ schedule, compact = false }: TempleScheduleProps) => {
     <div className="space-y-3">
       <div className="flex items-center gap-2">
         <Clock className="w-4 h-4 text-primary" />
-        <h4 className="font-medium text-foreground">Daily Aarti Schedule</h4>
+        <h4 className="font-medium text-foreground">Daily Aarati Schedule</h4>
       </div>
       
       <div className="grid gap-2">

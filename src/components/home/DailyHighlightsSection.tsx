@@ -5,7 +5,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { TranslationKey } from '@/i18n/translations';
 
 const highlights = [
-  { icon: Sparkles, labelKey: 'highlights.todaysPick' as TranslationKey, title: 'Kashi Ganga Aarti', href: '/live-darshan' },
+  { icon: Sparkles, labelKey: 'highlights.todaysPick' as TranslationKey, title: 'Kashi Ganga Aarati', href: '/live-darshan' },
   { icon: Waves, labelKey: 'highlights.recommended' as TranslationKey, title: '528 Hz Healing', href: '/sonic-lab' },
   { icon: Building2, labelKey: 'highlights.featuredTemple' as TranslationKey, title: 'Tirupati Balaji', href: '/live-darshan' },
 ];

@@ -214,7 +214,7 @@ export const useYouTubePlayer = ({
       case 'loading':
         return 'Connecting to darshan...';
       case 'live':
-        return 'Live Aarti';
+        return 'Live Aarati';
       case 'recorded':
         return 'Recorded Darshan';
       case 'ambience':

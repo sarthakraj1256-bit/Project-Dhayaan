@@ -233,7 +233,7 @@ const createDefaultZones = (templeId: string): TempleZone[] => {
       ],
       ritualPoints: [
         { id: 'r1', type: 'prasad', position: { x: 0, y: 1, z: -8 }, label: 'Offer Prasad' },
-        { id: 'r2', type: 'diya', position: { x: -2, y: 1, z: -6 }, label: 'Light Aarti Diya' },
+        { id: 'r2', type: 'diya', position: { x: -2, y: 1, z: -6 }, label: 'Light Aarati Diya' },
         { id: 'r3', type: 'flower', position: { x: 2, y: 1, z: -6 }, label: 'Offer Garland' }
       ],
       meditationSpots: [
@@ -258,7 +258,7 @@ export const iskconTemples: ImmersiveTemple[] = [
     zones: createDefaultZones('iskcon_vrindavan'),
     defaultZoneId: 'iskcon_vrindavan_entrance',
     audio: {
-      aartiTrack: 'Traditional ISKCON Mangala Aarti with kartals and mridanga',
+      aartiTrack: 'Traditional ISKCON Mangala Aarati with kartals and mridanga',
       kirtanTrack: 'Hare Krishna Mahamantra kirtan with devotees chanting',
       bellSound: 'Large brass temple bell resonating',
       ambienceTrack: 'Temple morning ambience with birds and distant chanting',
@@ -292,7 +292,7 @@ export const iskconTemples: ImmersiveTemple[] = [
     zones: createDefaultZones('iskcon_mayapur'),
     defaultZoneId: 'iskcon_mayapur_entrance',
     audio: {
-      aartiTrack: 'Grand Mayapur Aarti with hundreds of devotees',
+      aartiTrack: 'Grand Mayapur Aarati with hundreds of devotees',
       kirtanTrack: 'Bengali style kirtan with harmonium and mridanga',
       bellSound: 'Multiple brass bells ringing in harmony',
       ambienceTrack: 'Mayapur morning sounds with Ganges river',
@@ -323,7 +323,7 @@ export const iskconTemples: ImmersiveTemple[] = [
     zones: createDefaultZones('iskcon_bangalore'),
     defaultZoneId: 'iskcon_bangalore_entrance',
     audio: {
-      aartiTrack: 'South Indian style ISKCON Aarti',
+      aartiTrack: 'South Indian style ISKCON Aarati',
       kirtanTrack: 'Melodious kirtan with veena accompaniment',
       bellSound: 'Deep resonating temple bell',
       ambienceTrack: 'Peaceful temple garden ambience',
@@ -358,7 +358,7 @@ export const jyotirlingaTemples: ImmersiveTemple[] = [
     zones: createDefaultZones('kedarnath'),
     defaultZoneId: 'kedarnath_entrance',
     audio: {
-      aartiTrack: 'Himalayan Shiva Aarti with damaru and bells',
+      aartiTrack: 'Himalayan Shiva Aarati with damaru and bells',
       kirtanTrack: 'Om Namah Shivaya chanting in mountain echo',
       bellSound: 'Ancient brass bell with Himalayan wind',
       ambienceTrack: 'Mountain wind and distant temple bells',
@@ -389,7 +389,7 @@ export const jyotirlingaTemples: ImmersiveTemple[] = [
     zones: createDefaultZones('kashi_vishwanath'),
     defaultZoneId: 'kashi_vishwanath_entrance',
     audio: {
-      aartiTrack: 'Ganga Aarti style Shiva worship with conch shells',
+      aartiTrack: 'Ganga Aarati style Shiva worship with conch shells',
       kirtanTrack: 'Banaras style bhajan with tabla and harmonium',
       bellSound: 'Multiple temple bells creating sacred resonance',
       ambienceTrack: 'Ganga ghat ambience with distant prayers',
@@ -420,7 +420,7 @@ export const jyotirlingaTemples: ImmersiveTemple[] = [
     zones: createDefaultZones('somnath'),
     defaultZoneId: 'somnath_entrance',
     audio: {
-      aartiTrack: 'Somnath evening Aarti with ocean waves',
+      aartiTrack: 'Somnath evening Aarati with ocean waves',
       kirtanTrack: 'Gujarati Shiv bhajan with dhol',
       bellSound: 'Seaside temple bell with ocean breeze',
       ambienceTrack: 'Arabian Sea waves and temple ambience',
@@ -446,12 +446,12 @@ export const jyotirlingaTemples: ImmersiveTemple[] = [
     location: 'Ujjain, Madhya Pradesh',
     category: 'jyotirlinga',
     deity: 'Lord Shiva (Mahakal)',
-    description: 'The only south-facing Jyotirlinga, famous for the Bhasma Aarti ritual.',
+    description: 'The only south-facing Jyotirlinga, famous for the Bhasma Aarati ritual.',
     thumbnail: 'https://images.unsplash.com/photo-1544006659-f0b21884ce1d?w=400',
     zones: createDefaultZones('mahakaleshwar'),
     defaultZoneId: 'mahakaleshwar_entrance',
     audio: {
-      aartiTrack: 'Bhasma Aarti with sacred ash ritual sounds',
+      aartiTrack: 'Bhasma Aarati with sacred ash ritual sounds',
       kirtanTrack: 'Mahakal bhajan with Malwa folk style',
       bellSound: 'Deep underground temple bell',
       ambienceTrack: 'Ancient temple corridor echoes',
@@ -486,7 +486,7 @@ export const shaktiPeethTemples: ImmersiveTemple[] = [
     zones: createDefaultZones('vaishno_devi'),
     defaultZoneId: 'vaishno_devi_entrance',
     audio: {
-      aartiTrack: 'Maa Vaishno Devi Aarti with Pahadi dhol',
+      aartiTrack: 'Maa Vaishno Devi Aarati with Pahadi dhol',
       kirtanTrack: 'Jai Mata Di bhajan with mountain echoes',
       bellSound: 'Cave temple bell resonance',
       ambienceTrack: 'Mountain cave ambience with pilgrims',
@@ -517,7 +517,7 @@ export const shaktiPeethTemples: ImmersiveTemple[] = [
     zones: createDefaultZones('kamakhya'),
     defaultZoneId: 'kamakhya_entrance',
     audio: {
-      aartiTrack: 'Kamakhya Devi Aarti with Assamese drums',
+      aartiTrack: 'Kamakhya Devi Aarati with Assamese drums',
       kirtanTrack: 'Tantric chanting with bells and cymbals',
       bellSound: 'Ancient bronze bell',
       ambienceTrack: 'Nilachal hill ambience with forest sounds',
@@ -548,7 +548,7 @@ export const shaktiPeethTemples: ImmersiveTemple[] = [
     zones: createDefaultZones('meenakshi_amman'),
     defaultZoneId: 'meenakshi_amman_entrance',
     audio: {
-      aartiTrack: 'Carnatic style temple Aarti with nadaswaram',
+      aartiTrack: 'Carnatic style temple Aarati with nadaswaram',
       kirtanTrack: 'Tamil devotional songs with mridangam',
       bellSound: 'Temple bell with South Indian temple ambience',
       ambienceTrack: 'Grand temple corridor with pilgrims',
@@ -614,7 +614,7 @@ export const vishnuTemples: ImmersiveTemple[] = [
     zones: createDefaultZones('jagannath_puri'),
     defaultZoneId: 'jagannath_puri_entrance',
     audio: {
-      aartiTrack: 'Jagannath Aarti with Odia temple instruments',
+      aartiTrack: 'Jagannath Aarati with Odia temple instruments',
       kirtanTrack: 'Jai Jagannath bhajan with mardala',
       bellSound: 'Ancient Puri temple bell',
       ambienceTrack: 'Bay of Bengal breeze with temple sounds',
@@ -648,7 +648,7 @@ export const vishnuTemples: ImmersiveTemple[] = [
     zones: createDefaultZones('badrinath'),
     defaultZoneId: 'badrinath_entrance',
     audio: {
-      aartiTrack: 'Badrinath Aarti with Himalayan temple bells',
+      aartiTrack: 'Badrinath Aarati with Himalayan temple bells',
       kirtanTrack: 'Jai Badri Vishal bhajan',
       bellSound: 'High altitude temple bell',
       ambienceTrack: 'Alaknanda river and mountain winds',
@@ -718,7 +718,7 @@ export const internationalTemples: ImmersiveTemple[] = [
     zones: createDefaultZones('pashupatinath'),
     defaultZoneId: 'pashupatinath_entrance',
     audio: {
-      aartiTrack: 'Nepali Shiva Aarti with traditional instruments',
+      aartiTrack: 'Nepali Shiva Aarati with traditional instruments',
       kirtanTrack: 'Om Namah Shivaya in Nepali style',
       bellSound: 'Ancient Nepali temple bell',
       ambienceTrack: 'Bagmati river and cremation ghat sounds',
@@ -749,7 +749,7 @@ export const internationalTemples: ImmersiveTemple[] = [
     zones: createDefaultZones('batu_caves'),
     defaultZoneId: 'batu_caves_entrance',
     audio: {
-      aartiTrack: 'Tamil style temple Aarti',
+      aartiTrack: 'Tamil style temple Aarati',
       kirtanTrack: 'Murugan bhajan with urumi melam',
       bellSound: 'Cave temple bell echo',
       ambienceTrack: 'Cave ambience with bats and echoes',

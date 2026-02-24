@@ -75,10 +75,10 @@ const AartiReminderSettings = () => {
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 font-display">
             <Bell className="w-5 h-5 text-primary" />
-            Aarti Reminders
+            Aarati Reminders
           </DialogTitle>
           <DialogDescription>
-            Get notified for morning and evening Aarti times
+            Get notified for morning and evening Aarati times
           </DialogDescription>
         </DialogHeader>
 
@@ -117,7 +117,7 @@ const AartiReminderSettings = () => {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <Sun className="w-4 h-4 text-amber-500" />
-                      <span className="font-medium">Morning Aarti</span>
+                      <span className="font-medium">Morning Aarati</span>
                     </div>
                     <Switch
                       checked={morningReminder.enabled}
@@ -146,7 +146,7 @@ const AartiReminderSettings = () => {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <Moon className="w-4 h-4 text-indigo-400" />
-                      <span className="font-medium">Evening Aarti</span>
+                      <span className="font-medium">Evening Aarati</span>
                     </div>
                     <Switch
                       checked={eveningReminder.enabled}

@@ -37,7 +37,7 @@ const DevotionalAudioControls = ({
   const [isExpanded, setIsExpanded] = useState(false);
 
   const audioOptions = [
-    { id: 'aarti', label: 'Aarti', icon: Waves, action: onPlayAarti, color: 'text-orange-400' },
+    { id: 'aarti', label: 'Aarati', icon: Waves, action: onPlayAarti, color: 'text-orange-400' },
     { id: 'kirtan', label: 'Kirtan', icon: Music, action: onPlayKirtan, color: 'text-purple-400' },
     { id: 'ambience', label: 'Ambience', icon: Mic2, action: onPlayAmbience, color: 'text-blue-400' },
     { id: 'chanting', label: 'Chanting', icon: Waves, action: onPlayChanting, color: 'text-green-400' }
