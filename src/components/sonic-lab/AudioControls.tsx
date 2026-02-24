@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
 import { atmospheres } from '@/data/soundLibrary';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface AudioControlsProps {
   isPlaying: boolean;
@@ -36,6 +37,15 @@ interface AudioControlsProps {
   onStop: () => void;
 }
 
+const atmosphereNameKeys: Record<string, string> = {
+  none: 'sound.atm.none',
+  rain: 'sound.atm.rain',
+  river: 'sound.atm.river',
+  bells: 'sound.atm.bells',
+  forest: 'sound.atm.forest',
+  chimes: 'sound.atm.chimes',
+};
+
 /* ── Expanded controls (shared between mobile sheet & desktop panel) ── */
 const ExpandedControls = ({
   frequencyVolume,
@@ -49,6 +59,7 @@ const ExpandedControls = ({
   onFrequencyVolumeChange,
   onAtmosphereVolumeChange,
   onAtmosphereChange,
+  t,
 }: Pick<
   AudioControlsProps,
   | 'frequencyVolume'
@@ -62,7 +73,7 @@ const ExpandedControls = ({
   | 'onFrequencyVolumeChange'
   | 'onAtmosphereVolumeChange'
   | 'onAtmosphereChange'
->) => (
+> & { t: (key: any) => string }) => (
   <div className="px-5 pb-5 pt-2 space-y-5">
     {/* Favorite */}
     {onSaveFavorite && (
@@ -77,7 +88,7 @@ const ExpandedControls = ({
           }`}
         >
           <Heart className={`w-3.5 h-3.5 ${isFavorited ? 'fill-primary' : ''}`} />
-          {isFavorited ? 'Saved' : 'Save'}
+          {isFavorited ? t('sonic.saved') : t('sonic.save')}
         </button>
       </div>
     )}
@@ -86,7 +97,7 @@ const ExpandedControls = ({
     <div className="flex items-center gap-3">
       <Volume2 className="w-4 h-4 text-primary shrink-0" />
       <div className="flex-1">
-        <p className="text-xs text-muted-foreground mb-1.5">Frequency</p>
+        <p className="text-xs text-muted-foreground mb-1.5">{t('sonic.frequency')}</p>
         <Slider
           value={[frequencyVolume * 100]}
           onValueChange={([v]) => onFrequencyVolumeChange(v / 100)}
@@ -104,7 +115,7 @@ const ExpandedControls = ({
       <div className="flex items-center gap-2 mb-3">
         <Layers className="w-4 h-4 text-primary" />
         <p className="text-xs text-muted-foreground uppercase tracking-widest">
-          Atmosphere
+          {t('sonic.atmosphere')}
         </p>
       </div>
 
@@ -125,7 +136,7 @@ const ExpandedControls = ({
             }`}
           >
             <span>{atm.icon}</span>
-            {atm.name}
+            {t(atmosphereNameKeys[atm.id] as any) || atm.name}
             {atmosphereLoading && currentAtmosphere === atm.id && (
               <Loader2 className="w-3 h-3 animate-spin" />
             )}
@@ -139,7 +150,7 @@ const ExpandedControls = ({
       {atmosphereLoading && currentAtmosphere !== 'none' && (
         <div className="flex items-center gap-2 mb-3 text-xs text-primary">
           <Cloud className="w-3.5 h-3.5 animate-pulse" />
-          <span>Generating atmosphere…</span>
+          <span>{t('sonic.generatingAtmosphere')}</span>
         </div>
       )}
 
@@ -191,6 +202,7 @@ const AudioControls = forwardRef<HTMLDivElement, AudioControlsProps>(
     },
     _ref,
   ) => {
+    const { t } = useLanguage();
     const [expanded, setExpanded] = useState(false);
 
     const handleDragEnd = useCallback(
@@ -215,9 +227,9 @@ const AudioControls = forwardRef<HTMLDivElement, AudioControlsProps>(
       onFrequencyVolumeChange,
       onAtmosphereVolumeChange,
       onAtmosphereChange,
+      t,
     };
 
-    /* ── Glassmorphism mini-bar (shared style) ── */
     const glassStyle = {
       background: 'hsl(var(--void-light) / 0.92)',
       backdropFilter: 'blur(24px)',
@@ -229,8 +241,6 @@ const AudioControls = forwardRef<HTMLDivElement, AudioControlsProps>(
     return (
       <>
         {/* ═══════════ MOBILE ═══════════ */}
-
-        {/* Overlay when sheet is expanded */}
         <AnimatePresence>
           {expanded && (
             <motion.div
@@ -244,9 +254,7 @@ const AudioControls = forwardRef<HTMLDivElement, AudioControlsProps>(
           )}
         </AnimatePresence>
 
-        {/* Mobile container — sits above BottomNav (bottom-16 ≈ 64px nav height) */}
         <div className="md:hidden fixed bottom-16 left-0 right-0 z-50 safe-bottom">
-          {/* Expanded sheet */}
           <AnimatePresence>
             {expanded && (
               <motion.div
@@ -266,16 +274,14 @@ const AudioControls = forwardRef<HTMLDivElement, AudioControlsProps>(
                     '0 -8px 40px -10px hsl(var(--gold) / 0.25), inset 0 1px 0 0 hsl(var(--gold) / 0.1)',
                 }}
               >
-                {/* Drag handle */}
                 <div className="flex justify-center pt-3 pb-1">
                   <div className="w-10 h-1 rounded-full bg-foreground/15" />
                 </div>
 
-                {/* Header inside sheet */}
                 <div className="px-5 pb-3 flex items-center justify-between">
                   <div>
                     <p className="text-[10px] text-muted-foreground uppercase tracking-widest">
-                      Now Playing
+                      {t('sonic.nowPlaying')}
                     </p>
                     <p className="font-display text-2xl tracking-wider text-foreground">
                       {currentFrequency}Hz
@@ -301,7 +307,6 @@ const AudioControls = forwardRef<HTMLDivElement, AudioControlsProps>(
             )}
           </AnimatePresence>
 
-          {/* Mini-player bar — always visible when playing */}
           <div
             className="mx-2 rounded-xl overflow-hidden"
             style={glassStyle}
@@ -310,14 +315,12 @@ const AudioControls = forwardRef<HTMLDivElement, AudioControlsProps>(
             className="flex items-center gap-3 px-4 py-4 cursor-pointer select-none min-h-[56px]"
             onClick={() => setExpanded((v) => !v)}
           >
-            {/* Pulsing dot */}
             <motion.div
               animate={{ scale: [1, 1.4, 1], opacity: [1, 0.4, 1] }}
               transition={{ duration: 2, repeat: Infinity }}
               className="w-3 h-3 rounded-full bg-primary shrink-0"
             />
 
-            {/* Info */}
             <div className="flex-1 min-w-0">
               <p className="font-display text-base tracking-wider text-foreground truncate">
                 {currentFrequency}Hz
@@ -329,7 +332,6 @@ const AudioControls = forwardRef<HTMLDivElement, AudioControlsProps>(
               </p>
             </div>
 
-            {/* Timer */}
             <div className="flex items-center gap-1.5 text-muted-foreground">
               <Timer className="w-4 h-4 text-primary/60" />
               <span className="font-mono text-sm tracking-wider">
@@ -337,7 +339,6 @@ const AudioControls = forwardRef<HTMLDivElement, AudioControlsProps>(
               </span>
             </div>
 
-            {/* Stop */}
             <button
               onClick={(e) => {
                 e.stopPropagation();
@@ -349,7 +350,6 @@ const AudioControls = forwardRef<HTMLDivElement, AudioControlsProps>(
               <Square className="w-4 h-4 text-foreground/80" />
             </button>
 
-            {/* Chevron */}
             <motion.div
               animate={{ rotate: expanded ? 180 : 0 }}
               transition={{ duration: 0.2 }}
@@ -378,7 +378,6 @@ const AudioControls = forwardRef<HTMLDivElement, AudioControlsProps>(
               boxShadow: '0 -4px 40px -10px hsl(var(--gold) / 0.25)',
             }}
           >
-            {/* Expanded above bar */}
             <AnimatePresence>
               {expanded && (
                 <motion.div
@@ -393,7 +392,6 @@ const AudioControls = forwardRef<HTMLDivElement, AudioControlsProps>(
               )}
             </AnimatePresence>
 
-            {/* Bar */}
             <div
               className={`flex items-center gap-3 px-4 py-3 cursor-pointer select-none ${
                 expanded ? 'border-t border-border/30' : ''

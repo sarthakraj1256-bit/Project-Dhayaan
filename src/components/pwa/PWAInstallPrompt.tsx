@@ -2,10 +2,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Download, X, Share, Plus, Smartphone } from 'lucide-react';
 import { usePWAInstall } from '@/hooks/usePWAInstall';
 import { useHapticFeedback } from '@/hooks/useHapticFeedback';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export const PWAInstallPrompt = () => {
   const { isInstallable, isIOS, install, dismiss } = usePWAInstall();
   const { trigger } = useHapticFeedback();
+  const { t } = useLanguage();
 
   const handleInstall = async () => {
     trigger('button');
@@ -20,7 +22,6 @@ export const PWAInstallPrompt = () => {
     dismiss();
   };
 
-  // Show iOS-specific instructions
   if (isIOS && !window.matchMedia('(display-mode: standalone)').matches) {
     return (
       <AnimatePresence>
@@ -41,7 +42,7 @@ export const PWAInstallPrompt = () => {
             <button 
               onClick={handleDismiss}
               className="absolute top-3 right-3 p-1 rounded-full hover:bg-white/10 transition-colors"
-              aria-label="Dismiss"
+              aria-label={t('common.close')}
             >
               <X className="w-4 h-4 text-muted-foreground" />
             </button>
@@ -59,20 +60,20 @@ export const PWAInstallPrompt = () => {
               
               <div className="flex-1 min-w-0">
                 <h3 className="font-display text-lg text-foreground mb-1">
-                  Install Dhyaan
+                  {t('pwa.installDhyaan')}
                 </h3>
                 <p className="text-sm text-muted-foreground mb-3">
-                  Add to your home screen for the best experience
+                  {t('pwa.addHomeScreen')}
                 </p>
                 
                 <div className="space-y-2 text-sm text-muted-foreground">
                   <div className="flex items-center gap-2">
                     <Share className="w-4 h-4 text-gold" />
-                    <span>Tap the <strong className="text-foreground">Share</strong> button</span>
+                    <span>{t('pwa.tapShare')}</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Plus className="w-4 h-4 text-gold" />
-                    <span>Select <strong className="text-foreground">Add to Home Screen</strong></span>
+                    <span>{t('pwa.selectAddHome')}</span>
                   </div>
                 </div>
               </div>
@@ -83,7 +84,6 @@ export const PWAInstallPrompt = () => {
     );
   }
 
-  // Show native install prompt for Android/Desktop
   if (!isInstallable) return null;
 
   return (
@@ -105,7 +105,7 @@ export const PWAInstallPrompt = () => {
           <button 
             onClick={handleDismiss}
             className="absolute top-3 right-3 p-1 rounded-full hover:bg-white/10 transition-colors"
-            aria-label="Dismiss"
+            aria-label={t('common.close')}
           >
             <X className="w-4 h-4 text-muted-foreground" />
           </button>
@@ -123,10 +123,10 @@ export const PWAInstallPrompt = () => {
             
             <div className="flex-1 min-w-0">
               <h3 className="font-display text-lg text-foreground mb-1">
-                Install Dhyaan
+                {t('pwa.installDhyaan')}
               </h3>
               <p className="text-sm text-muted-foreground mb-3">
-                Get quick access from your home screen
+                {t('pwa.quickAccess')}
               </p>
               
               <div className="flex gap-2">
@@ -138,13 +138,13 @@ export const PWAInstallPrompt = () => {
                     color: 'hsl(var(--void))',
                   }}
                 >
-                  Install App
+                  {t('pwa.installApp')}
                 </button>
                 <button
                   onClick={handleDismiss}
                   className="px-4 py-2 rounded-lg font-body text-sm text-muted-foreground hover:bg-white/5 transition-colors"
                 >
-                  Not now
+                  {t('pwa.notNow')}
                 </button>
               </div>
             </div>

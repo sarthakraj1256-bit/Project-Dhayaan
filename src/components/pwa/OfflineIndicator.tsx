@@ -3,12 +3,13 @@ import { WifiOff, Wifi, CloudOff } from 'lucide-react';
 import { useNetworkStatus } from '@/hooks/useNetworkStatus';
 import { useHapticFeedback } from '@/hooks/useHapticFeedback';
 import { useEffect } from 'react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export const OfflineIndicator = () => {
   const { isOnline, wasOffline } = useNetworkStatus();
   const { trigger } = useHapticFeedback();
+  const { t } = useLanguage();
 
-  // Haptic feedback when status changes
   useEffect(() => {
     if (!isOnline) {
       trigger('warning');
@@ -19,7 +20,6 @@ export const OfflineIndicator = () => {
 
   return (
     <AnimatePresence>
-      {/* Offline Banner */}
       {!isOnline && (
         <motion.div
           initial={{ opacity: 0, y: -100 }}
@@ -36,29 +36,21 @@ export const OfflineIndicator = () => {
             }}
           >
             <motion.div
-              animate={{ 
-                scale: [1, 1.2, 1],
-                opacity: [1, 0.7, 1],
-              }}
-              transition={{ 
-                duration: 2, 
-                repeat: Infinity, 
-                ease: 'easeInOut' 
-              }}
+              animate={{ scale: [1, 1.2, 1], opacity: [1, 0.7, 1] }}
+              transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
             >
               <WifiOff className="w-5 h-5 text-white" />
             </motion.div>
             <span className="font-body text-sm text-white font-medium">
-              You're offline
+              {t('pwa.youreOffline')}
             </span>
             <span className="text-white/70 text-xs hidden sm:inline">
-              — Some features may be limited
+              {t('pwa.featuresLimited')}
             </span>
           </div>
         </motion.div>
       )}
 
-      {/* Back Online Toast */}
       {isOnline && wasOffline && (
         <motion.div
           initial={{ opacity: 0, y: -100 }}
@@ -82,7 +74,7 @@ export const OfflineIndicator = () => {
               <Wifi className="w-5 h-5 text-white" />
             </motion.div>
             <span className="font-body text-sm text-white font-medium">
-              Back online
+              {t('pwa.backOnline')}
             </span>
           </div>
         </motion.div>
@@ -91,9 +83,9 @@ export const OfflineIndicator = () => {
   );
 };
 
-// Compact offline indicator for embedding in UI elements
 export const OfflineChip = () => {
   const { isOnline } = useNetworkStatus();
+  const { t } = useLanguage();
 
   if (isOnline) return null;
 
@@ -110,7 +102,7 @@ export const OfflineChip = () => {
       }}
     >
       <CloudOff className="w-3 h-3" />
-      <span className="font-body">Offline</span>
+      <span className="font-body">{t('pwa.offline')}</span>
     </motion.div>
   );
 };
