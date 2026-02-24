@@ -1,5 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Trophy, Medal, Award } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { getLocalizedUnit } from '@/i18n/units';
 
 interface LeaderboardEntry {
   id: string;
@@ -20,15 +22,17 @@ const rankIcons = [
 ];
 
 const JapLeaderboard = ({ leaderboard }: JapLeaderboardProps) => {
+  const { t, language } = useLanguage();
+
   return (
     <Card className="border-primary/20 bg-card/80">
       <CardHeader className="pb-2">
-        <CardTitle className="text-lg text-primary">🏆 Jap Leaderboard</CardTitle>
+        <CardTitle className="text-lg text-primary">{t('jap.leaderboard')}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-2">
         {leaderboard.length === 0 && (
           <p className="text-sm text-muted-foreground text-center py-6">
-            No entries yet. Be the first to chant! 🙏
+            {t('jap.noEntries')}
           </p>
         )}
         {leaderboard.map((entry, i) => {
@@ -53,13 +57,13 @@ const JapLeaderboard = ({ leaderboard }: JapLeaderboardProps) => {
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-semibold text-foreground truncate">
-                  {entry.display_name || 'Devotee'}
+                  {entry.display_name || t('common.devotee')}
                 </p>
                 <p className="text-xs text-muted-foreground truncate">{entry.mantra_name}</p>
               </div>
               <div className="text-right flex-shrink-0">
                 <p className="text-sm font-bold text-primary">{entry.total_chants.toLocaleString()}</p>
-                <p className="text-[10px] text-muted-foreground">chants</p>
+                <p className="text-[10px] text-muted-foreground">{t('jap.chants')}</p>
               </div>
             </div>
           );

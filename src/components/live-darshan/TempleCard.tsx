@@ -1,11 +1,13 @@
 import { motion } from 'framer-motion';
 import { Play, Users, Radio, MapPin } from 'lucide-react';
-import { Temple, deityLabels } from '@/data/templeStreams';
+import { Temple, DeityType } from '@/data/templeStreams';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import TempleSchedule from './TempleSchedule';
 import FavoriteButton from './FavoriteButton';
+import { useLanguage } from '@/contexts/LanguageContext';
+import type { TranslationKey } from '@/i18n/translations';
 
 interface TempleCardProps {
   temple: Temple;
@@ -13,7 +15,17 @@ interface TempleCardProps {
   isSelected?: boolean;
 }
 
+const deityKeyMap: Record<DeityType, TranslationKey> = {
+  shiva: 'temple.deity.shiva',
+  vishnu: 'temple.deity.vishnu',
+  devi: 'temple.deity.devi',
+  guru: 'temple.deity.guru',
+  multi: 'temple.deity.multi',
+};
+
 const TempleCard = ({ temple, onSelect, isSelected }: TempleCardProps) => {
+  const { t } = useLanguage();
+
   return (
     <motion.div
       whileHover={{ scale: 1.02, y: -4 }}
@@ -37,29 +49,25 @@ const TempleCard = ({ temple, onSelect, isSelected }: TempleCardProps) => {
               alt={temple.name}
               className="w-full h-full object-cover"
             />
-            {/* Gradient Overlay */}
             <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
             
-            {/* Live Badge */}
             {temple.isLive && (
               <div className="absolute top-3 left-3">
                 <Badge className="bg-red-600 text-white border-0 gap-1 animate-pulse">
                   <Radio className="w-3 h-3" />
-                  LIVE
+                  {t('temple.live')}
                 </Badge>
               </div>
             )}
             
-            {/* Featured Badge */}
             {temple.isFeatured && (
               <div className="absolute top-3 right-3">
                 <Badge className="bg-primary text-primary-foreground border-0">
-                  ⭐ Featured
+                  {t('temple.featured')}
                 </Badge>
               </div>
             )}
             
-            {/* Play Button Overlay */}
             <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
               <motion.div
                 whileHover={{ scale: 1.1 }}
@@ -69,7 +77,6 @@ const TempleCard = ({ temple, onSelect, isSelected }: TempleCardProps) => {
               </motion.div>
             </div>
             
-            {/* Viewer Count */}
             {temple.viewerCount && (
               <div className="absolute bottom-3 right-3 flex items-center gap-1.5 bg-background/80 backdrop-blur-sm px-2 py-1 rounded-full text-xs">
                 <Users className="w-3 h-3 text-primary" />
@@ -80,12 +87,10 @@ const TempleCard = ({ temple, onSelect, isSelected }: TempleCardProps) => {
         </div>
         
         <CardContent className="p-4 space-y-3">
-          {/* Temple Name */}
           <h3 className="font-display text-lg text-foreground font-semibold line-clamp-1">
             {temple.name}
           </h3>
           
-          {/* Location */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-1.5 text-muted-foreground text-sm">
               <MapPin className="w-3.5 h-3.5" />
@@ -94,26 +99,22 @@ const TempleCard = ({ temple, onSelect, isSelected }: TempleCardProps) => {
             <FavoriteButton templeId={temple.id} templeName={temple.name} size="sm" />
           </div>
           
-          {/* Deity Badge */}
           <div className="flex items-center gap-2">
             <Badge variant="secondary" className="text-xs">
-              {deityLabels[temple.deity]}
+              {t(deityKeyMap[temple.deity])}
             </Badge>
           </div>
           
-          {/* Description */}
           <p className="text-sm text-muted-foreground line-clamp-2">
             {temple.description}
           </p>
           
-          {/* Aarti Schedule Preview */}
           {temple.aartiSchedule && temple.aartiSchedule.length > 0 && (
             <div className="pt-2 border-t border-border/30">
               <TempleSchedule schedule={temple.aartiSchedule} compact />
             </div>
           )}
 
-          {/* Live Features */}
           <div className="flex flex-wrap gap-1">
             {temple.liveFeatures.slice(0, 2).map((feature, index) => (
               <span
@@ -125,7 +126,7 @@ const TempleCard = ({ temple, onSelect, isSelected }: TempleCardProps) => {
             ))}
             {temple.liveFeatures.length > 2 && (
               <span className="text-xs px-2 py-0.5 bg-muted rounded-full text-muted-foreground">
-                +{temple.liveFeatures.length - 2} more
+                +{temple.liveFeatures.length - 2} {t('temple.more')}
               </span>
             )}
           </div>

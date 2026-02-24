@@ -141,7 +141,7 @@ const ImmersiveDarshan = () => {
 
             <Badge variant="outline" className="hidden sm:flex gap-1 border-primary/50 text-primary">
               <Eye className="w-3 h-3" />
-              {allImmersiveTemples.length} Temples
+              {allImmersiveTemples.length} {t('immersive.temples')}
             </Badge>
       </header>
 
@@ -151,7 +151,7 @@ const ImmersiveDarshan = () => {
           <div className="relative">
             <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
             <Input
-              placeholder="Search temples..."
+              placeholder={t('immersive.searchTemples')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-12 h-12 bg-card border-border/50"
@@ -165,7 +165,7 @@ const ImmersiveDarshan = () => {
               size="sm"
               onClick={() => setSelectedCategory('all')}
             >
-              All Temples
+              {t('immersive.allTemples')}
             </Button>
             {Object.entries(categoryLabels).map(([key, label]) => (
               <Button
@@ -233,7 +233,7 @@ const ImmersiveDarshan = () => {
                     </Badge>
                     {temple.features.hasLiveStream && (
                       <Badge variant="outline" className="text-xs border-destructive/50 text-destructive">
-                        Live
+                        {t('darshan.liveCount')}
                       </Badge>
                     )}
                   </div>
@@ -245,7 +245,7 @@ const ImmersiveDarshan = () => {
 
         {filteredTemples.length === 0 && (
           <div className="text-center py-16">
-            <p className="text-muted-foreground">No temples found matching your criteria</p>
+            <p className="text-muted-foreground">{t('immersive.noTemples')}</p>
           </div>
         )}
       </main>

@@ -2,14 +2,13 @@ import { motion } from 'framer-motion';
 import { Filter, Radio, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { 
   TempleCategory, 
   DeityType, 
   Region,
-  categoryLabels,
-  deityLabels,
-  regionLabels 
 } from '@/data/templeStreams';
+import type { TranslationKey } from '@/i18n/translations';
 
 interface TempleFiltersProps {
   selectedCategory: TempleCategory | 'all';
@@ -22,6 +21,30 @@ interface TempleFiltersProps {
   onLiveOnlyChange: (liveOnly: boolean) => void;
 }
 
+const categoryKeyMap: Record<TempleCategory, TranslationKey> = {
+  jyotirlinga: 'temple.cat.jyotirlinga',
+  shakti_peeth: 'temple.cat.shaktiPeeth',
+  major: 'temple.cat.major',
+  international: 'temple.cat.international',
+  iskcon: 'temple.cat.iskcon',
+};
+
+const deityKeyMap: Record<DeityType, TranslationKey> = {
+  shiva: 'temple.deity.shiva',
+  vishnu: 'temple.deity.vishnu',
+  devi: 'temple.deity.devi',
+  guru: 'temple.deity.guru',
+  multi: 'temple.deity.multi',
+};
+
+const regionKeyMap: Record<Region, TranslationKey> = {
+  north: 'temple.region.north',
+  south: 'temple.region.south',
+  east: 'temple.region.east',
+  west: 'temple.region.west',
+  international: 'temple.region.international',
+};
+
 const TempleFilters = ({
   selectedCategory,
   selectedDeity,
@@ -32,6 +55,7 @@ const TempleFilters = ({
   onRegionChange,
   onLiveOnlyChange
 }: TempleFiltersProps) => {
+  const { t } = useLanguage();
   const categories: (TempleCategory | 'all')[] = ['all', 'jyotirlinga', 'shakti_peeth', 'major', 'international', 'iskcon'];
   const deities: (DeityType | 'all')[] = ['all', 'shiva', 'vishnu', 'devi', 'guru'];
   const regions: (Region | 'all')[] = ['all', 'north', 'south', 'east', 'west', 'international'];
@@ -47,7 +71,7 @@ const TempleFilters = ({
           className="gap-2"
         >
           <Radio className={`w-4 h-4 ${showLiveOnly ? 'animate-pulse' : ''}`} />
-          Live Only
+          {t('temple.liveOnly')}
         </Button>
         
         <Button
@@ -62,7 +86,7 @@ const TempleFilters = ({
           className="gap-2 text-muted-foreground"
         >
           <Filter className="w-4 h-4" />
-          Clear Filters
+          {t('temple.clearFilters')}
         </Button>
       </div>
 
@@ -70,7 +94,7 @@ const TempleFilters = ({
       <div className="space-y-2">
         <h4 className="text-sm font-medium text-muted-foreground flex items-center gap-2">
           <Sparkles className="w-4 h-4 text-primary" />
-          Temple Category
+          {t('temple.category')}
         </h4>
         <div className="flex flex-wrap gap-2">
           {categories.map((category) => (
@@ -88,7 +112,7 @@ const TempleFilters = ({
                 }`}
                 onClick={() => onCategoryChange(category)}
               >
-                {category === 'all' ? '🏛️ All Temples' : categoryLabels[category]}
+                {category === 'all' ? t('temple.allTemples') : t(categoryKeyMap[category])}
               </Badge>
             </motion.div>
           ))}
@@ -97,7 +121,7 @@ const TempleFilters = ({
 
       {/* Deity Filter */}
       <div className="space-y-2">
-        <h4 className="text-sm font-medium text-muted-foreground">By Deity</h4>
+        <h4 className="text-sm font-medium text-muted-foreground">{t('temple.byDeity')}</h4>
         <div className="flex flex-wrap gap-2">
           {deities.map((deity) => (
             <motion.div
@@ -114,7 +138,7 @@ const TempleFilters = ({
                 }`}
                 onClick={() => onDeityChange(deity)}
               >
-                {deity === 'all' ? '✨ All Deities' : deityLabels[deity]}
+                {deity === 'all' ? t('temple.allDeities') : t(deityKeyMap[deity])}
               </Badge>
             </motion.div>
           ))}
@@ -123,7 +147,7 @@ const TempleFilters = ({
 
       {/* Region Filter */}
       <div className="space-y-2">
-        <h4 className="text-sm font-medium text-muted-foreground">By Region</h4>
+        <h4 className="text-sm font-medium text-muted-foreground">{t('temple.byRegion')}</h4>
         <div className="flex flex-wrap gap-2">
           {regions.map((region) => (
             <motion.div
@@ -140,7 +164,7 @@ const TempleFilters = ({
                 }`}
                 onClick={() => onRegionChange(region)}
               >
-                {region === 'all' ? '🌏 All Regions' : regionLabels[region]}
+                {region === 'all' ? t('temple.allRegions') : t(regionKeyMap[region])}
               </Badge>
             </motion.div>
           ))}
