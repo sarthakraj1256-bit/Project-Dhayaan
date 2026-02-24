@@ -1,11 +1,13 @@
 import { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Target, Plus, CheckCircle2 } from 'lucide-react';
 import RadialProgress from './RadialProgress';
 import { PRESET_MANTRAS, type JapGoal } from '@/hooks/useJapBank';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { localizeUnit, localizeDate } from '@/i18n/units';
 
 interface JapGoalsProps {
   goals: JapGoal[];
@@ -14,6 +16,7 @@ interface JapGoalsProps {
 }
 
 const JapGoals = ({ goals, onCreateGoal, isCreating }: JapGoalsProps) => {
+  const { t, language } = useLanguage();
   const [showForm, setShowForm] = useState(false);
   const [mantra, setMantra] = useState(PRESET_MANTRAS[0]);
   const [customMantra, setCustomMantra] = useState('');
@@ -24,16 +27,8 @@ const JapGoals = ({ goals, onCreateGoal, isCreating }: JapGoalsProps) => {
   const handleCreate = () => {
     const name = mantra === 'custom' ? customMantra.trim() : mantra;
     if (!name || !target) return;
-    onCreateGoal({
-      mantraName: name,
-      targetCount: parseInt(target),
-      deadline: deadline || undefined,
-      dedication: dedication || undefined,
-    });
-    setShowForm(false);
-    setTarget('108');
-    setDeadline('');
-    setDedication('');
+    onCreateGoal({ mantraName: name, targetCount: parseInt(target), deadline: deadline || undefined, dedication: dedication || undefined });
+    setShowForm(false); setTarget('108'); setDeadline(''); setDedication('');
   };
 
   const activeGoals = goals.filter(g => g.status === 'active');
@@ -43,7 +38,7 @@ const JapGoals = ({ goals, onCreateGoal, isCreating }: JapGoalsProps) => {
     <div className="space-y-4">
       <Button onClick={() => setShowForm(!showForm)} className="w-full" variant={showForm ? 'secondary' : 'default'}>
         <Plus className="w-4 h-4 mr-2" />
-        {showForm ? 'Cancel' : 'Create Jap Goal'}
+        {showForm ? t('common.cancel') : t('jap.createGoal')}
       </Button>
 
       {showForm && (
@@ -53,15 +48,15 @@ const JapGoals = ({ goals, onCreateGoal, isCreating }: JapGoalsProps) => {
               <SelectTrigger className="bg-muted"><SelectValue /></SelectTrigger>
               <SelectContent>
                 {PRESET_MANTRAS.map(m => <SelectItem key={m} value={m}>{m}</SelectItem>)}
-                <SelectItem value="custom">✏️ Custom</SelectItem>
+                <SelectItem value="custom">{t('jap.customMantra')}</SelectItem>
               </SelectContent>
             </Select>
             {mantra === 'custom' && (
-              <Input placeholder="Custom mantra..." value={customMantra} onChange={e => setCustomMantra(e.target.value)} maxLength={200} className="bg-muted" />
+              <Input placeholder={t('jap.enterMantra')} value={customMantra} onChange={e => setCustomMantra(e.target.value)} maxLength={200} className="bg-muted" />
             )}
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="text-xs text-muted-foreground">Target Count</label>
+                <label className="text-xs text-muted-foreground">{t('jap.targetCount')}</label>
                 <Select value={target} onValueChange={setTarget}>
                   <SelectTrigger className="bg-muted"><SelectValue /></SelectTrigger>
                   <SelectContent>
@@ -72,23 +67,22 @@ const JapGoals = ({ goals, onCreateGoal, isCreating }: JapGoalsProps) => {
                 </Select>
               </div>
               <div>
-                <label className="text-xs text-muted-foreground">Deadline</label>
+                <label className="text-xs text-muted-foreground">{t('jap.deadline')}</label>
                 <Input type="date" value={deadline} onChange={e => setDeadline(e.target.value)} className="bg-muted" />
               </div>
             </div>
-            <Input placeholder="Dedicated to... (optional)" value={dedication} onChange={e => setDedication(e.target.value)} maxLength={200} className="bg-muted" />
+            <Input placeholder={t('jap.dedicatedTo')} value={dedication} onChange={e => setDedication(e.target.value)} maxLength={200} className="bg-muted" />
             <Button onClick={handleCreate} disabled={isCreating} className="w-full">
-              {isCreating ? 'Creating...' : '🎯 Set Goal'}
+              {isCreating ? t('jap.creating') : t('jap.setGoalAction')}
             </Button>
           </CardContent>
         </Card>
       )}
 
-      {/* Active Goals */}
       {activeGoals.length > 0 && (
         <div className="space-y-3">
           <h3 className="text-sm font-semibold text-primary flex items-center gap-2">
-            <Target className="w-4 h-4" /> Active Goals
+            <Target className="w-4 h-4" /> {t('jap.activeGoals')}
           </h3>
           {activeGoals.map(g => {
             const pct = (g.current_count / g.target_count) * 100;
@@ -96,19 +90,15 @@ const JapGoals = ({ goals, onCreateGoal, isCreating }: JapGoalsProps) => {
               <Card key={g.id} className="border-primary/20 bg-card/80">
                 <CardContent className="p-4">
                   <div className="flex items-center gap-4">
-                    <RadialProgress
-                      percentage={pct}
-                      current={g.current_count}
-                      target={g.target_count}
-                    />
+                    <RadialProgress percentage={pct} current={g.current_count} target={g.target_count} />
                     <div className="flex-1 min-w-0 space-y-1">
                       <p className="font-semibold text-foreground truncate">{g.mantra_name}</p>
-                      {g.dedication && <p className="text-xs text-muted-foreground truncate">For: {g.dedication}</p>}
+                      {g.dedication && <p className="text-xs text-muted-foreground truncate">{g.dedication}</p>}
                       <p className="text-xs text-muted-foreground">
-                        {g.current_count.toLocaleString()} / {g.target_count.toLocaleString()} chants
+                        {localizeUnit(g.current_count.toLocaleString(), 'chants', language).replace(`${g.current_count.toLocaleString()} `, '')} {g.current_count.toLocaleString()} / {g.target_count.toLocaleString()}
                       </p>
                       <p className="text-xs text-muted-foreground">
-                        {g.deadline ? `Due: ${new Date(g.deadline).toLocaleDateString()}` : 'No deadline'}
+                        {g.deadline ? `${t('jap.due')}: ${localizeDate(g.deadline, language)}` : t('jap.noDeadline')}
                       </p>
                     </div>
                   </div>
@@ -119,11 +109,10 @@ const JapGoals = ({ goals, onCreateGoal, isCreating }: JapGoalsProps) => {
         </div>
       )}
 
-      {/* Completed Goals */}
       {completedGoals.length > 0 && (
         <div className="space-y-3">
           <h3 className="text-sm font-semibold text-accent flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4" /> Completed Goals
+            <CheckCircle2 className="w-4 h-4" /> {t('jap.completedGoals')}
           </h3>
           {completedGoals.map(g => (
             <Card key={g.id} className="border-accent/20 bg-card/80 opacity-80">
@@ -131,7 +120,7 @@ const JapGoals = ({ goals, onCreateGoal, isCreating }: JapGoalsProps) => {
                 <div className="flex justify-between">
                   <div>
                     <p className="font-semibold text-foreground">{g.mantra_name}</p>
-                    <p className="text-xs text-accent">✅ {g.target_count.toLocaleString()} chants completed</p>
+                    <p className="text-xs text-accent">✅ {localizeUnit(g.target_count.toLocaleString(), 'chants', language)}</p>
                   </div>
                 </div>
               </CardContent>
@@ -141,7 +130,7 @@ const JapGoals = ({ goals, onCreateGoal, isCreating }: JapGoalsProps) => {
       )}
 
       {goals.length === 0 && !showForm && (
-        <p className="text-center text-muted-foreground text-sm py-6">No goals yet. Create one to track your spiritual journey! 🎯</p>
+        <p className="text-center text-muted-foreground text-sm py-6">{t('jap.noGoals')}</p>
       )}
     </div>
   );
