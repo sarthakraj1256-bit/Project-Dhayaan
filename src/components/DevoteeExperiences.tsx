@@ -9,6 +9,7 @@ import { getInitialStress } from './StressCheckInModal';
 import { useToast } from '@/hooks/use-toast';
 import { logError, logWarn } from '@/lib/logger';
 import { getVersionString } from '@/lib/version';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 // Lazy load Supabase to prevent initialization errors
 const getSupabase = async () => {
@@ -16,7 +17,7 @@ const getSupabase = async () => {
     const { supabase } = await import('@/integrations/backend/client');
     return supabase;
   } catch (e) {
-     logWarn('Supabase not available', e);
+    logWarn('Supabase not available', e);
     return null;
   }
 };
@@ -34,6 +35,7 @@ interface Review {
 const STORAGE_KEY = 'devalaya-devotee-reviews';
 
 export default function DevoteeExperiences() {
+  const { t, language } = useLanguage();
   const [reviews, setReviews] = useState<Review[]>([]);
   const [name, setName] = useState('');
   const [message, setMessage] = useState('');
@@ -52,7 +54,7 @@ export default function DevoteeExperiences() {
       try {
         setReviews(JSON.parse(stored));
       } catch (e) {
-         logError('Failed to parse reviews', e);
+        logError('Failed to parse reviews', e);
       }
     }
   }, []);
@@ -70,7 +72,6 @@ export default function DevoteeExperiences() {
     e.preventDefault();
     if (!name.trim() || !message.trim() || rating === 0) return;
     
-    // Show the final stress modal before submitting
     setPendingSubmission(true);
     setShowFinalStressModal(true);
   };
@@ -81,7 +82,8 @@ export default function DevoteeExperiences() {
     setIsSubmitting(true);
     
     const initialStress = getInitialStress();
-    const createdAt = new Date().toLocaleDateString('en-IN', {
+    const locale = language === 'hi' ? 'hi-IN' : 'en-IN';
+    const createdAt = new Date().toLocaleDateString(locale, {
       day: 'numeric',
       month: 'short',
       year: 'numeric'
@@ -97,10 +99,8 @@ export default function DevoteeExperiences() {
       stressReduction
     };
 
-    // Add to local state first for instant feedback
     setReviews(prev => [newReview, ...prev]);
 
-    // Submit to backend (if available)
     try {
       const supabase = await getSupabase();
       if (supabase) {
@@ -123,21 +123,19 @@ export default function DevoteeExperiences() {
       }
 
       toast({
-        title: "Experience Shared! 🙏",
+        title: t('devotee.sharedSuccess'),
         description: stressReduction !== null && stressReduction > 0 
-          ? `Your stress reduced by ${stressReduction}%! Thank you for sharing.`
-          : "Thank you for sharing your spiritual journey.",
+          ? t('devotee.stressReduced').replace('{value}', String(stressReduction))
+          : t('devotee.thankYou'),
       });
     } catch (err) {
        logError('Review submission error', err);
-      // Review is still saved locally
       toast({
-        title: "Experience Saved Locally 🙏",
-        description: "Thank you for sharing your spiritual journey.",
+        title: t('devotee.savedLocally'),
+        description: t('devotee.thankYou'),
       });
     }
 
-    // Reset form
     setName('');
     setMessage('');
     setRating(0);
@@ -178,10 +176,10 @@ export default function DevoteeExperiences() {
         {/* Section Header */}
         <div className="text-center mb-16">
           <h2 className="font-display text-3xl md:text-4xl text-gold-gradient tracking-wider mb-4">
-            Devotee Experiences
+            {t('devotee.title')}
           </h2>
           <p className="font-body text-muted-foreground max-w-2xl mx-auto">
-            Share your spiritual journey and connect with fellow seekers exploring the sacred geometry of Indian temples.
+            {t('devotee.subtitle')}
           </p>
         </div>
 
@@ -189,7 +187,7 @@ export default function DevoteeExperiences() {
         {reviews.length > 0 && (
           <div className="glass-card p-6 mb-10 text-center">
             <p className="text-sm text-muted-foreground uppercase tracking-widest mb-2">
-              Community Rating
+              {t('devotee.communityRating')}
             </p>
             <div className="flex items-center justify-center gap-3">
               <span className="font-display text-4xl text-gold-gradient">
@@ -198,7 +196,7 @@ export default function DevoteeExperiences() {
               {renderStars(Math.round(averageRating), false, 'w-6 h-6')}
             </div>
             <p className="text-xs text-muted-foreground mt-2">
-              Based on {reviews.length} {reviews.length === 1 ? 'experience' : 'experiences'}
+              {t('devotee.basedOn')} {reviews.length} {reviews.length === 1 ? t('devotee.experience') : t('devotee.experiences')}
             </p>
           </div>
         )}
@@ -216,14 +214,14 @@ export default function DevoteeExperiences() {
         {/* Submit Form */}
         <form onSubmit={handleFormSubmit} className="glass-card p-8 mb-12">
           <h3 className="font-display text-xl text-foreground tracking-wider mb-6">
-            Share Your Experience
+            {t('devotee.shareExperience')}
           </h3>
 
           <div className="space-y-6">
             {/* Star Rating */}
             <div>
               <label className="block text-sm text-muted-foreground mb-2 tracking-wider">
-                Your Rating
+                {t('devotee.yourRating')}
               </label>
               {renderStars(rating, true, 'w-8 h-8')}
             </div>
@@ -237,13 +235,13 @@ export default function DevoteeExperiences() {
             {/* Name Input */}
             <div>
               <label htmlFor="name" className="block text-sm text-muted-foreground mb-2 tracking-wider">
-                Your Name
+                {t('devotee.yourName')}
               </label>
               <Input
                 id="name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="Enter your name"
+                placeholder={t('devotee.enterName')}
                 className="bg-background/50 border-border/50 focus:border-primary/50"
                 required
               />
@@ -252,13 +250,13 @@ export default function DevoteeExperiences() {
             {/* Message Input */}
             <div>
               <label htmlFor="message" className="block text-sm text-muted-foreground mb-2 tracking-wider">
-                Your Experience
+                {t('devotee.yourExperience')}
               </label>
               <Textarea
                 id="message"
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
-                placeholder="Share your thoughts on the sacred architecture..."
+                placeholder={t('devotee.experiencePlaceholder')}
                 className="bg-background/50 border-border/50 focus:border-primary/50 min-h-[120px]"
                 required
               />
@@ -279,10 +277,10 @@ export default function DevoteeExperiences() {
               {isSubmitting ? (
                 <span className="flex items-center gap-2">
                   <span className="w-4 h-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
-                  Submitting...
+                  {t('devotee.submitting')}
                 </span>
               ) : (
-                'Submit Experience'
+                t('devotee.submit')
               )}
             </Button>
           </div>
@@ -292,7 +290,7 @@ export default function DevoteeExperiences() {
         {reviews.length > 0 && (
           <div className="space-y-6">
             <h3 className="font-display text-xl text-foreground tracking-wider text-center mb-8">
-              Recent Experiences
+              {t('devotee.recentExperiences')}
             </h3>
             {reviews.map((review) => (
               <div
@@ -336,15 +334,14 @@ export default function DevoteeExperiences() {
             ध्यान
           </p>
           <p className="font-body text-sm text-muted-foreground max-w-md mx-auto">
-            Exploring the intersection of ancient wisdom, sacred geometry, 
-            and scientific principles in Indian temple architecture.
+            {t('footer.exploringIntersection')}
           </p>
 
 
           {/* Team Credits */}
           <div className="pt-8 border-t border-border/10 mt-8 space-y-4">
             <p className="font-display text-sm tracking-widest text-muted-foreground uppercase">
-              Crafted with devotion by
+              {t('footer.craftedBy')}
             </p>
             <p className="font-display text-xl text-gold-gradient tracking-wider">
               Team Dhyaan
@@ -353,7 +350,7 @@ export default function DevoteeExperiences() {
             {/* Mentorship Credits */}
             <div className="pt-4 mt-2">
               <p className="font-display text-xs tracking-widest text-muted-foreground uppercase mb-2">
-                Under the guidance of
+                {t('footer.guidanceOf')}
               </p>
               <p className="font-display text-sm text-foreground tracking-wider">
                 Manish Sir & Shashank Sir
@@ -375,7 +372,7 @@ export default function DevoteeExperiences() {
           </div>
 
           <p className="text-xs text-muted-foreground/50 pt-4 tracking-wide">
-            "सर्वं खल्विदं ब्रह्म" — All this is indeed Brahman
+            {t('footer.allBrahman')}
           </p>
         </div>
       </div>
