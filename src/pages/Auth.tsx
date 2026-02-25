@@ -365,9 +365,9 @@ const Auth = () => {
       case "reset":
         return "RESTORE PASSWORD";
       case "login":
-        return "AWAKEN";
+        return "LOGIN";
       default:
-        return "AWAKEN";
+        return "SIGN UP";
     }
   };
 
