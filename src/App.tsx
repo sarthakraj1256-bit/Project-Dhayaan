@@ -31,6 +31,7 @@ const SharedGarden = lazy(() => import("./pages/SharedGarden"));
 const Install = lazy(() => import("./pages/Install"));
 const JapBank = lazy(() => import("./pages/JapBank"));
 const ChildrenCartoons = lazy(() => import("./pages/ChildrenCartoons"));
+const Help = lazy(() => import("./pages/Help"));
 
 // Lazy-loaded protected route wrapper
 const ProtectedRoute = lazy(() => import("./components/auth/ProtectedRoute"));
@@ -101,6 +102,7 @@ const App = () => (
             <Route path="/jap-bank" element={<JapBank />} />
             <Route path="/children-cartoons" element={<ChildrenCartoons />} />
             <Route path="/install" element={<Install />} />
+            <Route path="/help" element={<Help />} />
             
             {/* Catch-all */}
             <Route path="*" element={<NotFound />} />
