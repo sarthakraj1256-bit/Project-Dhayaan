@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowLeft, Compass, LifeBuoy, HelpCircle, Target, Radio, Layers, TrendingUp, Volume2, RefreshCw, WifiOff, MessageCircle } from "lucide-react";
+import { ArrowLeft, Compass, LifeBuoy, HelpCircle, Target, Radio, Layers, TrendingUp, Volume2, RefreshCw, WifiOff, MessageCircle, Mail } from "lucide-react";
 import {
   Accordion,
   AccordionContent,
@@ -65,8 +65,7 @@ const supportItems = [
     id: "support-4",
     icon: MessageCircle,
     title: "Contact Us",
-    content:
-      "For deep technical issues or feature suggestions like the Jap Bank, reach out to our dev team via the Profile section.",
+    isContact: true,
   },
 ];
 
@@ -185,7 +184,28 @@ const Help = () => {
                     </span>
                   </AccordionTrigger>
                   <AccordionContent className="text-sm text-muted-foreground pb-4 pl-9">
-                    {item.content}
+                    {'isContact' in item && item.isContact ? (
+                      <div className="space-y-3">
+                        <p>
+                          Have a question, found a bug, or want to suggest a feature? We'd love to hear from you.
+                        </p>
+                        <a
+                          href="mailto:try.dhyaan@gmail.com"
+                          className="inline-flex items-center gap-2 text-primary font-medium hover:underline"
+                        >
+                          <Mail className="w-4 h-4" />
+                          try.dhyaan@gmail.com
+                        </a>
+                        <ul className="list-disc pl-5 space-y-1.5 text-muted-foreground">
+                          <li>Report bugs or playback issues with detailed steps</li>
+                          <li>Suggest new mantras, frequencies, or temple streams</li>
+                          <li>Request features like the Jap Bank or new guided sessions</li>
+                          <li>We typically respond within 24–48 hours</li>
+                        </ul>
+                      </div>
+                    ) : (
+                      item.content
+                    )}
                   </AccordionContent>
                 </AccordionItem>
               );
