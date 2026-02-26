@@ -220,7 +220,42 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
+    <div className="min-h-screen bg-background flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Subtle spiritual background */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div
+          className="absolute inset-0"
+          style={{
+            background: 'radial-gradient(ellipse at 50% 0%, hsl(38, 70%, 50%, 0.07) 0%, transparent 60%)',
+          }}
+        />
+        <div
+          className="absolute inset-0"
+          style={{
+            background: 'radial-gradient(ellipse at 80% 80%, hsl(30, 60%, 55%, 0.05) 0%, transparent 50%)',
+          }}
+        />
+        {[...Array(8)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-1 h-1 rounded-full"
+            style={{
+              left: `${15 + Math.random() * 70}%`,
+              top: `${15 + Math.random() * 70}%`,
+              background: 'hsl(38, 70%, 50%, 0.12)',
+            }}
+            animate={{
+              y: [0, -15, 0],
+              opacity: [0.08, 0.25, 0.08],
+            }}
+            transition={{
+              duration: 5 + Math.random() * 3,
+              repeat: Infinity,
+              delay: Math.random() * 4,
+            }}
+          />
+        ))}
+      </div>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
