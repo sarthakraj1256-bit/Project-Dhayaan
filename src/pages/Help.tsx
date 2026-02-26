@@ -84,9 +84,9 @@ const faqItems = [
   },
   {
     id: "faq-3",
-    question: "Is my data secure?",
+    question: "Data Security and Infrastructure",
     answer:
-      "Yes, we use Row Level Security to ensure your spiritual journey and personal Jap-proofs are completely private to you.",
+      "We employ a multi-layered security framework to protect user information. Our backend implements PostgreSQL-level data isolation, meaning every user's record is protected by a dedicated security policy. This ensures complete privacy for your spiritual milestones and profile data, providing a secure environment for your daily Sadhana.",
   },
   {
     id: "faq-4",
