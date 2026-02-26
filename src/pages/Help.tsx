@@ -88,6 +88,12 @@ const faqItems = [
     answer:
       "Yes, we use Row Level Security to ensure your spiritual journey and personal Jap-proofs are completely private to you.",
   },
+  {
+    id: "faq-4",
+    question: "What is the Inner Calm Garden?",
+    answer:
+      "The Inner Calm Garden is your personal digital sanctuary where meditation progress grows sacred plants like the Lotus and Bodhi Tree. You earn Water Drops—1 drop for every 10 minutes of meditation—which you use to nurture your garden. It features dynamic weather, seasonal events, daily challenges, and over 20 achievement badges to unlock.",
+  },
 ];
 
 interface SectionProps {
