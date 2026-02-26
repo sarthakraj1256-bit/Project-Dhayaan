@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { User } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/backend/client';
 import { toast } from 'sonner';
-import { ArrowLeft, Camera, Loader2, Save, User as UserIcon, Trash2, Database } from 'lucide-react';
+import { ArrowLeft, Camera, Loader2, Save, User as UserIcon, Trash2, Database, HelpCircle, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -373,6 +373,21 @@ const Profile = () => {
             {isClearingCache ? t('profile.clearing') : t('profile.clearCache')}
           </Button>
         </div>
+
+        {/* Help & Guide Link */}
+        <button
+          onClick={() => navigate('/help')}
+          className="w-full rounded-xl p-4 flex items-center gap-3 border border-border/50 bg-card hover:bg-muted transition-colors"
+        >
+          <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center">
+            <HelpCircle className="w-5 h-5 text-primary" />
+          </div>
+          <div className="flex-1 text-left">
+            <p className="text-sm font-medium text-foreground">Help & Guide</p>
+            <p className="text-xs text-muted-foreground">Sadhana guide, FAQs & support</p>
+          </div>
+          <ChevronRight className="w-4 h-4 text-muted-foreground" />
+        </button>
       </div>
     </div>
   );
