@@ -88,12 +88,6 @@ const faqItems = [
     answer:
       "Yes, we use Row Level Security to ensure your spiritual journey and personal Jap-proofs are completely private to you.",
   },
-  {
-    id: "faq-4",
-    question: "What is the Digital Akhanda Garden?",
-    answer:
-      "This is an upcoming feature where your progress helps grow a virtual sacred tree, reflecting your inner growth through a living digital garden.",
-  },
 ];
 
 interface SectionProps {
