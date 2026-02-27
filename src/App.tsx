@@ -32,9 +32,11 @@ const Install = lazy(() => import("./pages/Install"));
 const JapBank = lazy(() => import("./pages/JapBank"));
 const ChildrenCartoons = lazy(() => import("./pages/ChildrenCartoons"));
 const Help = lazy(() => import("./pages/Help"));
+const Admin = lazy(() => import("./pages/Admin"));
 
-// Lazy-loaded protected route wrapper
+// Lazy-loaded protected route wrappers
 const ProtectedRoute = lazy(() => import("./components/auth/ProtectedRoute"));
+const AdminRoute = lazy(() => import("./components/auth/AdminRoute"));
 
 // Page loading skeleton
 const PageSkeleton = () => (
@@ -103,6 +105,11 @@ const App = () => (
             <Route path="/children-cartoons" element={<ChildrenCartoons />} />
             <Route path="/install" element={<Install />} />
             <Route path="/help" element={<Help />} />
+            <Route path="/admin" element={
+              <Suspense fallback={<PageSkeleton />}>
+                <AdminRoute><Admin /></AdminRoute>
+              </Suspense>
+            } />
             
             {/* Catch-all */}
             <Route path="*" element={<NotFound />} />
