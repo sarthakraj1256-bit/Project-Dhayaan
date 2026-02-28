@@ -65,7 +65,7 @@ export default function SectionNav() {
       <div className="bg-background/85 backdrop-blur-xl border-b border-border/50">
         <div
           ref={navRef}
-          className="flex items-center gap-1.5 px-4 py-2.5 overflow-x-auto scrollbar-hide"
+          className="flex items-center gap-1.5 px-4 pr-28 sm:pr-36 py-2.5 overflow-x-auto scrollbar-hide"
         >
           {sections.map((section) => (
             <button
