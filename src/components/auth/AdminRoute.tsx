@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/backend/client";
 import { useAdminCheck } from "@/hooks/useAdminCheck";
@@ -15,6 +15,7 @@ const AdminRoute = ({ children }: AdminRouteProps) => {
   const { isAdmin, isLoading: roleLoading } = useAdminCheck();
   const location = useLocation();
   const { toast } = useToast();
+  const unauthorizedToastShownRef = useRef(false);
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
@@ -31,6 +32,17 @@ const AdminRoute = ({ children }: AdminRouteProps) => {
 
     return () => subscription.unsubscribe();
   }, []);
+
+  useEffect(() => {
+    if (!authLoading && !roleLoading && user && !isAdmin && !unauthorizedToastShownRef.current) {
+      unauthorizedToastShownRef.current = true;
+      toast({
+        title: "Unauthorized Access",
+        description: "You don't have permission to access the admin area.",
+        variant: "destructive",
+      });
+    }
+  }, [authLoading, roleLoading, user, isAdmin, toast]);
 
   if (authLoading || roleLoading) {
     return (
@@ -63,11 +75,6 @@ const AdminRoute = ({ children }: AdminRouteProps) => {
   }
 
   if (!isAdmin) {
-    toast({
-      title: "Unauthorized Access",
-      description: "You don't have permission to access the admin area.",
-      variant: "destructive",
-    });
     return <Navigate to="/dashboard" replace />;
   }
 
@@ -75,3 +82,4 @@ const AdminRoute = ({ children }: AdminRouteProps) => {
 };
 
 export default AdminRoute;
+
