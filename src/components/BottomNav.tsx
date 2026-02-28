@@ -18,7 +18,7 @@ const navItems: NavItem[] = [
   { path: '/sonic-lab', labelKey: 'nav.sonic', icon: Radio },
   { path: '/live-darshan', labelKey: 'nav.darshan', icon: Play },
   { path: '/lakshya', labelKey: 'nav.lakshya', icon: Sparkles },
-  { path: '/profile', labelKey: 'nav.profile', icon: User },
+  
 ];
 
 const BottomNav = forwardRef<HTMLElement>((_, ref) => {
