@@ -71,6 +71,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <EnvHealthCheck />
+      <PWAInstallPrompt />
       
       <BrowserRouter>
         <Suspense fallback={<PageSkeleton />}>
