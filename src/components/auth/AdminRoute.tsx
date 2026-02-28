@@ -37,8 +37,8 @@ const AdminRoute = ({ children }: AdminRouteProps) => {
     if (!authLoading && !roleLoading && user && !isAdmin && !unauthorizedToastShownRef.current) {
       unauthorizedToastShownRef.current = true;
       toast({
-        title: "Unauthorized Access",
-        description: "You don't have permission to access the admin area.",
+        title: "Access Denied",
+        description: "Access Denied: Restricted to Authorized Personnel.",
         variant: "destructive",
       });
     }
