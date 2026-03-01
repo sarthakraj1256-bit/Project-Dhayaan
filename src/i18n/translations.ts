@@ -91,6 +91,7 @@ export const translations = {
     'nav.darshan': 'Darshan',
     'nav.lakshya': 'Lakshya',
     'nav.profile': 'Profile',
+    'nav.shorts': 'Shorts',
 
     // Section nav
     'sectionNav.home': 'Home',
@@ -947,6 +948,7 @@ export const translations = {
     'nav.darshan': 'दर्शन',
     'nav.lakshya': 'लक्ष्य',
     'nav.profile': 'प्रोफ़ाइल',
+    'nav.shorts': 'शॉर्ट्स',
 
     // Section nav
     'sectionNav.home': 'होम',
