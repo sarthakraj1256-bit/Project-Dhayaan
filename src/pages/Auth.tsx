@@ -5,7 +5,7 @@ import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovableSafe";
 import { useToast } from "@/hooks/use-toast";
-import { ArrowLeft, Mail, Lock, Eye, EyeOff, ArrowRight, Loader2 } from "lucide-react";
+import { ArrowLeft, Mail, Lock, Eye, EyeOff, ArrowRight, Loader2, WifiOff, RefreshCw } from "lucide-react";
 import { logError } from "@/lib/logger";
 import dhyaanLogo from "@/assets/dhyaan-logo.png";
 
@@ -26,6 +26,8 @@ const Auth = () => {
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [isAppleLoading, setIsAppleLoading] = useState(false);
   const [errors, setErrors] = useState<{ email?: string; password?: string; confirmPassword?: string }>({});
+  const [connectionError, setConnectionError] = useState(false);
+  const [resettingSession, setResettingSession] = useState(false);
 
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -87,12 +89,14 @@ const Auth = () => {
       supabase.auth.getSession().then(async ({ data: { session }, error }) => {
         if (error) {
           logError("Auth session fetch error", error);
-          if (error.message?.toLowerCase().includes("fetch")) {
-            await supabase.auth.signOut({ scope: "local" });
+          const isFetchError = error.message?.toLowerCase().includes("fetch");
+          if (isFetchError) {
+            setConnectionError(true);
           }
           return;
         }
 
+        setConnectionError(false);
         if (session?.user && !isResetMode) {
           navigate("/");
         }
@@ -234,6 +238,20 @@ const Auth = () => {
     }
   };
 
+  const handleResetLocalSession = async () => {
+    setResettingSession(true);
+    try {
+      await supabase.auth.signOut({ scope: "local" });
+      localStorage.removeItem("sb-pgavnutkwiiovdvbrbcl-auth-token");
+      setConnectionError(false);
+      toast({ title: "Session cleared", description: "You can now sign in fresh." });
+    } catch {
+      toast({ title: "Could not reset", description: "Please clear your browser data manually.", variant: "destructive" });
+    } finally {
+      setResettingSession(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4 relative overflow-hidden">
       {/* Subtle spiritual background */}
@@ -277,6 +295,38 @@ const Auth = () => {
         transition={{ duration: 0.5, ease: "easeOut" }}
         className="w-full max-w-sm"
       >
+        {/* Auth health banner */}
+        <AnimatePresence>
+          {connectionError && (
+            <motion.div
+              initial={{ opacity: 0, y: -10, height: 0 }}
+              animate={{ opacity: 1, y: 0, height: "auto" }}
+              exit={{ opacity: 0, y: -10, height: 0 }}
+              className="mb-3 rounded-xl border border-destructive/30 bg-destructive/10 p-3.5 flex items-start gap-3"
+            >
+              <WifiOff className="w-5 h-5 text-destructive shrink-0 mt-0.5" />
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-foreground">Connection issue detected</p>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  A stale session is preventing sign-in. Reset it to continue.
+                </p>
+                <button
+                  onClick={handleResetLocalSession}
+                  disabled={resettingSession}
+                  className="mt-2 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-destructive/20 hover:bg-destructive/30 text-destructive text-xs font-semibold transition-colors disabled:opacity-50"
+                >
+                  {resettingSession ? (
+                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                  ) : (
+                    <RefreshCw className="w-3.5 h-3.5" />
+                  )}
+                  Reset local session
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* Card */}
         <div className="rounded-2xl bg-card border border-border shadow-lg p-6 md:p-8">
           {/* Back button for forgot/reset */}
