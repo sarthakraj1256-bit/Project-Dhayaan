@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { z } from "zod";
-import { supabase } from "@/integrations/backend/client";
+import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovableSafe";
 import { useToast } from "@/hooks/use-toast";
 import { ArrowLeft, Mail, Lock, Eye, EyeOff, ArrowRight, Loader2 } from "lucide-react";
@@ -84,7 +84,15 @@ const Auth = () => {
         }
       });
 
-      supabase.auth.getSession().then(({ data: { session } }) => {
+      supabase.auth.getSession().then(async ({ data: { session }, error }) => {
+        if (error) {
+          logError("Auth session fetch error", error);
+          if (error.message?.toLowerCase().includes("fetch")) {
+            await supabase.auth.signOut({ scope: "local" });
+          }
+          return;
+        }
+
         if (session?.user && !isResetMode) {
           navigate("/");
         }
@@ -184,8 +192,15 @@ const Auth = () => {
           navigate("/");
         }
       }
-    } catch {
-      toast({ title: "An error occurred", description: "Please try again later.", variant: "destructive" });
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Please try again later.";
+      toast({
+        title: "Sign-in failed",
+        description: message.toLowerCase().includes("fetch")
+          ? "Network connection issue while contacting authentication service. Please retry."
+          : message,
+        variant: "destructive"
+      });
     } finally {
       setIsLoading(false);
     }

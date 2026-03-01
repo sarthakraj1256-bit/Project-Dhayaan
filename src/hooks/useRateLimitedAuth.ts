@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { supabase } from '@/integrations/backend/client';
+import { supabase } from '@/integrations/supabase/client';
 
 interface AuthResult {
   success: boolean;
