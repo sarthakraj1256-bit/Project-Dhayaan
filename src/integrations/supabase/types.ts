@@ -493,6 +493,132 @@ export type Database = {
         }
         Relationships: []
       }
+      shorts_comments: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          short_id: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          short_id: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          short_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shorts_comments_short_id_fkey"
+            columns: ["short_id"]
+            isOneToOne: false
+            referencedRelation: "shorts_metadata"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      shorts_likes: {
+        Row: {
+          created_at: string
+          id: string
+          short_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          short_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          short_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shorts_likes_short_id_fkey"
+            columns: ["short_id"]
+            isOneToOne: false
+            referencedRelation: "shorts_metadata"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      shorts_metadata: {
+        Row: {
+          caption: string | null
+          created_at: string
+          creator_id: string
+          id: string
+          is_flagged: boolean
+          likes_count: number
+          tags: string[] | null
+          video_url: string
+        }
+        Insert: {
+          caption?: string | null
+          created_at?: string
+          creator_id: string
+          id?: string
+          is_flagged?: boolean
+          likes_count?: number
+          tags?: string[] | null
+          video_url: string
+        }
+        Update: {
+          caption?: string | null
+          created_at?: string
+          creator_id?: string
+          id?: string
+          is_flagged?: boolean
+          likes_count?: number
+          tags?: string[] | null
+          video_url?: string
+        }
+        Relationships: []
+      }
+      shorts_reports: {
+        Row: {
+          created_at: string
+          id: string
+          reason: string
+          reporter_id: string
+          short_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          reason: string
+          reporter_id: string
+          short_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          reason?: string
+          reporter_id?: string
+          short_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shorts_reports_short_id_fkey"
+            columns: ["short_id"]
+            isOneToOne: false
+            referencedRelation: "shorts_metadata"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       story_reactions: {
         Row: {
           created_at: string
@@ -804,6 +930,10 @@ export type Database = {
       auto_acknowledge_temple_reports: { Args: never; Returns: undefined }
       check_auto_complete_requests: { Args: never; Returns: undefined }
       check_expired_requests: { Args: never; Returns: undefined }
+      flag_short: {
+        Args: { p_reason: string; p_short_id: string }
+        Returns: undefined
+      }
       get_garden_leaderboard: {
         Args: { limit_count?: number }
         Returns: {
@@ -879,6 +1009,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      toggle_short_like: { Args: { p_short_id: string }; Returns: boolean }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
