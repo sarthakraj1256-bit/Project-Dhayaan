@@ -1,19 +1,27 @@
 import { useState, useRef, useEffect, useCallback } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Plus, ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useShorts } from "@/hooks/useShorts";
 import ShortCard from "./ShortCard";
 import UploadModal from "./UploadModal";
+import TagFilter from "./TagFilter";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 
 const ShortsFeed = () => {
-  const { shorts, loading, hasMore, loadMore, removeShort, refetch } = useShorts();
+  const [activeTag, setActiveTag] = useState<string | null>(null);
+  const { shorts, loading, hasMore, loadMore, removeShort, refetch } = useShorts(activeTag);
   const [activeIndex, setActiveIndex] = useState(0);
   const [showUpload, setShowUpload] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+
+  // Reset scroll position when tag changes
+  useEffect(() => {
+    setActiveIndex(0);
+    containerRef.current?.scrollTo({ top: 0 });
+  }, [activeTag]);
 
   // Track active short via IntersectionObserver
   useEffect(() => {
@@ -27,7 +35,6 @@ const ShortsFeed = () => {
             const idx = Number(entry.target.getAttribute("data-index"));
             if (!isNaN(idx)) {
               setActiveIndex(idx);
-              // Load more when near the end
               if (idx >= shorts.length - 3 && hasMore) {
                 loadMore();
               }
@@ -70,9 +77,32 @@ const ShortsFeed = () => {
   if (shorts.length === 0) {
     return (
       <div className="h-[100dvh] flex flex-col items-center justify-center px-6" style={{ background: "#0A0604" }}>
-        <p className="text-lg font-semibold text-[#E8C97A] mb-2">No Shorts Yet</p>
+        {/* Tag filter even on empty */}
+        <div className="fixed top-0 left-0 right-0 z-30 pt-4 safe-top">
+          <div className="flex items-center gap-3 px-4 mb-3">
+            <button
+              onClick={() => navigate(-1)}
+              className="w-10 h-10 rounded-full flex items-center justify-center touch-target flex-shrink-0"
+              style={{
+                background: "rgba(15,10,5,0.45)",
+                backdropFilter: "blur(18px)",
+                border: "1px solid rgba(201,168,76,0.25)",
+              }}
+              aria-label="Go back"
+            >
+              <ArrowLeft className="w-5 h-5 text-[#E8C97A]" />
+            </button>
+            <TagFilter activeTag={activeTag} onTagChange={setActiveTag} />
+          </div>
+        </div>
+
+        <p className="text-lg font-semibold text-[#E8C97A] mb-2">
+          {activeTag ? `No "${activeTag}" shorts yet` : "No Shorts Yet"}
+        </p>
         <p className="text-sm text-[#F2EDE8]/50 text-center mb-6">
-          Be the first to share a devotional moment with the community 🙏
+          {activeTag
+            ? "Try another category or be the first to upload! 🙏"
+            : "Be the first to share a devotional moment with the community 🙏"}
         </p>
         <button
           onClick={handleUploadClick}
@@ -88,19 +118,24 @@ const ShortsFeed = () => {
 
   return (
     <div className="relative" style={{ background: "#0A0604" }}>
-      {/* Back button */}
-      <button
-        onClick={() => navigate(-1)}
-        className="fixed top-4 left-4 z-30 w-10 h-10 rounded-full flex items-center justify-center touch-target"
-        style={{
-          background: "rgba(15,10,5,0.45)",
-          backdropFilter: "blur(18px)",
-          border: "1px solid rgba(201,168,76,0.25)",
-        }}
-        aria-label="Go back"
-      >
-        <ArrowLeft className="w-5 h-5 text-[#E8C97A]" />
-      </button>
+      {/* Top bar: Back + Tag filter */}
+      <div className="fixed top-0 left-0 right-0 z-30 pt-4 safe-top">
+        <div className="flex items-center gap-3 px-4">
+          <button
+            onClick={() => navigate(-1)}
+            className="w-10 h-10 rounded-full flex items-center justify-center touch-target flex-shrink-0"
+            style={{
+              background: "rgba(15,10,5,0.45)",
+              backdropFilter: "blur(18px)",
+              border: "1px solid rgba(201,168,76,0.25)",
+            }}
+            aria-label="Go back"
+          >
+            <ArrowLeft className="w-5 h-5 text-[#E8C97A]" />
+          </button>
+          <TagFilter activeTag={activeTag} onTagChange={setActiveTag} />
+        </div>
+      </div>
 
       {/* Scroll container */}
       <div

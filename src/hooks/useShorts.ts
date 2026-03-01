@@ -15,26 +15,37 @@ export interface ShortItem {
 
 const PAGE_SIZE = 10;
 
-export const useShorts = () => {
+export const useShorts = (activeTag: string | null = null) => {
   const [shorts, setShorts] = useState<ShortItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [hasMore, setHasMore] = useState(true);
   const pageRef = useRef(0);
+  const activeTagRef = useRef(activeTag);
 
-  const fetchShorts = useCallback(async (reset = false) => {
+  // Track tag changes
+  activeTagRef.current = activeTag;
+
+  const fetchShorts = useCallback(async (reset = false, tag: string | null = activeTagRef.current) => {
     if (reset) {
       pageRef.current = 0;
       setHasMore(true);
+      setLoading(true);
     }
 
     const from = pageRef.current * PAGE_SIZE;
     const to = from + PAGE_SIZE - 1;
 
-    const { data, error } = await supabase
+    let query = supabase
       .from("shorts_metadata")
       .select("*")
       .order("created_at", { ascending: false })
       .range(from, to);
+
+    if (tag) {
+      query = query.contains("tags", [tag]);
+    }
+
+    const { data, error } = await query;
 
     if (error) {
       console.error("Error fetching shorts:", error);
@@ -94,9 +105,10 @@ export const useShorts = () => {
     );
   }, []);
 
+  // Re-fetch when tag changes
   useEffect(() => {
-    fetchShorts(true);
-  }, [fetchShorts]);
+    fetchShorts(true, activeTag);
+  }, [activeTag, fetchShorts]);
 
   return { shorts, loading, hasMore, loadMore, removeShort, updateLikeCount, refetch: () => fetchShorts(true) };
 };
