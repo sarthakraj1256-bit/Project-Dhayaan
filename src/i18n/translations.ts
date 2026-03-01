@@ -41,6 +41,8 @@ export const translations = {
     'feature.dailyAartiDesc': 'Devotional videos',
     'feature.kidsCartoons': 'Kids Cartoons',
     'feature.kidsCartoonsDesc': 'Spiritual stories',
+    'feature.bhaktiShorts': 'Bhakti Shorts',
+    'feature.bhaktiShortsDesc': 'Devotional reels',
 
     // Relaxation section
     'relax.title': 'Healing Frequencies',
@@ -895,6 +897,8 @@ export const translations = {
     'feature.dailyAartiDesc': 'भक्ति वीडियो',
     'feature.kidsCartoons': 'बच्चों के कार्टून',
     'feature.kidsCartoonsDesc': 'आध्यात्मिक कहानियाँ',
+    'feature.bhaktiShorts': 'भक्ति शॉर्ट्स',
+    'feature.bhaktiShortsDesc': 'भक्ति रील्स',
 
     // Relaxation section
     'relax.title': 'उपचारात्मक ध्वनियाँ',
