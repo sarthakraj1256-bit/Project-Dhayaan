@@ -1,7 +1,7 @@
 import { forwardRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Home, Radio, BookOpen, Sparkles, Play, User } from 'lucide-react';
+import { Home, Radio, BookOpen, Sparkles, Play, User, Clapperboard } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { triggerHaptic } from '@/hooks/useHapticFeedback';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -16,8 +16,8 @@ interface NavItem {
 const navItems: NavItem[] = [
   { path: '/', labelKey: 'nav.home', icon: Home },
   { path: '/sonic-lab', labelKey: 'nav.sonic', icon: Radio },
+  { path: '/bhakti-shorts', labelKey: 'nav.shorts', icon: Clapperboard },
   { path: '/live-darshan', labelKey: 'nav.darshan', icon: Play },
-  { path: '/lakshya', labelKey: 'nav.lakshya', icon: Sparkles },
   { path: '/profile', labelKey: 'nav.profile', icon: User },
 ];
 
