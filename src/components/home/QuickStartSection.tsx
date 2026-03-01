@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import {
-  Waves, Play, BookOpen, ScrollText, Sparkles, Eye, Flame, Tv,
+  Waves, Play, BookOpen, ScrollText, Sparkles, Eye, Flame, Tv, Clapperboard,
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
@@ -16,6 +16,7 @@ const features = [
   { icon: Eye, labelKey: 'feature.immersive' as TranslationKey, descKey: 'feature.immersiveDesc' as TranslationKey, href: '/immersive-darshan', color: '#3BA8C0' },
   { icon: Flame, labelKey: 'feature.dailyAarti' as TranslationKey, descKey: 'feature.dailyAartiDesc' as TranslationKey, href: '/live-darshan?tab=content', color: '#D4872A' },
   { icon: Tv, labelKey: 'feature.kidsCartoons' as TranslationKey, descKey: 'feature.kidsCartoonsDesc' as TranslationKey, href: '/children-cartoons', color: '#D45470' },
+  { icon: Clapperboard, labelKey: 'feature.bhaktiShorts' as TranslationKey, descKey: 'feature.bhaktiShortsDesc' as TranslationKey, href: '/bhakti-shorts', color: '#C9A84C' },
 ];
 
 export default function QuickStartSection() {
