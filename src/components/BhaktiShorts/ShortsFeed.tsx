@@ -52,16 +52,25 @@ const ShortsFeed = () => {
   }, [shorts.length, hasMore, loadMore]);
 
   const handleUploadClick = useCallback(async () => {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        toast({
+          title: "Sign in to join the Bhakti community 🙏",
+          description: "Create an account to upload shorts",
+        });
+        navigate("/auth");
+        return;
+      }
+      setShowUpload(true);
+    } catch {
       toast({
-        title: "Sign in to join the Bhakti community 🙏",
-        description: "Create an account to upload shorts",
+        title: "Sign in required",
+        description: "Please sign in first to upload Bhakti Shorts 🙏",
       });
-      return;
+      navigate("/auth");
     }
-    setShowUpload(true);
-  }, []);
+  }, [navigate]);
 
   if (loading && shorts.length === 0) {
     return (
