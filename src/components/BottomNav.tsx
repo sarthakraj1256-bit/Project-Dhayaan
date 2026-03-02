@@ -16,8 +16,8 @@ interface NavItem {
 const navItems: NavItem[] = [
   { path: '/', labelKey: 'nav.home', icon: Home },
   { path: '/sonic-lab', labelKey: 'nav.sonic', icon: Radio },
-  { path: '/bhakti-shorts', labelKey: 'nav.shorts', icon: Clapperboard },
   { path: '/live-darshan', labelKey: 'nav.darshan', icon: Play },
+  { path: '/bhakti-shorts', labelKey: 'nav.shorts', icon: Clapperboard },
   { path: '/lakshya', labelKey: 'nav.lakshya', icon: Sparkles },
   { path: '/profile', labelKey: 'nav.profile', icon: User },
 ];
