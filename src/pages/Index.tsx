@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import { Link } from 'react-router-dom';
 import { LogIn } from 'lucide-react';
 import { supabase } from '@/integrations/backend/client';
@@ -8,20 +8,20 @@ import BottomNav from '@/components/BottomNav';
 
 import LanguageToggle from '@/components/LanguageToggle';
 import { useLanguage } from '@/contexts/LanguageContext';
-import {
-  HeroSection,
-  QuickStartSection,
-  RelaxationSection,
-  DarshanSection,
-  SpiritualHubSection,
-  DailyHighlightsSection,
-  PhilosophySection,
-  FinalCTASection,
-} from '@/components/home';
-import DevoteeExperiences from '@/components/DevoteeExperiences';
-import ChildrenCartoonsSection from '@/components/home/ChildrenCartoonsSection';
+// Only hero + quick-start are above the fold — load eagerly
+import { HeroSection, QuickStartSection } from '@/components/home';
 import SectionNav from '@/components/home/SectionNav';
 import WavyBackground from '@/components/home/WavyBackground';
+
+// Below-fold sections — lazy loaded
+const RelaxationSection = lazy(() => import('@/components/home/RelaxationSection'));
+const DarshanSection = lazy(() => import('@/components/home/DarshanSection'));
+const SpiritualHubSection = lazy(() => import('@/components/home/SpiritualHubSection'));
+const ChildrenCartoonsSection = lazy(() => import('@/components/home/ChildrenCartoonsSection'));
+const DailyHighlightsSection = lazy(() => import('@/components/home/DailyHighlightsSection'));
+const PhilosophySection = lazy(() => import('@/components/home/PhilosophySection'));
+const FinalCTASection = lazy(() => import('@/components/home/FinalCTASection'));
+const DevoteeExperiences = lazy(() => import('@/components/DevoteeExperiences'));
 
 const Index = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -48,14 +48,16 @@ const Index = () => {
       <main className="relative z-10 pb-24 md:pb-0">
         <div id="hero"><HeroSection user={user} /></div>
         <div id="explore"><QuickStartSection /></div>
-        <div id="relaxation"><RelaxationSection /></div>
-        <div id="darshan"><DarshanSection /></div>
-        <div id="daily-aarti"><SpiritualHubSection /></div>
-        <div id="cartoons"><ChildrenCartoonsSection /></div>
-        <div id="highlights"><DailyHighlightsSection /></div>
-        <div id="philosophy"><PhilosophySection /></div>
-        <FinalCTASection />
-        <div id="reviews"><DevoteeExperiences /></div>
+        <Suspense fallback={null}>
+          <div id="relaxation"><RelaxationSection /></div>
+          <div id="darshan"><DarshanSection /></div>
+          <div id="daily-aarti"><SpiritualHubSection /></div>
+          <div id="cartoons"><ChildrenCartoonsSection /></div>
+          <div id="highlights"><DailyHighlightsSection /></div>
+          <div id="philosophy"><PhilosophySection /></div>
+          <FinalCTASection />
+          <div id="reviews"><DevoteeExperiences /></div>
+        </Suspense>
       </main>
 
       {/* Navigation - Fixed Top Right */}
