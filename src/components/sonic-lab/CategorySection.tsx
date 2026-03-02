@@ -21,6 +21,7 @@ const categoryNameKeys: Record<string, TranslationKey> = {
   stress: 'sound.cat.stress',
   meditation: 'sound.cat.meditation',
   sleep: 'sound.cat.sleep',
+  celestial: 'sound.cat.celestial',
 };
 
 const categoryDescKeys: Record<string, TranslationKey> = {
@@ -30,6 +31,7 @@ const categoryDescKeys: Record<string, TranslationKey> = {
   stress: 'sound.cat.stress.desc',
   meditation: 'sound.cat.meditation.desc',
   sleep: 'sound.cat.sleep.desc',
+  celestial: 'sound.cat.celestial.desc',
 };
 
 const CategorySection = ({

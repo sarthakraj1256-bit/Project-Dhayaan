@@ -9,13 +9,14 @@
    category: FrequencyCategory;
  }
  
- export type FrequencyCategory =
-   | 'refresh'
-   | 'healing'
-   | 'focus'
-   | 'stress'
-   | 'meditation'
-   | 'sleep';
+export type FrequencyCategory =
+  | 'refresh'
+  | 'healing'
+  | 'focus'
+  | 'stress'
+  | 'meditation'
+  | 'sleep'
+  | 'celestial';
  
  export interface CategoryInfo {
    id: FrequencyCategory;
@@ -66,11 +67,18 @@
      name: 'Sleep & Recovery',
      description: 'Better rest and physical recovery',
      icon: '🌙',
-     color: 'indigo',
-   },
- ];
- 
- export const soundLibrary: FrequencyItem[] = [
+    color: 'indigo',
+  },
+  {
+    id: 'celestial',
+    name: 'Celestial & Brainwave Tones',
+    description: 'Planetary frequencies and brainwave entrainment',
+    icon: '✨',
+    color: 'gold',
+  },
+];
+
+export const soundLibrary: FrequencyItem[] = [
    // Refresh & Energy Boost
    { freq: '174Hz', value: 174, name: 'Foundation', purpose: 'Mental refresh, grounding', category: 'refresh' },
    { freq: '285Hz', value: 285, name: 'Rejuvenation', purpose: 'Cellular rejuvenation', category: 'refresh' },
@@ -121,8 +129,14 @@
    { freq: '432Hz', value: 432, name: 'Slow Mind', purpose: 'Slow brain activity', category: 'sleep' },
    { freq: '528Hz', value: 528, name: 'Inner Peace', purpose: 'Gentle inner peace', category: 'sleep' },
    { freq: '639Hz', value: 639, name: 'Ease', purpose: 'Emotional ease', category: 'sleep' },
-   { freq: '741Hz', value: 741, name: 'Quietness', purpose: 'Mental quietness', category: 'sleep' },
- ];
+  { freq: '741Hz', value: 741, name: 'Quietness', purpose: 'Mental quietness', category: 'sleep' },
+
+  // Celestial & Brainwave Tones
+  { freq: '141.27Hz', value: 141.27, name: "Mercury's Clarity", purpose: 'Intellectual focus and clear communication', category: 'celestial' },
+  { freq: '221.23Hz', value: 221.23, name: 'Venusian Harmony', purpose: 'Opening the heart to unconditional love and Bhakti', category: 'celestial' },
+  { freq: '7.83Hz', value: 7.83, name: 'Earth Heartbeat', purpose: 'Aligning with the Schumann Resonance for deep stability', category: 'celestial' },
+  { freq: '40Hz', value: 40, name: 'Gamma Insight', purpose: 'Heightened perception and spiritual epiphany', category: 'celestial' },
+];
  
  export interface AtmosphereItem {
    id: string;

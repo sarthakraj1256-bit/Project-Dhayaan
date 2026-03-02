@@ -43,13 +43,19 @@
      border: 'border-violet-500/60',
      text: 'text-violet-400',
    },
-   indigo: {
-     glow: 'shadow-[0_0_30px_rgba(99,102,241,0.5)]',
-     bg: 'from-indigo-500/20 to-indigo-600/5',
-     border: 'border-indigo-500/60',
-     text: 'text-indigo-400',
-   },
- };
+    indigo: {
+      glow: 'shadow-[0_0_30px_rgba(99,102,241,0.5)]',
+      bg: 'from-indigo-500/20 to-indigo-600/5',
+      border: 'border-indigo-500/60',
+      text: 'text-indigo-400',
+    },
+    gold: {
+      glow: 'shadow-[0_0_30px_rgba(201,168,76,0.5)]',
+      bg: 'from-[#C9A84C]/20 to-indigo-950/40',
+      border: 'border-[#C9A84C]/60',
+      text: 'text-[#C9A84C]',
+    },
+  };
  
   const FrequencyCard = ({ frequency, isActive, categoryColor, onPlay, onStop }: FrequencyCardProps) => {
     const colors = colorMap[categoryColor] || colorMap.cyan;
@@ -64,11 +70,11 @@
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         whileHover={{ scale: 1.02 }}
-        className={`
+      className={`
           relative min-w-[200px] p-5 rounded-xl cursor-pointer transition-all duration-500
           bg-gradient-to-br ${colors.bg}
+          ${categoryColor === 'gold' ? 'backdrop-blur-md bg-indigo-950/30' : 'backdrop-blur-sm'}
           border-2 ${isActive ? 'border-gold shadow-[0_0_24px_4px_hsl(var(--gold)/0.25)]' : 'border-border/50 hover:border-border'}
-          backdrop-blur-sm
         `}
        onClick={isActive ? onStop : onPlay}
      >
