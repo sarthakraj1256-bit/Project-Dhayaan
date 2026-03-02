@@ -27,6 +27,7 @@ interface AudioControlsProps {
   atmosphereLoading?: boolean;
   atmosphereCached?: boolean;
   atmosphereError?: string | null;
+  atmosphereNeedsInteraction?: boolean;
   sessionTime?: string;
   isFavorited?: boolean;
   isAuthenticated?: boolean;
@@ -34,6 +35,7 @@ interface AudioControlsProps {
   onFrequencyVolumeChange: (volume: number) => void;
   onAtmosphereVolumeChange: (volume: number) => void;
   onAtmosphereChange: (atmosphereId: string) => void;
+  onReconnectAudio?: () => void;
   onStop: () => void;
 }
 
@@ -54,11 +56,13 @@ const ExpandedControls = ({
   atmosphereLoading,
   atmosphereCached,
   atmosphereError,
+  atmosphereNeedsInteraction,
   isFavorited,
   onSaveFavorite,
   onFrequencyVolumeChange,
   onAtmosphereVolumeChange,
   onAtmosphereChange,
+  onReconnectAudio,
   t,
 }: Pick<
   AudioControlsProps,
@@ -68,11 +72,13 @@ const ExpandedControls = ({
   | 'atmosphereLoading'
   | 'atmosphereCached'
   | 'atmosphereError'
+  | 'atmosphereNeedsInteraction'
   | 'isFavorited'
   | 'onSaveFavorite'
   | 'onFrequencyVolumeChange'
   | 'onAtmosphereVolumeChange'
   | 'onAtmosphereChange'
+  | 'onReconnectAudio'
 > & { t: (key: any) => string }) => (
   <div className="px-5 pb-5 pt-2 space-y-5">
     {/* Favorite */}
@@ -155,7 +161,19 @@ const ExpandedControls = ({
       )}
 
       {atmosphereError && (
-        <p className="mb-3 text-xs text-destructive">{atmosphereError}</p>
+        <div className="mb-3 rounded-lg border border-gold/40 bg-background/90 px-3 py-2 text-xs text-foreground">
+          <p className="mb-2 text-foreground/90">
+            {atmosphereNeedsInteraction ? 'Tap to Enable Sound' : atmosphereError}
+          </p>
+          {onReconnectAudio && (
+            <button
+              onClick={onReconnectAudio}
+              className="inline-flex items-center rounded-md border border-gold/50 bg-gold/10 px-2.5 py-1 font-medium text-gold hover:bg-gold/20 transition-colors"
+            >
+              Reconnect Audio
+            </button>
+          )}
+        </div>
       )}
 
       {currentAtmosphere !== 'none' && !atmosphereLoading && (
@@ -191,6 +209,7 @@ const AudioControls = forwardRef<HTMLDivElement, AudioControlsProps>(
       atmosphereLoading = false,
       atmosphereCached = false,
       atmosphereError = null,
+      atmosphereNeedsInteraction = false,
       sessionTime = '00:00',
       isFavorited = false,
       isAuthenticated = false,
@@ -198,6 +217,7 @@ const AudioControls = forwardRef<HTMLDivElement, AudioControlsProps>(
       onFrequencyVolumeChange,
       onAtmosphereVolumeChange,
       onAtmosphereChange,
+      onReconnectAudio,
       onStop,
     },
     _ref,
@@ -222,11 +242,13 @@ const AudioControls = forwardRef<HTMLDivElement, AudioControlsProps>(
       atmosphereLoading,
       atmosphereCached,
       atmosphereError,
+      atmosphereNeedsInteraction,
       isFavorited,
       onSaveFavorite,
       onFrequencyVolumeChange,
       onAtmosphereVolumeChange,
       onAtmosphereChange,
+      onReconnectAudio,
       t,
     };
 
