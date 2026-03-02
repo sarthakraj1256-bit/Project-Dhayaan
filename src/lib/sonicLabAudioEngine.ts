@@ -1,4 +1,11 @@
-import { toast } from '@/hooks/use-toast';
+/**
+ * Singleton AudioContext shared by both the Frequency oscillator
+ * and the Atmosphere buffer player inside Sonic Lab.
+ *
+ * IMPORTANT: This module must NEVER import React hooks or call
+ * functions that trigger React state updates (e.g. toast()).
+ * Doing so during React's commit phase corrupts the fiber queue.
+ */
 
 interface SonicLabAudioEngine {
   context: AudioContext;
@@ -14,6 +21,10 @@ function createAudioContext(): AudioContext {
     (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
 }
 
+/**
+ * Get (or lazily create) the shared audio engine.
+ * Safe to call from effects and callbacks — never call during render.
+ */
 export function getSonicLabAudioEngine(): SonicLabAudioEngine {
   if (engine) return engine;
 
@@ -26,21 +37,23 @@ export function getSonicLabAudioEngine(): SonicLabAudioEngine {
   atmosphereGain.gain.setValueAtTime(0.2, context.currentTime);
   analyser.fftSize = 256;
 
+  // Frequency → Analyser → Destination (for visualizations)
   frequencyGain.connect(analyser);
   analyser.connect(context.destination);
+
+  // Atmosphere → Destination (independent gain path)
   atmosphereGain.connect(context.destination);
 
-  engine = {
-    context,
-    frequencyGain,
-    atmosphereGain,
-    analyser,
-  };
-
+  engine = { context, frequencyGain, atmosphereGain, analyser };
   return engine;
 }
 
-export async function resumeSonicLabAudioContext(showToast = true): Promise<boolean> {
+/**
+ * Resume the AudioContext if suspended.
+ * Returns true if playback is now allowed.
+ * Does NOT trigger React state updates — callers handle UI feedback.
+ */
+export async function resumeSonicLabAudioContext(): Promise<boolean> {
   try {
     const { context } = getSonicLabAudioEngine();
     if (context.state === 'suspended') {
@@ -48,19 +61,19 @@ export async function resumeSonicLabAudioContext(showToast = true): Promise<bool
     }
     return true;
   } catch (error) {
-    if (showToast) {
-      toast({
-        title: 'Tap to unlock sound',
-        description: 'Tap an atmosphere button again to enable audio.',
-      });
-    }
     console.error('Failed to resume Sonic Lab audio context:', error);
     return false;
   }
 }
 
 export function resetSonicLabAudioEngineGains() {
-  const { context, frequencyGain, atmosphereGain } = getSonicLabAudioEngine();
+  if (!engine) return;
+  const { context, frequencyGain, atmosphereGain } = engine;
   frequencyGain.gain.setValueAtTime(0.3, context.currentTime);
   atmosphereGain.gain.setValueAtTime(0.2, context.currentTime);
+}
+
+/** Check if engine exists without creating it */
+export function hasSonicLabAudioEngine(): boolean {
+  return engine !== null;
 }
