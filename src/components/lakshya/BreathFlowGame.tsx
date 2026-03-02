@@ -402,8 +402,8 @@ const BreathFlowGame = ({ onClose, onKarmaEarned }: BreathFlowGameProps) => {
               </button>
             </div>
 
-            {/* Breath Guide */}
-            <div className="absolute bottom-4 left-1/2 -translate-x-1/2">
+            {/* End Game Button */}
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] flex flex-col items-center gap-3">
               <div className="px-6 py-3 rounded-full bg-void/80 backdrop-blur-sm flex items-center gap-4">
                 <motion.div
                   animate={{
@@ -426,15 +426,13 @@ const BreathFlowGame = ({ onClose, onKarmaEarned }: BreathFlowGameProps) => {
                   </p>
                 </div>
               </div>
+              <button
+                onClick={completeGame}
+                className="px-4 py-2 rounded-lg bg-amber-500/20 border border-amber-500/30 text-amber-400 hover:bg-amber-500/30 transition-colors text-sm"
+              >
+                End & Collect Karma
+              </button>
             </div>
-
-            {/* End Game Button */}
-            <button
-              onClick={completeGame}
-              className="absolute bottom-4 right-4 px-4 py-2 rounded-lg bg-amber-500/20 border border-amber-500/30 text-amber-400 hover:bg-amber-500/30 transition-colors text-sm"
-            >
-              End & Collect Karma
-            </button>
 
             {/* Paused Overlay */}
             {gameState === 'paused' && (
