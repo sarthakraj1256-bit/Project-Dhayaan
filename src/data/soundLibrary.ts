@@ -136,6 +136,11 @@ export const soundLibrary: FrequencyItem[] = [
   { freq: '221.23Hz', value: 221.23, name: 'Venusian Harmony', purpose: 'Opening the heart to unconditional love and Bhakti', category: 'celestial' },
   { freq: '7.83Hz', value: 7.83, name: 'Earth Heartbeat', purpose: 'Aligning with the Schumann Resonance for deep stability', category: 'celestial' },
   { freq: '40Hz', value: 40, name: 'Gamma Insight', purpose: 'Heightened perception and spiritual epiphany', category: 'celestial' },
+  { freq: '183.58Hz', value: 183.58, name: "Jupiter's Joy", purpose: 'Expansion, abundance, and spiritual growth', category: 'celestial' },
+  { freq: '147.85Hz', value: 147.85, name: "Saturn's Discipline", purpose: 'Structure, focus, and karmic clarity', category: 'celestial' },
+  { freq: '144.72Hz', value: 144.72, name: "Mars's Will", purpose: 'Courage, determination, and inner fire', category: 'celestial' },
+  { freq: '126.22Hz', value: 126.22, name: "Sun's Vitality", purpose: 'Life force, confidence, and radiant energy', category: 'celestial' },
+  { freq: '210.42Hz', value: 210.42, name: "Moon's Serenity", purpose: 'Emotional balance, intuition, and calm reflection', category: 'celestial' },
 ];
  
  export interface AtmosphereItem {
