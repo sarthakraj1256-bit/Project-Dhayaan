@@ -2,6 +2,7 @@ import { useState, useRef, useCallback, useEffect } from 'react';
 import { atmospheres } from '@/data/soundLibrary';
 import {
   getSonicLabAudioEngine,
+  hasSonicLabAudioEngine,
   resetSonicLabAudioEngineGains,
   resumeSonicLabAudioContext,
 } from '@/lib/sonicLabAudioEngine';
@@ -38,34 +39,55 @@ export const useFrequencyAudio = () => {
   const gainNode2Ref = useRef<GainNode | null>(null);
   const lfoRef = useRef<OscillatorNode | null>(null);
   const lfoGainRef = useRef<GainNode | null>(null);
+  const prefetchScheduledRef = useRef(false);
 
+  /* ── Unlock the shared AudioContext ── */
   const ensureAudioUnlocked = useCallback(async () => {
-    const unlocked = await resumeSonicLabAudioContext(true);
-    if (!unlocked) {
+    const ok = await resumeSonicLabAudioContext();
+    if (!ok) {
       setAudioState((prev) => ({ ...prev, isAudioUnlocked: false }));
       return false;
     }
-
     await unlockAtmosphereAudio();
     setAudioState((prev) => ({ ...prev, isAudioUnlocked: true }));
     return true;
   }, [unlockAtmosphereAudio]);
 
+  /*
+   * Prefetch atmosphere buffers AFTER the component has fully mounted
+   * and React has committed. Using setTimeout(0) pushes this out of
+   * React's commit phase so any state updates from async callbacks
+   * won't corrupt the fiber queue.
+   */
   useEffect(() => {
-    void prefetchAtmospheres(atmospheres.map((atm) => atm.id));
-  }, [prefetchAtmospheres]);
+    if (prefetchScheduledRef.current) return;
+    prefetchScheduledRef.current = true;
 
+    const timer = setTimeout(() => {
+      void prefetchAtmospheres(atmospheres.map((atm) => atm.id));
+    }, 100);
+
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  /* ── Unlock on first user interaction ── */
   useEffect(() => {
     let hasTriggered = false;
 
-    const unlockOnFirstInteraction = async () => {
+    const unlockOnFirstInteraction = () => {
       if (hasTriggered) return;
       hasTriggered = true;
-      await ensureAudioUnlocked();
+      // Schedule outside the event handler to avoid React queue issues
+      setTimeout(() => void ensureAudioUnlocked(), 0);
     };
 
-    document.addEventListener('pointerdown', unlockOnFirstInteraction, { passive: true });
-    document.addEventListener('keydown', unlockOnFirstInteraction, { passive: true });
+    document.addEventListener('pointerdown', unlockOnFirstInteraction, {
+      passive: true,
+    });
+    document.addEventListener('keydown', unlockOnFirstInteraction, {
+      passive: true,
+    });
 
     return () => {
       document.removeEventListener('pointerdown', unlockOnFirstInteraction);
@@ -73,6 +95,7 @@ export const useFrequencyAudio = () => {
     };
   }, [ensureAudioUnlocked]);
 
+  /* ── Play a frequency ── */
   const playFrequency = useCallback(
     async (frequency: number) => {
       const unlocked = await ensureAudioUnlocked();
@@ -81,6 +104,7 @@ export const useFrequencyAudio = () => {
       const { context, frequencyGain } = getSonicLabAudioEngine();
       const BINAURAL_THRESHOLD = 100;
 
+      // Cross-fade out old oscillator
       if (oscillatorRef.current && gainNodeRef.current) {
         const oldOsc = oscillatorRef.current;
         const oldOsc2 = oscillator2Ref.current;
@@ -92,24 +116,9 @@ export const useFrequencyAudio = () => {
         oldGain2?.gain.linearRampToValueAtTime(0, context.currentTime + 0.5);
 
         setTimeout(() => {
-          try {
-            oldOsc.stop();
-            oldOsc.disconnect();
-          } catch {
-            // no-op
-          }
-          try {
-            oldOsc2?.stop();
-            oldOsc2?.disconnect();
-          } catch {
-            // no-op
-          }
-          try {
-            oldLfo?.stop();
-            oldLfo?.disconnect();
-          } catch {
-            // no-op
-          }
+          try { oldOsc.stop(); oldOsc.disconnect(); } catch { /* */ }
+          try { oldOsc2?.stop(); oldOsc2?.disconnect(); } catch { /* */ }
+          try { oldLfo?.stop(); oldLfo?.disconnect(); } catch { /* */ }
         }, 520);
       }
 
@@ -190,29 +199,20 @@ export const useFrequencyAudio = () => {
     [audioState.frequencyVolume, ensureAudioUnlocked],
   );
 
+  /* ── Stop frequency ── */
   const stopFrequency = useCallback(() => {
-    const { context } = getSonicLabAudioEngine();
-
-    if (gainNodeRef.current) {
+    if (hasSonicLabAudioEngine() && gainNodeRef.current) {
+      const { context } = getSonicLabAudioEngine();
       gainNodeRef.current.gain.linearRampToValueAtTime(0, context.currentTime + 0.3);
       gainNode2Ref.current?.gain.linearRampToValueAtTime(0, context.currentTime + 0.3);
 
       setTimeout(() => {
-        if (oscillatorRef.current) {
-          oscillatorRef.current.stop();
-          oscillatorRef.current.disconnect();
-          oscillatorRef.current = null;
-        }
-        if (oscillator2Ref.current) {
-          oscillator2Ref.current.stop();
-          oscillator2Ref.current.disconnect();
-          oscillator2Ref.current = null;
-        }
-        if (lfoRef.current) {
-          lfoRef.current.stop();
-          lfoRef.current.disconnect();
-          lfoRef.current = null;
-        }
+        try { oscillatorRef.current?.stop(); oscillatorRef.current?.disconnect(); } catch { /* */ }
+        try { oscillator2Ref.current?.stop(); oscillator2Ref.current?.disconnect(); } catch { /* */ }
+        try { lfoRef.current?.stop(); lfoRef.current?.disconnect(); } catch { /* */ }
+        oscillatorRef.current = null;
+        oscillator2Ref.current = null;
+        lfoRef.current = null;
       }, 300);
     }
 
@@ -221,22 +221,24 @@ export const useFrequencyAudio = () => {
       isPlaying: false,
       currentFrequency: null,
     }));
-
     stopAtmosphere();
   }, [stopAtmosphere]);
 
+  /* ── Set frequency volume ── */
   const setFrequencyVolume = useCallback((volume: number) => {
-    const { context, frequencyGain } = getSonicLabAudioEngine();
-    frequencyGain.gain.linearRampToValueAtTime(volume, context.currentTime + 0.1);
+    if (hasSonicLabAudioEngine()) {
+      const { context, frequencyGain } = getSonicLabAudioEngine();
+      frequencyGain.gain.linearRampToValueAtTime(volume, context.currentTime + 0.1);
 
-    if (gainNodeRef.current) {
-      gainNodeRef.current.gain.linearRampToValueAtTime(volume, context.currentTime + 0.1);
-      gainNode2Ref.current?.gain.linearRampToValueAtTime(volume, context.currentTime + 0.1);
+      if (gainNodeRef.current) {
+        gainNodeRef.current.gain.linearRampToValueAtTime(volume, context.currentTime + 0.1);
+        gainNode2Ref.current?.gain.linearRampToValueAtTime(volume, context.currentTime + 0.1);
+      }
     }
-
     setAudioState((prev) => ({ ...prev, frequencyVolume: volume }));
   }, []);
 
+  /* ── Reconnect everything ── */
   const reconnectAudio = useCallback(async () => {
     stopFrequency();
     resetSonicLabAudioEngineGains();
@@ -244,34 +246,31 @@ export const useFrequencyAudio = () => {
     await ensureAudioUnlocked();
   }, [ensureAudioUnlocked, reconnectAtmosphereAudio, stopFrequency]);
 
+  /* ── Analyser access (lazy — only after engine exists) ── */
   const getAnalyser = useCallback(() => {
-    return getSonicLabAudioEngine().analyser;
+    return hasSonicLabAudioEngine()
+      ? getSonicLabAudioEngine().analyser
+      : null;
   }, []);
 
   const getFrequencyData = useCallback(() => {
+    if (!hasSonicLabAudioEngine()) return new Uint8Array(0);
     const analyser = getSonicLabAudioEngine().analyser;
     const dataArray = new Uint8Array(analyser.frequencyBinCount);
     analyser.getByteFrequencyData(dataArray);
     return dataArray;
   }, []);
 
+  /* ── Cleanup on unmount ── */
   useEffect(() => {
     return () => {
-      if (oscillatorRef.current) {
-        oscillatorRef.current.stop();
-        oscillatorRef.current.disconnect();
-      }
-      if (oscillator2Ref.current) {
-        oscillator2Ref.current.stop();
-        oscillator2Ref.current.disconnect();
-      }
-      if (lfoRef.current) {
-        lfoRef.current.stop();
-        lfoRef.current.disconnect();
-      }
+      try { oscillatorRef.current?.stop(); oscillatorRef.current?.disconnect(); } catch { /* */ }
+      try { oscillator2Ref.current?.stop(); oscillator2Ref.current?.disconnect(); } catch { /* */ }
+      try { lfoRef.current?.stop(); lfoRef.current?.disconnect(); } catch { /* */ }
     };
   }, []);
 
+  /* ── Combined state ── */
   const combinedState = {
     ...audioState,
     atmosphereVolume: atmosphereState.atmosphereVolume,
