@@ -199,6 +199,8 @@ export const translations = {
     'sound.cat.meditation.desc': 'Advanced meditation and spiritual growth',
     'sound.cat.sleep': 'Sleep & Recovery',
     'sound.cat.sleep.desc': 'Better rest and physical recovery',
+    'sound.cat.celestial': 'Celestial & Brainwave',
+    'sound.cat.celestial.desc': 'Planetary frequencies and brainwave entrainment',
 
     // Sonic Lab — Frequency names
     'sound.freq.foundation': 'Foundation',
@@ -1056,6 +1058,8 @@ export const translations = {
     'sound.cat.meditation.desc': 'उन्नत ध्यान और आध्यात्मिक विकास',
     'sound.cat.sleep': 'नींद और पुनर्प्राप्ति',
     'sound.cat.sleep.desc': 'बेहतर आराम और शारीरिक पुनर्प्राप्ति',
+    'sound.cat.celestial': 'दिव्य और मस्तिष्क तरंगें',
+    'sound.cat.celestial.desc': 'ग्रहीय आवृत्तियाँ और मस्तिष्क तरंग समन्वय',
 
     // Sonic Lab — Frequency names
     'sound.freq.foundation': 'आधार',
