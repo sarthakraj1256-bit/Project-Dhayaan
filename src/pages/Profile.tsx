@@ -97,23 +97,31 @@ const Profile = () => {
   };
 
   const handleAvatarUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
+    const input = event.target;
+    const file = input.files?.[0];
     if (!file || !user) return;
 
-    if (!file.type.startsWith('image/')) {
+    const fileExt = file.name.split('.').pop()?.toLowerCase();
+    const allowedImageExtensions = ['jpg', 'jpeg', 'png', 'webp', 'gif', 'bmp', 'svg', 'heic', 'heif', 'avif'];
+    const isImageByMime = file.type.startsWith('image/');
+    const isImageByExtension = Boolean(fileExt && allowedImageExtensions.includes(fileExt));
+
+    if (!isImageByMime && !isImageByExtension) {
       toast.error(t('profile.uploadImage'));
+      input.value = '';
       return;
     }
 
     if (file.size > 2 * 1024 * 1024) {
       toast.error(t('profile.imageTooLarge'));
+      input.value = '';
       return;
     }
 
     setIsUploading(true);
 
-    const fileExt = file.name.split('.').pop();
-    const filePath = `${user.id}/avatar.${fileExt}`;
+    const safeExt = fileExt || 'jpg';
+    const filePath = `${user.id}/avatar.${safeExt}`;
 
     const { error: uploadError } = await supabase.storage
       .from('avatars')
@@ -123,6 +131,7 @@ const Profile = () => {
       toast.error(t('profile.failedUpload'));
       logError('Avatar upload error', uploadError);
       setIsUploading(false);
+      input.value = '';
       return;
     }
 
@@ -145,6 +154,7 @@ const Profile = () => {
     }
 
     setIsUploading(false);
+    input.value = '';
   };
 
   const handleClearAudioCache = async () => {
@@ -232,10 +242,9 @@ const Profile = () => {
 
           </button>
 
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/*"
+              <input
+                ref={fileInputRef}
+                type="file"
               onChange={handleAvatarUpload}
               className="hidden"
             />
