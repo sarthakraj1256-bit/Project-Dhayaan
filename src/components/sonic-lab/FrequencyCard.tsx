@@ -1,8 +1,9 @@
   import { motion } from 'framer-motion';
-  import { Play, Pause } from 'lucide-react';
+  import { Play, Pause, Headphones } from 'lucide-react';
   import { FrequencyItem } from '@/data/soundLibrary';
   import { useLanguage } from '@/contexts/LanguageContext';
   import type { TranslationKey } from '@/i18n/translations';
+  import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
  
  interface FrequencyCardProps {
    frequency: FrequencyItem;
@@ -64,7 +65,8 @@
     const purposeKey = `freq.${frequency.category}.${frequency.value}.purpose` as TranslationKey;
     const localizedName = t(nameKey) !== nameKey ? t(nameKey) : frequency.name;
     const localizedPurpose = t(purposeKey) !== purposeKey ? t(purposeKey) : frequency.purpose;
- 
+    const isBinaural = frequency.value < 100;
+
     return (
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
@@ -103,11 +105,27 @@
        )}
  
        {/* Content */}
-       <div className={`relative z-10 ${isActive ? 'opacity-90' : ''}`}>
-         {/* Frequency Value */}
-         <div className={`font-display text-2xl tracking-wider ${isActive ? colors.text : 'text-foreground'}`}>
-           {frequency.freq}
-         </div>
+        <div className={`relative z-10 ${isActive ? 'opacity-90' : ''}`}>
+          {/* Frequency Value + Binaural Badge */}
+          <div className="flex items-center gap-2">
+            <div className={`font-display text-2xl tracking-wider ${isActive ? colors.text : 'text-foreground'}`}>
+              {frequency.freq}
+            </div>
+            {isBinaural && (
+              <TooltipProvider delayDuration={200}>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-[#C9A84C]/15 border border-[#C9A84C]/30">
+                      <Headphones className="w-3 h-3 text-[#C9A84C]" />
+                    </span>
+                  </TooltipTrigger>
+                  <TooltipContent side="top" className="text-xs max-w-[200px]">
+                    Use headphones for the binaural beat entrainment effect
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            )}
+          </div>
  
           {/* Name */}
           <div className="font-display text-sm tracking-widest text-foreground/80 mt-1">
