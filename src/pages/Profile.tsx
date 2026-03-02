@@ -230,14 +230,15 @@ const Profile = () => {
                 )}
               </div>
 
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/*"
-                onChange={handleAvatarUpload}
-                className="hidden"
-              />
           </button>
+
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleAvatarUpload}
+              className="hidden"
+            />
 
             <p className="text-sm text-muted-foreground mt-3">
               {t('profile.clickUpload')}
