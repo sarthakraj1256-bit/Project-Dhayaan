@@ -1,10 +1,15 @@
-import { useState, useRef, useCallback, useEffect } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import { getCachedAudio, setCachedAudio } from '@/lib/audioCache';
 import { supabase } from '@/integrations/backend/client';
+import { toast } from '@/hooks/use-toast';
+import { getSonicLabAudioEngine, resumeSonicLabAudioContext } from '@/lib/sonicLabAudioEngine';
 
 // Hardcoded fallbacks matching backend/client.ts — env vars can be undefined in preview
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || "https://pgavnutkwiiovdvbrbcl.supabase.co";
-const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBnYXZudXRrd2lpb3ZkdmJyYmNsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAwNDgyOTcsImV4cCI6MjA4NTYyNDI5N30.bM1DTGq9Fgn0WPcDlS2hjxRr-bdTDIbLq47RZFIvFbo";
+const SUPABASE_URL =
+  import.meta.env.VITE_SUPABASE_URL || 'https://pgavnutkwiiovdvbrbcl.supabase.co';
+const SUPABASE_KEY =
+  import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ||
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBnYXZudXRrd2lpb3ZkdmJyYmNsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAwNDgyOTcsImV4cCI6MjA4NTYyNDI5N30.bM1DTGq9Fgn0WPcDlS2hjxRr-bdTDIbLq47RZFIvFbo';
 
 interface AtmosphereState {
   currentAtmosphere: string;
@@ -20,16 +25,10 @@ const RETRY_DELAY_MS = 450;
 
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-const isAutoplayOrInterruptedError = (error: unknown) => {
+const isUnlockError = (error: unknown) => {
   if (!(error instanceof Error)) return false;
   const msg = error.message.toLowerCase();
-  return (
-    error.name === 'NotAllowedError' ||
-    error.name === 'AbortError' ||
-    msg.includes('user didn\'t interact') ||
-    msg.includes('play() failed') ||
-    msg.includes('interrupted')
-  );
+  return error.name === 'NotAllowedError' || msg.includes('interrupted') || msg.includes('gesture');
 };
 
 export const useAtmosphereAudio = () => {
@@ -42,179 +41,62 @@ export const useAtmosphereAudio = () => {
     requiresInteraction: false,
   });
 
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const objectUrlRef = useRef<string | null>(null);
-  const audioContextRef = useRef<AudioContext | null>(null);
-  const mediaSourceRef = useRef<MediaElementAudioSourceNode | null>(null);
-  const atmosphereGainRef = useRef<GainNode | null>(null);
+  const sourceRef = useRef<AudioBufferSourceNode | null>(null);
   const prefetchedRef = useRef<Set<string>>(new Set());
+  const bufferCacheRef = useRef<Map<string, AudioBuffer>>(new Map());
   const volumeRef = useRef(0.2);
 
-  const initAtmosphereContext = useCallback(() => {
-    if (!audioContextRef.current) {
-      audioContextRef.current = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
-    }
-
-    if (!atmosphereGainRef.current && audioContextRef.current) {
-      atmosphereGainRef.current = audioContextRef.current.createGain();
-      atmosphereGainRef.current.gain.setValueAtTime(volumeRef.current, audioContextRef.current.currentTime);
-      atmosphereGainRef.current.connect(audioContextRef.current.destination);
-    }
-
-    return audioContextRef.current;
-  }, []);
-
-  const unlockAtmosphereAudio = useCallback(async () => {
-    try {
-      const ctx = initAtmosphereContext();
-      if (ctx.state === 'suspended') {
-        await ctx.resume();
-      }
-      setState((prev) => ({ ...prev, requiresInteraction: false, error: null }));
-      return true;
-    } catch (error) {
-      console.error('Error unlocking atmosphere audio:', error);
-      setState((prev) => ({
-        ...prev,
-        requiresInteraction: true,
-        error: 'Tap to Enable Sound',
-      }));
-      return false;
-    }
-  }, [initAtmosphereContext]);
-
-  // Cleanup object URL and nodes on unmount
-  useEffect(() => {
-    return () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current = null;
-      }
-      if (objectUrlRef.current) {
-        URL.revokeObjectURL(objectUrlRef.current);
-      }
-      if (mediaSourceRef.current) {
-        try {
-          mediaSourceRef.current.disconnect();
-        } catch {
-          // no-op
-        }
-        mediaSourceRef.current = null;
-      }
-      if (atmosphereGainRef.current) {
-        try {
-          atmosphereGainRef.current.disconnect();
-        } catch {
-          // no-op
-        }
-        atmosphereGainRef.current = null;
-      }
-      if (audioContextRef.current) {
-        audioContextRef.current.close().catch(() => {
-          // no-op
-        });
-        audioContextRef.current = null;
-      }
-    };
-  }, []);
-
   const stopAtmosphere = useCallback(() => {
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.currentTime = 0;
-      audioRef.current = null;
-    }
-    if (mediaSourceRef.current) {
+    if (sourceRef.current) {
       try {
-        mediaSourceRef.current.disconnect();
+        sourceRef.current.stop();
+        sourceRef.current.disconnect();
       } catch {
         // no-op
       }
-      mediaSourceRef.current = null;
-    }
-    if (objectUrlRef.current) {
-      URL.revokeObjectURL(objectUrlRef.current);
-      objectUrlRef.current = null;
+      sourceRef.current = null;
     }
   }, []);
 
-  const playAudioBlob = useCallback(async (blob: Blob, volume: number) => {
-    stopAtmosphere();
-
-    const unlocked = await unlockAtmosphereAudio();
+  const unlockAtmosphereAudio = useCallback(async () => {
+    const unlocked = await resumeSonicLabAudioContext(true);
     if (!unlocked) {
-      throw new Error('Tap to Enable Sound');
+      setState((prev) => ({
+        ...prev,
+        requiresInteraction: true,
+        error: 'Tap to unlock sound',
+      }));
+      return false;
     }
 
-    const ctx = initAtmosphereContext();
-    const url = URL.createObjectURL(blob);
-    objectUrlRef.current = url;
-
-    const audio = new Audio(url);
-    audio.loop = true;
-    audio.preload = 'auto';
-    audioRef.current = audio;
-
-    const source = ctx.createMediaElementSource(audio);
-    mediaSourceRef.current = source;
-
-    const gain = atmosphereGainRef.current ?? ctx.createGain();
-    atmosphereGainRef.current = gain;
-    gain.gain.setValueAtTime(volume, ctx.currentTime);
-
-    source.connect(gain);
-
-    try {
-      await audio.play();
-      setState((prev) => ({ ...prev, requiresInteraction: false, error: null }));
-    } catch (error) {
-      console.error('Error playing atmosphere audio:', error);
-      if (isAutoplayOrInterruptedError(error)) {
-        setState((prev) => ({
-          ...prev,
-          requiresInteraction: true,
-          error: 'Tap to Enable Sound',
-        }));
-      } else {
-        setState((prev) => ({
-          ...prev,
-          error: 'Unable to play atmosphere. Please reconnect audio.',
-        }));
-      }
-      throw error;
-    }
-  }, [initAtmosphereContext, stopAtmosphere, unlockAtmosphereAudio]);
+    setState((prev) => ({ ...prev, requiresInteraction: false, error: null }));
+    return true;
+  }, []);
 
   const fetchAtmosphereWithRetry = useCallback(async (atmosphereId: string): Promise<Blob> => {
-    const { data: { session } } = await supabase.auth.getSession();
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
     const token = session?.access_token || SUPABASE_KEY;
 
     let lastError: Error | null = null;
 
     for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
       try {
-        const response = await fetch(
-          `${SUPABASE_URL}/functions/v1/elevenlabs-sfx`,
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              apikey: SUPABASE_KEY,
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({ atmosphereId }),
+        const response = await fetch(`${SUPABASE_URL}/functions/v1/elevenlabs-sfx`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            apikey: SUPABASE_KEY,
+            Authorization: `Bearer ${token}`,
           },
-        );
+          body: JSON.stringify({ atmosphereId }),
+        });
 
         if (!response.ok) {
           const raw = await response.text().catch(() => '');
-          let parsedError = 'Unknown error';
-          try {
-            parsedError = raw ? (JSON.parse(raw)?.error ?? raw) : 'Unknown error';
-          } catch {
-            parsedError = raw || 'Unknown error';
-          }
-          throw new Error(parsedError || `HTTP ${response.status}`);
+          const errorMessage = raw || `HTTP ${response.status}`;
+          throw new Error(errorMessage);
         }
 
         return await response.blob();
@@ -229,110 +111,143 @@ export const useAtmosphereAudio = () => {
     throw lastError ?? new Error('Unknown error');
   }, []);
 
-  const prefetchAtmospheres = useCallback(async (atmosphereIds: string[]) => {
-    const unlocked = await unlockAtmosphereAudio();
-    if (!unlocked) return;
+  const decodeBlobToBuffer = useCallback(async (blob: Blob) => {
+    const { context } = getSonicLabAudioEngine();
+    const bytes = await blob.arrayBuffer();
+    // decodeAudioData may detach the buffer in some browsers; pass a clone for safety
+    return context.decodeAudioData(bytes.slice(0));
+  }, []);
 
-    await Promise.all(
-      atmosphereIds
-        .filter((id) => id !== 'none' && !prefetchedRef.current.has(id))
-        .map(async (atmosphereId) => {
-          prefetchedRef.current.add(atmosphereId);
-          try {
-            const cachedBlob = await getCachedAudio(atmosphereId);
-            if (cachedBlob) return;
-            const blob = await fetchAtmosphereWithRetry(atmosphereId);
-            await setCachedAudio(atmosphereId, blob);
-          } catch {
-            prefetchedRef.current.delete(atmosphereId);
-          }
-        }),
-    );
-  }, [fetchAtmosphereWithRetry, unlockAtmosphereAudio]);
+  const getOrLoadAtmosphereBuffer = useCallback(
+    async (atmosphereId: string): Promise<{ buffer: AudioBuffer; fromCache: boolean }> => {
+      const memoryBuffer = bufferCacheRef.current.get(atmosphereId);
+      if (memoryBuffer) {
+        return { buffer: memoryBuffer, fromCache: true };
+      }
 
-  const setAtmosphere = useCallback(async (atmosphereId: string) => {
-    if (atmosphereId === 'none') {
-      stopAtmosphere();
-      setState((prev) => ({
-        ...prev,
-        currentAtmosphere: 'none',
-        isLoading: false,
-        isCached: false,
-        error: null,
-        requiresInteraction: false,
-      }));
-      return;
-    }
-
-    setState((prev) => ({
-      ...prev,
-      currentAtmosphere: atmosphereId,
-      isLoading: true,
-      error: null,
-    }));
-
-    try {
       const cachedBlob = await getCachedAudio(atmosphereId);
-
       if (cachedBlob) {
-        await playAudioBlob(cachedBlob, volumeRef.current);
+        const decoded = await decodeBlobToBuffer(cachedBlob);
+        bufferCacheRef.current.set(atmosphereId, decoded);
+        return { buffer: decoded, fromCache: true };
+      }
+
+      const generated = await fetchAtmosphereWithRetry(atmosphereId);
+      await setCachedAudio(atmosphereId, generated);
+      const decoded = await decodeBlobToBuffer(generated);
+      bufferCacheRef.current.set(atmosphereId, decoded);
+      return { buffer: decoded, fromCache: false };
+    },
+    [decodeBlobToBuffer, fetchAtmosphereWithRetry],
+  );
+
+  const playAtmosphereBuffer = useCallback(
+    async (buffer: AudioBuffer) => {
+      const unlocked = await unlockAtmosphereAudio();
+      if (!unlocked) {
+        throw new Error('Tap to unlock sound');
+      }
+
+      stopAtmosphere();
+
+      const { context, atmosphereGain } = getSonicLabAudioEngine();
+      const source = context.createBufferSource();
+      source.buffer = buffer;
+      source.loop = true;
+      source.connect(atmosphereGain);
+      atmosphereGain.gain.linearRampToValueAtTime(volumeRef.current, context.currentTime + 0.1);
+      source.start();
+      sourceRef.current = source;
+    },
+    [stopAtmosphere, unlockAtmosphereAudio],
+  );
+
+  const setAtmosphere = useCallback(
+    async (atmosphereId: string) => {
+      if (atmosphereId === 'none') {
+        stopAtmosphere();
         setState((prev) => ({
           ...prev,
+          currentAtmosphere: 'none',
           isLoading: false,
-          isCached: true,
+          isCached: false,
+          error: null,
+          requiresInteraction: false,
         }));
         return;
       }
 
-      const audioBlob = await fetchAtmosphereWithRetry(atmosphereId);
-      await setCachedAudio(atmosphereId, audioBlob);
-      await playAudioBlob(audioBlob, volumeRef.current);
+      setState((prev) => ({
+        ...prev,
+        currentAtmosphere: atmosphereId,
+        isLoading: true,
+        error: null,
+      }));
 
-      setState((prev) => ({
-        ...prev,
-        isLoading: false,
-        isCached: false,
-      }));
-    } catch (error) {
-      console.error('Error loading atmosphere:', error);
-      const interactionError = isAutoplayOrInterruptedError(error);
-      setState((prev) => ({
-        ...prev,
-        isLoading: false,
-        requiresInteraction: interactionError,
-        error: interactionError
-          ? 'Tap to Enable Sound'
-          : 'Unable to load atmosphere. Please reconnect audio.',
-      }));
-    }
-  }, [fetchAtmosphereWithRetry, playAudioBlob, stopAtmosphere]);
+      try {
+        const { buffer, fromCache } = await getOrLoadAtmosphereBuffer(atmosphereId);
+        await playAtmosphereBuffer(buffer);
+
+        setState((prev) => ({
+          ...prev,
+          isLoading: false,
+          isCached: fromCache,
+          error: null,
+          requiresInteraction: false,
+        }));
+      } catch (error) {
+        const shouldShowUnlockToast = isUnlockError(error);
+        if (shouldShowUnlockToast) {
+          toast({
+            title: 'Tap to unlock sound',
+            description: 'Tap the atmosphere again to continue playback.',
+          });
+        }
+
+        console.error('Error loading atmosphere:', error);
+        setState((prev) => ({
+          ...prev,
+          isLoading: false,
+          requiresInteraction: shouldShowUnlockToast,
+          error: shouldShowUnlockToast ? 'Tap to unlock sound' : 'Unable to load atmosphere',
+        }));
+      }
+    },
+    [getOrLoadAtmosphereBuffer, playAtmosphereBuffer, stopAtmosphere],
+  );
 
   const setAtmosphereVolume = useCallback((volume: number) => {
     volumeRef.current = volume;
-    if (atmosphereGainRef.current && audioContextRef.current) {
-      atmosphereGainRef.current.gain.linearRampToValueAtTime(volume, audioContextRef.current.currentTime + 0.1);
-    }
+    const { context, atmosphereGain } = getSonicLabAudioEngine();
+    atmosphereGain.gain.linearRampToValueAtTime(volume, context.currentTime + 0.1);
     setState((prev) => ({ ...prev, atmosphereVolume: volume }));
   }, []);
 
+  const prefetchAtmospheres = useCallback(
+    async (atmosphereIds: string[]) => {
+      await Promise.all(
+        atmosphereIds
+          .filter((id) => id !== 'none' && !prefetchedRef.current.has(id))
+          .map(async (atmosphereId) => {
+            prefetchedRef.current.add(atmosphereId);
+            try {
+              await getOrLoadAtmosphereBuffer(atmosphereId);
+            } catch {
+              prefetchedRef.current.delete(atmosphereId);
+            }
+          }),
+      );
+    },
+    [getOrLoadAtmosphereBuffer],
+  );
+
   const reconnectAtmosphereAudio = useCallback(async () => {
     stopAtmosphere();
-
-    if (audioContextRef.current) {
-      await audioContextRef.current.close().catch(() => {
-        // no-op
-      });
-      audioContextRef.current = null;
-    }
-
-    mediaSourceRef.current = null;
-    atmosphereGainRef.current = null;
-
     const unlocked = await unlockAtmosphereAudio();
     setState((prev) => ({
       ...prev,
       isLoading: false,
-      error: unlocked ? null : 'Tap to Enable Sound',
+      error: unlocked ? null : 'Tap to unlock sound',
       requiresInteraction: !unlocked,
     }));
   }, [stopAtmosphere, unlockAtmosphereAudio]);

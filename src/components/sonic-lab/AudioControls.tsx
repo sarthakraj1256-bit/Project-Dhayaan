@@ -160,21 +160,7 @@ const ExpandedControls = ({
         </div>
       )}
 
-      {atmosphereError && (
-        <div className="mb-3 rounded-lg border border-gold/40 bg-background/90 px-3 py-2 text-xs text-foreground">
-          <p className="mb-2 text-foreground/90">
-            {atmosphereNeedsInteraction ? 'Tap to Enable Sound' : atmosphereError}
-          </p>
-          {onReconnectAudio && (
-            <button
-              onClick={onReconnectAudio}
-              className="inline-flex items-center rounded-md border border-gold/50 bg-gold/10 px-2.5 py-1 font-medium text-gold hover:bg-gold/20 transition-colors"
-            >
-              Reconnect Audio
-            </button>
-          )}
-        </div>
-      )}
+      {/* Unlock/retry feedback now handled via toast to keep UI clean */}
 
       {currentAtmosphere !== 'none' && !atmosphereLoading && (
         <div className="flex items-center gap-3">
