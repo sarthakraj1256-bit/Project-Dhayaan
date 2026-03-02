@@ -42,6 +42,7 @@ import BottomNav from '@/components/BottomNav';
      setFrequencyVolume,
      setAtmosphere,
      setAtmosphereVolume,
+     reconnectAudio,
      getFrequencyData,
    } = useFrequencyAudio();
  
@@ -365,6 +366,7 @@ import BottomNav from '@/components/BottomNav';
           atmosphereLoading={audioState.atmosphereLoading}
           atmosphereCached={audioState.atmosphereCached}
           atmosphereError={audioState.atmosphereError}
+          atmosphereNeedsInteraction={audioState.atmosphereNeedsInteraction}
           sessionTime={formattedTime}
           isFavorited={currentIsFavorited}
           isAuthenticated={isAuthenticated}
@@ -372,6 +374,7 @@ import BottomNav from '@/components/BottomNav';
           onFrequencyVolumeChange={setFrequencyVolume}
           onAtmosphereVolumeChange={setAtmosphereVolume}
           onAtmosphereChange={setAtmosphere}
+          onReconnectAudio={reconnectAudio}
             onStop={handleStop}
         />
        </div>
