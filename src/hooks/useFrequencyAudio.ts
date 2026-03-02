@@ -52,16 +52,16 @@ export const useFrequencyAudio = () => {
   }, [unlockAtmosphereAudio]);
 
   useEffect(() => {
+    void prefetchAtmospheres(atmospheres.map((atm) => atm.id));
+  }, [prefetchAtmospheres]);
+
+  useEffect(() => {
     let hasTriggered = false;
 
     const unlockOnFirstInteraction = async () => {
       if (hasTriggered) return;
       hasTriggered = true;
-
-      const unlocked = await ensureAudioUnlocked();
-      if (unlocked) {
-        void prefetchAtmospheres(atmospheres.map((atm) => atm.id));
-      }
+      await ensureAudioUnlocked();
     };
 
     document.addEventListener('pointerdown', unlockOnFirstInteraction, { passive: true });
@@ -71,7 +71,7 @@ export const useFrequencyAudio = () => {
       document.removeEventListener('pointerdown', unlockOnFirstInteraction);
       document.removeEventListener('keydown', unlockOnFirstInteraction);
     };
-  }, [ensureAudioUnlocked, prefetchAtmospheres]);
+  }, [ensureAudioUnlocked]);
 
   const playFrequency = useCallback(
     async (frequency: number) => {
