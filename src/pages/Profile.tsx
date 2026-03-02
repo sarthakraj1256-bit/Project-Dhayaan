@@ -203,7 +203,12 @@ const Profile = () => {
           }}
         >
           <div className="flex flex-col items-center mb-8">
-            <div className="relative group">
+          <button
+            type="button"
+            className="relative group cursor-pointer"
+            onClick={() => !isUploading && fileInputRef.current?.click()}
+            disabled={isUploading}
+          >
               <Avatar className="w-24 h-24 border-2 border-gold/30">
                 <AvatarImage src={profile?.avatar_url || undefined} />
                 <AvatarFallback
@@ -217,17 +222,13 @@ const Profile = () => {
                 </AvatarFallback>
               </Avatar>
 
-              <button
-                onClick={() => fileInputRef.current?.click()}
-                disabled={isUploading}
-                className="absolute inset-0 rounded-full flex items-center justify-center bg-void/60 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
-              >
+              <div className="absolute inset-0 rounded-full flex items-center justify-center bg-void/60 opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity">
                 {isUploading ? (
                   <Loader2 className="w-6 h-6 animate-spin text-gold" />
                 ) : (
                   <Camera className="w-6 h-6 text-gold" />
                 )}
-              </button>
+              </div>
 
               <input
                 ref={fileInputRef}
@@ -236,7 +237,7 @@ const Profile = () => {
                 onChange={handleAvatarUpload}
                 className="hidden"
               />
-            </div>
+          </button>
 
             <p className="text-sm text-muted-foreground mt-3">
               {t('profile.clickUpload')}
