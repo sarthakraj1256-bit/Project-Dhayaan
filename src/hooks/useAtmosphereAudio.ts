@@ -2,6 +2,10 @@ import { useState, useRef, useCallback, useEffect } from 'react';
 import { getCachedAudio, setCachedAudio } from '@/lib/audioCache';
 import { supabase } from '@/integrations/backend/client';
 
+// Hardcoded fallbacks matching backend/client.ts — env vars can be undefined in preview
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || "https://pgavnutkwiiovdvbrbcl.supabase.co";
+const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBnYXZudXRrd2lpb3ZkdmJyYmNsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAwNDgyOTcsImV4cCI6MjA4NTYyNDI5N30.bM1DTGq9Fgn0WPcDlS2hjxRr-bdTDIbLq47RZFIvFbo";
+
 interface AtmosphereState {
   currentAtmosphere: string;
   atmosphereVolume: number;
@@ -183,19 +187,19 @@ export const useAtmosphereAudio = () => {
 
   const fetchAtmosphereWithRetry = useCallback(async (atmosphereId: string): Promise<Blob> => {
     const { data: { session } } = await supabase.auth.getSession();
-    const token = session?.access_token || import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+    const token = session?.access_token || SUPABASE_KEY;
 
     let lastError: Error | null = null;
 
     for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
       try {
         const response = await fetch(
-          `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/elevenlabs-sfx`,
+          `${SUPABASE_URL}/functions/v1/elevenlabs-sfx`,
           {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+              apikey: SUPABASE_KEY,
               Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify({ atmosphereId }),
