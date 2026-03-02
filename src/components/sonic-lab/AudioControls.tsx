@@ -11,6 +11,7 @@ import {
   Heart,
   ChevronUp,
   Square,
+  RefreshCw,
 } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
 import { atmospheres } from '@/data/soundLibrary';
@@ -157,6 +158,19 @@ const ExpandedControls = ({
         <div className="flex items-center gap-2 mb-3 text-xs text-primary">
           <Cloud className="w-3.5 h-3.5 animate-pulse" />
           <span>{t('sonic.generatingAtmosphere')}</span>
+        </div>
+      )}
+
+      {atmosphereError && !atmosphereNeedsInteraction && onReconnectAudio && (
+        <div className="mb-3 flex justify-end">
+          <button
+            onClick={onReconnectAudio}
+            className="inline-flex items-center gap-1.5 rounded-full border border-gold/45 bg-void/85 px-3 py-1.5 text-xs text-gold shadow-[0_0_0_1px_hsl(var(--gold)/0.12)] backdrop-blur-sm hover:bg-gold/10 transition-colors"
+            aria-label="Reconnect atmosphere audio"
+          >
+            <RefreshCw className="h-3.5 w-3.5" />
+            Reconnect
+          </button>
         </div>
       )}
 
