@@ -51,8 +51,8 @@
     },
     gold: {
       glow: 'shadow-[0_0_30px_rgba(201,168,76,0.5)]',
-      bg: 'from-[#C9A84C]/20 to-indigo-950/40',
-      border: 'border-[#C9A84C]/60',
+      bg: 'from-amber-50/90 to-orange-50/80',
+      border: 'border-[#C9A84C]/40',
       text: 'text-[#C9A84C]',
     },
   };
@@ -73,7 +73,7 @@
       className={`
           relative min-w-[200px] p-5 rounded-xl cursor-pointer transition-all duration-500
           bg-gradient-to-br ${colors.bg}
-          ${categoryColor === 'gold' ? 'backdrop-blur-md bg-indigo-950/30' : 'backdrop-blur-sm'}
+          backdrop-blur-sm
           border-2 ${isActive ? 'border-gold shadow-[0_0_24px_4px_hsl(var(--gold)/0.25)]' : 'border-border/50 hover:border-border'}
         `}
        onClick={isActive ? onStop : onPlay}
