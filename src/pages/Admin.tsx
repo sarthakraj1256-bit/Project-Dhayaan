@@ -3,10 +3,11 @@ import { supabase } from "@/integrations/backend/client";
 import { motion } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
 import {
-  Users, ShieldCheck, Music, Image, ArrowLeft, Loader2,
+  Users, ShieldCheck, Music, Image, Loader2,
   Calendar, Award, RefreshCw, Plus, Trash2, Save
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import BackButton from '@/components/BackButton';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
