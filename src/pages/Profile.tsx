@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { User } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/backend/client';
 import { toast } from 'sonner';
-import { ArrowLeft, Camera, Loader2, Save, Pencil, Trash2, Database, HelpCircle, ChevronRight, Sun, Moon, Phone, BadgeCheck } from 'lucide-react';
+import { Camera, Loader2, Save, Pencil, Trash2, Database, HelpCircle, ChevronRight, Sun, Moon, Phone, BadgeCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
