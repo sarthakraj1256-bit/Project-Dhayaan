@@ -97,10 +97,11 @@ serve(async (req) => {
         Authorization: `Bearer ${LOVABLE_API_KEY}`,
         "Content-Type": "application/json",
       },
+      const now = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
       body: JSON.stringify({
         model: "google/gemini-3-flash-preview",
         messages: [
-          { role: "system", content: SYSTEM_PROMPT },
+          { role: "system", content: SYSTEM_PROMPT + `\n\nCurrent date and time in India (IST): ${now}` },
           ...sanitized,
         ],
         stream: true,
