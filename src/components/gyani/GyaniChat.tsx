@@ -100,6 +100,7 @@ function nowTime() {
 
 // ─── Component ───────────────────────────────────────────
 export default function GyaniChat() {
+  const { t } = useLanguage();
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Msg[]>(() => {
     try {
@@ -113,6 +114,15 @@ export default function GyaniChat() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const navigate = useNavigate();
+
+  const quickChips = useMemo(() => [
+    { emoji: "🧘", label: t("gyani.chip.meditate" as any) },
+    { emoji: "🎵", label: t("gyani.chip.frequencies" as any) },
+    { emoji: "🛕", label: t("gyani.chip.darshan" as any) },
+    { emoji: "🎮", label: t("gyani.chip.games" as any) },
+    { emoji: "😴", label: t("gyani.chip.sleep" as any) },
+    { emoji: "🆘", label: t("gyani.chip.support" as any) },
+  ], [t]);
 
   // Persist to localStorage
   useEffect(() => {
