@@ -46,7 +46,7 @@ export const useTemplePresence = ({
         // User joined
       })
       .on('presence', { event: 'leave' }, ({ leftPresences }) => {
-        console.log('[useTemplePresence] User left:', leftPresences.length);
+        // User left
       })
       .subscribe(async (status) => {
         if (status === 'SUBSCRIBED') {

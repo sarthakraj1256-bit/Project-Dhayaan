@@ -339,7 +339,7 @@ export const useYouTubePlayerAPI = ({
         }
       } catch (crossOriginError) {
         // Cross-origin access blocked - this is expected for YouTube
-        console.log('[YT Player] Cross-origin PiP blocked, using fallback');
+        // Cross-origin PiP blocked, using fallback
       }
 
       // Fallback: Open video in new window for "pseudo-PiP" experience
