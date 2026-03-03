@@ -230,7 +230,7 @@ export const useYouTubePlayerAPI = ({
         
         const fallbackId = getNextFallback();
         if (!fallbackId) {
-          console.log('[YT Player] No more fallbacks');
+          // No more fallbacks
           setStatus('ambience');
           onStatusChange?.('ambience');
           isHandlingErrorRef.current = false;
