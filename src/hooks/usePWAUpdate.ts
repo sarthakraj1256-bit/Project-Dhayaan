@@ -142,7 +142,7 @@ async function initSW(): Promise<void> {
             }, 1500);
           } else {
             // First install - content cached
-            console.log('📦 PWA cached for offline use');
+            // PWA cached for offline use
           }
         }
       });
