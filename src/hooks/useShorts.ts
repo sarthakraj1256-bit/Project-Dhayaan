@@ -37,7 +37,7 @@ export const useShorts = (activeTag: string | null = null) => {
 
     let query = supabase
       .from("shorts_metadata")
-      .select("*")
+      .select("id, video_url, creator_id, caption, likes_count, tags, created_at")
       .order("created_at", { ascending: false })
       .range(from, to);
 

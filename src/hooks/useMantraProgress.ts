@@ -43,7 +43,7 @@
        
        const { data, error } = await supabase
          .from('mantra_progress')
-         .select('*')
+         .select('id, user_id, mantra_id, completed, completed_syllables, total_repetitions, last_practiced_at, completed_at, created_at, updated_at')
          .eq('user_id', userId)
          .order('last_practiced_at', { ascending: false });
        

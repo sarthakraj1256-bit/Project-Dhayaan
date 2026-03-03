@@ -354,7 +354,7 @@
        // Check goal completion
        const { data: goals } = await supabase
          .from('meditation_goals')
-         .select('*')
+         .select('target_minutes')
          .eq('goal_type', 'weekly')
          .maybeSingle();
  

@@ -202,7 +202,7 @@ export function useJapBank() {
       if (!userId) return [];
       const { data, error } = await supabase
         .from('jap_requests')
-        .select('*')
+        .select('id, requester_id, performer_id, mantra_name, required_count, completed_count, dedicated_to, deadline, karma_reward, status, rating, feedback, escrow_amount, escrow_status, auto_complete_at, requester_terms_accepted_at, performer_terms_accepted_at, sankalpa_receipt, created_at, updated_at')
         .order('created_at', { ascending: false });
       if (error) { console.error(error); return []; }
       return data as JapRequest[];

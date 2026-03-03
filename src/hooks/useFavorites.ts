@@ -47,7 +47,7 @@ import { supabase } from '@/integrations/backend/client';
      try {
        const { data, error } = await supabase
          .from('session_favorites')
-         .select('*')
+         .select('id, user_id, frequency_value, frequency_name, frequency_category, atmosphere_id, name, created_at')
          .order('created_at', { ascending: false });
  
        if (error) throw error;

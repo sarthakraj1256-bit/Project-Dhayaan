@@ -78,7 +78,7 @@ export const useDarshanChat = ({
     try {
       const { data, error: fetchError } = await supabase
         .from('darshan_chat_messages')
-        .select('*')
+        .select('id, temple_id, user_id, message, created_at')
         .eq('temple_id', templeId)
         .order('created_at', { ascending: true })
         .limit(limit);

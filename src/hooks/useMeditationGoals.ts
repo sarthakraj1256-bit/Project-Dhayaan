@@ -136,7 +136,7 @@
      try {
        const { data, error } = await supabase
          .from('meditation_goals')
-         .select('*');
+         .select('id, user_id, goal_type, target_minutes, created_at, updated_at');
  
        if (error) throw error;
  
