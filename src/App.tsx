@@ -4,7 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Skeleton } from "@/components/ui/skeleton";
+
 import EnvHealthCheck from "./components/EnvHealthCheck";
 import { PWASplashScreen } from "./components/pwa/PWASplashScreen";
 import { OfflineIndicator } from "./components/pwa/OfflineIndicator";
@@ -40,16 +40,11 @@ const AdminRoute = lazy(() => import("./components/auth/AdminRoute"));
 
 // Page loading skeleton
 const PageSkeleton = () => (
-  <div className="min-h-screen bg-void flex items-center justify-center">
-    <div className="text-center space-y-4">
-      <div className="w-16 h-16 mx-auto rounded-full bg-primary/20 animate-pulse" />
-      <Skeleton className="h-4 w-32 mx-auto bg-white/10" />
-      <div className="flex gap-2 justify-center">
-        <div className="w-2 h-2 rounded-full bg-primary animate-bounce" style={{ animationDelay: '0ms' }} />
-        <div className="w-2 h-2 rounded-full bg-primary animate-bounce" style={{ animationDelay: '150ms' }} />
-        <div className="w-2 h-2 rounded-full bg-primary animate-bounce" style={{ animationDelay: '300ms' }} />
-      </div>
-    </div>
+  <div className="min-h-screen bg-background flex items-center justify-center">
+    <div
+      className="w-3 h-3 rounded-full animate-pulse"
+      style={{ background: 'hsl(38 60% 55%)' }}
+    />
   </div>
 );
 
