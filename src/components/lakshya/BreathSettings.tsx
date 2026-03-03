@@ -51,7 +51,7 @@ const BreathSettings = ({ initialTimings, onStart }: BreathSettingsProps) => {
       </p>
 
       {isAdvanced && (
-        <Badge className="mb-4 bg-[#C9A84C]/20 text-[#C9A84C] border-[#C9A84C]/30 hover:bg-[#C9A84C]/30">
+        <Badge className="mb-4 bg-primary/20 text-primary border-primary/30 hover:bg-primary/30">
           <Zap className="w-3 h-3 mr-1" /> Advanced Practice
         </Badge>
       )}
@@ -61,7 +61,7 @@ const BreathSettings = ({ initialTimings, onStart }: BreathSettingsProps) => {
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <Label className="text-sm text-muted-foreground">Inhale Duration</Label>
-            <span className="text-sm font-mono text-[#C9A84C] font-semibold">{inhale}s</span>
+            <span className="text-sm font-mono text-primary font-semibold">{inhale}s</span>
           </div>
           <Slider
             value={[inhale]}
@@ -69,7 +69,7 @@ const BreathSettings = ({ initialTimings, onStart }: BreathSettingsProps) => {
             min={2}
             max={12}
             step={1}
-            className="[&_[role=slider]]:border-[#C9A84C] [&_[role=slider]]:bg-background [&_.relative>span]:bg-[#C9A84C]"
+            className="[&_[role=slider]]:border-primary [&_[role=slider]]:bg-background [&_.relative>span]:bg-primary"
           />
           <div className="flex justify-between text-[10px] text-muted-foreground">
             <span>2s</span><span>12s</span>
@@ -80,7 +80,7 @@ const BreathSettings = ({ initialTimings, onStart }: BreathSettingsProps) => {
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <Label className="text-sm text-muted-foreground">Exhale Duration</Label>
-            <span className="text-sm font-mono text-[#C9A84C] font-semibold">{exhale}s</span>
+            <span className="text-sm font-mono text-primary font-semibold">{exhale}s</span>
           </div>
           <Slider
             value={[exhale]}
@@ -89,7 +89,7 @@ const BreathSettings = ({ initialTimings, onStart }: BreathSettingsProps) => {
             max={12}
             step={1}
             disabled={autoBalance}
-            className="[&_[role=slider]]:border-[#C9A84C] [&_[role=slider]]:bg-background [&_.relative>span]:bg-[#C9A84C]"
+            className="[&_[role=slider]]:border-primary [&_[role=slider]]:bg-background [&_.relative>span]:bg-primary"
           />
           <div className="flex justify-between text-[10px] text-muted-foreground">
             <span>2s</span><span>12s</span>
@@ -97,7 +97,7 @@ const BreathSettings = ({ initialTimings, onStart }: BreathSettingsProps) => {
         </div>
 
         {/* Auto-Balance Toggle */}
-        <div className="flex items-center justify-between p-3 rounded-xl bg-[#C9A84C]/5 border border-[#C9A84C]/15">
+        <div className="flex items-center justify-between p-3 rounded-xl bg-primary/5 border border-primary/15">
           <div>
             <Label className="text-sm text-foreground">Auto-Balance (1:2)</Label>
             <p className="text-[11px] text-muted-foreground mt-0.5">Traditional Pranayama ratio</p>
@@ -131,7 +131,7 @@ const BreathSettings = ({ initialTimings, onStart }: BreathSettingsProps) => {
         {/* Start Button */}
         <button
           onClick={() => onStart({ inhaleSeconds: inhale, exhaleSeconds: exhale, holdSeconds: hold })}
-          className="w-full py-3 rounded-full bg-gradient-to-r from-[#C9A84C] to-amber-500 text-white font-medium hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
+          className="w-full py-3 rounded-full bg-gradient-to-r from-primary to-amber-500 text-primary-foreground font-medium hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
         >
           <Play className="w-5 h-5" />
           Begin Journey

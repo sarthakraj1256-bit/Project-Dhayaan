@@ -25,15 +25,15 @@ const ChakraProgress = ({ progress }: ChakraProgressProps) => {
               className={`
                 relative w-16 h-16 rounded-full border-2 flex items-center justify-center
                 transition-all duration-500
-                ${isUnlocked 
-                  ? 'border-transparent' 
-                  : 'border-white/20'
-                }
+                 ${isUnlocked 
+                   ? 'border-transparent' 
+                   : 'border-border'
+                 }
               `}
               style={{
                 background: isUnlocked 
                   ? `radial-gradient(circle, ${chakra.color}40, ${chakra.color}10)`
-                  : 'rgba(255,255,255,0.05)',
+                  : 'hsl(var(--muted))',
                 boxShadow: isUnlocked 
                   ? `0 0 20px ${chakra.color}40, 0 0 40px ${chakra.color}20`
                   : 'none',
@@ -86,7 +86,7 @@ const ChakraProgress = ({ progress }: ChakraProgressProps) => {
             </div>
 
             {/* Tooltip on hover */}
-            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 rounded-lg bg-void/90 border border-white/10 text-xs text-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10">
+            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 rounded-lg bg-popover border border-border text-xs text-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10">
               <p className="font-medium text-foreground">{chakra.name}</p>
               <p className="text-muted-foreground">
                 {isUnlocked ? 'Awakened' : `Requires ${chakra.points} Karma`}

@@ -202,7 +202,7 @@ const BreathFlowGame = ({ onClose, onKarmaEarned }: BreathFlowGameProps) => {
     <div className="relative">
       <div className="flex items-center justify-between mb-6">
         <h2 className="font-display text-2xl text-foreground">Breath Flow Journey</h2>
-        <button onClick={onClose} className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors">
+        <button onClick={onClose} className="p-2 rounded-full bg-muted hover:bg-muted/80 transition-colors">
           <X className="w-5 h-5" />
         </button>
       </div>
@@ -239,15 +239,15 @@ const BreathFlowGame = ({ onClose, onKarmaEarned }: BreathFlowGameProps) => {
                 <p className="text-amber-400">Karma Points Earned</p>
               </motion.div>
               <div className="grid grid-cols-3 gap-4 mb-4 text-center">
-                <div className="p-3 rounded-lg bg-white/5">
+                <div className="p-3 rounded-lg bg-muted/50">
                   <p className="text-xl font-display text-foreground">{formatTime(elapsedTime)}</p>
                   <p className="text-xs text-muted-foreground">Duration</p>
                 </div>
-                <div className="p-3 rounded-lg bg-white/5">
+                <div className="p-3 rounded-lg bg-muted/50">
                   <p className="text-xl font-display text-foreground">{Math.floor(distance)}</p>
                   <p className="text-xs text-muted-foreground">Distance</p>
                 </div>
-                <div className="p-3 rounded-lg bg-white/5">
+                <div className="p-3 rounded-lg bg-muted/50">
                   <p className="text-xl font-display text-foreground">{Math.floor(consistency)}%</p>
                   <p className="text-xs text-muted-foreground">Consistency</p>
                 </div>
@@ -256,7 +256,7 @@ const BreathFlowGame = ({ onClose, onKarmaEarned }: BreathFlowGameProps) => {
                 Rhythm: {activeTimings.inhaleSeconds}s / {activeTimings.holdSeconds}s / {activeTimings.exhaleSeconds}s
               </p>
               <div className="flex gap-4">
-                <button onClick={() => setGameState('settings')} className="px-6 py-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors flex items-center gap-2">
+                <button onClick={() => setGameState('settings')} className="px-6 py-2 rounded-full bg-muted hover:bg-muted/80 transition-colors flex items-center gap-2">
                   <RotateCcw className="w-4 h-4" /> Play Again
                 </button>
                 <button onClick={onClose} className="px-6 py-2 rounded-full bg-primary/20 border border-primary/50 text-primary hover:bg-primary/30 transition-colors">Done</button>
