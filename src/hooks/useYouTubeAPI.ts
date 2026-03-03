@@ -187,7 +187,7 @@ export const useYouTubePlayerAPI = ({
     if (!container) return;
 
     const videoId = currentVideoIdRef.current;
-    console.log('[YT Player] Initializing with video:', videoId);
+    // YT Player initializing
 
     const handleReady = (event: YTPlayerEvent) => {
       console.log('[YT Player] Ready');
