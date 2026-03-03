@@ -285,7 +285,7 @@ export default function ContactForm() {
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
-              className="w-full flex items-center gap-3 rounded-lg border border-dashed border-border bg-muted/40 px-4 py-3 text-sm text-muted-foreground hover:border-primary/50 hover:bg-muted/60 transition-colors"
+              className="w-full flex items-center gap-3 rounded-lg border border-dashed border-border/70 bg-muted/40 px-4 py-3 text-sm text-muted-foreground hover:border-primary/60 hover:bg-primary/[0.04] transition-colors"
             >
               <Paperclip className="w-4 h-4 shrink-0" />
               <span>Tap to attach an image (max 5 MB)</span>
