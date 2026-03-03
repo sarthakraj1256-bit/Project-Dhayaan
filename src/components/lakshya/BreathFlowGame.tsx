@@ -239,15 +239,15 @@ const BreathFlowGame = ({ onClose, onKarmaEarned }: BreathFlowGameProps) => {
                 <p className="text-amber-400">Karma Points Earned</p>
               </motion.div>
               <div className="grid grid-cols-3 gap-4 mb-4 text-center">
-                <div className="p-3 rounded-lg bg-white/5">
+                <div className="p-3 rounded-lg bg-muted/50">
                   <p className="text-xl font-display text-foreground">{formatTime(elapsedTime)}</p>
                   <p className="text-xs text-muted-foreground">Duration</p>
                 </div>
-                <div className="p-3 rounded-lg bg-white/5">
+                <div className="p-3 rounded-lg bg-muted/50">
                   <p className="text-xl font-display text-foreground">{Math.floor(distance)}</p>
                   <p className="text-xs text-muted-foreground">Distance</p>
                 </div>
-                <div className="p-3 rounded-lg bg-white/5">
+                <div className="p-3 rounded-lg bg-muted/50">
                   <p className="text-xl font-display text-foreground">{Math.floor(consistency)}%</p>
                   <p className="text-xs text-muted-foreground">Consistency</p>
                 </div>
