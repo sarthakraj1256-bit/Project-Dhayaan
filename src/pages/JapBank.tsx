@@ -2,6 +2,7 @@ import { Suspense, lazy, useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { BookOpen, Target, HandHeart, Trophy, Building2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import BackButton from '@/components/BackButton';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';

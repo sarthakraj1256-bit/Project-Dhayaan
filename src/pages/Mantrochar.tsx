@@ -2,6 +2,7 @@ import PageTransition from '@/components/PageTransition';
 import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import BackButton from '@/components/BackButton';
 import { BookOpen, Radio, Flame, GraduationCap, Loader2, LogIn } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { mantras, getMantrasByDifficulty, type Mantra } from '@/data/mantraLibrary';

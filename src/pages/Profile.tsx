@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import BackButton from '@/components/BackButton';
 import { User } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/backend/client';
 import { toast } from 'sonner';

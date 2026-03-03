@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import BackButton from '@/components/BackButton';
 import { motion } from "framer-motion";
 import { Compass, LifeBuoy, HelpCircle, Target, Radio, Layers, TrendingUp, Volume2, RefreshCw, WifiOff, MessageCircle, Mail } from "lucide-react";
 import {

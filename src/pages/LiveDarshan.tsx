@@ -3,6 +3,7 @@ import { useState, useMemo } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { motion } from 'framer-motion';
 import { Link, useSearchParams } from 'react-router-dom';
+import BackButton from '@/components/BackButton';
 import { 
   Radio, 
   Search, 
