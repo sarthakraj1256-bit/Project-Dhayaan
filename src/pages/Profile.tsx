@@ -295,8 +295,13 @@ const Profile = () => {
               </button>
             )}
 
-            {/* Email */}
-            <p className="text-sm text-muted-foreground">{user?.email}</p>
+            {/* Email with verified badge */}
+            <div className="flex items-center gap-1.5 mt-1">
+              <p className="text-sm text-muted-foreground">{user?.email}</p>
+              {user?.email_confirmed_at && (
+                <BadgeCheck className="w-4 h-4 text-primary shrink-0" />
+              )}
+            </div>
           </div>
         </div>
 
