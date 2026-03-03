@@ -211,7 +211,7 @@ export const useYouTubePlayerAPI = ({
 
     const handleStateChange = (event: YTPlayerEvent) => {
       if (event.data === PlayerState.ENDED) {
-        console.log('[YT Player] Video ended, restarting...');
+        // Video ended, restarting
         event.target.seekTo(0);
         event.target.playVideo();
       }
