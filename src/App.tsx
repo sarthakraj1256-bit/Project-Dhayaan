@@ -72,6 +72,7 @@ const App = () => (
         <Sonner />
         <EnvHealthCheck />
         <PWAInstallPrompt />
+        <GyaniChat />
         
         <Suspense fallback={<PageSkeleton />}>
           <Routes>
