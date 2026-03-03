@@ -300,6 +300,49 @@ const Profile = () => {
           </div>
         </div>
 
+        {/* Contact Number Card */}
+        <div className="rounded-xl bg-card border border-border p-5">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center">
+                <Phone className="w-5 h-5 text-primary" />
+              </div>
+              <div>
+                <p className="text-sm font-medium text-foreground">Contact No</p>
+                {isEditingPhone ? (
+                  <div className="flex items-center gap-2 mt-1">
+                    <Input
+                      value={phoneNumber}
+                      onChange={(e) => setPhoneNumber(e.target.value)}
+                      placeholder="+91 XXXXX XXXXX"
+                      maxLength={20}
+                      type="tel"
+                      className="h-8 w-44 text-sm bg-transparent border-border"
+                      autoFocus
+                      onKeyDown={(e) => e.key === 'Enter' && handleSavePhone()}
+                    />
+                    <Button size="sm" onClick={handleSavePhone} disabled={isSaving} className="h-8 px-2">
+                      {isSaving ? <Loader2 className="w-3 h-3 animate-spin" /> : <Save className="w-3 h-3" />}
+                    </Button>
+                  </div>
+                ) : (
+                  <p className="text-sm text-muted-foreground">
+                    {profile?.phone_number || 'Not added'}
+                  </p>
+                )}
+              </div>
+            </div>
+            {!isEditingPhone && (
+              <button
+                onClick={() => setIsEditingPhone(true)}
+                className="text-primary text-sm font-medium hover:underline"
+              >
+                {profile?.phone_number ? 'Edit' : 'Add'}
+              </button>
+            )}
+          </div>
+        </div>
+
         {/* Appearance Card */}
         <div className="rounded-xl bg-card border border-border p-5">
           <div className="flex items-center justify-between">
