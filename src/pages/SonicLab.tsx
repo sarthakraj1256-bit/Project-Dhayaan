@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Radio, Star, BarChart3 } from 'lucide-react';
+import { Radio, Star, BarChart3 } from 'lucide-react';
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import PageTransition from '@/components/PageTransition';
