@@ -270,7 +270,7 @@ export default function GyaniChat() {
                     <Sparkles className="w-3.5 h-3.5 text-primary-foreground" />
                   </div>
                   <div className="rounded-xl rounded-tl-sm bg-card border border-border/60 px-3 py-2.5 text-sm text-foreground max-w-[85%]">
-                    {WELCOME}
+                    {t("gyani.welcome" as any)}
                   </div>
                 </motion.div>
               )}
