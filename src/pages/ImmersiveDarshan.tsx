@@ -2,7 +2,8 @@ import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Play, Search, Filter, MapPin, Star, Eye } from 'lucide-react';
+import BackButton from '@/components/BackButton';
+import { Play, Search, Filter, MapPin, Star, Eye } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -131,9 +132,7 @@ const ImmersiveDarshan = () => {
       {/* Header */}
       <header className="sticky top-0 z-40 h-14 px-4 flex items-center justify-between backdrop-blur-xl bg-background/80 border-b border-border/30">
             <div className="flex items-center gap-3">
-              <Link to="/live-darshan" className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-muted transition-colors">
-                <ArrowLeft className="w-5 h-5 text-muted-foreground" />
-              </Link>
+              <BackButton />
               <h1 className="font-display text-lg text-gold-gradient tracking-wider">
                 {t('page.immersiveDarshan')}
               </h1>

@@ -2,7 +2,8 @@ import PageTransition from '@/components/PageTransition';
 import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, BookOpen, Radio, Flame, GraduationCap, Loader2, LogIn } from 'lucide-react';
+import BackButton from '@/components/BackButton';
+import { BookOpen, Radio, Flame, GraduationCap, Loader2, LogIn } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { mantras, getMantrasByDifficulty, type Mantra } from '@/data/mantraLibrary';
 import MantraCard from '@/components/mantrochar/MantraCard';
@@ -108,12 +109,7 @@ const difficultyKeyMap: Record<string, TranslationKey> = {
        <div className="relative z-10 pb-24 md:pb-0">
          {/* Header */}
          <header className="sticky top-0 z-40 h-14 px-4 flex items-center justify-between bg-background/85 backdrop-blur-xl border-b border-border/50">
-               <Link
-                 to="/"
-                 className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-foreground/5 transition-colors"
-               >
-                 <ArrowLeft className="w-5 h-5 text-muted-foreground" />
-               </Link>
+               <BackButton />
   
                <div className="flex items-center gap-2">
                  <BookOpen className="w-5 h-5 text-primary" />

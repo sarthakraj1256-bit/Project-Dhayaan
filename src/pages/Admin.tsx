@@ -3,10 +3,11 @@ import { supabase } from "@/integrations/backend/client";
 import { motion } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
 import {
-  Users, ShieldCheck, Music, Image, ArrowLeft, Loader2,
+  Users, ShieldCheck, Music, Image, Loader2,
   Calendar, Award, RefreshCw, Plus, Trash2, Save
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import BackButton from '@/components/BackButton';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -105,9 +106,7 @@ const Admin = () => {
       {/* Header */}
       <header className="sticky top-0 z-30 bg-background/80 backdrop-blur-md border-b border-primary/20">
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center gap-3">
-          <button onClick={() => navigate("/")} className="text-muted-foreground hover:text-foreground transition-colors">
-            <ArrowLeft className="w-5 h-5" />
-          </button>
+          <BackButton />
           <ShieldCheck className="w-5 h-5 text-primary" />
           <h1 className="text-lg font-bold text-foreground">Admin Dashboard</h1>
           <Badge variant="outline" className="ml-auto border-primary/50 text-primary text-[10px] tracking-widest uppercase">

@@ -1,6 +1,7 @@
 import { useState, useMemo, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Play, Clock, ListVideo, X, CheckCircle2, Circle, Eye, EyeOff } from 'lucide-react';
+import BackButton from '@/components/BackButton';
+import { Play, Clock, ListVideo, X, CheckCircle2, Circle, Eye, EyeOff } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { standaloneCartoons, rollNo21Cartoons, chhotaBheemKrishnaCartoons, selfieWithBajrangiCartoons, jayJagannathCartoons, CartoonVideo } from '@/data/childrenCartoons';
 import { Badge } from '@/components/ui/badge';
@@ -56,9 +57,7 @@ export default function ChildrenCartoons() {
   return (
     <div className="min-h-screen bg-background pb-24 md:pb-8">
        <header className="sticky top-0 z-40 h-14 px-4 flex items-center gap-3 border-b border-border/50 bg-background/85 backdrop-blur-xl">
-        <Link to="/" className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-foreground/5 transition-colors">
-          <ArrowLeft className="w-5 h-5 text-muted-foreground" />
-        </Link>
+        <BackButton />
         <h1 className="font-display text-lg tracking-wider text-foreground">{t('page.childrenCartoons')}</h1>
       </header>
 

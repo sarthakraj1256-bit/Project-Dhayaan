@@ -1,8 +1,8 @@
 import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import BackButton from '@/components/BackButton';
 import { 
-  ArrowLeft, 
   Clock, 
   Sun, 
   Moon, 
@@ -162,11 +162,7 @@ const AartiSchedulePage = () => {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <Link to="/live-darshan">
-                <Button variant="ghost" size="icon">
-                  <ArrowLeft className="w-5 h-5" />
-                </Button>
-              </Link>
+              <BackButton />
               <div>
                 <h1 className="font-display text-2xl md:text-3xl text-gold-gradient">
                   Aarati Schedule

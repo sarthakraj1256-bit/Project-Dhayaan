@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import BackButton from '@/components/BackButton';
 import { User } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/backend/client';
 import { toast } from 'sonner';
-import { ArrowLeft, Camera, Loader2, Save, Pencil, Trash2, Database, HelpCircle, ChevronRight, Sun, Moon, Phone, BadgeCheck } from 'lucide-react';
+import { Camera, Loader2, Save, Pencil, Trash2, Database, HelpCircle, ChevronRight, Sun, Moon, Phone, BadgeCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -222,12 +223,7 @@ const Profile = () => {
     <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="sticky top-0 z-40 h-14 px-4 flex items-center justify-between bg-background/80 backdrop-blur-xl border-b border-border/30">
-        <button
-          onClick={() => navigate(-1)}
-          className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-muted transition-colors"
-        >
-          <ArrowLeft className="w-5 h-5 text-muted-foreground" />
-        </button>
+        <BackButton />
         <h1 className="font-display text-lg tracking-wider text-foreground">
           {t('page.profile')}
         </h1>
