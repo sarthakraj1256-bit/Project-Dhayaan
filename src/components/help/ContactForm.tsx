@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import emailjs from "@emailjs/browser";
-import { Send, CheckCircle2, Loader2, AlertTriangle } from "lucide-react";
+import { Send, CheckCircle2, Loader2, AlertTriangle, Paperclip, X, ImageIcon } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -38,6 +38,9 @@ const SUBJECTS = [
   "Other",
 ] as const;
 
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+const ACCEPTED_TYPES = ["image/png", "image/jpeg", "image/jpg", "image/webp", "image/gif"];
+
 const contactSchema = z.object({
   from_name: z.string().trim().min(1, "Name is required").max(100, "Name is too long"),
   from_email: z.string().trim().email("Please enter a valid email").max(255),
@@ -46,12 +49,15 @@ const contactSchema = z.object({
 });
 
 type ContactFormData = z.infer<typeof contactSchema>;
-
 type Status = "idle" | "sending" | "success" | "error";
 
 export default function ContactForm() {
   const [status, setStatus] = useState<Status>("idle");
   const [sentEmail, setSentEmail] = useState("");
+  const [attachment, setAttachment] = useState<File | null>(null);
+  const [attachError, setAttachError] = useState("");
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const form = useForm<ContactFormData>({
     resolver: zodResolver(contactSchema),
@@ -79,26 +85,85 @@ export default function ContactForm() {
     })();
   }, [form]);
 
+  // Clean up preview URL on unmount
+  useEffect(() => {
+    return () => {
+      if (previewUrl) URL.revokeObjectURL(previewUrl);
+    };
+  }, [previewUrl]);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAttachError("");
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!ACCEPTED_TYPES.includes(file.type)) {
+      setAttachError("Only images are allowed (PNG, JPG, WebP, GIF)");
+      e.target.value = "";
+      return;
+    }
+    if (file.size > MAX_FILE_SIZE) {
+      setAttachError("File must be under 5 MB");
+      e.target.value = "";
+      return;
+    }
+
+    if (previewUrl) URL.revokeObjectURL(previewUrl);
+    setAttachment(file);
+    setPreviewUrl(URL.createObjectURL(file));
+  };
+
+  const removeAttachment = () => {
+    if (previewUrl) URL.revokeObjectURL(previewUrl);
+    setAttachment(null);
+    setPreviewUrl(null);
+    setAttachError("");
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
+  const uploadScreenshot = async (file: File): Promise<string | null> => {
+    const ext = file.name.split(".").pop() ?? "png";
+    const path = `contact/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+
+    const { error } = await supabase.storage
+      .from("garden-screenshots") // reuse existing public bucket
+      .upload(path, file, { contentType: file.type, upsert: false });
+
+    if (error) return null;
+
+    const { data: urlData } = supabase.storage
+      .from("garden-screenshots")
+      .getPublicUrl(path);
+
+    return urlData?.publicUrl ?? null;
+  };
+
   const onSubmit = async (data: ContactFormData) => {
     setStatus("sending");
     try {
-      // Fetch EmailJS config from edge function
       const { data: configData, error: configError } = await supabase.functions.invoke("emailjs-config");
       if (configError || !configData?.serviceId) throw new Error("Config unavailable");
 
       const { serviceId, contactTemplateId, autoreplyTemplateId, publicKey } = configData;
 
-      const templateParams = {
+      let screenshotUrl = "";
+      if (attachment) {
+        const url = await uploadScreenshot(attachment);
+        screenshotUrl = url ?? "";
+      }
+
+      const templateParams: Record<string, string> = {
         from_name: data.from_name,
         from_email: data.from_email,
         subject: data.subject,
         message: data.message,
+        screenshot_url: screenshotUrl
+          ? `\n\n📎 Screenshot attached: ${screenshotUrl}`
+          : "",
       };
 
-      // Send contact email
       await emailjs.send(serviceId, contactTemplateId, templateParams, publicKey);
 
-      // Send auto-reply (non-blocking)
       if (autoreplyTemplateId) {
         emailjs.send(serviceId, autoreplyTemplateId, templateParams, publicKey).catch(() => {});
       }
@@ -112,6 +177,7 @@ export default function ContactForm() {
 
   const reset = () => {
     form.reset();
+    removeAttachment();
     setStatus("idle");
     setSentEmail("");
   };
@@ -207,6 +273,60 @@ export default function ContactForm() {
             </FormItem>
           )}
         />
+
+        {/* Attachment */}
+        <div className="space-y-2">
+          <label className="text-xs text-muted-foreground">Attach Screenshot (optional)</label>
+
+          {!attachment ? (
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              className="w-full flex items-center gap-3 rounded-lg border border-dashed border-border bg-muted/40 px-4 py-3 text-sm text-muted-foreground hover:border-primary/50 hover:bg-muted/60 transition-colors"
+            >
+              <Paperclip className="w-4 h-4 shrink-0" />
+              <span>Tap to attach an image (max 5 MB)</span>
+            </button>
+          ) : (
+            <div className="flex items-center gap-3 rounded-lg border border-border bg-muted/40 px-3 py-2">
+              {previewUrl ? (
+                <img
+                  src={previewUrl}
+                  alt="Preview"
+                  className="w-10 h-10 rounded object-cover border border-border"
+                />
+              ) : (
+                <ImageIcon className="w-10 h-10 text-muted-foreground" />
+              )}
+              <div className="flex-1 min-w-0">
+                <p className="text-xs font-medium text-foreground truncate">{attachment.name}</p>
+                <p className="text-[10px] text-muted-foreground">
+                  {(attachment.size / 1024).toFixed(0)} KB
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={removeAttachment}
+                className="p-1.5 rounded-full hover:bg-destructive/10 text-muted-foreground hover:text-destructive transition-colors"
+                aria-label="Remove attachment"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+          )}
+
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/png,image/jpeg,image/jpg,image/webp,image/gif"
+            onChange={handleFileChange}
+            className="hidden"
+          />
+
+          {attachError && (
+            <p className="text-xs text-destructive">{attachError}</p>
+          )}
+        </div>
 
         {status === "error" && (
           <div className="flex items-start gap-2 rounded-lg bg-destructive/10 border border-destructive/30 p-3 text-xs text-destructive">
