@@ -60,6 +60,7 @@ const queryClient = new QueryClient({
 });
 
 const App = () => (
+  <ThemeProvider>
   <LanguageProvider>
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
