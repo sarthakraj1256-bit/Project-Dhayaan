@@ -172,6 +172,7 @@
     font-family: 'Inter', 'system-ui', sans-serif;
     overscroll-behavior-y: none;
     -webkit-text-size-adjust: 100%;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
 
   /* Global touch-action: manipulation removes 300ms tap delay in Safari */
