@@ -92,7 +92,7 @@ const SharedGarden = () => {
         >
           <Link
             to="/"
-            className="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors"
+            className="p-2 rounded-lg bg-muted/50 hover:bg-muted transition-colors"
           >
             <ArrowLeft className="w-5 h-5 text-muted-foreground" />
           </Link>
