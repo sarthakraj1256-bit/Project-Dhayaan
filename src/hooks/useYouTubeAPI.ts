@@ -190,7 +190,7 @@ export const useYouTubePlayerAPI = ({
     // YT Player initializing
 
     const handleReady = (event: YTPlayerEvent) => {
-      console.log('[YT Player] Ready');
+      // YT Player ready
       setIsPlayerReady(true);
       errorCountRef.current = 0;
       
