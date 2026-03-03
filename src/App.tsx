@@ -40,15 +40,21 @@ const AdminRoute = lazy(() => import("./components/auth/AdminRoute"));
 
 // Page loading skeleton
 const PageSkeleton = () => (
-  <div className="min-h-screen bg-void flex items-center justify-center">
+  <div className="min-h-screen bg-background flex items-center justify-center">
     <div className="text-center space-y-4">
-      <div className="w-16 h-16 mx-auto rounded-full bg-primary/20 animate-pulse" />
-      <Skeleton className="h-4 w-32 mx-auto bg-white/10" />
-      <div className="flex gap-2 justify-center">
-        <div className="w-2 h-2 rounded-full bg-primary animate-bounce" style={{ animationDelay: '0ms' }} />
-        <div className="w-2 h-2 rounded-full bg-primary animate-bounce" style={{ animationDelay: '150ms' }} />
-        <div className="w-2 h-2 rounded-full bg-primary animate-bounce" style={{ animationDelay: '300ms' }} />
-      </div>
+      <motion.div
+        animate={{
+          scale: [1, 1.3, 1],
+          opacity: [0.3, 0.6, 0.3],
+        }}
+        transition={{
+          duration: 2,
+          repeat: Infinity,
+          ease: 'easeInOut',
+        }}
+        className="w-3 h-3 mx-auto rounded-full"
+        style={{ background: 'hsl(38 60% 55%)' }}
+      />
     </div>
   </div>
 );
