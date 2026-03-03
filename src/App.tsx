@@ -11,6 +11,7 @@ import { OfflineIndicator } from "./components/pwa/OfflineIndicator";
 import { LanguageProvider } from "./contexts/LanguageContext";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { PWAInstallPrompt } from "./components/pwa/PWAInstallPrompt";
+import GyaniChat from "./components/gyani/GyaniChat";
 
 // Critical routes - loaded immediately
 import Index from "./pages/Index";
@@ -71,6 +72,7 @@ const App = () => (
         <Sonner />
         <EnvHealthCheck />
         <PWAInstallPrompt />
+        <GyaniChat />
         
         <Suspense fallback={<PageSkeleton />}>
           <Routes>
