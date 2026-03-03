@@ -88,7 +88,7 @@ export function useJapBank() {
       if (!userId) return [];
       const { data, error } = await supabase
         .from('jap_entries')
-        .select('*')
+        .select('id, user_id, mantra_name, chant_count, created_at')
         .eq('user_id', userId)
         .order('created_at', { ascending: false });
       if (error) { console.error(error); return []; }
