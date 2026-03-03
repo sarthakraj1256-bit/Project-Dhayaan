@@ -179,7 +179,7 @@
        };
        
        ws.onclose = () => {
-         console.log('STT WebSocket closed');
+         // STT WebSocket closed
          cleanup();
        };
        

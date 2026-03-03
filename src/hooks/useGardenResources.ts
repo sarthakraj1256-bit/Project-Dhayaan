@@ -24,7 +24,7 @@ export const useGardenResources = () => {
       try {
         setResources(JSON.parse(saved));
       } catch (e) {
-        console.log('Could not load garden resources');
+        // Could not load garden resources
       }
     }
   }, []);

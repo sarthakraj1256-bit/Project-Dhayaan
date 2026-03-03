@@ -163,7 +163,7 @@
      try {
        const { data, error } = await supabase
          .from('meditation_sessions')
-         .select('*')
+         .select('id, user_id, frequency_value, frequency_name, frequency_category, atmosphere_id, duration_seconds, started_at, ended_at, created_at')
          .order('started_at', { ascending: false })
          .limit(100);
  

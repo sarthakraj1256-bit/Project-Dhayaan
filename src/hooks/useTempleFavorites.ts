@@ -51,7 +51,7 @@ export const useTempleFavorites = () => {
 
       const { data, error } = await supabase
         .from('temple_favorites')
-        .select('*')
+        .select('id, temple_id, notifications_enabled, created_at')
         .eq('user_id', userId);
 
       if (error) throw error;

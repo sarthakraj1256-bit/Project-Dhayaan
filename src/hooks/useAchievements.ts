@@ -149,7 +149,7 @@
      try {
        const { data, error } = await supabase
          .from('user_achievements')
-         .select('*');
+         .select('id, achievement_id, unlocked_at');
  
        if (error) throw error;
  
@@ -354,7 +354,7 @@
        // Check goal completion
        const { data: goals } = await supabase
          .from('meditation_goals')
-         .select('*')
+         .select('target_minutes')
          .eq('goal_type', 'weekly')
          .maybeSingle();
  

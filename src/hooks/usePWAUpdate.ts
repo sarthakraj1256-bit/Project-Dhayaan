@@ -128,7 +128,7 @@ async function initSW(): Promise<void> {
         if (newWorker.state === 'installed') {
           if (navigator.serviceWorker.controller) {
             // New update available - show notification and refresh
-            console.log('🔄 New PWA version available');
+            // New PWA version available
             
             toast.info('New version available! Refreshing...', {
               id: 'pwa-update',
@@ -142,7 +142,7 @@ async function initSW(): Promise<void> {
             }, 1500);
           } else {
             // First install - content cached
-            console.log('📦 PWA cached for offline use');
+            // PWA cached for offline use
           }
         }
       });
@@ -153,7 +153,7 @@ async function initSW(): Promise<void> {
       window.location.reload();
     });
 
-    console.log('✅ Service worker registered');
+    // Service worker registered successfully
   } catch (error) {
     console.error('❌ Service worker registration failed:', error);
   }

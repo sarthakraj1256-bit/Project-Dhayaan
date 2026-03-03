@@ -187,10 +187,10 @@ export const useYouTubePlayerAPI = ({
     if (!container) return;
 
     const videoId = currentVideoIdRef.current;
-    console.log('[YT Player] Initializing with video:', videoId);
+    // YT Player initializing
 
     const handleReady = (event: YTPlayerEvent) => {
-      console.log('[YT Player] Ready');
+      // YT Player ready
       setIsPlayerReady(true);
       errorCountRef.current = 0;
       
@@ -211,7 +211,7 @@ export const useYouTubePlayerAPI = ({
 
     const handleStateChange = (event: YTPlayerEvent) => {
       if (event.data === PlayerState.ENDED) {
-        console.log('[YT Player] Video ended, restarting...');
+        // Video ended, restarting
         event.target.seekTo(0);
         event.target.playVideo();
       }
@@ -230,14 +230,14 @@ export const useYouTubePlayerAPI = ({
         
         const fallbackId = getNextFallback();
         if (!fallbackId) {
-          console.log('[YT Player] No more fallbacks');
+          // No more fallbacks
           setStatus('ambience');
           onStatusChange?.('ambience');
           isHandlingErrorRef.current = false;
           return;
         }
         
-        console.log(`[YT Player] Switching to: ${fallbackId}`);
+        // Switching to fallback
         currentVideoIdRef.current = fallbackId;
         
         const newStatus = fallbackId === recordedVideoId ? 'recorded' : 'ambience';
@@ -296,7 +296,7 @@ export const useYouTubePlayerAPI = ({
 
   const retryConnection = useCallback(() => {
     if (!playerRef.current || !liveVideoId) return;
-    console.log('[YT Player] Retrying live stream');
+    // Retrying live stream
     errorCountRef.current = 0;
     currentAttemptRef.current = 'live';
     currentVideoIdRef.current = liveVideoId;
@@ -339,7 +339,7 @@ export const useYouTubePlayerAPI = ({
         }
       } catch (crossOriginError) {
         // Cross-origin access blocked - this is expected for YouTube
-        console.log('[YT Player] Cross-origin PiP blocked, using fallback');
+        // Cross-origin PiP blocked, using fallback
       }
 
       // Fallback: Open video in new window for "pseudo-PiP" experience

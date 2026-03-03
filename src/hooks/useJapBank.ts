@@ -88,7 +88,7 @@ export function useJapBank() {
       if (!userId) return [];
       const { data, error } = await supabase
         .from('jap_entries')
-        .select('*')
+        .select('id, user_id, mantra_name, chant_count, created_at')
         .eq('user_id', userId)
         .order('created_at', { ascending: false });
       if (error) { console.error(error); return []; }
@@ -149,7 +149,7 @@ export function useJapBank() {
       if (!userId) return [];
       const { data, error } = await supabase
         .from('jap_goals')
-        .select('*')
+        .select('id, user_id, mantra_name, target_count, current_count, deadline, dedication, status, created_at, updated_at')
         .eq('user_id', userId)
         .order('created_at', { ascending: false });
       if (error) { console.error(error); return []; }
@@ -202,7 +202,7 @@ export function useJapBank() {
       if (!userId) return [];
       const { data, error } = await supabase
         .from('jap_requests')
-        .select('*')
+        .select('id, requester_id, performer_id, mantra_name, required_count, completed_count, dedicated_to, deadline, karma_reward, status, rating, feedback, escrow_amount, escrow_status, auto_complete_at, requester_terms_accepted_at, performer_terms_accepted_at, sankalpa_receipt, created_at, updated_at')
         .order('created_at', { ascending: false });
       if (error) { console.error(error); return []; }
       return data as JapRequest[];

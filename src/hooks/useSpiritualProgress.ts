@@ -82,7 +82,7 @@ export function useSpiritualProgress() {
       
       const { data, error } = await supabase
         .from('user_spiritual_progress')
-        .select('*')
+        .select('id, user_id, karma_points, current_level, total_meditation_minutes, total_chanting_sessions, total_mantra_lessons, total_games_played, current_streak, longest_streak, last_activity_date, unlocked_chakras, unlocked_environments, unlocked_wallpapers')
         .eq('user_id', userId)
         .maybeSingle();
 
