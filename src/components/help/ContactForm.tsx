@@ -211,7 +211,7 @@ export default function ContactForm() {
             <FormItem>
               <FormLabel className="text-xs text-muted-foreground">Full Name *</FormLabel>
               <FormControl>
-                <Input placeholder="Your name" {...field} className="bg-muted/60 border-border focus:border-primary" />
+                <Input placeholder="Your name" {...field} className={inputClasses} />
               </FormControl>
               <FormMessage />
             </FormItem>
