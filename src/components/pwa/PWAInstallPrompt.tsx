@@ -29,9 +29,9 @@ export const PWAInstallPrompt = () => {
           initial={{ opacity: 0, y: 100 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 100 }}
-          className="fixed bottom-20 left-4 right-4 z-50 md:left-auto md:right-6 md:max-w-sm"
+          className="fixed bottom-4 left-4 right-4 z-[60] md:left-auto md:right-6 md:max-w-sm"
         >
-          <div 
+        <div 
             className="rounded-2xl p-4 backdrop-blur-xl"
             style={{
               background: 'linear-gradient(135deg, hsl(var(--void-light) / 0.95), hsl(var(--void) / 0.9))',
@@ -92,7 +92,7 @@ export const PWAInstallPrompt = () => {
         initial={{ opacity: 0, y: 100 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 100 }}
-        className="fixed bottom-20 left-4 right-4 z-50 md:left-auto md:right-6 md:max-w-sm"
+        className="fixed bottom-4 left-4 right-4 z-[60] md:left-auto md:right-6 md:max-w-sm"
       >
         <div 
           className="rounded-2xl p-4 backdrop-blur-xl"
