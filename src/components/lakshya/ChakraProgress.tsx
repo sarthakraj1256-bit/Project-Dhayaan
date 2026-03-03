@@ -33,7 +33,7 @@ const ChakraProgress = ({ progress }: ChakraProgressProps) => {
               style={{
                 background: isUnlocked 
                   ? `radial-gradient(circle, ${chakra.color}40, ${chakra.color}10)`
-                  : 'rgba(255,255,255,0.05)',
+                  : 'hsl(var(--muted))',
                 boxShadow: isUnlocked 
                   ? `0 0 20px ${chakra.color}40, 0 0 40px ${chakra.color}20`
                   : 'none',
