@@ -380,7 +380,7 @@ export default function GyaniChat() {
                   </button>
                 </TooltipTrigger>
                 <TooltipContent side="top">
-                  <p className="text-xs">Voice coming soon 🎙️</p>
+                  <p className="text-xs">{t("gyani.voiceSoon" as any)}</p>
                 </TooltipContent>
               </Tooltip>
 
