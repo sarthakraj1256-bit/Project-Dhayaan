@@ -380,7 +380,7 @@ const Lakshya = () => {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               <button
                 onClick={() => navigate('/sonic-lab')}
-                className="p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors text-center"
+                className="p-4 rounded-xl bg-muted/50 border border-border hover:bg-muted transition-colors text-center"
               >
                 <span className="text-2xl mb-2 block">🎵</span>
                 <span className="text-sm text-foreground">{t('feature.sonicLab')}</span>
