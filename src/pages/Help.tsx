@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowLeft, Compass, LifeBuoy, HelpCircle, Target, Radio, Layers, TrendingUp, Volume2, RefreshCw, WifiOff, MessageCircle, Mail } from "lucide-react";
+import { Compass, LifeBuoy, HelpCircle, Target, Radio, Layers, TrendingUp, Volume2, RefreshCw, WifiOff, MessageCircle, Mail } from "lucide-react";
 import {
   Accordion,
   AccordionContent,
