@@ -114,9 +114,7 @@ const LiveDarshan = () => {
       {/* Header */}
        <header className="sticky top-0 z-40 h-14 px-4 flex items-center justify-between backdrop-blur-xl bg-background/85 border-b border-border/50">
             <div className="flex items-center gap-3">
-              <Link to="/" className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-foreground/5 transition-colors">
-                <ArrowLeft className="w-5 h-5 text-muted-foreground" />
-              </Link>
+              <BackButton />
               <h1 className="font-display text-lg text-gold-gradient tracking-wider">
                 {t('page.liveDarshan')}
               </h1>

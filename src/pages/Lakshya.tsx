@@ -140,12 +140,7 @@ const Lakshya = () => {
 
       {/* Sticky Header */}
       <header className="sticky top-0 z-40 h-14 px-4 flex items-center justify-between bg-background/80 backdrop-blur-xl border-b border-border/30">
-          <button
-            onClick={() => navigate(-1)}
-            className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-foreground/5 transition-colors"
-          >
-            <ArrowLeft className="w-5 h-5 text-muted-foreground" />
-          </button>
+          <BackButton />
           
           <h1 className="font-display text-lg tracking-wider text-foreground">
             <span className="text-primary">लक्ष्य</span> {t('page.lakshya')}

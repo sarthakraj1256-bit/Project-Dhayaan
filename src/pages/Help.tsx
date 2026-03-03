@@ -127,13 +127,7 @@ const Help = () => {
     <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="sticky top-0 z-40 h-14 flex items-center gap-3 px-4 border-b border-border/50 bg-background/80 backdrop-blur-lg">
-        <button
-          onClick={() => navigate(-1)}
-          className="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-muted transition-colors"
-          aria-label="Go back"
-        >
-          <ArrowLeft className="w-5 h-5 text-foreground" />
-        </button>
+        <BackButton />
         <h1 className="text-lg font-semibold text-foreground">Help & Guide</h1>
       </header>
 
