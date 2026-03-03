@@ -21,7 +21,10 @@ export type Database = {
           completed_at: string
           created_at: string
           duration_seconds: number
+          exhale_seconds: number
+          hold_seconds: number
           id: string
+          inhale_seconds: number
           karma_earned: number
           max_distance_reached: number
           user_id: string
@@ -32,7 +35,10 @@ export type Database = {
           completed_at?: string
           created_at?: string
           duration_seconds: number
+          exhale_seconds?: number
+          hold_seconds?: number
           id?: string
+          inhale_seconds?: number
           karma_earned?: number
           max_distance_reached?: number
           user_id: string
@@ -43,9 +49,45 @@ export type Database = {
           completed_at?: string
           created_at?: string
           duration_seconds?: number
+          exhale_seconds?: number
+          hold_seconds?: number
           id?: string
+          inhale_seconds?: number
           karma_earned?: number
           max_distance_reached?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
+      breathing_preferences: {
+        Row: {
+          auto_balance: boolean
+          created_at: string
+          exhale_seconds: number
+          hold_seconds: number
+          id: string
+          inhale_seconds: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          auto_balance?: boolean
+          created_at?: string
+          exhale_seconds?: number
+          hold_seconds?: number
+          id?: string
+          inhale_seconds?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          auto_balance?: boolean
+          created_at?: string
+          exhale_seconds?: number
+          hold_seconds?: number
+          id?: string
+          inhale_seconds?: number
+          updated_at?: string
           user_id?: string
         }
         Relationships: []
