@@ -153,7 +153,7 @@ async function initSW(): Promise<void> {
       window.location.reload();
     });
 
-    console.log('✅ Service worker registered');
+    // Service worker registered successfully
   } catch (error) {
     console.error('❌ Service worker registration failed:', error);
   }
