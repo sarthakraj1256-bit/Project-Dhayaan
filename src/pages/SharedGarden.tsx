@@ -125,7 +125,7 @@ const SharedGarden = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="mb-8 p-6 rounded-xl bg-white/5 border border-white/10 text-center"
+            className="mb-8 p-6 rounded-xl bg-muted/50 border border-border text-center"
           >
             <p className="text-muted-foreground text-sm">
               🔒 This gardener chose to share anonymously
