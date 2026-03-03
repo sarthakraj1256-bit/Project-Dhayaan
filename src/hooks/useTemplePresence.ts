@@ -43,7 +43,7 @@ export const useTemplePresence = ({
         setOnlineCount(count);
       })
       .on('presence', { event: 'join' }, ({ newPresences }) => {
-        console.log('[useTemplePresence] User joined:', newPresences.length);
+        // User joined
       })
       .on('presence', { event: 'leave' }, ({ leftPresences }) => {
         console.log('[useTemplePresence] User left:', leftPresences.length);
