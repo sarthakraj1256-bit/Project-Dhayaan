@@ -341,7 +341,7 @@ export default function GyaniChat() {
                         />
                       ))}
                     </div>
-                    <span className="text-[10px] mt-0.5 text-muted-foreground/50 italic">Gyani is reflecting...</span>
+                    <span className="text-[10px] mt-0.5 text-muted-foreground/50 italic">{t("gyani.reflecting" as any)}</span>
                   </div>
                 </div>
               )}
