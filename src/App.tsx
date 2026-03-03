@@ -9,6 +9,7 @@ import EnvHealthCheck from "./components/EnvHealthCheck";
 import { PWASplashScreen } from "./components/pwa/PWASplashScreen";
 import { OfflineIndicator } from "./components/pwa/OfflineIndicator";
 import { LanguageProvider } from "./contexts/LanguageContext";
+import { ThemeProvider } from "./contexts/ThemeContext";
 import { PWAInstallPrompt } from "./components/pwa/PWAInstallPrompt";
 
 // Critical routes - loaded immediately
@@ -59,6 +60,7 @@ const queryClient = new QueryClient({
 });
 
 const App = () => (
+  <ThemeProvider>
   <LanguageProvider>
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
@@ -116,6 +118,7 @@ const App = () => (
     </TooltipProvider>
   </QueryClientProvider>
   </LanguageProvider>
+  </ThemeProvider>
 );
 
 export default App;

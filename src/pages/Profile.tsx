@@ -3,15 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import { User } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/backend/client';
 import { toast } from 'sonner';
-import { ArrowLeft, Camera, Loader2, Save, User as UserIcon, Trash2, Database, HelpCircle, ChevronRight } from 'lucide-react';
+import { ArrowLeft, Camera, Loader2, Save, Pencil, Trash2, Database, HelpCircle, ChevronRight, Sun, Moon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Switch } from '@/components/ui/switch';
 import { logError } from '@/lib/logger';
 import { clearTTSCache, clearAudioCache, getCacheSize, formatBytes, getLastCleanupStats, type CleanupStats } from '@/lib/audioCache';
 import { formatDistanceToNow } from 'date-fns';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useTheme } from '@/contexts/ThemeContext';
 
 interface Profile {
   id: string;
@@ -23,10 +24,12 @@ interface Profile {
 const Profile = () => {
   const navigate = useNavigate();
   const { t } = useLanguage();
+  const { theme, toggleTheme } = useTheme();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [displayName, setDisplayName] = useState('');
+  const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
@@ -92,6 +95,7 @@ const Profile = () => {
     } else {
       toast.success(t('profile.updateSuccess'));
       setProfile(prev => prev ? { ...prev, display_name: displayName.trim() || null } : null);
+      setIsEditing(false);
     }
     setIsSaving(false);
   };
@@ -187,12 +191,11 @@ const Profile = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="fixed inset-0 sacred-pattern pointer-events-none opacity-20 z-0" />
-
+      {/* Header */}
       <header className="sticky top-0 z-40 h-14 px-4 flex items-center justify-between bg-background/80 backdrop-blur-xl border-b border-border/30">
         <button
           onClick={() => navigate(-1)}
-          className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-foreground/5 transition-colors"
+          className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-muted transition-colors"
         >
           <ArrowLeft className="w-5 h-5 text-muted-foreground" />
         </button>
@@ -202,117 +205,101 @@ const Profile = () => {
         <div className="w-9" />
       </header>
 
-      <div className="relative z-10 max-w-2xl mx-auto px-4 py-6">
-        <div
-          className="rounded-xl p-4 sm:p-5 md:p-6 mb-6"
-          style={{
-            background: 'hsl(var(--void-light) / 0.4)',
-            backdropFilter: 'blur(16px)',
-            WebkitBackdropFilter: 'blur(16px)',
-            border: '1px solid hsl(var(--gold) / 0.2)',
-          }}
-        >
-          <div className="flex flex-col items-center mb-8">
-          <button
-            type="button"
-            className="relative group cursor-pointer"
-            onClick={() => !isUploading && fileInputRef.current?.click()}
-            disabled={isUploading}
-          >
-              <Avatar className="w-24 h-24 border-2 border-gold/30">
+      <div className="max-w-lg mx-auto px-4 py-6 space-y-4">
+        {/* Profile Card */}
+        <div className="rounded-xl bg-card border border-border p-6">
+          <div className="flex flex-col items-center">
+            {/* Avatar */}
+            <button
+              type="button"
+              className="relative group cursor-pointer mb-4"
+              onClick={() => !isUploading && fileInputRef.current?.click()}
+              disabled={isUploading}
+            >
+              <Avatar className="w-24 h-24 border-2 border-border">
                 <AvatarImage src={profile?.avatar_url || undefined} />
-                <AvatarFallback
-                  className="text-xl font-display tracking-wider"
-                  style={{
-                    background: 'linear-gradient(135deg, hsl(var(--gold) / 0.3), hsl(var(--gold) / 0.1))',
-                    color: 'hsl(var(--gold))',
-                  }}
-                >
+                <AvatarFallback className="text-xl font-display tracking-wider bg-muted text-muted-foreground">
                   {getInitials()}
                 </AvatarFallback>
               </Avatar>
-
-              <div className="absolute inset-0 rounded-full flex items-center justify-center bg-void/60 opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity">
+              <div className="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-primary flex items-center justify-center border-2 border-card shadow-sm">
                 {isUploading ? (
-                  <Loader2 className="w-6 h-6 animate-spin text-gold" />
+                  <Loader2 className="w-4 h-4 animate-spin text-primary-foreground" />
                 ) : (
-                  <Camera className="w-6 h-6 text-gold" />
+                  <Camera className="w-4 h-4 text-primary-foreground" />
                 )}
               </div>
+            </button>
 
-          </button>
-
-              <input
-                ref={fileInputRef}
-                type="file"
+            <input
+              ref={fileInputRef}
+              type="file"
               onChange={handleAvatarUpload}
               className="hidden"
             />
 
-            <p className="text-sm text-muted-foreground mt-3">
-              {t('profile.clickUpload')}
-            </p>
-          </div>
-
-          <div className="space-y-6">
-            <div className="space-y-2">
-              <Label className="text-muted-foreground text-sm tracking-wider">
-                {t('profile.email')}
-              </Label>
-              <div className="px-4 py-3 rounded-lg bg-void/30 border border-gold/10 text-foreground/70">
-                {user?.email}
+            {/* Name */}
+            {isEditing ? (
+              <div className="flex items-center gap-2 mb-1">
+                <Input
+                  value={displayName}
+                  onChange={(e) => setDisplayName(e.target.value)}
+                  placeholder={t('profile.enterName')}
+                  maxLength={50}
+                  className="text-center text-lg font-semibold bg-transparent border-border h-9 w-48"
+                  autoFocus
+                  onKeyDown={(e) => e.key === 'Enter' && handleSave()}
+                />
+                <Button size="sm" onClick={handleSave} disabled={isSaving} className="h-9">
+                  {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+                </Button>
               </div>
-            </div>
+            ) : (
+              <button
+                onClick={() => setIsEditing(true)}
+                className="flex items-center gap-2 mb-1 group"
+              >
+                <h2 className="text-xl font-semibold text-foreground">
+                  {profile?.display_name || t('profile.enterName')}
+                </h2>
+                <Pencil className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+              </button>
+            )}
 
-            <div className="space-y-2">
-              <Label htmlFor="displayName" className="text-muted-foreground text-sm tracking-wider">
-                {t('profile.displayName')}
-              </Label>
-              <Input
-                id="displayName"
-                value={displayName}
-                onChange={(e) => setDisplayName(e.target.value)}
-                placeholder={t('profile.enterName')}
-                maxLength={50}
-                className="bg-void/30 border-gold/20 focus:border-gold/50 text-foreground placeholder:text-muted-foreground/50"
+            {/* Email */}
+            <p className="text-sm text-muted-foreground">{user?.email}</p>
+          </div>
+        </div>
+
+        {/* Appearance Card */}
+        <div className="rounded-xl bg-card border border-border p-5">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="font-semibold text-foreground">Appearance</h3>
+              <p className="text-sm text-muted-foreground">Switch between dark & light mode</p>
+            </div>
+            <div className="flex items-center gap-2">
+              {theme === 'light' ? (
+                <Sun className="w-4 h-4 text-primary" />
+              ) : (
+                <Moon className="w-4 h-4 text-primary" />
+              )}
+              <Switch
+                checked={theme === 'dark'}
+                onCheckedChange={toggleTheme}
               />
             </div>
-
-            <Button
-              onClick={handleSave}
-              disabled={isSaving}
-              className="w-full mt-6"
-              style={{
-                background: 'linear-gradient(135deg, hsl(var(--gold) / 0.8), hsl(var(--gold) / 0.6))',
-                color: 'hsl(var(--void))',
-              }}
-            >
-              {isSaving ? (
-                <Loader2 className="w-4 h-4 animate-spin mr-2" />
-              ) : (
-                <Save className="w-4 h-4 mr-2" />
-              )}
-              {isSaving ? t('profile.saving') : t('profile.saveChanges')}
-            </Button>
           </div>
         </div>
 
         {/* Storage Settings Card */}
-        <div
-          className="rounded-xl p-4 sm:p-5 md:p-6"
-          style={{
-            background: 'hsl(var(--void-light) / 0.4)',
-            backdropFilter: 'blur(16px)',
-            WebkitBackdropFilter: 'blur(16px)',
-            border: '1px solid hsl(var(--gold) / 0.2)',
-          }}
-        >
+        <div className="rounded-xl bg-card border border-border p-5">
           <div className="flex items-center gap-3 mb-4">
-            <div className="p-2 rounded-lg bg-primary/10">
+            <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center">
               <Database className="w-5 h-5 text-primary" />
             </div>
             <div>
-              <h3 className="font-display text-lg tracking-wider text-foreground">
+              <h3 className="font-semibold text-foreground">
                 {t('profile.storageSettings')}
               </h3>
               <p className="text-sm text-muted-foreground">
@@ -321,60 +308,56 @@ const Profile = () => {
             </div>
           </div>
 
-          <div className="p-4 rounded-xl bg-foreground/5 border border-border/50 mb-4">
-            <div className="flex items-start justify-between gap-4">
-              <div className="flex-1">
-                <div className="flex items-center justify-between mb-2">
-                  <p className="text-sm font-medium text-foreground">
-                    {t('profile.audioCache')}
-                  </p>
-                  {cacheSize && (
-                    <span className={`text-sm font-mono ${cacheSize.total > 0 ? 'text-primary' : 'text-muted-foreground'}`}>
-                      {formatBytes(cacheSize.total)}
-                    </span>
-                  )}
+          <div className="p-4 rounded-xl bg-muted/50 border border-border/50 mb-4">
+            <div className="flex items-center justify-between mb-2">
+              <p className="text-sm font-medium text-foreground">
+                {t('profile.audioCache')}
+              </p>
+              {cacheSize && (
+                <span className={`text-sm font-mono ${cacheSize.total > 0 ? 'text-primary' : 'text-muted-foreground'}`}>
+                  {formatBytes(cacheSize.total)}
+                </span>
+              )}
+            </div>
+            <p className="text-xs text-muted-foreground mb-3">
+              {t('profile.cacheDesc')}
+            </p>
+
+            {cacheSize && cacheSize.total > 0 && (
+              <div className="grid grid-cols-2 gap-3 pt-3 border-t border-border/30">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-muted-foreground">{t('profile.ttsVoice')}</span>
+                  <span className="text-xs font-mono text-foreground">{formatBytes(cacheSize.tts)}</span>
                 </div>
-                <p className="text-xs text-muted-foreground mb-3">
-                  {t('profile.cacheDesc')}
-                </p>
-                
-                {cacheSize && cacheSize.total > 0 && (
-                  <div className="grid grid-cols-2 gap-3 pt-3 border-t border-border/30">
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs text-muted-foreground">{t('profile.ttsVoice')}</span>
-                      <span className="text-xs font-mono text-foreground">{formatBytes(cacheSize.tts)}</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs text-muted-foreground">{t('profile.atmosphere')}</span>
-                      <span className="text-xs font-mono text-foreground">{formatBytes(cacheSize.atmosphere)}</span>
-                    </div>
-                  </div>
-                )}
-                
-                {cleanupStats && (
-                  <div className="pt-3 mt-3 border-t border-border/30">
-                    <div className="flex items-center justify-between text-xs">
-                      <span className="text-muted-foreground">{t('profile.lastAutoCleanup')}</span>
-                      <span className="text-foreground/70">
-                        {formatDistanceToNow(new Date(cleanupStats.lastCleanupDate), { addSuffix: true })}
-                      </span>
-                    </div>
-                    {cleanupStats.totalRemoved > 0 && (
-                      <p className="text-xs text-emerald-400/80 mt-1">
-                        {t('profile.removedEntries').replace('{count}', String(cleanupStats.totalRemoved)).replace('{unit}', cleanupStats.totalRemoved === 1 ? t('profile.entry') : t('profile.entries'))}
-                      </p>
-                    )}
-                  </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-muted-foreground">{t('profile.atmosphere')}</span>
+                  <span className="text-xs font-mono text-foreground">{formatBytes(cacheSize.atmosphere)}</span>
+                </div>
+              </div>
+            )}
+
+            {cleanupStats && (
+              <div className="pt-3 mt-3 border-t border-border/30">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="text-muted-foreground">{t('profile.lastAutoCleanup')}</span>
+                  <span className="text-foreground/70">
+                    {formatDistanceToNow(new Date(cleanupStats.lastCleanupDate), { addSuffix: true })}
+                  </span>
+                </div>
+                {cleanupStats.totalRemoved > 0 && (
+                  <p className="text-xs text-emerald-500 dark:text-emerald-400 mt-1">
+                    {t('profile.removedEntries').replace('{count}', String(cleanupStats.totalRemoved)).replace('{unit}', cleanupStats.totalRemoved === 1 ? t('profile.entry') : t('profile.entries'))}
+                  </p>
                 )}
               </div>
-            </div>
+            )}
           </div>
 
           <Button
             onClick={handleClearAudioCache}
             disabled={isClearingCache}
             variant="outline"
-            className="w-full border-red-500/30 text-red-400 hover:bg-red-500/10 hover:text-red-300"
+            className="w-full border-destructive/30 text-destructive hover:bg-destructive/10"
           >
             {isClearingCache ? (
               <Loader2 className="w-4 h-4 animate-spin mr-2" />
@@ -388,7 +371,7 @@ const Profile = () => {
         {/* Help & Guide Link */}
         <button
           onClick={() => navigate('/help')}
-          className="w-full rounded-xl p-4 flex items-center gap-3 border border-border/50 bg-card hover:bg-muted transition-colors"
+          className="w-full rounded-xl p-4 flex items-center gap-3 border border-border bg-card hover:bg-muted transition-colors"
         >
           <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center">
             <HelpCircle className="w-5 h-5 text-primary" />
