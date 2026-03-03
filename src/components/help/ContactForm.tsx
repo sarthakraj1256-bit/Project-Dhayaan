@@ -242,7 +242,7 @@ export default function ContactForm() {
               <FormLabel className="text-xs text-muted-foreground">Subject *</FormLabel>
               <Select onValueChange={field.onChange} value={field.value}>
                 <FormControl>
-                  <SelectTrigger className="bg-muted/60 border-border focus:border-primary">
+                  <SelectTrigger className={inputClasses}>
                     <SelectValue placeholder="Select a topic" />
                   </SelectTrigger>
                 </FormControl>
