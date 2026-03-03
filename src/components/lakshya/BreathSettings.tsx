@@ -51,7 +51,7 @@ const BreathSettings = ({ initialTimings, onStart }: BreathSettingsProps) => {
       </p>
 
       {isAdvanced && (
-        <Badge className="mb-4 bg-[#C9A84C]/20 text-[#C9A84C] border-[#C9A84C]/30 hover:bg-[#C9A84C]/30">
+        <Badge className="mb-4 bg-primary/20 text-primary border-primary/30 hover:bg-primary/30">
           <Zap className="w-3 h-3 mr-1" /> Advanced Practice
         </Badge>
       )}
