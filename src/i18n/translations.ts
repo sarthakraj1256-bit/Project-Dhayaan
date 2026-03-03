@@ -859,6 +859,20 @@ export const translations = {
     'freq.sleep.639.purpose': 'Emotional ease',
     'freq.sleep.741.name': 'Quietness',
     'freq.sleep.741.purpose': 'Mental quietness',
+
+    // Gyani AI assistant
+    'gyani.name': 'Gyani',
+    'gyani.subtitle': 'Your Dhyaan Guide 🙏',
+    'gyani.placeholder': 'Ask Gyani anything... 🙏',
+    'gyani.welcome': 'Namaste 🙏 I\'m Gyani, your personal guide for Dhyaan. I can help you explore meditations, healing frequencies, temple darshan, games, and answer any question you have. What shall we discover today? ✨',
+    'gyani.reflecting': 'Gyani is reflecting...',
+    'gyani.voiceSoon': 'Voice coming soon 🎙️',
+    'gyani.chip.meditate': 'How do I meditate?',
+    'gyani.chip.frequencies': 'What are healing frequencies?',
+    'gyani.chip.darshan': 'Show me Temple Darshan',
+    'gyani.chip.games': 'What games are available?',
+    'gyani.chip.sleep': 'Help me sleep better',
+    'gyani.chip.support': 'I need support',
   },
   hi: {
     // Greetings
