@@ -296,7 +296,7 @@ export const useYouTubePlayerAPI = ({
 
   const retryConnection = useCallback(() => {
     if (!playerRef.current || !liveVideoId) return;
-    console.log('[YT Player] Retrying live stream');
+    // Retrying live stream
     errorCountRef.current = 0;
     currentAttemptRef.current = 'live';
     currentVideoIdRef.current = liveVideoId;
