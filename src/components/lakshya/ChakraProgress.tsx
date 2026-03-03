@@ -25,10 +25,10 @@ const ChakraProgress = ({ progress }: ChakraProgressProps) => {
               className={`
                 relative w-16 h-16 rounded-full border-2 flex items-center justify-center
                 transition-all duration-500
-                ${isUnlocked 
-                  ? 'border-transparent' 
-                  : 'border-white/20'
-                }
+                 ${isUnlocked 
+                   ? 'border-transparent' 
+                   : 'border-border'
+                 }
               `}
               style={{
                 background: isUnlocked 
