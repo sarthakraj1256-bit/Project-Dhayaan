@@ -202,7 +202,7 @@ const BreathFlowGame = ({ onClose, onKarmaEarned }: BreathFlowGameProps) => {
     <div className="relative">
       <div className="flex items-center justify-between mb-6">
         <h2 className="font-display text-2xl text-foreground">Breath Flow Journey</h2>
-        <button onClick={onClose} className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors">
+        <button onClick={onClose} className="p-2 rounded-full bg-muted hover:bg-muted/80 transition-colors">
           <X className="w-5 h-5" />
         </button>
       </div>
