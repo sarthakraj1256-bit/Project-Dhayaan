@@ -51,6 +51,9 @@ const contactSchema = z.object({
 type ContactFormData = z.infer<typeof contactSchema>;
 type Status = "idle" | "sending" | "success" | "error";
 
+const inputClasses =
+  "bg-muted/50 border-border/70 text-foreground placeholder:text-muted-foreground/60 focus:border-primary focus-visible:ring-primary/40 focus-visible:ring-2 focus-visible:ring-offset-0 transition-colors";
+
 export default function ContactForm() {
   const [status, setStatus] = useState<Status>("idle");
   const [sentEmail, setSentEmail] = useState("");
@@ -208,7 +211,7 @@ export default function ContactForm() {
             <FormItem>
               <FormLabel className="text-xs text-muted-foreground">Full Name *</FormLabel>
               <FormControl>
-                <Input placeholder="Your name" {...field} className="bg-muted/60 border-border focus:border-primary" />
+                <Input placeholder="Your name" {...field} className={inputClasses} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -223,7 +226,7 @@ export default function ContactForm() {
             <FormItem>
               <FormLabel className="text-xs text-muted-foreground">Email Address *</FormLabel>
               <FormControl>
-                <Input type="email" placeholder="you@example.com" {...field} className="bg-muted/60 border-border focus:border-primary" />
+                <Input type="email" placeholder="you@example.com" {...field} className={inputClasses} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -239,7 +242,7 @@ export default function ContactForm() {
               <FormLabel className="text-xs text-muted-foreground">Subject *</FormLabel>
               <Select onValueChange={field.onChange} value={field.value}>
                 <FormControl>
-                  <SelectTrigger className="bg-muted/60 border-border focus:border-primary">
+                  <SelectTrigger className={inputClasses}>
                     <SelectValue placeholder="Select a topic" />
                   </SelectTrigger>
                 </FormControl>
@@ -266,7 +269,7 @@ export default function ContactForm() {
                   rows={4}
                   placeholder="Describe your question or issue…"
                   {...field}
-                  className="bg-muted/60 border-border focus:border-primary resize-y"
+                  className={`${inputClasses} resize-y`}
                 />
               </FormControl>
               <FormMessage />
@@ -282,7 +285,7 @@ export default function ContactForm() {
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
-              className="w-full flex items-center gap-3 rounded-lg border border-dashed border-border bg-muted/40 px-4 py-3 text-sm text-muted-foreground hover:border-primary/50 hover:bg-muted/60 transition-colors"
+              className="w-full flex items-center gap-3 rounded-lg border border-dashed border-border/70 bg-muted/40 px-4 py-3 text-sm text-muted-foreground hover:border-primary/60 hover:bg-primary/[0.04] transition-colors"
             >
               <Paperclip className="w-4 h-4 shrink-0" />
               <span>Tap to attach an image (max 5 MB)</span>
