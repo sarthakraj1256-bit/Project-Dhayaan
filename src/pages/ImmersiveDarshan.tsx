@@ -131,7 +131,7 @@ const ImmersiveDarshan = () => {
       {/* Header */}
       <header className="sticky top-0 z-40 h-14 px-4 flex items-center justify-between backdrop-blur-xl bg-background/80 border-b border-border/30">
             <div className="flex items-center gap-3">
-              <Link to="/live-darshan" className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors">
+              <Link to="/live-darshan" className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-muted transition-colors">
                 <ArrowLeft className="w-5 h-5 text-muted-foreground" />
               </Link>
               <h1 className="font-display text-lg text-gold-gradient tracking-wider">
