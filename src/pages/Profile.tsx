@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { User } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/backend/client';
 import { toast } from 'sonner';
-import { ArrowLeft, Camera, Loader2, Save, Pencil, Trash2, Database, HelpCircle, ChevronRight, Sun, Moon, Phone } from 'lucide-react';
+import { ArrowLeft, Camera, Loader2, Save, Pencil, Trash2, Database, HelpCircle, ChevronRight, Sun, Moon, Phone, BadgeCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -295,8 +295,13 @@ const Profile = () => {
               </button>
             )}
 
-            {/* Email */}
-            <p className="text-sm text-muted-foreground">{user?.email}</p>
+            {/* Email with verified badge */}
+            <div className="flex items-center gap-1.5 mt-1">
+              <p className="text-sm text-muted-foreground">{user?.email}</p>
+              {user?.email_confirmed_at && (
+                <BadgeCheck className="w-4 h-4 text-primary shrink-0" />
+              )}
+            </div>
           </div>
         </div>
 
