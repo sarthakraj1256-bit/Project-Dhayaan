@@ -79,6 +79,7 @@ const Profile = () => {
     } else if (data) {
       setProfile(data);
       setDisplayName(data.display_name || '');
+      setPhoneNumber(data.phone_number || '');
     }
     setIsLoading(false);
   };
