@@ -171,12 +171,13 @@ const ShortCard = ({ short, isActive, onRemove }: ShortCardProps) => {
           }}
         >
           <div className="flex items-center gap-2 mb-2 pointer-events-auto">
-            {short.creator_avatar ? (
-              <img
-                src={short.creator_avatar}
-                alt={short.creator_name || "Creator"}
-                className="w-9 h-9 rounded-full border border-[rgba(201,168,76,0.4)] object-cover"
-              />
+             {short.creator_avatar ? (
+               <img
+                 src={short.creator_avatar}
+                 alt={short.creator_name || "Creator"}
+                 loading="lazy"
+                 className="w-9 h-9 rounded-full border border-[rgba(201,168,76,0.4)] object-cover"
+               />
             ) : (
               <div className="w-9 h-9 rounded-full bg-[#C9A84C]/20 flex items-center justify-center text-sm text-[#E8C97A] font-semibold">
                 {(short.creator_name || "D")[0].toUpperCase()}

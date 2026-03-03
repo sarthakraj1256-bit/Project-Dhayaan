@@ -44,11 +44,12 @@ const TempleCard = ({ temple, onSelect, isSelected }: TempleCardProps) => {
       >
         <div className="relative">
           <AspectRatio ratio={16 / 9}>
-            <img
-              src={temple.thumbnail}
-              alt={temple.name}
-              className="w-full h-full object-cover"
-            />
+             <img
+               src={temple.thumbnail}
+               alt={temple.name}
+               loading="lazy"
+               className="w-full h-full object-cover"
+             />
             <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
             
             {temple.isLive && (
