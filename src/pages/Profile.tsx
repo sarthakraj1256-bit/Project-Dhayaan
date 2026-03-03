@@ -19,6 +19,7 @@ interface Profile {
   user_id: string;
   display_name: string | null;
   avatar_url: string | null;
+  phone_number: string | null;
 }
 
 const Profile = () => {
