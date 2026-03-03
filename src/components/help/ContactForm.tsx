@@ -226,7 +226,7 @@ export default function ContactForm() {
             <FormItem>
               <FormLabel className="text-xs text-muted-foreground">Email Address *</FormLabel>
               <FormControl>
-                <Input type="email" placeholder="you@example.com" {...field} className="bg-muted/60 border-border focus:border-primary" />
+                <Input type="email" placeholder="you@example.com" {...field} className={inputClasses} />
               </FormControl>
               <FormMessage />
             </FormItem>
