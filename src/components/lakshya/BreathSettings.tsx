@@ -69,7 +69,7 @@ const BreathSettings = ({ initialTimings, onStart }: BreathSettingsProps) => {
             min={2}
             max={12}
             step={1}
-            className="[&_[role=slider]]:border-[#C9A84C] [&_[role=slider]]:bg-background [&_.relative>span]:bg-[#C9A84C]"
+            className="[&_[role=slider]]:border-primary [&_[role=slider]]:bg-background [&_.relative>span]:bg-primary"
           />
           <div className="flex justify-between text-[10px] text-muted-foreground">
             <span>2s</span><span>12s</span>
@@ -80,7 +80,7 @@ const BreathSettings = ({ initialTimings, onStart }: BreathSettingsProps) => {
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <Label className="text-sm text-muted-foreground">Exhale Duration</Label>
-            <span className="text-sm font-mono text-[#C9A84C] font-semibold">{exhale}s</span>
+            <span className="text-sm font-mono text-primary font-semibold">{exhale}s</span>
           </div>
           <Slider
             value={[exhale]}
@@ -89,7 +89,7 @@ const BreathSettings = ({ initialTimings, onStart }: BreathSettingsProps) => {
             max={12}
             step={1}
             disabled={autoBalance}
-            className="[&_[role=slider]]:border-[#C9A84C] [&_[role=slider]]:bg-background [&_.relative>span]:bg-[#C9A84C]"
+            className="[&_[role=slider]]:border-primary [&_[role=slider]]:bg-background [&_.relative>span]:bg-primary"
           />
           <div className="flex justify-between text-[10px] text-muted-foreground">
             <span>2s</span><span>12s</span>
