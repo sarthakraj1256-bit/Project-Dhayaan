@@ -97,7 +97,7 @@ const BreathSettings = ({ initialTimings, onStart }: BreathSettingsProps) => {
         </div>
 
         {/* Auto-Balance Toggle */}
-        <div className="flex items-center justify-between p-3 rounded-xl bg-[#C9A84C]/5 border border-[#C9A84C]/15">
+        <div className="flex items-center justify-between p-3 rounded-xl bg-primary/5 border border-primary/15">
           <div>
             <Label className="text-sm text-foreground">Auto-Balance (1:2)</Label>
             <p className="text-[11px] text-muted-foreground mt-0.5">Traditional Pranayama ratio</p>
