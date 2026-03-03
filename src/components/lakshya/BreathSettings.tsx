@@ -131,7 +131,7 @@ const BreathSettings = ({ initialTimings, onStart }: BreathSettingsProps) => {
         {/* Start Button */}
         <button
           onClick={() => onStart({ inhaleSeconds: inhale, exhaleSeconds: exhale, holdSeconds: hold })}
-          className="w-full py-3 rounded-full bg-gradient-to-r from-[#C9A84C] to-amber-500 text-white font-medium hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
+          className="w-full py-3 rounded-full bg-gradient-to-r from-primary to-amber-500 text-primary-foreground font-medium hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
         >
           <Play className="w-5 h-5" />
           Begin Journey

@@ -86,7 +86,7 @@ const ChakraProgress = ({ progress }: ChakraProgressProps) => {
             </div>
 
             {/* Tooltip on hover */}
-            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 rounded-lg bg-void/90 border border-white/10 text-xs text-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10">
+            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 rounded-lg bg-popover border border-border text-xs text-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10">
               <p className="font-medium text-foreground">{chakra.name}</p>
               <p className="text-muted-foreground">
                 {isUnlocked ? 'Awakened' : `Requires ${chakra.points} Karma`}

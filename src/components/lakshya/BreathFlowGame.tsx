@@ -256,7 +256,7 @@ const BreathFlowGame = ({ onClose, onKarmaEarned }: BreathFlowGameProps) => {
                 Rhythm: {activeTimings.inhaleSeconds}s / {activeTimings.holdSeconds}s / {activeTimings.exhaleSeconds}s
               </p>
               <div className="flex gap-4">
-                <button onClick={() => setGameState('settings')} className="px-6 py-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors flex items-center gap-2">
+                <button onClick={() => setGameState('settings')} className="px-6 py-2 rounded-full bg-muted hover:bg-muted/80 transition-colors flex items-center gap-2">
                   <RotateCcw className="w-4 h-4" /> Play Again
                 </button>
                 <button onClick={onClose} className="px-6 py-2 rounded-full bg-primary/20 border border-primary/50 text-primary hover:bg-primary/30 transition-colors">Done</button>
