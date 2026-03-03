@@ -1,9 +1,10 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Send, Sparkles, Trash2, Mic } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { cn } from "@/lib/utils";
 
 // ─── Types ───────────────────────────────────────────────
@@ -13,17 +14,6 @@ const STORAGE_KEY = "gyani-chat-history";
 const MAX_STORED = 20;
 const MAX_CONTEXT = 10;
 const MAX_CHARS = 500;
-
-const WELCOME = `Namaste 🙏 I'm Gyani, your personal guide for Dhyaan. I can help you explore meditations, healing frequencies, temple darshan, games, and answer any question you have. What shall we discover today? ✨`;
-
-const QUICK_CHIPS = [
-  { emoji: "🧘", label: "How do I meditate?" },
-  { emoji: "🎵", label: "What are healing frequencies?" },
-  { emoji: "🛕", label: "Show me Temple Darshan" },
-  { emoji: "🎮", label: "What games are available?" },
-  { emoji: "😴", label: "Help me sleep better" },
-  { emoji: "🆘", label: "I need support" },
-];
 
 // ─── Chat stream helper ──────────────────────────────────
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/gyani-chat`;
@@ -110,6 +100,7 @@ function nowTime() {
 
 // ─── Component ───────────────────────────────────────────
 export default function GyaniChat() {
+  const { t } = useLanguage();
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Msg[]>(() => {
     try {
@@ -123,6 +114,15 @@ export default function GyaniChat() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const navigate = useNavigate();
+
+  const quickChips = useMemo(() => [
+    { emoji: "🧘", label: t("gyani.chip.meditate" as any) },
+    { emoji: "🎵", label: t("gyani.chip.frequencies" as any) },
+    { emoji: "🛕", label: t("gyani.chip.darshan" as any) },
+    { emoji: "🎮", label: t("gyani.chip.games" as any) },
+    { emoji: "😴", label: t("gyani.chip.sleep" as any) },
+    { emoji: "🆘", label: t("gyani.chip.support" as any) },
+  ], [t]);
 
   // Persist to localStorage
   useEffect(() => {
@@ -250,8 +250,8 @@ export default function GyaniChat() {
                 <Sparkles className="w-5 h-5 text-primary-foreground" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-primary">Gyani</p>
-                <p className="text-[10px] text-muted-foreground">Your Dhyaan Guide 🙏</p>
+                <p className="text-sm font-semibold text-primary">{t("gyani.name" as any)}</p>
+                <p className="text-[10px] text-muted-foreground">{t("gyani.subtitle" as any)}</p>
               </div>
               <button onClick={clearChat} className="p-2 rounded-full hover:bg-muted/60 text-muted-foreground" aria-label="Clear chat">
                 <Trash2 className="w-4 h-4" />
@@ -270,7 +270,7 @@ export default function GyaniChat() {
                     <Sparkles className="w-3.5 h-3.5 text-primary-foreground" />
                   </div>
                   <div className="rounded-xl rounded-tl-sm bg-card border border-border/60 px-3 py-2.5 text-sm text-foreground max-w-[85%]">
-                    {WELCOME}
+                    {t("gyani.welcome" as any)}
                   </div>
                 </motion.div>
               )}
@@ -341,7 +341,7 @@ export default function GyaniChat() {
                         />
                       ))}
                     </div>
-                    <span className="text-[10px] mt-0.5 text-muted-foreground/50 italic">Gyani is reflecting...</span>
+                    <span className="text-[10px] mt-0.5 text-muted-foreground/50 italic">{t("gyani.reflecting" as any)}</span>
                   </div>
                 </div>
               )}
@@ -350,7 +350,7 @@ export default function GyaniChat() {
             {/* Quick chips */}
             {showChips && messages.length === 0 && (
               <div className="px-4 pb-2 flex flex-wrap gap-2">
-                {QUICK_CHIPS.map((chip, i) => (
+                {quickChips.map((chip, i) => (
                   <motion.button
                     key={chip.label}
                     initial={{ opacity: 0, y: 6 }}
@@ -380,7 +380,7 @@ export default function GyaniChat() {
                   </button>
                 </TooltipTrigger>
                 <TooltipContent side="top">
-                  <p className="text-xs">Voice coming soon 🎙️</p>
+                  <p className="text-xs">{t("gyani.voiceSoon" as any)}</p>
                 </TooltipContent>
               </Tooltip>
 
@@ -391,7 +391,7 @@ export default function GyaniChat() {
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={handleKeyDown}
-                  placeholder="Ask Gyani anything... 🙏"
+                  placeholder={t("gyani.placeholder" as any)}
                   disabled={isStreaming}
                   rows={1}
                   className="w-full resize-none bg-muted/50 border border-border/70 rounded-2xl px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary disabled:opacity-50 transition-colors"
