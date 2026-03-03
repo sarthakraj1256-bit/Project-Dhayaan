@@ -128,7 +128,7 @@ async function initSW(): Promise<void> {
         if (newWorker.state === 'installed') {
           if (navigator.serviceWorker.controller) {
             // New update available - show notification and refresh
-            console.log('🔄 New PWA version available');
+            // New PWA version available
             
             toast.info('New version available! Refreshing...', {
               id: 'pwa-update',
