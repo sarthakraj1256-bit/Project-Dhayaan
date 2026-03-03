@@ -109,7 +109,6 @@ const difficultyKeyMap: Record<string, TranslationKey> = {
          {/* Header */}
          <header className="sticky top-0 z-40 h-14 px-4 flex items-center justify-between bg-background/85 backdrop-blur-xl border-b border-border/50">
                <BackButton />
-               </Link>
   
                <div className="flex items-center gap-2">
                  <BookOpen className="w-5 h-5 text-primary" />
