@@ -237,7 +237,7 @@ export const useYouTubePlayerAPI = ({
           return;
         }
         
-        console.log(`[YT Player] Switching to: ${fallbackId}`);
+        // Switching to fallback
         currentVideoIdRef.current = fallbackId;
         
         const newStatus = fallbackId === recordedVideoId ? 'recorded' : 'ambience';
