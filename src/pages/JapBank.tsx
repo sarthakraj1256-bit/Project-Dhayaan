@@ -1,6 +1,6 @@
 import { Suspense, lazy, useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowLeft, BookOpen, Target, HandHeart, Trophy, Building2 } from 'lucide-react';
+import { BookOpen, Target, HandHeart, Trophy, Building2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
