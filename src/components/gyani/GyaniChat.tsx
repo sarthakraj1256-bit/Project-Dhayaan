@@ -1,9 +1,10 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Send, Sparkles, Trash2, Mic } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { cn } from "@/lib/utils";
 
 // ─── Types ───────────────────────────────────────────────
@@ -13,17 +14,6 @@ const STORAGE_KEY = "gyani-chat-history";
 const MAX_STORED = 20;
 const MAX_CONTEXT = 10;
 const MAX_CHARS = 500;
-
-const WELCOME = `Namaste 🙏 I'm Gyani, your personal guide for Dhyaan. I can help you explore meditations, healing frequencies, temple darshan, games, and answer any question you have. What shall we discover today? ✨`;
-
-const QUICK_CHIPS = [
-  { emoji: "🧘", label: "How do I meditate?" },
-  { emoji: "🎵", label: "What are healing frequencies?" },
-  { emoji: "🛕", label: "Show me Temple Darshan" },
-  { emoji: "🎮", label: "What games are available?" },
-  { emoji: "😴", label: "Help me sleep better" },
-  { emoji: "🆘", label: "I need support" },
-];
 
 // ─── Chat stream helper ──────────────────────────────────
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/gyani-chat`;
