@@ -149,7 +149,7 @@ export function useJapBank() {
       if (!userId) return [];
       const { data, error } = await supabase
         .from('jap_goals')
-        .select('*')
+        .select('id, user_id, mantra_name, target_count, current_count, deadline, dedication, status, created_at, updated_at')
         .eq('user_id', userId)
         .order('created_at', { ascending: false });
       if (error) { console.error(error); return []; }
