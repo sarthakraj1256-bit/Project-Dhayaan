@@ -269,7 +269,7 @@ export default function ContactForm() {
                   rows={4}
                   placeholder="Describe your question or issue…"
                   {...field}
-                  className="bg-muted/60 border-border focus:border-primary resize-y"
+                  className={`${inputClasses} resize-y`}
                 />
               </FormControl>
               <FormMessage />
