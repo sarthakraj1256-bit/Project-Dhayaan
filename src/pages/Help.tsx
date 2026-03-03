@@ -1,7 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import BackButton from '@/components/BackButton';
 import { motion } from "framer-motion";
-import { Compass, LifeBuoy, HelpCircle, Target, Radio, Layers, TrendingUp, Volume2, RefreshCw, WifiOff, MessageCircle, Mail } from "lucide-react";
+import { Compass, LifeBuoy, HelpCircle, Target, Radio, Layers, TrendingUp, Volume2, RefreshCw, WifiOff, MessageCircle } from "lucide-react";
+import ContactForm from "@/components/help/ContactForm";
 import {
   Accordion,
   AccordionContent,
@@ -182,21 +183,9 @@ const Help = () => {
                     {'isContact' in item && item.isContact ? (
                       <div className="space-y-3">
                         <p>
-                          Have a question, found a bug, or want to suggest a feature? We'd love to hear from you.
+                          Have a question, found a bug, or want to suggest a feature? Fill out the form below and we'll get back to you.
                         </p>
-                        <a
-                          href="mailto:try.dhyaan@gmail.com"
-                          className="inline-flex items-center gap-2 text-primary font-medium hover:underline"
-                        >
-                          <Mail className="w-4 h-4" />
-                          try.dhyaan@gmail.com
-                        </a>
-                        <ul className="list-disc pl-5 space-y-1.5 text-muted-foreground">
-                          <li>Report bugs or playback issues with detailed steps</li>
-                          <li>Suggest new mantras, frequencies, or temple streams</li>
-                          <li>Request features like the Jap Bank or new guided sessions</li>
-                          <li>We typically respond within 24–48 hours</li>
-                        </ul>
+                        <ContactForm />
                       </div>
                     ) : (
                       item.content

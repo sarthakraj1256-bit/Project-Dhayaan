@@ -6,6 +6,7 @@
       "name": "vite_react_shadcn_ts",
       "dependencies": {
         "@elevenlabs/react": "^0.14.0",
+        "@emailjs/browser": "^4.4.1",
         "@hookform/resolvers": "^3.10.0",
         "@lovable.dev/cloud-auth-js": "^0.0.2",
         "@radix-ui/react-accordion": "^1.2.11",
@@ -286,6 +287,8 @@
     "@elevenlabs/react": ["@elevenlabs/react@0.14.0", "", { "dependencies": { "@elevenlabs/client": "0.14.0" }, "peerDependencies": { "react": ">=16.8.0" } }, "sha512-iGI6yyPgZF1/FBtQtvyCW5lhQvlIEQ5LrKQxwzT3qBcS4Ja0f+jVftKQGhilRtJLOKeli5t7Dv9g9dDGO2gAwg=="],
 
     "@elevenlabs/types": ["@elevenlabs/types@0.5.0", "", {}, "sha512-tTawfIkJdOmV1W74yOYFbCXOwz/5sYKtdxVoK8uf5tDdtpZUHerBC25Oc8i7shZQc6QvvIuyV2YtMh37PKYMBA=="],
+
+    "@emailjs/browser": ["@emailjs/browser@4.4.1", "", {}, "sha512-DGSlP9sPvyFba3to2A50kDtZ+pXVp/0rhmqs2LmbMS3I5J8FSOgLwzY2Xb4qfKlOVHh29EAutLYwe5yuEZmEFg=="],
 
     "@esbuild/aix-ppc64": ["@esbuild/aix-ppc64@0.25.0", "", { "os": "aix", "cpu": "ppc64" }, "sha512-O7vun9Sf8DFjH2UtqK8Ku3LkquL9SZL8OLY1T5NZkA34+wG3OQF7cl4Ql8vdNzM6fzBbYfLaiRLIOZ+2FOCgBQ=="],
 
@@ -1852,8 +1855,6 @@
     "prop-types/react-is": ["react-is@16.13.1", "", {}, "sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ=="],
 
     "react-dom/scheduler": ["scheduler@0.23.2", "", { "dependencies": { "loose-envify": "^1.1.0" } }, "sha512-UOShsPwz7NrMUqhR6t0hWjFduvOzbtv7toDH1/hIrfRNIDBnnBWd0CwJTGvTpngVlmwGCdP9/Zl/tVrDqcuYzQ=="],
-
-    "react-reconciler/scheduler": ["scheduler@0.21.0", "", { "dependencies": { "loose-envify": "^1.1.0" } }, "sha512-1r87x5fz9MXqswA2ERLo0EbOAU74DpIUO090gIasYTqlVoJeMcl+Z1Rg7WHz+qtPujhS/hGIt9kxZOYBV3faRQ=="],
 
     "readdirp/picomatch": ["picomatch@2.3.1", "", {}, "sha512-JU3teHTNjmE2VCGFzuY8EXzCDVwEqB2a8fsIvwaStHhAWJEeVd1o1QD80CU6+ZdEXXSLbSsuLwJjkCBWqRQUVA=="],
 
