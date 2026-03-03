@@ -138,7 +138,7 @@ const SharedGarden = () => {
             transition={{ delay: 0.2 }}
             className="grid grid-cols-4 gap-3 mb-8"
           >
-            <div className="p-4 rounded-xl bg-white/5 border border-white/10 text-center">
+            <div className="p-4 rounded-xl bg-muted/50 border border-border text-center">
               <TreeDeciduous className="w-6 h-6 text-emerald-400 mx-auto mb-2" />
               <p className="text-xl font-display text-foreground">{garden.plant_count}</p>
               <p className="text-xs text-muted-foreground">Plants</p>
