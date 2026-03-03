@@ -91,13 +91,14 @@ serve(async (req) => {
       throw new Error("LOVABLE_API_KEY is not configured");
     }
 
+    const now = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
+
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${LOVABLE_API_KEY}`,
         "Content-Type": "application/json",
       },
-      const now = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
       body: JSON.stringify({
         model: "google/gemini-3-flash-preview",
         messages: [
