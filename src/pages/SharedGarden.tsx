@@ -110,7 +110,7 @@ const SharedGarden = () => {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.1 }}
-          className="rounded-2xl overflow-hidden border border-white/10 mb-6"
+          className="rounded-2xl overflow-hidden border border-border mb-6"
         >
           <img
             src={garden.screenshot_url}
