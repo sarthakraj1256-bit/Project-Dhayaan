@@ -1,16 +1,18 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Send, Sparkles, Trash2 } from "lucide-react";
+import { X, Send, Sparkles, Trash2, Mic } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 
 // ─── Types ───────────────────────────────────────────────
-type Msg = { role: "user" | "assistant"; content: string };
+type Msg = { role: "user" | "assistant"; content: string; time?: string };
 
 const STORAGE_KEY = "gyani-chat-history";
 const MAX_STORED = 20;
 const MAX_CONTEXT = 10;
+const MAX_CHARS = 500;
 
 const WELCOME = `Namaste 🙏 I'm Gyani, your personal guide for Dhyaan. I can help you explore meditations, healing frequencies, temple darshan, games, and answer any question you have. What shall we discover today? ✨`;
 
@@ -44,7 +46,7 @@ async function streamChat({
         "Content-Type": "application/json",
         Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
       },
-      body: JSON.stringify({ messages }),
+      body: JSON.stringify({ messages: messages.map(({ role, content }) => ({ role, content })) }),
     });
 
     if (!resp.ok) {
@@ -83,7 +85,7 @@ async function streamChat({
     }
     onDone();
   } catch {
-    onError("I'm taking a moment of silence 🙏 Please try again shortly.");
+    onError("🙏 Gyani needs a moment of silence. Please check your connection and try again.");
   }
 }
 
@@ -102,6 +104,10 @@ function parseNavActions(text: string) {
   return parts;
 }
 
+function nowTime() {
+  return new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+}
+
 // ─── Component ───────────────────────────────────────────
 export default function GyaniChat() {
   const [open, setOpen] = useState(false);
@@ -115,7 +121,7 @@ export default function GyaniChat() {
   const [isStreaming, setIsStreaming] = useState(false);
   const [showChips, setShowChips] = useState(true);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
   const navigate = useNavigate();
 
   // Persist to localStorage
@@ -137,17 +143,26 @@ export default function GyaniChat() {
     if (messages.some((m) => m.role === "user")) setShowChips(false);
   }, [messages]);
 
+  // Auto-resize textarea
+  useEffect(() => {
+    const ta = textareaRef.current;
+    if (!ta) return;
+    ta.style.height = "auto";
+    ta.style.height = Math.min(ta.scrollHeight, 96) + "px"; // max ~4 lines
+  }, [input]);
+
   const send = useCallback(
     async (text: string) => {
       const trimmed = text.trim();
       if (!trimmed || isStreaming) return;
 
-      const userMsg: Msg = { role: "user", content: trimmed };
+      const userMsg: Msg = { role: "user", content: trimmed, time: nowTime() };
       setMessages((prev) => [...prev, userMsg]);
       setInput("");
       setIsStreaming(true);
 
       let assistantSoFar = "";
+      const startTime = nowTime();
       const upsert = (chunk: string) => {
         assistantSoFar += chunk;
         setMessages((prev) => {
@@ -157,7 +172,7 @@ export default function GyaniChat() {
               i === prev.length - 1 ? { ...m, content: assistantSoFar } : m
             );
           }
-          return [...prev, { role: "assistant", content: assistantSoFar }];
+          return [...prev, { role: "assistant", content: assistantSoFar, time: startTime }];
         });
       };
 
@@ -170,7 +185,7 @@ export default function GyaniChat() {
         onError: (msg) => {
           setMessages((prev) => [
             ...prev,
-            { role: "assistant", content: msg },
+            { role: "assistant", content: msg, time: nowTime() },
           ]);
           setIsStreaming(false);
         },
@@ -190,8 +205,17 @@ export default function GyaniChat() {
     send(input);
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      send(input);
+    }
+  };
+
+  const charCount = input.length;
+
   return (
-    <>
+    <TooltipProvider>
       {/* ── Floating Button ── */}
       <AnimatePresence>
         {!open && (
@@ -264,29 +288,39 @@ export default function GyaniChat() {
                       <Sparkles className="w-3.5 h-3.5 text-primary-foreground" />
                     </div>
                   )}
-                  <div
-                    className={cn(
-                      "rounded-xl px-3 py-2.5 text-sm max-w-[85%] whitespace-pre-wrap",
-                      msg.role === "user"
-                        ? "bg-primary text-primary-foreground rounded-tr-sm"
-                        : "bg-card border border-border/60 text-foreground rounded-tl-sm"
-                    )}
-                  >
-                    {msg.role === "assistant"
-                      ? parseNavActions(msg.content).map((part, j) =>
-                          typeof part === "string" ? (
-                            <span key={j}>{part}</span>
-                          ) : (
-                            <button
-                              key={j}
-                              onClick={() => { navigate(part.route); setOpen(false); }}
-                              className="inline-flex items-center gap-1 mt-1 px-3 py-1 rounded-full text-xs font-medium bg-primary/15 text-primary hover:bg-primary/25 transition-colors"
-                            >
-                              {part.label} →
-                            </button>
+                  <div className="flex flex-col max-w-[85%]">
+                    <div
+                      className={cn(
+                        "rounded-xl px-3 py-2.5 text-sm whitespace-pre-wrap",
+                        msg.role === "user"
+                          ? "bg-primary text-primary-foreground rounded-tr-sm"
+                          : "bg-card border border-border/60 text-foreground rounded-tl-sm"
+                      )}
+                    >
+                      {msg.role === "assistant"
+                        ? parseNavActions(msg.content).map((part, j) =>
+                            typeof part === "string" ? (
+                              <span key={j}>{part}</span>
+                            ) : (
+                              <button
+                                key={j}
+                                onClick={() => { navigate(part.route); setOpen(false); }}
+                                className="inline-flex items-center gap-1 mt-1 px-3 py-1 rounded-full text-xs font-medium bg-primary/15 text-primary hover:bg-primary/25 transition-colors"
+                              >
+                                {part.label} →
+                              </button>
+                            )
                           )
-                        )
-                      : msg.content}
+                        : msg.content}
+                    </div>
+                    {msg.time && (
+                      <span className={cn(
+                        "text-[10px] mt-0.5 text-muted-foreground/60",
+                        msg.role === "user" ? "text-right" : "text-left"
+                      )}>
+                        {msg.time}
+                      </span>
+                    )}
                   </div>
                 </motion.div>
               ))}
@@ -297,14 +331,17 @@ export default function GyaniChat() {
                   <div className="w-7 h-7 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center shrink-0">
                     <Sparkles className="w-3.5 h-3.5 text-primary-foreground" />
                   </div>
-                  <div className="rounded-xl rounded-tl-sm bg-card border border-border/60 px-4 py-3 flex gap-1">
-                    {[0, 1, 2].map((d) => (
-                      <span
-                        key={d}
-                        className="w-2 h-2 rounded-full bg-primary/50 animate-bounce"
-                        style={{ animationDelay: `${d * 150}ms` }}
-                      />
-                    ))}
+                  <div className="flex flex-col">
+                    <div className="rounded-xl rounded-tl-sm bg-card border border-border/60 px-4 py-3 flex gap-1">
+                      {[0, 1, 2].map((d) => (
+                        <span
+                          key={d}
+                          className="w-2 h-2 rounded-full bg-primary/50 animate-bounce"
+                          style={{ animationDelay: `${d * 150}ms` }}
+                        />
+                      ))}
+                    </div>
+                    <span className="text-[10px] mt-0.5 text-muted-foreground/50 italic">Gyani is reflecting...</span>
                   </div>
                 </div>
               )}
@@ -328,21 +365,61 @@ export default function GyaniChat() {
               </div>
             )}
 
-            {/* Input */}
-            <form onSubmit={handleSubmit} className="flex items-center gap-2 px-3 py-3 border-t border-border/60 shrink-0">
-              <input
-                ref={inputRef}
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                placeholder="Ask Gyani anything..."
-                disabled={isStreaming}
-                className="flex-1 bg-muted/50 border border-border/70 rounded-lg px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-primary/40 disabled:opacity-50"
-              />
+            {/* Input bar */}
+            <form onSubmit={handleSubmit} className="flex items-end gap-2 px-3 py-3 border-t border-border/60 shrink-0 backdrop-blur-sm bg-background/80">
+              {/* Mic button */}
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    type="button"
+                    className="shrink-0 w-9 h-9 rounded-full flex items-center justify-center text-muted-foreground/50 hover:text-muted-foreground transition-colors"
+                    aria-label="Voice input coming soon"
+                    tabIndex={-1}
+                  >
+                    <Mic className="w-4 h-4" />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent side="top">
+                  <p className="text-xs">Voice coming soon 🎙️</p>
+                </TooltipContent>
+              </Tooltip>
+
+              {/* Textarea */}
+              <div className="flex-1 relative">
+                <textarea
+                  ref={textareaRef}
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  placeholder="Ask Gyani anything... 🙏"
+                  disabled={isStreaming}
+                  rows={1}
+                  className="w-full resize-none bg-muted/50 border border-border/70 rounded-2xl px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary disabled:opacity-50 transition-colors"
+                  style={{ maxHeight: "96px" }}
+                />
+                {charCount > MAX_CHARS && (
+                  <span className="absolute -bottom-4 right-2 text-[10px] text-destructive font-medium">
+                    {charCount}/{MAX_CHARS + 500}
+                  </span>
+                )}
+                {charCount > 0 && charCount <= MAX_CHARS && (
+                  <span className="absolute -bottom-4 right-2 text-[10px] text-muted-foreground/40">
+                    {charCount}
+                  </span>
+                )}
+              </div>
+
+              {/* Send button */}
               <Button
                 type="submit"
                 size="icon"
                 disabled={!input.trim() || isStreaming}
-                className="shrink-0 w-10 h-10 rounded-lg bg-primary hover:bg-primary/90"
+                className={cn(
+                  "shrink-0 w-10 h-10 rounded-full transition-all",
+                  input.trim()
+                    ? "bg-primary hover:bg-primary/90 shadow-md shadow-primary/25"
+                    : "bg-muted text-muted-foreground"
+                )}
               >
                 <Send className="w-4 h-4" />
               </Button>
@@ -350,6 +427,6 @@ export default function GyaniChat() {
           </motion.div>
         )}
       </AnimatePresence>
-    </>
+    </TooltipProvider>
   );
 }
