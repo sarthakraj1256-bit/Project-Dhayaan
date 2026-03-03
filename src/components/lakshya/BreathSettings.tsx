@@ -61,7 +61,7 @@ const BreathSettings = ({ initialTimings, onStart }: BreathSettingsProps) => {
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <Label className="text-sm text-muted-foreground">Inhale Duration</Label>
-            <span className="text-sm font-mono text-[#C9A84C] font-semibold">{inhale}s</span>
+            <span className="text-sm font-mono text-primary font-semibold">{inhale}s</span>
           </div>
           <Slider
             value={[inhale]}
