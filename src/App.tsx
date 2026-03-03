@@ -64,14 +64,14 @@ const App = () => (
   <LanguageProvider>
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <PWASplashScreen minDisplayTime={2500} />
-      <OfflineIndicator />
-      <Toaster />
-      <Sonner />
-      <EnvHealthCheck />
-      <PWAInstallPrompt />
-      
       <BrowserRouter>
+        <PWASplashScreen minDisplayTime={2500} />
+        <OfflineIndicator />
+        <Toaster />
+        <Sonner />
+        <EnvHealthCheck />
+        <PWAInstallPrompt />
+        
         <Suspense fallback={<PageSkeleton />}>
           <Routes>
             {/* Critical routes - no lazy loading */}
