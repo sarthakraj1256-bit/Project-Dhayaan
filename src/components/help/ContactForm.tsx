@@ -51,6 +51,9 @@ const contactSchema = z.object({
 type ContactFormData = z.infer<typeof contactSchema>;
 type Status = "idle" | "sending" | "success" | "error";
 
+const inputClasses =
+  "bg-muted/50 border-border/70 text-foreground placeholder:text-muted-foreground/60 focus:border-primary focus-visible:ring-primary/40 focus-visible:ring-2 focus-visible:ring-offset-0 transition-colors";
+
 export default function ContactForm() {
   const [status, setStatus] = useState<Status>("idle");
   const [sentEmail, setSentEmail] = useState("");
