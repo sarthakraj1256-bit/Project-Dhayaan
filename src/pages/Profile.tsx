@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { User } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/backend/client';
 import { toast } from 'sonner';
-import { ArrowLeft, Camera, Loader2, Save, Pencil, Trash2, Database, HelpCircle, ChevronRight, Sun, Moon } from 'lucide-react';
+import { ArrowLeft, Camera, Loader2, Save, Pencil, Trash2, Database, HelpCircle, ChevronRight, Sun, Moon, Phone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -19,6 +19,7 @@ interface Profile {
   user_id: string;
   display_name: string | null;
   avatar_url: string | null;
+  phone_number: string | null;
 }
 
 const Profile = () => {
@@ -29,7 +30,9 @@ const Profile = () => {
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [displayName, setDisplayName] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [isEditing, setIsEditing] = useState(false);
+  const [isEditingPhone, setIsEditingPhone] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
@@ -76,6 +79,7 @@ const Profile = () => {
     } else if (data) {
       setProfile(data);
       setDisplayName(data.display_name || '');
+      setPhoneNumber(data.phone_number || '');
     }
     setIsLoading(false);
   };
@@ -96,6 +100,31 @@ const Profile = () => {
       toast.success(t('profile.updateSuccess'));
       setProfile(prev => prev ? { ...prev, display_name: displayName.trim() || null } : null);
       setIsEditing(false);
+    }
+    setIsSaving(false);
+  };
+
+  const handleSavePhone = async () => {
+    if (!user) return;
+    const cleaned = phoneNumber.replace(/[^\d+\-\s()]/g, '').trim();
+    if (cleaned && (cleaned.length < 7 || cleaned.length > 20)) {
+      toast.error('Please enter a valid phone number');
+      return;
+    }
+    setIsSaving(true);
+
+    const { error } = await supabase
+      .from('profiles')
+      .update({ phone_number: cleaned || null })
+      .eq('user_id', user.id);
+
+    if (error) {
+      toast.error(t('profile.failedUpdate'));
+      logError('Phone update error', error);
+    } else {
+      toast.success(t('profile.updateSuccess'));
+      setProfile(prev => prev ? { ...prev, phone_number: cleaned || null } : null);
+      setIsEditingPhone(false);
     }
     setIsSaving(false);
   };
@@ -268,6 +297,49 @@ const Profile = () => {
 
             {/* Email */}
             <p className="text-sm text-muted-foreground">{user?.email}</p>
+          </div>
+        </div>
+
+        {/* Contact Number Card */}
+        <div className="rounded-xl bg-card border border-border p-5">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center">
+                <Phone className="w-5 h-5 text-primary" />
+              </div>
+              <div>
+                <p className="text-sm font-medium text-foreground">Contact No</p>
+                {isEditingPhone ? (
+                  <div className="flex items-center gap-2 mt-1">
+                    <Input
+                      value={phoneNumber}
+                      onChange={(e) => setPhoneNumber(e.target.value)}
+                      placeholder="+91 XXXXX XXXXX"
+                      maxLength={20}
+                      type="tel"
+                      className="h-8 w-44 text-sm bg-transparent border-border"
+                      autoFocus
+                      onKeyDown={(e) => e.key === 'Enter' && handleSavePhone()}
+                    />
+                    <Button size="sm" onClick={handleSavePhone} disabled={isSaving} className="h-8 px-2">
+                      {isSaving ? <Loader2 className="w-3 h-3 animate-spin" /> : <Save className="w-3 h-3" />}
+                    </Button>
+                  </div>
+                ) : (
+                  <p className="text-sm text-muted-foreground">
+                    {profile?.phone_number || 'Not added'}
+                  </p>
+                )}
+              </div>
+            </div>
+            {!isEditingPhone && (
+              <button
+                onClick={() => setIsEditingPhone(true)}
+                className="text-primary text-sm font-medium hover:underline"
+              >
+                {profile?.phone_number ? 'Edit' : 'Add'}
+              </button>
+            )}
           </div>
         </div>
 
