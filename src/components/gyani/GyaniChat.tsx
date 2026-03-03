@@ -391,7 +391,7 @@ export default function GyaniChat() {
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={handleKeyDown}
-                  placeholder="Ask Gyani anything... 🙏"
+                  placeholder={t("gyani.placeholder" as any)}
                   disabled={isStreaming}
                   rows={1}
                   className="w-full resize-none bg-muted/50 border border-border/70 rounded-2xl px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary disabled:opacity-50 transition-colors"
