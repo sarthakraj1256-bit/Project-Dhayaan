@@ -250,8 +250,8 @@ export default function GyaniChat() {
                 <Sparkles className="w-5 h-5 text-primary-foreground" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-primary">Gyani</p>
-                <p className="text-[10px] text-muted-foreground">Your Dhyaan Guide 🙏</p>
+                <p className="text-sm font-semibold text-primary">{t("gyani.name" as any)}</p>
+                <p className="text-[10px] text-muted-foreground">{t("gyani.subtitle" as any)}</p>
               </div>
               <button onClick={clearChat} className="p-2 rounded-full hover:bg-muted/60 text-muted-foreground" aria-label="Clear chat">
                 <Trash2 className="w-4 h-4" />
