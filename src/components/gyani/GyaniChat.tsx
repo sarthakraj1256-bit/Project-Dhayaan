@@ -350,7 +350,7 @@ export default function GyaniChat() {
             {/* Quick chips */}
             {showChips && messages.length === 0 && (
               <div className="px-4 pb-2 flex flex-wrap gap-2">
-                {QUICK_CHIPS.map((chip, i) => (
+                {quickChips.map((chip, i) => (
                   <motion.button
                     key={chip.label}
                     initial={{ opacity: 0, y: 6 }}
