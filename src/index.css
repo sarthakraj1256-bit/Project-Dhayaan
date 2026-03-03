@@ -154,6 +154,29 @@
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 98%;
   }
+
+  /* Homepage dark variant */
+  .dark .homepage-theme {
+    --background: 24 10% 10%;
+    --foreground: 36 20% 90%;
+    --card: 24 10% 13%;
+    --card-foreground: 36 20% 90%;
+    --popover: 24 10% 12%;
+    --popover-foreground: 36 20% 90%;
+    --primary: 35 80% 52%;
+    --primary-foreground: 24 10% 10%;
+    --secondary: 24 10% 18%;
+    --secondary-foreground: 36 20% 85%;
+    --muted: 24 8% 18%;
+    --muted-foreground: 36 10% 55%;
+    --accent: 35 75% 50%;
+    --accent-foreground: 24 10% 10%;
+    --border: 24 8% 20%;
+    --input: 24 8% 22%;
+    --ring: 35 80% 52%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 98%;
+  }
 }
 
 @layer base {
@@ -172,6 +195,7 @@
     font-family: 'Inter', 'system-ui', sans-serif;
     overscroll-behavior-y: none;
     -webkit-text-size-adjust: 100%;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
 
   /* Global touch-action: manipulation removes 300ms tap delay in Safari */

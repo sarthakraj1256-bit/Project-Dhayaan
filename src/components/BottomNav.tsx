@@ -35,11 +35,8 @@ const BottomNav = forwardRef<HTMLElement>((_, ref) => {
   return (
     <nav ref={ref} className="fixed bottom-0 left-0 right-0 z-50 md:hidden">
       <div
-        className="mx-0 overflow-hidden touch-manipulation border-t border-border/50"
+        className="mx-0 overflow-hidden touch-manipulation border-t border-border/50 bg-background/95 backdrop-blur-xl"
         style={{
-          background: 'hsl(36, 33%, 97%)',
-          backdropFilter: 'blur(16px)',
-          WebkitBackdropFilter: 'blur(16px)',
           paddingBottom: 'env(safe-area-inset-bottom, 0px)',
         }}
       >
