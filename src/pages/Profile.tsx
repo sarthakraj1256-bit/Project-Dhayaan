@@ -104,6 +104,31 @@ const Profile = () => {
     setIsSaving(false);
   };
 
+  const handleSavePhone = async () => {
+    if (!user) return;
+    const cleaned = phoneNumber.replace(/[^\d+\-\s()]/g, '').trim();
+    if (cleaned && (cleaned.length < 7 || cleaned.length > 20)) {
+      toast.error('Please enter a valid phone number');
+      return;
+    }
+    setIsSaving(true);
+
+    const { error } = await supabase
+      .from('profiles')
+      .update({ phone_number: cleaned || null })
+      .eq('user_id', user.id);
+
+    if (error) {
+      toast.error(t('profile.failedUpdate'));
+      logError('Phone update error', error);
+    } else {
+      toast.success(t('profile.updateSuccess'));
+      setProfile(prev => prev ? { ...prev, phone_number: cleaned || null } : null);
+      setIsEditingPhone(false);
+    }
+    setIsSaving(false);
+  };
+
   const handleAvatarUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const input = event.target;
     const file = input.files?.[0];
