@@ -436,7 +436,7 @@ export default function GyaniChat() {
             )}
 
             {/* Input bar */}
-            <form onSubmit={handleSubmit} className="flex items-end gap-2 px-3 py-3 border-t border-border/60 shrink-0 backdrop-blur-sm bg-background/80">
+            <form onSubmit={handleSubmit} className="flex items-end gap-2 px-3 py-3 border-t border-border/60 shrink-0 backdrop-blur-sm bg-background/80 pb-[calc(0.75rem+env(safe-area-inset-bottom,0px))]">
               <Tooltip>
                 <TooltipTrigger asChild>
                   <button
@@ -459,11 +459,19 @@ export default function GyaniChat() {
                   value={input}
                   onChange={(e) => setInput(e.target.value.slice(0, MAX_CHARS + 500))}
                   onKeyDown={handleKeyDown}
+                  onFocus={() => {
+                    // Scroll input into view on mobile when keyboard opens
+                    setTimeout(() => {
+                      textareaRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }, 300);
+                  }}
                   placeholder={t("gyani.placeholder" as any)}
                   disabled={isStreaming}
                   rows={1}
+                  inputMode="text"
+                  enterKeyHint="send"
                   className="w-full resize-none bg-muted/50 border border-border/70 rounded-2xl px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary disabled:opacity-50 transition-colors"
-                  style={{ maxHeight: "96px" }}
+                  style={{ maxHeight: "96px", fontSize: "16px" }}
                 />
                 {charCount > 400 && (
                   <span className={cn(
