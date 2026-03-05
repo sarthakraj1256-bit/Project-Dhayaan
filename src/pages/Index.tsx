@@ -5,6 +5,7 @@ import { supabase } from '@/integrations/backend/client';
 import { User } from '@supabase/supabase-js';
 import UserMenu from '@/components/UserMenu';
 import BottomNav from '@/components/BottomNav';
+import GyaniChat from '@/components/gyani/GyaniChat';
 
 import LanguageToggle from '@/components/LanguageToggle';
 import { useLanguage } from '@/contexts/LanguageContext';
