@@ -299,7 +299,7 @@ export default function GyaniChat() {
             exit={{ y: "100%", opacity: 0 }}
             transition={{ type: "spring", damping: 28, stiffness: 300 }}
             className="fixed inset-x-0 bottom-0 z-50 flex flex-col bg-background border-t border-border shadow-2xl md:inset-x-auto md:right-4 md:bottom-4 md:w-[400px] md:rounded-2xl md:border md:max-h-[600px]"
-            style={{ height: "min(85vh, 600px)" }}
+            style={{ height: "min(70dvh, 600px)", maxHeight: "calc(100dvh - env(safe-area-inset-bottom, 0px))" }}
           >
             {/* Header */}
             <div className="flex items-center gap-3 px-4 py-3 border-b border-border/60 shrink-0">
