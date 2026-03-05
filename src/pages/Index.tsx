@@ -77,11 +77,13 @@ const Index = () => {
          )}
       </div>
 
-      {/* Mobile Bottom Navigation */}
-      <BottomNav />
+       {/* Mobile Bottom Navigation */}
+       <BottomNav />
 
-    </div>
-  );
-};
+       {/* Gyani AI Guide - Homepage Only */}
+       <GyaniChat />
+     </div>
+   );
+ };
 
-export default Index;
+ export default Index;
