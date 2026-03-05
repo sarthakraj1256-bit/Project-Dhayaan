@@ -5,6 +5,7 @@ import { supabase } from '@/integrations/backend/client';
 import { User } from '@supabase/supabase-js';
 import UserMenu from '@/components/UserMenu';
 import BottomNav from '@/components/BottomNav';
+import GyaniChat from '@/components/gyani/GyaniChat';
 
 import LanguageToggle from '@/components/LanguageToggle';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -76,11 +77,13 @@ const Index = () => {
          )}
       </div>
 
-      {/* Mobile Bottom Navigation */}
-      <BottomNav />
+       {/* Mobile Bottom Navigation */}
+       <BottomNav />
 
-    </div>
-  );
-};
+       {/* Gyani AI Guide - Homepage Only */}
+       <GyaniChat />
+     </div>
+   );
+ };
 
-export default Index;
+ export default Index;
