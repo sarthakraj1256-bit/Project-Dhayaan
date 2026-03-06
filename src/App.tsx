@@ -105,6 +105,7 @@ const App = () => (
             <Route path="/install" element={<Install />} />
             <Route path="/help" element={<Help />} />
             <Route path="/bhakti-shorts" element={<BhaktiShorts />} />
+            <Route path="/settings" element={<SettingsPage />} />
             <Route path="/admin" element={
               <Suspense fallback={<PageSkeleton />}>
                 <AdminRoute><Admin /></AdminRoute>
