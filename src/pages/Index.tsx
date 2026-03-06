@@ -46,7 +46,7 @@ const Index = () => {
     <div className="homepage-theme relative min-h-screen bg-background overflow-x-hidden">
       <WavyBackground />
       <SectionNav />
-      <main className="relative z-10 pb-24 md:pb-0 pt-[52px]">
+      <main className="relative z-[1] pb-24 md:pb-0 pt-16 md:pt-[72px]">
         <div id="hero"><HeroSection user={user} /></div>
         <div id="explore"><QuickStartSection /></div>
         <Suspense fallback={null}>
