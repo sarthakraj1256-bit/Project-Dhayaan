@@ -1,6 +1,8 @@
-import { useState, lazy, Suspense } from "react";
+import { useState, useEffect, useCallback, lazy, Suspense } from "react";
 import AdminSidebar, { AdminSection } from "@/components/admin/AdminSidebar";
 import AdminHeader from "@/components/admin/AdminHeader";
+import { supabase } from "@/integrations/backend/client";
+import { toast } from "@/hooks/use-toast";
 
 // Lazy load all sections
 const CommandCenter = lazy(() => import("@/components/admin/CommandCenter"));
