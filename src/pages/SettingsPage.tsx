@@ -1,19 +1,62 @@
-import { Sun, Moon, ArrowLeft } from 'lucide-react';
+import { Sun, Moon, ArrowLeft, Shield, LogIn, Loader2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { triggerHaptic } from '@/hooks/useHapticFeedback';
 import LanguageToggle from '@/components/LanguageToggle';
+import { useState } from 'react';
+import { supabase } from '@/integrations/backend/client';
+import { toast } from '@/hooks/use-toast';
 
 export default function SettingsPage() {
   const { theme, toggleTheme } = useTheme();
   const { t } = useLanguage();
+  const navigate = useNavigate();
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleAdminLogin = async () => {
+    if (!email || !password) {
+      toast({ title: 'Please enter email and password', variant: 'destructive' });
+      return;
+    }
+    setIsLoading(true);
+    try {
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) {
+        toast({ title: 'Login failed', description: error.message, variant: 'destructive' });
+      } else {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) throw new Error('No user');
+
+        const { data: roleData } = await supabase
+          .from('user_roles')
+          .select('role')
+          .eq('user_id', user.id)
+          .eq('role', 'admin')
+          .maybeSingle();
+
+        if (roleData) {
+          toast({ title: '🙏 Welcome, Admin' });
+          navigate('/admin');
+        } else {
+          toast({ title: 'Access denied', description: 'You do not have admin privileges.', variant: 'destructive' });
+        }
+      }
+    } catch {
+      toast({ title: 'Something went wrong', variant: 'destructive' });
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
       <header className="sticky top-0 z-50 h-14 flex items-center gap-3 px-4 border-b border-border/40 bg-background/95 backdrop-blur-xl">
         <Link to="/" className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-foreground/[0.06] transition-colors touch-target">
           <ArrowLeft className="w-5 h-5 text-foreground/70" />
@@ -55,6 +98,51 @@ export default function SettingsPage() {
           <div className="flex items-center justify-between p-4 rounded-xl bg-card border border-border/50">
             <p className="text-sm font-medium text-foreground">App Language</p>
             <LanguageToggle />
+          </div>
+        </section>
+
+        {/* Admin Login */}
+        <section className="space-y-3">
+          <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider flex items-center gap-2">
+            <Shield className="w-4 h-4" /> Admin
+          </h2>
+          <div className="p-4 rounded-xl bg-card border border-border/50 space-y-3">
+            <p className="text-xs text-muted-foreground">Sign in with admin credentials to access the dashboard.</p>
+            <input
+              type="email"
+              placeholder="Admin email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full h-10 px-3 rounded-lg bg-background border border-border/60 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
+            />
+            <div className="relative">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleAdminLogin()}
+                className="w-full h-10 px-3 pr-16 rounded-lg bg-background border border-border/60 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground hover:text-foreground"
+              >
+                {showPassword ? 'Hide' : 'Show'}
+              </button>
+            </div>
+            <button
+              onClick={handleAdminLogin}
+              disabled={isLoading}
+              className={cn(
+                'w-full h-10 rounded-lg text-sm font-medium flex items-center justify-center gap-2 transition-colors',
+                'bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50'
+              )}
+            >
+              {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <LogIn className="w-4 h-4" />}
+              {isLoading ? 'Signing in…' : 'Admin Login'}
+            </button>
           </div>
         </section>
       </div>
