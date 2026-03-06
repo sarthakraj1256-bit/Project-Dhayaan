@@ -80,7 +80,7 @@ const LiveDarshan = () => {
             /* Temple cards grid */
             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
               {LIVE_TEMPLES.map((temple, i) => (
-                <LiveTempleCard key={temple.id} temple={temple} index={i} onTap={handleTap} />
+                <LiveTempleCard key={temple.id} temple={temple} index={i} />
               ))}
             </div>
           )}
