@@ -16,14 +16,12 @@ const sections = [
 
 export default function SectionNav() {
   const [active, setActive] = useState('hero');
-  const [visible, setVisible] = useState(false);
   const navRef = useRef<HTMLDivElement>(null);
   const pillRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const { t } = useLanguage();
 
   useEffect(() => {
     const handleScroll = () => {
-      setVisible(window.scrollY > 120);
       let current = 'hero';
       for (const section of sections) {
         const el = document.getElementById(section.id);
@@ -49,20 +47,18 @@ export default function SectionNav() {
   const scrollTo = (id: string) => {
     const el = document.getElementById(id);
     if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      const offset = 52;
+      const y = el.getBoundingClientRect().top + window.scrollY - offset;
+      window.scrollTo({ top: y, behavior: 'smooth' });
     }
   };
 
   return (
     <div
-      className={cn(
-        'fixed top-0 left-0 right-0 z-[1000] transition-all duration-300',
-        visible
-          ? 'translate-y-0 opacity-100'
-          : '-translate-y-full opacity-0 pointer-events-none'
-      )}
+      className="fixed top-0 left-0 right-0 z-[1000]"
+      style={{ backgroundColor: '#E9E2D9' }}
     >
-      <div className="bg-background backdrop-blur-xl border-b border-border/50 shadow-sm">
+      <div className="border-b border-border/50 shadow-sm">
         <div
           ref={navRef}
           className="flex items-center gap-1.5 px-4 pr-28 sm:pr-36 py-2.5 overflow-x-auto scrollbar-hide"
