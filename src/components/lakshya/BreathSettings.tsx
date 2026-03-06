@@ -51,7 +51,7 @@ const BreathSettings = ({ initialTimings, onStart }: BreathSettingsProps) => {
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="flex flex-col items-center justify-center p-6 sm:p-8 min-h-[400px]"
+      className="flex flex-col items-center p-6 sm:p-8 min-h-[400px] overflow-y-auto max-h-[80vh]"
     >
       <div className="text-5xl mb-4">🌬️</div>
       <h3 className="font-display text-2xl text-foreground mb-1">Breath Flow Journey</h3>

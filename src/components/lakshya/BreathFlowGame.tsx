@@ -207,7 +207,7 @@ const BreathFlowGame = ({ onClose, onKarmaEarned }: BreathFlowGameProps) => {
         </button>
       </div>
 
-      <div className="relative rounded-2xl overflow-hidden bg-gradient-to-b from-indigo-900/20 to-violet-900/20 border border-indigo-500/20">
+      <div className="relative rounded-2xl overflow-hidden bg-gradient-to-b from-indigo-900/20 to-violet-900/20 border border-indigo-500/20" style={{ minHeight: gameState === 'settings' ? 'auto' : undefined }}>
         {/* Settings Screen */}
         <AnimatePresence>
           {gameState === 'settings' && loaded && (
