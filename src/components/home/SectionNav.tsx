@@ -56,13 +56,13 @@ export default function SectionNav() {
   return (
     <div
       className={cn(
-        'fixed top-0 left-0 right-0 z-40 transition-all duration-300',
+        'fixed top-0 left-0 right-0 z-[1000] transition-all duration-300',
         visible
           ? 'translate-y-0 opacity-100'
           : '-translate-y-full opacity-0 pointer-events-none'
       )}
     >
-      <div className="bg-background/85 backdrop-blur-xl border-b border-border/50">
+      <div className="bg-background backdrop-blur-xl border-b border-border/50 shadow-sm">
         <div
           ref={navRef}
           className="flex items-center gap-1.5 px-4 pr-28 sm:pr-36 py-2.5 overflow-x-auto scrollbar-hide"
