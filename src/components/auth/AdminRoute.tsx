@@ -11,10 +11,7 @@ interface AdminRouteProps {
 const AdminRoute = ({ children }: AdminRouteProps) => {
   const [user, setUser] = useState<any>(null);
   const [authLoading, setAuthLoading] = useState(true);
-  const { isAdmin, isLoading: roleLoading } = useAdminCheck();
   const location = useLocation();
-  const { toast } = useToast();
-  const unauthorizedToastShownRef = useRef(false);
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
