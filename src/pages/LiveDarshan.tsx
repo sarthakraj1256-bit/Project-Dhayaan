@@ -13,7 +13,7 @@ import { useNetworkStatus } from '@/hooks/useNetworkStatus';
 const LiveDarshan = () => {
   const navigate = useNavigate();
   const [confirmTemple, setConfirmTemple] = useState<LiveTemple | null>(null);
-  const isOnline = useNetworkStatus();
+  const { isOnline } = useNetworkStatus();
 
   const handleTap = useCallback((temple: LiveTemple) => {
     if (shouldSkipConfirm()) {
