@@ -6,7 +6,6 @@ import { User } from '@supabase/supabase-js';
 import BottomNav from '@/components/BottomNav';
 import GyaniChat from '@/components/gyani/GyaniChat';
 
-import LanguageToggle from '@/components/LanguageToggle';
 import { useLanguage } from '@/contexts/LanguageContext';
 // Only hero + quick-start are above the fold — load eagerly
 import { HeroSection, QuickStartSection } from '@/components/home';
@@ -63,11 +62,6 @@ const Index = () => {
           <div id="reviews"><DevoteeExperiences /></div>
         </Suspense>
       </main>
-
-      {/* Language selector — Fixed Top Right */}
-      <div className="fixed top-3.5 right-3.5 sm:top-4 sm:right-5 z-[1001] flex items-center gap-2">
-         <LanguageToggle />
-      </div>
 
        {/* Mobile Bottom Navigation */}
        <BottomNav />
