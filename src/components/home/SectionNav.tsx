@@ -16,7 +16,7 @@ const sections = [
 
 export default function SectionNav() {
   const [active, setActive] = useState('hero');
-  const navRef = useRef<HTMLDivElement>(null);
+  const [scrolled, setScrolled] = useState(false);
   const pillRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const { t } = useLanguage();
 
