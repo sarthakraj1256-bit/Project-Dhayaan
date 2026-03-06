@@ -64,9 +64,12 @@ export default function LiveTempleCard({ temple, index, onTap }: LiveTempleCardP
             {temple.name}
           </h3>
           <p className="text-xs text-[#9C8C7C] mt-0.5 truncate">{temple.subtitle}</p>
-          <p className="text-xs text-[hsl(38_60%_55%)] mt-1 flex items-center gap-1">
-            <Sparkles className="w-3 h-3" /> {temple.deity}
-          </p>
+          <div className="flex items-center justify-between mt-1">
+            <p className="text-xs text-[hsl(38_60%_55%)] flex items-center gap-1">
+              <Sparkles className="w-3 h-3" /> {temple.deity}
+            </p>
+            <span className="text-[11px] text-[#9C8C7C]">Opens in YouTube →</span>
+          </div>
         </div>
       </div>
     </motion.div>
