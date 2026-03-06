@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Play, Sparkles } from 'lucide-react';
 import type { LiveTemple } from '@/data/liveDarshanTemples';
+import { openLiveDarshan } from '@/lib/openLiveDarshan';
 
 interface LiveTempleCardProps {
   temple: LiveTemple;
@@ -10,6 +11,14 @@ interface LiveTempleCardProps {
 
 export default function LiveTempleCard({ temple, index }: LiveTempleCardProps) {
   const [imgError, setImgError] = useState(false);
+
+  const handleOpen = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    const isMobile = /iPhone|iPad|Android/i.test(navigator.userAgent);
+    if (!isMobile) return; // keep native anchor behavior on desktop
+
+    event.preventDefault();
+    openLiveDarshan(temple);
+  };
 
   return (
     <motion.div
@@ -24,6 +33,7 @@ export default function LiveTempleCard({ temple, index }: LiveTempleCardProps) {
         href={temple.liveUrl}
         target="_blank"
         rel="noopener noreferrer"
+        onClick={handleOpen}
         className="block rounded-[20px] overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.25)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.5)] transition-shadow duration-300 group-hover:shadow-[0_12px_40px_rgba(0,0,0,0.35)] cursor-pointer no-underline"
       >
         <div className="relative h-[200px] md:h-[240px] overflow-hidden">
