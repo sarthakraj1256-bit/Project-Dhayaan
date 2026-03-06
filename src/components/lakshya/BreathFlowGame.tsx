@@ -207,20 +207,18 @@ const BreathFlowGame = ({ onClose, onKarmaEarned }: BreathFlowGameProps) => {
         </button>
       </div>
 
-      <div className="relative rounded-2xl overflow-hidden bg-gradient-to-b from-indigo-900/20 to-violet-900/20 border border-indigo-500/20">
+      <div className="relative rounded-2xl overflow-hidden bg-gradient-to-b from-indigo-900/20 to-violet-900/20 border border-indigo-500/20" style={{ minHeight: gameState === 'settings' ? 'auto' : undefined }}>
         {/* Settings Screen */}
-        <AnimatePresence>
-          {gameState === 'settings' && loaded && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="absolute inset-0 z-20 bg-gradient-to-b from-void/90 to-void/95"
-            >
-              <BreathSettings initialTimings={savedTimings} onStart={handleStart} />
-            </motion.div>
-          )}
-        </AnimatePresence>
+        {gameState === 'settings' && loaded && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="bg-gradient-to-b from-void/90 to-void/95"
+          >
+            <BreathSettings initialTimings={savedTimings} onStart={handleStart} />
+          </motion.div>
+        )}
 
         {/* Complete Screen */}
         <AnimatePresence>
@@ -265,7 +263,9 @@ const BreathFlowGame = ({ onClose, onKarmaEarned }: BreathFlowGameProps) => {
           )}
         </AnimatePresence>
 
-        <canvas ref={canvasRef} width={800} height={400} className="w-full h-[400px]" style={{ transform: 'translateZ(0)', willChange: 'contents' }} />
+        {gameState !== 'settings' && (
+          <canvas ref={canvasRef} width={800} height={400} className="w-full h-[400px]" style={{ transform: 'translateZ(0)', willChange: 'contents' }} />
+        )}
 
         {/* Game UI Overlay */}
         {(gameState === 'playing' || gameState === 'paused') && (
