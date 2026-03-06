@@ -33,16 +33,7 @@ const AdminRoute = ({ children }: AdminRouteProps) => {
     return () => subscription.unsubscribe();
   }, []);
 
-  useEffect(() => {
-    if (!authLoading && !roleLoading && user && !isAdmin && !unauthorizedToastShownRef.current) {
-      unauthorizedToastShownRef.current = true;
-      toast({
-        title: "Access Denied",
-        description: "Access Denied: Restricted to Authorized Personnel.",
-        variant: "destructive",
-      });
-    }
-  }, [authLoading, roleLoading, user, isAdmin, toast]);
+  // Silent redirect - no toast for security through obscurity
 
   if (authLoading || roleLoading) {
     return (
