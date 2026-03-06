@@ -1,7 +1,7 @@
 import { forwardRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Home, Radio, BookOpen, Sparkles, Play, User, Clapperboard } from 'lucide-react';
+import { Home, Radio, Play, Sparkles, Clapperboard } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { triggerHaptic } from '@/hooks/useHapticFeedback';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -19,7 +19,6 @@ const navItems: NavItem[] = [
   { path: '/live-darshan', labelKey: 'nav.darshan', icon: Play },
   { path: '/bhakti-shorts', labelKey: 'nav.shorts', icon: Clapperboard },
   { path: '/lakshya', labelKey: 'nav.lakshya', icon: Sparkles },
-  { path: '/profile', labelKey: 'nav.profile', icon: User },
 ];
 
 const BottomNav = forwardRef<HTMLElement>((_, ref) => {
@@ -33,7 +32,7 @@ const BottomNav = forwardRef<HTMLElement>((_, ref) => {
   };
 
   return (
-    <nav ref={ref} className="fixed bottom-0 left-0 right-0 z-50 md:hidden">
+    <nav ref={ref} className="fixed bottom-0 left-0 right-0 z-[999] md:hidden">
       <div
         className="mx-0 overflow-hidden touch-manipulation border-t border-border/50 bg-background/95 backdrop-blur-xl"
         style={{
@@ -62,14 +61,14 @@ const BottomNav = forwardRef<HTMLElement>((_, ref) => {
 
                  <Icon
                    className={cn(
-                     'w-5 h-5 transition-colors duration-150',
+                     'w-[22px] h-[22px] transition-colors duration-150',
                      isActive ? 'text-primary' : 'text-foreground/30'
                    )}
                 />
 
                 <span
                   className={cn(
-                     'text-[10px] mt-0.5 font-medium transition-colors duration-150',
+                     'text-[11px] mt-0.5 font-medium transition-colors duration-150',
                      isActive ? 'text-primary' : 'text-foreground/30'
                   )}
                 >

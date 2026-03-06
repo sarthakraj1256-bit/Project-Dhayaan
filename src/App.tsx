@@ -34,6 +34,7 @@ const ChildrenCartoons = lazy(() => import("./pages/ChildrenCartoons"));
 const Help = lazy(() => import("./pages/Help"));
 const Admin = lazy(() => import("./pages/Admin"));
 const BhaktiShorts = lazy(() => import("./pages/BhaktiShorts"));
+const SettingsPage = lazy(() => import("./pages/SettingsPage"));
 
 // Lazy-loaded protected route wrappers
 const ProtectedRoute = lazy(() => import("./components/auth/ProtectedRoute"));
@@ -104,6 +105,7 @@ const App = () => (
             <Route path="/install" element={<Install />} />
             <Route path="/help" element={<Help />} />
             <Route path="/bhakti-shorts" element={<BhaktiShorts />} />
+            <Route path="/settings" element={<SettingsPage />} />
             <Route path="/admin" element={
               <Suspense fallback={<PageSkeleton />}>
                 <AdminRoute><Admin /></AdminRoute>
