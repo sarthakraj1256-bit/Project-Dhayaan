@@ -64,12 +64,12 @@ export default function SpiritualHubSection() {
           <h2 className="text-xs font-semibold text-foreground/40 uppercase tracking-widest">
             {t('section.dailyAarti')}
           </h2>
-          <Link
-            to="/aarti-schedule"
-            className="text-xs text-primary font-medium flex items-center gap-1 hover:underline"
-          >
-            {t('link.exploreAll')} <ArrowRight className="w-3 h-3" />
-          </Link>
+           <Link
+             to="/live-darshan"
+             className="text-xs text-primary font-medium flex items-center gap-1 hover:underline"
+           >
+             {t('link.exploreAll')} <ArrowRight className="w-3 h-3" />
+           </Link>
         </div>
 
         <div className="flex gap-3 overflow-x-auto pb-2 -mx-1 px-1 scrollbar-hide">
