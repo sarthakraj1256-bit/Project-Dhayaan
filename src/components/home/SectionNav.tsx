@@ -23,6 +23,7 @@ export default function SectionNav() {
 
   useEffect(() => {
     const handleScroll = () => {
+      setScrolled(window.scrollY > 10);
       let current = 'hero';
       for (const section of sections) {
         const el = document.getElementById(section.id);
