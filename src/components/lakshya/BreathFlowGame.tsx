@@ -263,7 +263,9 @@ const BreathFlowGame = ({ onClose, onKarmaEarned }: BreathFlowGameProps) => {
           )}
         </AnimatePresence>
 
-        <canvas ref={canvasRef} width={800} height={400} className="w-full h-[400px]" style={{ transform: 'translateZ(0)', willChange: 'contents' }} />
+        {gameState !== 'settings' && (
+          <canvas ref={canvasRef} width={800} height={400} className="w-full h-[400px]" style={{ transform: 'translateZ(0)', willChange: 'contents' }} />
+        )}
 
         {/* Game UI Overlay */}
         {(gameState === 'playing' || gameState === 'paused') && (
