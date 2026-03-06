@@ -6,7 +6,6 @@ import { User } from '@supabase/supabase-js';
 import BottomNav from '@/components/BottomNav';
 import GyaniChat from '@/components/gyani/GyaniChat';
 
-import LanguageToggle from '@/components/LanguageToggle';
 import { useLanguage } from '@/contexts/LanguageContext';
 // Only hero + quick-start are above the fold — load eagerly
 import { HeroSection, QuickStartSection } from '@/components/home';
