@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { LogIn } from 'lucide-react';
 import { supabase } from '@/integrations/backend/client';
 import { User } from '@supabase/supabase-js';
-import UserMenu from '@/components/UserMenu';
 import BottomNav from '@/components/BottomNav';
 import GyaniChat from '@/components/gyani/GyaniChat';
 
@@ -12,6 +11,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 // Only hero + quick-start are above the fold — load eagerly
 import { HeroSection, QuickStartSection } from '@/components/home';
 import SectionNav from '@/components/home/SectionNav';
+import SideDrawer from '@/components/home/SideDrawer';
 import WavyBackground from '@/components/home/WavyBackground';
 
 // Below-fold sections — lazy loaded
@@ -26,6 +26,7 @@ const DevoteeExperiences = lazy(() => import('@/components/DevoteeExperiences'))
 
 const Index = () => {
   const [user, setUser] = useState<User | null>(null);
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const { t } = useLanguage();
 
   useEffect(() => {
@@ -45,7 +46,9 @@ const Index = () => {
   return (
     <div className="homepage-theme relative min-h-screen bg-background overflow-x-hidden">
       <WavyBackground />
-      <SectionNav />
+      <SectionNav onMenuOpen={() => setDrawerOpen(true)} />
+      <SideDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
+
       <main className="relative z-[1] pb-24 md:pb-0 pt-16 md:pt-[72px]">
         <div id="hero"><HeroSection user={user} /></div>
         <div id="explore"><QuickStartSection /></div>
@@ -61,20 +64,9 @@ const Index = () => {
         </Suspense>
       </main>
 
-      {/* Navigation - Fixed Top Right */}
+      {/* Language selector — Fixed Top Right */}
       <div className="fixed top-3.5 right-3.5 sm:top-4 sm:right-5 z-[1001] flex items-center gap-2">
          <LanguageToggle />
-         {user ? (
-           <UserMenu user={user} />
-         ) : (
-           <Link
-             to="/auth"
-             className="flex items-center gap-2 px-3.5 py-2 rounded-full bg-card/80 backdrop-blur-sm border border-border/50 text-xs sm:text-sm font-medium text-foreground/75 shadow-sm transition-all duration-200 hover:bg-card active:scale-95"
-           >
-             <LogIn className="w-4 h-4 text-primary" />
-             {t('auth.signIn')}
-           </Link>
-         )}
       </div>
 
        {/* Mobile Bottom Navigation */}

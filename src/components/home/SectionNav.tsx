@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { Menu } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { TranslationKey } from '@/i18n/translations';
@@ -14,7 +15,11 @@ const sections = [
   { id: 'philosophy', labelKey: 'sectionNav.philosophy' as TranslationKey },
 ];
 
-export default function SectionNav() {
+interface SectionNavProps {
+  onMenuOpen: () => void;
+}
+
+export default function SectionNav({ onMenuOpen }: SectionNavProps) {
   const [active, setActive] = useState('hero');
   const [scrolled, setScrolled] = useState(false);
   const navRef = useRef<HTMLDivElement>(null);
@@ -49,7 +54,7 @@ export default function SectionNav() {
   const scrollTo = (id: string) => {
     const el = document.getElementById(id);
     if (el) {
-      const offset = 52;
+      const offset = 64;
       const y = el.getBoundingClientRect().top + window.scrollY - offset;
       window.scrollTo({ top: y, behavior: 'smooth' });
     }
@@ -69,25 +74,37 @@ export default function SectionNav() {
       }}
     >
       <div className={cn('h-full border-b transition-colors duration-300', scrolled ? 'border-border/50' : 'border-transparent')}>
-        <div
-          ref={navRef}
-          className="flex items-center gap-1.5 h-full px-4 pr-28 sm:pr-36 overflow-x-auto scrollbar-hide"
-        >
-          {sections.map((section) => (
-            <button
-              key={section.id}
-              ref={(el) => { pillRefs.current[section.id] = el; }}
-              onClick={() => scrollTo(section.id)}
-              className={cn(
-                'shrink-0 px-3.5 py-1.5 rounded-full text-xs font-medium transition-all duration-200 whitespace-nowrap touch-target',
-                active === section.id
-                  ? 'bg-primary/15 text-primary shadow-sm'
-                  : 'text-foreground/40 hover:text-foreground/60 hover:bg-foreground/[0.04]'
-              )}
-            >
-              {t(section.labelKey)}
-            </button>
-          ))}
+        <div className="flex items-center h-full px-3 gap-1">
+          {/* Hamburger menu */}
+          <button
+            onClick={onMenuOpen}
+            className="w-11 h-11 flex items-center justify-center rounded-full hover:bg-foreground/[0.06] transition-colors touch-target shrink-0 lg:hidden"
+            aria-label="Open menu"
+          >
+            <Menu className="w-6 h-6 text-foreground/60" />
+          </button>
+
+          {/* Section pills - scrollable */}
+          <div
+            ref={navRef}
+            className="flex items-center gap-1.5 flex-1 overflow-x-auto scrollbar-hide pr-24 sm:pr-28"
+          >
+            {sections.map((section) => (
+              <button
+                key={section.id}
+                ref={(el) => { pillRefs.current[section.id] = el; }}
+                onClick={() => scrollTo(section.id)}
+                className={cn(
+                  'shrink-0 px-3.5 py-1.5 rounded-full text-xs font-medium transition-all duration-200 whitespace-nowrap touch-target',
+                  active === section.id
+                    ? 'bg-primary/15 text-primary shadow-sm'
+                    : 'text-foreground/40 hover:text-foreground/60 hover:bg-foreground/[0.04]'
+                )}
+              >
+                {t(section.labelKey)}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
     </div>
