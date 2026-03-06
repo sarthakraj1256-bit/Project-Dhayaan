@@ -1,27 +1,15 @@
-import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Bell, Landmark } from 'lucide-react';
-import { LIVE_TEMPLES, type LiveTemple } from '@/data/liveDarshanTemples';
+import { LIVE_TEMPLES } from '@/data/liveDarshanTemples';
 import LiveTempleCard from '@/components/live-darshan/LiveTempleCard';
-import DarshanConfirmSheet, { shouldSkipConfirm } from '@/components/live-darshan/DarshanConfirmSheet';
-import { openLiveDarshan } from '@/lib/openLiveDarshan';
 import BottomNav from '@/components/BottomNav';
 import PageTransition from '@/components/PageTransition';
 import { useNetworkStatus } from '@/hooks/useNetworkStatus';
 
 const LiveDarshan = () => {
   const navigate = useNavigate();
-  const [confirmTemple, setConfirmTemple] = useState<LiveTemple | null>(null);
   const { isOnline } = useNetworkStatus();
-
-  const handleTap = useCallback((temple: LiveTemple) => {
-    if (shouldSkipConfirm()) {
-      openLiveDarshan(temple);
-    } else {
-      setConfirmTemple(temple);
-    }
-  }, []);
 
   return (
     <PageTransition>
@@ -92,14 +80,13 @@ const LiveDarshan = () => {
             /* Temple cards grid */
             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
               {LIVE_TEMPLES.map((temple, i) => (
-                <LiveTempleCard key={temple.id} temple={temple} index={i} onTap={handleTap} />
+                <LiveTempleCard key={temple.id} temple={temple} index={i} />
               ))}
             </div>
           )}
         </main>
 
-        {/* Confirmation sheet */}
-        <DarshanConfirmSheet temple={confirmTemple} onClose={() => setConfirmTemple(null)} />
+
 
         <BottomNav />
       </div>
