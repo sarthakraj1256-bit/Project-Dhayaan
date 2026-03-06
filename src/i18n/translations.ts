@@ -103,6 +103,12 @@ export const translations = {
     'sectionNav.highlights': 'Highlights',
     'sectionNav.philosophy': 'Philosophy',
 
+    // Drawer
+    'drawer.mantraLearning': 'Mantra Learning',
+    'drawer.japSeva': 'Jap Seva',
+    'drawer.dailyAarati': 'Daily Aarati',
+    'drawer.settings': 'Settings',
+
     // Auth
     'auth.signIn': 'Sign in',
     'auth.signOut': 'Sign Out',
