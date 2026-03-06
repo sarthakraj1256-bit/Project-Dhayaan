@@ -14,7 +14,7 @@ const features = [
   { icon: ScrollText, labelKey: 'feature.japSeva' as TranslationKey, descKey: 'feature.japSevaDesc' as TranslationKey, href: '/jap-bank', color: '#C8873A' },
   { icon: Sparkles, labelKey: 'feature.lakshya' as TranslationKey, descKey: 'feature.lakshyaDesc' as TranslationKey, href: '/lakshya', color: '#8B6FC0' },
   { icon: Eye, labelKey: 'feature.immersive' as TranslationKey, descKey: 'feature.immersiveDesc' as TranslationKey, href: '/immersive-darshan', color: '#3BA8C0' },
-  { icon: Flame, labelKey: 'feature.dailyAarti' as TranslationKey, descKey: 'feature.dailyAartiDesc' as TranslationKey, href: '/aarti-schedule', color: '#D4872A' },
+  { icon: Flame, labelKey: 'feature.dailyAarti' as TranslationKey, descKey: 'feature.dailyAartiDesc' as TranslationKey, href: '/daily-aarati', color: '#D4872A' },
   { icon: Tv, labelKey: 'feature.kidsCartoons' as TranslationKey, descKey: 'feature.kidsCartoonsDesc' as TranslationKey, href: '/children-cartoons', color: '#D45470' },
   { icon: Clapperboard, labelKey: 'feature.bhaktiShorts' as TranslationKey, descKey: 'feature.bhaktiShortsDesc' as TranslationKey, href: '/bhakti-shorts', color: '#C9A84C' },
 ];

@@ -35,6 +35,7 @@ const Help = lazy(() => import("./pages/Help"));
 const Admin = lazy(() => import("./pages/Admin"));
 const BhaktiShorts = lazy(() => import("./pages/BhaktiShorts"));
 const SettingsPage = lazy(() => import("./pages/SettingsPage"));
+const DailyAarati = lazy(() => import("./pages/DailyAarati"));
 
 // Lazy-loaded protected route wrappers
 const ProtectedRoute = lazy(() => import("./components/auth/ProtectedRoute"));
@@ -98,6 +99,7 @@ const App = () => (
             <Route path="/lakshya" element={<Lakshya />} />
             <Route path="/live-darshan" element={<LiveDarshan />} />
             <Route path="/aarti-schedule" element={<AartiSchedule />} />
+            <Route path="/daily-aarati" element={<DailyAarati />} />
             <Route path="/immersive-darshan" element={<ImmersiveDarshan />} />
             <Route path="/garden/:id" element={<SharedGarden />} />
             <Route path="/jap-bank" element={<JapBank />} />
