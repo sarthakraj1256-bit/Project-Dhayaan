@@ -65,7 +65,7 @@ export default function SpiritualHubSection() {
             {t('section.dailyAarti')}
           </h2>
            <Link
-             to="/live-darshan"
+             to="/daily-aarati"
              className="text-xs text-primary font-medium flex items-center gap-1 hover:underline"
            >
              {t('link.exploreAll')} <ArrowRight className="w-3 h-3" />

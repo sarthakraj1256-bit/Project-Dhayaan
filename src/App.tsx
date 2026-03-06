@@ -99,6 +99,7 @@ const App = () => (
             <Route path="/lakshya" element={<Lakshya />} />
             <Route path="/live-darshan" element={<LiveDarshan />} />
             <Route path="/aarti-schedule" element={<AartiSchedule />} />
+            <Route path="/daily-aarati" element={<DailyAarati />} />
             <Route path="/immersive-darshan" element={<ImmersiveDarshan />} />
             <Route path="/garden/:id" element={<SharedGarden />} />
             <Route path="/jap-bank" element={<JapBank />} />

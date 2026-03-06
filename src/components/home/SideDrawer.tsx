@@ -25,7 +25,7 @@ const menuItems = [
   { path: '/mantrochar', icon: BookOpen, labelKey: 'drawer.mantraLearning' as const },
   { path: '/jap-bank', icon: Heart, labelKey: 'drawer.japSeva' as const },
   { path: '/lakshya', icon: Sparkles, labelKey: 'nav.lakshya' as const },
-  { path: '/aarti-schedule', icon: Bell, labelKey: 'drawer.dailyAarati' as const },
+  { path: '/daily-aarati', icon: Bell, labelKey: 'drawer.dailyAarati' as const },
   { path: '/profile', icon: User, labelKey: 'nav.profile' as const },
   { path: '/settings', icon: Settings, labelKey: 'drawer.settings' as const },
 ];
