@@ -982,6 +982,12 @@ export const translations = {
     'sectionNav.highlights': 'आकर्षण',
     'sectionNav.philosophy': 'दर्शन',
 
+    // Drawer
+    'drawer.mantraLearning': 'मंत्र सीखें',
+    'drawer.japSeva': 'जप सेवा',
+    'drawer.dailyAarati': 'दैनिक आरती',
+    'drawer.settings': 'सेटिंग्स',
+
     // Auth
     'auth.signIn': 'साइन इन',
     'auth.signOut': 'साइन आउट',
