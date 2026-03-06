@@ -7,17 +7,7 @@ export function openLiveDarshan(temple: LiveTemple) {
   // Show fallback toast with direct link
   toast({
     title: 'Opening YouTube…',
-    description: `If it doesn't open, tap the link below.`,
-    action: (
-      <a
-        href={temple.liveUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="text-[hsl(38_60%_55%)] underline text-xs font-medium whitespace-nowrap"
-      >
-        Open manually 🔗
-      </a>
-    ),
+    description: "If it doesn't open, copy this link: " + temple.liveUrl,
     duration: 3000,
   });
 
