@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Play, Clock, User, Sparkles, Music, Zap, BookOpen, Video, Filter, X } from 'lucide-react';
@@ -194,13 +194,36 @@ function VideoPlayerModal({ video, onClose }: { video: SpiritualContent; onClose
   const label = labelKey ? t(labelKey) : video.type;
   const color = typeColors[video.type] ?? 'bg-muted';
 
+  const dragY = useRef(0);
+  const isDragging = useRef(false);
+
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    dragY.current = e.touches[0].clientY;
+    isDragging.current = true;
+  }, []);
+
+  const handleTouchEnd = useCallback((e: React.TouchEvent) => {
+    if (!isDragging.current) return;
+    const diff = e.changedTouches[0].clientY - dragY.current;
+    if (diff > 80) onClose();
+    isDragging.current = false;
+  }, [onClose]);
+
   return (
     <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
+      initial={{ opacity: 0, y: '100%' }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: '100%' }}
+      transition={{ type: 'spring', damping: 28, stiffness: 300 }}
       className="fixed inset-0 z-[2000] bg-black flex flex-col"
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
     >
+      {/* Swipe indicator */}
+      <div className="flex justify-center pt-2 pb-1 shrink-0 md:hidden">
+        <div className="w-10 h-1 rounded-full bg-white/30" />
+      </div>
+
       {/* Top bar */}
       <div className="flex items-center justify-between px-4 py-3 bg-black/80 backdrop-blur-sm shrink-0">
         <div className="flex items-center gap-2 min-w-0">
