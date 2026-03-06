@@ -63,11 +63,6 @@ const Index = () => {
         </Suspense>
       </main>
 
-      {/* Language selector — Fixed Top Right */}
-      <div className="fixed top-3.5 right-3.5 sm:top-4 sm:right-5 z-[1001] flex items-center gap-2">
-         <LanguageToggle />
-      </div>
-
        {/* Mobile Bottom Navigation */}
        <BottomNav />
 
