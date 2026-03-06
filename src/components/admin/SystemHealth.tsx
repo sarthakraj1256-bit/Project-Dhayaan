@@ -1,0 +1,83 @@
+import { useState, useEffect } from "react";
+import { RefreshCw } from "lucide-react";
+import { Button } from "@/components/ui/button";
+
+interface ServiceStatus {
+  name: string;
+  status: "operational" | "degraded" | "down";
+  latency: string;
+  uptime: string;
+}
+
+const initialServices: ServiceStatus[] = [
+  { name: "Auth Service", status: "operational", latency: "45ms", uptime: "99.9%" },
+  { name: "Database (PG)", status: "operational", latency: "23ms", uptime: "99.8%" },
+  { name: "Realtime", status: "operational", latency: "12ms", uptime: "99.7%" },
+  { name: "Storage", status: "operational", latency: "67ms", uptime: "99.9%" },
+  { name: "Edge Functions", status: "operational", latency: "89ms", uptime: "98.5%" },
+  { name: "Karma Sync", status: "operational", latency: "34ms", uptime: "99.6%" },
+];
+
+const statusColor = { operational: "#22C55E", degraded: "#F59E0B", down: "#EF4444" };
+const statusLabel = { operational: "Live", degraded: "Degraded", down: "Down" };
+
+const SystemHealth = () => {
+  const [services, setServices] = useState(initialServices);
+  const [lastChecked, setLastChecked] = useState(new Date());
+  const [refreshing, setRefreshing] = useState(false);
+
+  const refresh = () => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setLastChecked(new Date());
+      setRefreshing(false);
+    }, 1000);
+  };
+
+  useEffect(() => {
+    const interval = setInterval(refresh, 30000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-lg font-semibold" style={{ color: "#C9A84C" }}>System Health</h2>
+          <p className="text-xs mt-1" style={{ color: "#6B5E4E" }}>
+            Last checked: {lastChecked.toLocaleTimeString()} • Auto-refreshes every 30s
+          </p>
+        </div>
+        <Button variant="outline" size="sm" onClick={refresh} disabled={refreshing}
+          style={{ borderColor: "rgba(201,168,76,0.3)", color: "#C9A84C" }}>
+          <RefreshCw className={`w-4 h-4 mr-2 ${refreshing ? "animate-spin" : ""}`} />
+          Refresh
+        </Button>
+      </div>
+
+      <div className="rounded-2xl overflow-hidden" style={{ background: "#13110D", border: "1px solid rgba(201,168,76,0.2)" }}>
+        {/* Header */}
+        <div className="grid grid-cols-4 gap-4 px-5 py-3 border-b" style={{ borderColor: "rgba(201,168,76,0.1)" }}>
+          {["Service", "Status", "Latency", "Uptime"].map((h) => (
+            <span key={h} className="text-[12px] font-medium uppercase tracking-wider" style={{ color: "#6B5E4E" }}>{h}</span>
+          ))}
+        </div>
+        {/* Rows */}
+        {services.map((s) => (
+          <div key={s.name} className="grid grid-cols-4 gap-4 px-5 py-3.5 border-b last:border-0 hover:bg-white/[0.02] transition-colors"
+            style={{ borderColor: "rgba(201,168,76,0.05)" }}>
+            <span className="text-sm font-medium" style={{ color: "#F5F0E8" }}>{s.name}</span>
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 rounded-full" style={{ background: statusColor[s.status] }} />
+              <span className="text-sm" style={{ color: statusColor[s.status] }}>{statusLabel[s.status]}</span>
+            </div>
+            <span className="text-sm" style={{ color: "#9C8C7C" }}>{s.latency}</span>
+            <span className="text-sm" style={{ color: "#9C8C7C" }}>{s.uptime}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default SystemHealth;

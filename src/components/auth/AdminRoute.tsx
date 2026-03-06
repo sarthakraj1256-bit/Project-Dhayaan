@@ -1,9 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/backend/client";
 import { useAdminCheck } from "@/hooks/useAdminCheck";
 import { motion } from "framer-motion";
-import { useToast } from "@/hooks/use-toast";
 
 interface AdminRouteProps {
   children: React.ReactNode;
@@ -14,8 +13,6 @@ const AdminRoute = ({ children }: AdminRouteProps) => {
   const [authLoading, setAuthLoading] = useState(true);
   const { isAdmin, isLoading: roleLoading } = useAdminCheck();
   const location = useLocation();
-  const { toast } = useToast();
-  const unauthorizedToastShownRef = useRef(false);
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
@@ -33,16 +30,7 @@ const AdminRoute = ({ children }: AdminRouteProps) => {
     return () => subscription.unsubscribe();
   }, []);
 
-  useEffect(() => {
-    if (!authLoading && !roleLoading && user && !isAdmin && !unauthorizedToastShownRef.current) {
-      unauthorizedToastShownRef.current = true;
-      toast({
-        title: "Access Denied",
-        description: "Access Denied: Restricted to Authorized Personnel.",
-        variant: "destructive",
-      });
-    }
-  }, [authLoading, roleLoading, user, isAdmin, toast]);
+  // Silent redirect - no toast for security through obscurity
 
   if (authLoading || roleLoading) {
     return (
@@ -75,7 +63,7 @@ const AdminRoute = ({ children }: AdminRouteProps) => {
   }
 
   if (!isAdmin) {
-    return <Navigate to="/dashboard" replace />;
+    return <Navigate to="/" replace />;
   }
 
   return <>{children}</>;
