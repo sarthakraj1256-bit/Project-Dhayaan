@@ -99,8 +99,10 @@ function AartiCard({ item, index }: { item: SpiritualContent; index: number }) {
       transition={{ delay: index * 0.04 }}
       className="shrink-0 w-[172px]"
     >
-      <Link
-        to="/live-darshan?tab=content"
+      <a
+        href={`https://www.youtube.com/watch?v=${item.youtubeVideoId}`}
+        target="_blank"
+        rel="noopener noreferrer"
         aria-label={`Play ${item.title}`}
         className="block rounded-2xl overflow-hidden light-card transition-all duration-200 active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-primary outline-none"
       >
