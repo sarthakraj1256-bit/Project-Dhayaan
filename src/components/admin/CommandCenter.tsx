@@ -27,14 +27,6 @@ const KPICard = ({ title, value, change, changeLabel, icon: Icon, positive }: {
   </div>
 );
 
-// Mock revenue data for chart
-const revenueData = [
-  { day: "Mon", revenue: 18200 }, { day: "Tue", revenue: 21500 },
-  { day: "Wed", revenue: 19800 }, { day: "Thu", revenue: 24350 },
-  { day: "Fri", revenue: 22100 }, { day: "Sat", revenue: 26800 },
-  { day: "Sun", revenue: 23500 },
-];
-
 const services = [
   { name: "Auth Service", status: "operational" },
   { name: "Edge Functions", status: "operational" },
@@ -45,34 +37,58 @@ const services = [
 
 const recentActivity = [
   { icon: "👤", message: "New user registered", time: "2 mins ago" },
-  { icon: "💰", message: "₹499 purchase completed", time: "5 mins ago" },
-  { icon: "🙏", message: "Jap-proof submitted", time: "8 mins ago" },
-  { icon: "📹", message: "New Bhakti Short uploaded", time: "12 mins ago" },
   { icon: "🧘", message: "Sonic Lab session (45m)", time: "15 mins ago" },
 ];
 
 const topFeatures = [
-  { name: "Sonic Lab", count: "2.4k" },
-  { name: "Live Darshan", count: "1.8k" },
-  { name: "Meditation", count: "1.2k" },
-  { name: "Bhakti Shorts", count: "890" },
+  { name: "Sonic Lab", count: "—" },
+  { name: "Live Darshan", count: "—" },
+  { name: "Jap Bank", count: "—" },
+  { name: "Bhakti Shorts", count: "—" },
 ];
 
 const CommandCenter = () => {
   const [userCount, setUserCount] = useState(0);
+  const [todayRevenue, setTodayRevenue] = useState(0);
+  const [revenueChange, setRevenueChange] = useState(0);
+  const [chartData, setChartData] = useState<{ day: string; revenue: number }[]>([]);
 
   useEffect(() => {
+    // Fetch user count
     supabase.from("profiles").select("id", { count: "exact", head: true })
       .then(({ count }) => setUserCount(count || 0));
+
+    // Fetch revenue summary
+    supabase.rpc("admin_get_revenue_summary").then(({ data }) => {
+      if (data) {
+        const row = Array.isArray(data) ? data[0] : data;
+        if (row) {
+          setTodayRevenue(Number(row.today_revenue) || 0);
+          setRevenueChange(Number(row.today_change) || 0);
+        }
+      }
+    });
+
+    // Fetch 7-day chart
+    supabase.rpc("admin_get_daily_revenue", { days_back: 7 }).then(({ data }) => {
+      if (data) {
+        setChartData((data as any[]).map((d) => ({
+          day: new Date(d.day).toLocaleDateString("en-IN", { weekday: "short" }),
+          revenue: Number(d.revenue),
+        })));
+      }
+    });
   }, []);
 
   return (
     <div className="space-y-6">
       {/* KPI Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <KPICard title="Total Users" value={userCount.toLocaleString()} change="▲ 8.3%" changeLabel="this week" icon={Users} positive />
-        <KPICard title="Today Revenue" value="₹ 24,350" change="▲ 12.1%" changeLabel="vs yesterday" icon={DollarSign} positive />
-        <KPICard title="Active Now" value="342" change="▲ 45" changeLabel="users" icon={Wifi} positive />
+        <KPICard title="Total Users" value={userCount.toLocaleString()} change="▲ —%" changeLabel="this week" icon={Users} positive />
+        <KPICard title="Today Revenue" value={`₹ ${todayRevenue.toLocaleString("en-IN")}`}
+          change={`${revenueChange >= 0 ? "▲" : "▼"} ${Math.abs(revenueChange)}%`}
+          changeLabel="vs yesterday" icon={DollarSign} positive={revenueChange >= 0} />
+        <KPICard title="Active Now" value="—" change="—" changeLabel="users" icon={Wifi} positive />
         <KPICard title="System Status" value="Healthy" change="99.8%" changeLabel="uptime" icon={Activity} positive />
       </div>
 
@@ -82,20 +98,24 @@ const CommandCenter = () => {
         <div className="lg:col-span-3 space-y-4">
           <div className="rounded-2xl p-5" style={{ background: "#13110D", border: "1px solid rgba(201,168,76,0.2)" }}>
             <h3 className="text-sm font-semibold mb-4" style={{ color: "#C9A84C" }}>Revenue Trend (7-day)</h3>
-            <div className="h-56">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={revenueData}>
-                  <CartesianGrid stroke="rgba(201,168,76,0.1)" strokeDasharray="3 3" />
-                  <XAxis dataKey="day" stroke="#6B5E4E" fontSize={12} />
-                  <YAxis stroke="#6B5E4E" fontSize={12} tickFormatter={(v) => `₹${(v/1000).toFixed(0)}k`} />
-                  <Tooltip
-                    contentStyle={{ background: "#13110D", border: "1px solid rgba(201,168,76,0.3)", borderRadius: 12, color: "#F5F0E8" }}
-                    formatter={(value: number) => [`₹${value.toLocaleString()}`, "Revenue"]}
-                  />
-                  <Line type="monotone" dataKey="revenue" stroke="#C9A84C" strokeWidth={2.5} dot={{ fill: "#C9A84C", r: 4 }} />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
+            {chartData.length === 0 || chartData.every((d) => d.revenue === 0) ? (
+              <p className="text-center py-16 text-sm" style={{ color: "#6B5E4E" }}>No revenue data yet. Add transactions to see the trend.</p>
+            ) : (
+              <div className="h-56">
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={chartData}>
+                    <CartesianGrid stroke="rgba(201,168,76,0.1)" strokeDasharray="3 3" />
+                    <XAxis dataKey="day" stroke="#6B5E4E" fontSize={12} />
+                    <YAxis stroke="#6B5E4E" fontSize={12} tickFormatter={(v) => `₹${(v/1000).toFixed(0)}k`} />
+                    <Tooltip
+                      contentStyle={{ background: "#13110D", border: "1px solid rgba(201,168,76,0.3)", borderRadius: 12, color: "#F5F0E8" }}
+                      formatter={(value: number) => [`₹${value.toLocaleString("en-IN")}`, "Revenue"]}
+                    />
+                    <Line type="monotone" dataKey="revenue" stroke="#C9A84C" strokeWidth={2.5} dot={{ fill: "#C9A84C", r: 4 }} />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+            )}
           </div>
 
           {/* Activity Heatmap placeholder */}
