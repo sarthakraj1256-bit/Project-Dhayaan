@@ -16,12 +16,14 @@ const sections = [
 
 export default function SectionNav() {
   const [active, setActive] = useState('hero');
+  const [scrolled, setScrolled] = useState(false);
   const navRef = useRef<HTMLDivElement>(null);
   const pillRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const { t } = useLanguage();
 
   useEffect(() => {
     const handleScroll = () => {
+      setScrolled(window.scrollY > 10);
       let current = 'hero';
       for (const section of sections) {
         const el = document.getElementById(section.id);
@@ -55,10 +57,13 @@ export default function SectionNav() {
 
   return (
     <div
-      className="fixed top-0 left-0 right-0 z-[1000]"
-      style={{ backgroundColor: '#E9E2D9' }}
+      className="fixed top-0 left-0 right-0 z-[1000] transition-shadow duration-300"
+      style={{
+        backgroundColor: '#E9E2D9',
+        boxShadow: scrolled ? '0 4px 20px -4px hsla(24, 10%, 15%, 0.12)' : 'none',
+      }}
     >
-      <div className="border-b border-border/50 shadow-sm">
+      <div className={cn('border-b transition-colors duration-300', scrolled ? 'border-border/50' : 'border-transparent')}>
         <div
           ref={navRef}
           className="flex items-center gap-1.5 px-4 pr-28 sm:pr-36 py-2.5 overflow-x-auto scrollbar-hide"
