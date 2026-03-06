@@ -293,13 +293,14 @@ const BreathFlowGame = ({ onClose, onKarmaEarned }: BreathFlowGameProps) => {
             <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] flex flex-col items-center gap-3">
               <div className="px-6 py-3 rounded-full bg-void/80 backdrop-blur-sm flex items-center gap-4">
                 <motion.div
+                  key={`${breathPhase}-${breathProgress < 0.05 ? 'start' : 'mid'}`}
                   animate={{
-                    scale: breathPhase === 'inhale' ? [1, 1.3] : breathPhase === 'exhale' ? [1.3, 1] : 1.3,
+                    scale: breathPhase === 'inhale' ? 1.3 : breathPhase === 'exhale' ? 1 : 1.3,
                     opacity: breathPhase === 'hold' ? [0.5, 1, 0.5] : 1,
                   }}
                   transition={{
                     duration: breathPhase === 'inhale' ? activeTimings.inhaleSeconds : breathPhase === 'exhale' ? activeTimings.exhaleSeconds : activeTimings.holdSeconds,
-                    repeat: Infinity,
+                    ease: 'easeInOut',
                   }}
                   className="w-8 h-8 rounded-full bg-gradient-to-r from-cyan-400 to-indigo-400"
                 />
