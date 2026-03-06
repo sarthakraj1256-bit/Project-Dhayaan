@@ -86,8 +86,7 @@ const LiveDarshan = () => {
           )}
         </main>
 
-        {/* Confirmation sheet */}
-        <DarshanConfirmSheet temple={confirmTemple} onClose={() => setConfirmTemple(null)} />
+
 
         <BottomNav />
       </div>
