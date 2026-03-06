@@ -55,11 +55,33 @@ const sectionMap: Record<AdminSection, React.LazyExoticComponent<React.Component
 const Admin = () => {
   const [activeSection, setActiveSection] = useState<AdminSection>("command-center");
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [notifications, setNotifications] = useState([
-    { id: "1", message: "New user registered", time: "2 mins ago", icon: "🔔" },
-    { id: "2", message: "₹499 purchase completed", time: "5 mins ago", icon: "💰" },
-    { id: "3", message: "Jap-proof submitted for review", time: "8 mins ago", icon: "🙏" },
-  ]);
+  const [notifications, setNotifications] = useState<{ id: string; message: string; time: string; icon: string }[]>([]);
+
+  const addNotification = useCallback((icon: string, message: string) => {
+    const n = { id: crypto.randomUUID(), message, time: "Just now", icon };
+    setNotifications((prev) => [n, ...prev].slice(0, 50));
+    toast({ title: `${icon} ${message}` });
+  }, []);
+
+  // Realtime subscriptions
+  useEffect(() => {
+    const channel = supabase
+      .channel("admin-realtime")
+      .on("postgres_changes", { event: "INSERT", schema: "public", table: "profiles" }, (payload) => {
+        const name = (payload.new as any).display_name || "Someone";
+        addNotification("👤", `New user registered: ${name}`);
+      })
+      .on("postgres_changes", { event: "INSERT", schema: "public", table: "transactions" }, (payload) => {
+        const amount = Number((payload.new as any).amount || 0).toLocaleString("en-IN");
+        addNotification("💰", `₹${amount} purchase completed`);
+      })
+      .on("postgres_changes", { event: "INSERT", schema: "public", table: "shorts_metadata" }, () => {
+        addNotification("📹", "New Bhakti Short uploaded for review");
+      })
+      .subscribe();
+
+    return () => { supabase.removeChannel(channel); };
+  }, [addNotification]);
 
   const ActiveComponent = sectionMap[activeSection];
 
