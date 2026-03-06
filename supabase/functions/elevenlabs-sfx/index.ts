@@ -77,37 +77,40 @@ serve(async (req) => {
      );
  
      if (!response.ok) {
-       const errorText = await response.text();
-       console.error(`ElevenLabs API error [${response.status}]:`, errorText);
-       
-       if (response.status === 429) {
-         return new Response(
-           JSON.stringify({ error: "Rate limit exceeded, please try again later" }),
-           {
-             status: 429,
-             headers: { ...corsHeaders, "Content-Type": "application/json" },
-           }
-         );
-       }
-       
-       if (response.status === 402) {
-         return new Response(
-           JSON.stringify({ error: "ElevenLabs credits exhausted" }),
-           {
-             status: 402,
-             headers: { ...corsHeaders, "Content-Type": "application/json" },
-           }
-         );
-       }
- 
-       return new Response(
-         JSON.stringify({ error: "Failed to generate sound effect" }),
-         {
-           status: 500,
-           headers: { ...corsHeaders, "Content-Type": "application/json" },
-         }
-       );
-     }
+        const errorText = await response.text();
+        console.error(`ElevenLabs API error [${response.status}]:`, errorText);
+        
+        // Check for quota exceeded (API returns 401 with quota_exceeded status)
+        const isQuotaExceeded = errorText.includes('quota_exceeded');
+        
+        if (response.status === 429) {
+          return new Response(
+            JSON.stringify({ error: "Rate limit exceeded, please try again later" }),
+            {
+              status: 429,
+              headers: { ...corsHeaders, "Content-Type": "application/json" },
+            }
+          );
+        }
+        
+        if (response.status === 402 || isQuotaExceeded) {
+          return new Response(
+            JSON.stringify({ error: "ElevenLabs credits exhausted" }),
+            {
+              status: 402,
+              headers: { ...corsHeaders, "Content-Type": "application/json" },
+            }
+          );
+        }
+
+        return new Response(
+          JSON.stringify({ error: "Failed to generate sound effect" }),
+          {
+            status: 500,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          }
+        );
+      }
  
      // Return raw audio bytes
      const audioBuffer = await response.arrayBuffer();
