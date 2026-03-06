@@ -1,7 +1,7 @@
 import { useState, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Play, Clock, User, Sparkles, Music, Zap, BookOpen, Video, Filter, X, ExternalLink } from 'lucide-react';
+import { ArrowLeft, Play, Clock, User, Sparkles, Music, Zap, BookOpen, Video, Filter, X } from 'lucide-react';
 import { spiritualContent, SpiritualContent } from '@/data/templeStreams';
 import { Badge } from '@/components/ui/badge';
 import BottomNav from '@/components/BottomNav';
