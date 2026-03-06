@@ -439,6 +439,57 @@ export type Database = {
         }
         Relationships: []
       }
+      products: {
+        Row: {
+          category: string
+          created_at: string
+          currency: string
+          description: string | null
+          id: string
+          image_url: string | null
+          is_active: boolean
+          name: string
+          price: number
+          stock_count: number | null
+          stock_limited: boolean
+          total_revenue: number
+          total_sales: number
+          updated_at: string
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          currency?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean
+          name: string
+          price?: number
+          stock_count?: number | null
+          stock_limited?: boolean
+          total_revenue?: number
+          total_sales?: number
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          currency?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean
+          name?: string
+          price?: number
+          stock_count?: number | null
+          stock_limited?: boolean
+          total_revenue?: number
+          total_sales?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -466,6 +517,42 @@ export type Database = {
           phone_number?: string | null
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      revenue_logs: {
+        Row: {
+          created_at: string
+          gross_revenue: number
+          id: string
+          infrastructure_cost: number
+          log_date: string
+          marketing_cost: number
+          net_revenue: number
+          new_subscribers: number
+          transaction_count: number
+        }
+        Insert: {
+          created_at?: string
+          gross_revenue?: number
+          id?: string
+          infrastructure_cost?: number
+          log_date?: string
+          marketing_cost?: number
+          net_revenue?: number
+          new_subscribers?: number
+          transaction_count?: number
+        }
+        Update: {
+          created_at?: string
+          gross_revenue?: number
+          id?: string
+          infrastructure_cost?: number
+          log_date?: string
+          marketing_cost?: number
+          net_revenue?: number
+          new_subscribers?: number
+          transaction_count?: number
         }
         Relationships: []
       }
@@ -843,6 +930,56 @@ export type Database = {
         }
         Relationships: []
       }
+      transactions: {
+        Row: {
+          amount: number
+          created_at: string
+          currency: string
+          id: string
+          notes: string | null
+          payment_method: string | null
+          product_id: string | null
+          product_name: string
+          status: string
+          user_email: string | null
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          currency?: string
+          id?: string
+          notes?: string | null
+          payment_method?: string | null
+          product_id?: string | null
+          product_name: string
+          status?: string
+          user_email?: string | null
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          currency?: string
+          id?: string
+          notes?: string | null
+          payment_method?: string | null
+          product_id?: string | null
+          product_name?: string
+          status?: string
+          user_email?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "transactions_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_achievements: {
         Row: {
           achievement_id: string
@@ -958,6 +1095,14 @@ export type Database = {
           user_id: string
         }[]
       }
+      admin_get_daily_revenue: {
+        Args: { days_back?: number }
+        Returns: {
+          day: string
+          revenue: number
+          transaction_count: number
+        }[]
+      }
       admin_get_jap_proofs: {
         Args: never
         Returns: {
@@ -970,6 +1115,26 @@ export type Database = {
           proof_type: string
           proof_url: string
           request_id: string
+        }[]
+      }
+      admin_get_revenue_by_category: {
+        Args: never
+        Returns: {
+          category: string
+          percentage: number
+          total: number
+        }[]
+      }
+      admin_get_revenue_summary: {
+        Args: never
+        Returns: {
+          month_change: number
+          month_revenue: number
+          month_transactions: number
+          today_change: number
+          today_revenue: number
+          today_transactions: number
+          total_revenue: number
         }[]
       }
       auto_acknowledge_temple_reports: { Args: never; Returns: undefined }
