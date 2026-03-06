@@ -1,9 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/backend/client";
 import { useAdminCheck } from "@/hooks/useAdminCheck";
 import { motion } from "framer-motion";
-import { useToast } from "@/hooks/use-toast";
 
 interface AdminRouteProps {
   children: React.ReactNode;
