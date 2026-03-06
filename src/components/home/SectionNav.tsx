@@ -57,16 +57,21 @@ export default function SectionNav() {
 
   return (
     <div
-      className="fixed top-0 left-0 right-0 z-[1000] transition-shadow duration-300"
+      className={cn(
+        'fixed top-0 left-0 right-0 z-[1000] w-full transition-shadow duration-300 safe-top',
+        'h-16 md:h-[72px]'
+      )}
       style={{
-        backgroundColor: '#E9E2D9',
+        backgroundColor: 'hsl(var(--background))',
+        backdropFilter: 'blur(12px)',
+        WebkitBackdropFilter: 'blur(12px)',
         boxShadow: scrolled ? '0 4px 20px -4px hsla(24, 10%, 15%, 0.12)' : 'none',
       }}
     >
-      <div className={cn('border-b transition-colors duration-300', scrolled ? 'border-border/50' : 'border-transparent')}>
+      <div className={cn('h-full border-b transition-colors duration-300', scrolled ? 'border-border/50' : 'border-transparent')}>
         <div
           ref={navRef}
-          className="flex items-center gap-1.5 px-4 pr-28 sm:pr-36 py-2.5 overflow-x-auto scrollbar-hide"
+          className="flex items-center gap-1.5 h-full px-4 pr-28 sm:pr-36 overflow-x-auto scrollbar-hide"
         >
           {sections.map((section) => (
             <button
@@ -74,7 +79,7 @@ export default function SectionNav() {
               ref={(el) => { pillRefs.current[section.id] = el; }}
               onClick={() => scrollTo(section.id)}
               className={cn(
-                'shrink-0 px-3.5 py-1.5 rounded-full text-xs font-medium transition-all duration-200 whitespace-nowrap',
+                'shrink-0 px-3.5 py-1.5 rounded-full text-xs font-medium transition-all duration-200 whitespace-nowrap touch-target',
                 active === section.id
                   ? 'bg-primary/15 text-primary shadow-sm'
                   : 'text-foreground/40 hover:text-foreground/60 hover:bg-foreground/[0.04]'
