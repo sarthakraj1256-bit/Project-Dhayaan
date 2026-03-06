@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Play, Zap } from 'lucide-react';
+import { Play, Zap, RotateCcw } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
 import { HapticSwitch } from '@/components/ui/HapticSwitch';
 import { Label } from '@/components/ui/label';
@@ -11,6 +11,8 @@ export interface BreathTimings {
   exhaleSeconds: number;
   holdSeconds: number;
 }
+
+const DEFAULTS: BreathTimings = { inhaleSeconds: 4, exhaleSeconds: 6, holdSeconds: 2 };
 
 interface BreathSettingsProps {
   initialTimings: BreathTimings;
@@ -38,6 +40,13 @@ const BreathSettings = ({ initialTimings, onStart }: BreathSettingsProps) => {
     }
   };
 
+  const resetToDefaults = () => {
+    setInhale(DEFAULTS.inhaleSeconds);
+    setExhale(DEFAULTS.exhaleSeconds);
+    setHold(DEFAULTS.holdSeconds);
+    setAutoBalance(false);
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -52,7 +61,7 @@ const BreathSettings = ({ initialTimings, onStart }: BreathSettingsProps) => {
 
       {isAdvanced && (
         <Badge className="mb-4 bg-primary/20 text-primary border-primary/30 hover:bg-primary/30">
-          <Zap className="w-3 h-3 mr-1" /> Advanced Practice
+          <Zap className="w-3 h-3 mr-1" /> Advanced Practice · 1.5× Karma
         </Badge>
       )}
 
@@ -73,6 +82,25 @@ const BreathSettings = ({ initialTimings, onStart }: BreathSettingsProps) => {
           />
           <div className="flex justify-between text-[10px] text-muted-foreground">
             <span>2s</span><span>12s</span>
+          </div>
+        </div>
+
+        {/* Hold */}
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <Label className="text-sm text-muted-foreground">Hold Duration</Label>
+            <span className="text-sm font-mono text-violet-400 font-semibold">{hold}s</span>
+          </div>
+          <Slider
+            value={[hold]}
+            onValueChange={([v]) => setHold(v)}
+            min={0}
+            max={8}
+            step={1}
+            className="[&_[role=slider]]:border-violet-400 [&_[role=slider]]:bg-background [&_.relative>span]:bg-violet-400"
+          />
+          <div className="flex justify-between text-[10px] text-muted-foreground">
+            <span>0s</span><span>8s</span>
           </div>
         </div>
 
@@ -128,14 +156,22 @@ const BreathSettings = ({ initialTimings, onStart }: BreathSettingsProps) => {
           One cycle = {inhale + hold + exhale}s total
         </p>
 
-        {/* Start Button */}
-        <button
-          onClick={() => onStart({ inhaleSeconds: inhale, exhaleSeconds: exhale, holdSeconds: hold })}
-          className="w-full py-3 rounded-full bg-gradient-to-r from-primary to-amber-500 text-primary-foreground font-medium hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
-        >
-          <Play className="w-5 h-5" />
-          Begin Journey
-        </button>
+        {/* Action Buttons */}
+        <div className="flex gap-3">
+          <button
+            onClick={resetToDefaults}
+            className="px-4 py-3 rounded-full bg-muted hover:bg-muted/80 transition-colors flex items-center gap-2 text-sm text-muted-foreground"
+          >
+            <RotateCcw className="w-4 h-4" /> Reset
+          </button>
+          <button
+            onClick={() => onStart({ inhaleSeconds: inhale, exhaleSeconds: exhale, holdSeconds: hold })}
+            className="flex-1 py-3 rounded-full bg-gradient-to-r from-primary to-amber-500 text-primary-foreground font-medium hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
+          >
+            <Play className="w-5 h-5" />
+            Begin Journey
+          </button>
+        </div>
       </div>
     </motion.div>
   );
