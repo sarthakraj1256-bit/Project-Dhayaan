@@ -64,12 +64,12 @@ export default function SpiritualHubSection() {
           <h2 className="text-xs font-semibold text-foreground/40 uppercase tracking-widest">
             {t('section.dailyAarti')}
           </h2>
-          <Link
-            to="/aarti-schedule"
-            className="text-xs text-primary font-medium flex items-center gap-1 hover:underline"
-          >
-            {t('link.exploreAll')} <ArrowRight className="w-3 h-3" />
-          </Link>
+           <Link
+             to="/live-darshan"
+             className="text-xs text-primary font-medium flex items-center gap-1 hover:underline"
+           >
+             {t('link.exploreAll')} <ArrowRight className="w-3 h-3" />
+           </Link>
         </div>
 
         <div className="flex gap-3 overflow-x-auto pb-2 -mx-1 px-1 scrollbar-hide">
@@ -99,8 +99,10 @@ function AartiCard({ item, index }: { item: SpiritualContent; index: number }) {
       transition={{ delay: index * 0.04 }}
       className="shrink-0 w-[172px]"
     >
-      <Link
-        to="/live-darshan?tab=content"
+      <a
+        href={`https://www.youtube.com/watch?v=${item.youtubeVideoId}`}
+        target="_blank"
+        rel="noopener noreferrer"
         aria-label={`Play ${item.title}`}
         className="block rounded-2xl overflow-hidden light-card transition-all duration-200 active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-primary outline-none"
       >
@@ -138,7 +140,7 @@ function AartiCard({ item, index }: { item: SpiritualContent; index: number }) {
             </Tooltip>
           )}
         </div>
-      </Link>
+      </a>
     </motion.div>
   );
 }
