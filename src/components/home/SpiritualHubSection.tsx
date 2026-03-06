@@ -140,7 +140,7 @@ function AartiCard({ item, index }: { item: SpiritualContent; index: number }) {
             </Tooltip>
           )}
         </div>
-      </Link>
+      </a>
     </motion.div>
   );
 }
