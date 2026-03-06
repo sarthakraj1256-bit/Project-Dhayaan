@@ -227,7 +227,7 @@ const BreathFlowGame = ({ onClose, onKarmaEarned }: BreathFlowGameProps) => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="absolute inset-0 z-20 flex flex-col items-center justify-center p-8 bg-gradient-to-b from-void/90 to-void/95"
+              className="flex flex-col items-center justify-center p-8 bg-gradient-to-b from-void/90 to-void/95"
             >
               <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring', delay: 0.2 }} className="text-6xl mb-6">✨</motion.div>
               <h3 className="font-display text-2xl text-foreground mb-2">Journey Complete</h3>
@@ -236,7 +236,7 @@ const BreathFlowGame = ({ onClose, onKarmaEarned }: BreathFlowGameProps) => {
                 <div className="text-5xl font-display text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-400 mb-2">+{karmaEarned}</div>
                 <p className="text-amber-400">Karma Points Earned</p>
               </motion.div>
-              <div className="grid grid-cols-3 gap-4 mb-4 text-center">
+              <div className="grid grid-cols-3 gap-4 mb-4 text-center w-full max-w-sm">
                 <div className="p-3 rounded-lg bg-muted/50">
                   <p className="text-xl font-display text-foreground">{formatTime(elapsedTime)}</p>
                   <p className="text-xs text-muted-foreground">Duration</p>
@@ -263,7 +263,7 @@ const BreathFlowGame = ({ onClose, onKarmaEarned }: BreathFlowGameProps) => {
           )}
         </AnimatePresence>
 
-        {gameState !== 'settings' && (
+        {(gameState === 'playing' || gameState === 'paused') && (
           <canvas ref={canvasRef} width={800} height={400} className="w-full h-[400px]" style={{ transform: 'translateZ(0)', willChange: 'contents' }} />
         )}
 
