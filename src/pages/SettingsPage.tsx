@@ -164,6 +164,9 @@ export default function SettingsPage() {
               {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <LogIn className="w-4 h-4" />}
               {isLoading ? 'Signing in…' : 'Admin Login'}
             </button>
+            {loginError && (
+              <p className="text-xs text-destructive mt-1">{loginError}</p>
+            )}
           </div>
         </section>
       </div>
