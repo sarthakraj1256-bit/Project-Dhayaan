@@ -3,10 +3,7 @@ import { RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface ServiceStatus {
-  name: string;
-  status: "operational" | "degraded" | "down";
-  latency: string;
-  uptime: string;
+  name: string; status: "operational" | "degraded" | "down"; latency: string; uptime: string;
 }
 
 const initialServices: ServiceStatus[] = [
@@ -28,10 +25,7 @@ const SystemHealth = () => {
 
   const refresh = () => {
     setRefreshing(true);
-    setTimeout(() => {
-      setLastChecked(new Date());
-      setRefreshing(false);
-    }, 1000);
+    setTimeout(() => { setLastChecked(new Date()); setRefreshing(false); }, 1000);
   };
 
   useEffect(() => {
@@ -43,36 +37,31 @@ const SystemHealth = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-lg font-semibold" style={{ color: "#C9A84C" }}>System Health</h2>
-          <p className="text-xs mt-1" style={{ color: "#6B5E4E" }}>
+          <h2 className="text-lg font-semibold text-primary">System Health</h2>
+          <p className="text-xs mt-1 text-muted-foreground">
             Last checked: {lastChecked.toLocaleTimeString()} • Auto-refreshes every 30s
           </p>
         </div>
-        <Button variant="outline" size="sm" onClick={refresh} disabled={refreshing}
-          style={{ borderColor: "rgba(201,168,76,0.3)", color: "#C9A84C" }}>
-          <RefreshCw className={`w-4 h-4 mr-2 ${refreshing ? "animate-spin" : ""}`} />
-          Refresh
+        <Button variant="outline" size="sm" onClick={refresh} disabled={refreshing}>
+          <RefreshCw className={`w-4 h-4 mr-2 ${refreshing ? "animate-spin" : ""}`} /> Refresh
         </Button>
       </div>
 
-      <div className="rounded-2xl overflow-hidden" style={{ background: "#13110D", border: "1px solid rgba(201,168,76,0.2)" }}>
-        {/* Header */}
-        <div className="grid grid-cols-4 gap-4 px-5 py-3 border-b" style={{ borderColor: "rgba(201,168,76,0.1)" }}>
+      <div className="rounded-2xl overflow-hidden bg-card border border-border">
+        <div className="grid grid-cols-4 gap-4 px-5 py-3 border-b-2 border-border bg-secondary/50">
           {["Service", "Status", "Latency", "Uptime"].map((h) => (
-            <span key={h} className="text-[12px] font-medium uppercase tracking-wider" style={{ color: "#6B5E4E" }}>{h}</span>
+            <span key={h} className="text-[12px] font-medium uppercase tracking-wider text-muted-foreground">{h}</span>
           ))}
         </div>
-        {/* Rows */}
-        {services.map((s) => (
-          <div key={s.name} className="grid grid-cols-4 gap-4 px-5 py-3.5 border-b last:border-0 hover:bg-white/[0.02] transition-colors"
-            style={{ borderColor: "rgba(201,168,76,0.05)" }}>
-            <span className="text-sm font-medium" style={{ color: "#F5F0E8" }}>{s.name}</span>
+        {services.map((s, i) => (
+          <div key={s.name} className={`grid grid-cols-4 gap-4 px-5 py-3.5 border-b last:border-0 border-border/50 hover:bg-foreground/[0.03] transition-colors ${i % 2 === 0 ? 'bg-popover' : 'bg-card'}`}>
+            <span className="text-sm font-medium text-foreground">{s.name}</span>
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full" style={{ background: statusColor[s.status] }} />
               <span className="text-sm" style={{ color: statusColor[s.status] }}>{statusLabel[s.status]}</span>
             </div>
-            <span className="text-sm" style={{ color: "#9C8C7C" }}>{s.latency}</span>
-            <span className="text-sm" style={{ color: "#9C8C7C" }}>{s.uptime}</span>
+            <span className="text-sm text-muted-foreground">{s.latency}</span>
+            <span className="text-sm text-muted-foreground">{s.uptime}</span>
           </div>
         ))}
       </div>

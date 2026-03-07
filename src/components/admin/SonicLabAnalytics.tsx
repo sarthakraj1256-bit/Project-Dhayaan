@@ -19,9 +19,8 @@ const SonicLabAnalytics = () => {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-lg font-semibold" style={{ color: "#C9A84C" }}>Sonic Lab Analytics</h2>
+      <h2 className="text-lg font-semibold text-primary">Sonic Lab Analytics</h2>
 
-      {/* Overview Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[
           { label: "Total Sessions", value: sessionCount.toLocaleString() },
@@ -29,29 +28,27 @@ const SonicLabAnalytics = () => {
           { label: "Most Played", value: "432 Hz" },
           { label: "Avg Load Time", value: "1.2s ✅" },
         ].map((c) => (
-          <div key={c.label} className="rounded-2xl p-4" style={{ background: "#13110D", border: "1px solid rgba(201,168,76,0.2)" }}>
-            <span className="text-[12px]" style={{ color: "#6B5E4E" }}>{c.label}</span>
-            <p className="text-xl font-bold mt-1" style={{ color: "#F5F0E8" }}>{c.value}</p>
+          <div key={c.label} className="rounded-2xl p-4 bg-card border border-border">
+            <span className="text-[12px] text-muted-foreground">{c.label}</span>
+            <p className="text-xl font-bold mt-1 text-foreground">{c.value}</p>
           </div>
         ))}
       </div>
 
-      {/* Table */}
-      <div className="rounded-2xl overflow-hidden" style={{ background: "#13110D", border: "1px solid rgba(201,168,76,0.2)" }}>
-        <div className="grid grid-cols-4 gap-4 px-5 py-3 border-b" style={{ borderColor: "rgba(201,168,76,0.1)" }}>
+      <div className="rounded-2xl overflow-hidden bg-card border border-border">
+        <div className="grid grid-cols-4 gap-4 px-5 py-3 border-b-2 border-border bg-secondary/50">
           {["Frequency", "Plays", "Avg Duration", "Load Time"].map((h) => (
-            <span key={h} className="text-[12px] font-medium uppercase tracking-wider" style={{ color: "#6B5E4E" }}>{h}</span>
+            <span key={h} className="text-[12px] font-medium uppercase tracking-wider text-muted-foreground">{h}</span>
           ))}
         </div>
-        {frequencyData.map((f) => {
+        {frequencyData.map((f, i) => {
           const loadMs = parseFloat(f.loadTime);
           return (
-            <div key={f.name} className="grid grid-cols-4 gap-4 px-5 py-3 border-b last:border-0 hover:bg-white/[0.02]"
-              style={{ borderColor: "rgba(201,168,76,0.05)" }}>
-              <span className="text-sm" style={{ color: "#F5F0E8" }}>{f.name}</span>
-              <span className="text-sm" style={{ color: "#9C8C7C" }}>{f.plays}</span>
-              <span className="text-sm" style={{ color: "#9C8C7C" }}>{f.avgDuration}</span>
-              <span className="text-sm font-medium" style={{ color: loadMs > 2 ? "#F59E0B" : "#22C55E" }}>{f.loadTime}</span>
+            <div key={f.name} className={`grid grid-cols-4 gap-4 px-5 py-3 border-b last:border-0 border-border/50 hover:bg-foreground/[0.03] ${i % 2 === 0 ? 'bg-popover' : 'bg-card'}`}>
+              <span className="text-sm text-foreground">{f.name}</span>
+              <span className="text-sm text-muted-foreground">{f.plays}</span>
+              <span className="text-sm text-muted-foreground">{f.avgDuration}</span>
+              <span className={`text-sm font-medium ${loadMs > 2 ? 'text-amber-500' : 'text-green-500'}`}>{f.loadTime}</span>
             </div>
           );
         })}

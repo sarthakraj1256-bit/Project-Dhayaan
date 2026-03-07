@@ -1,8 +1,11 @@
 import {
   LayoutDashboard, Activity, GitBranch, Music, Zap, HardDrive,
   DollarSign, Receipt, ShoppingBag, TrendingUp,
-  Users, Award, Film, Image, Settings, BellRing, X
+  Users, Award, Film, Image, Settings, BellRing, X, Sun, Moon
 } from "lucide-react";
+import { useTheme } from "@/contexts/ThemeContext";
+import { triggerHaptic } from "@/hooks/useHapticFeedback";
+import { motion } from "framer-motion";
 
 export type AdminSection =
   | "command-center"
@@ -68,6 +71,8 @@ const menuGroups = [
 ];
 
 const AdminSidebar = ({ activeSection, onSectionChange, isOpen, onClose }: AdminSidebarProps) => {
+  const { theme, toggleTheme } = useTheme();
+
   return (
     <>
       {/* Mobile overlay */}
@@ -76,25 +81,24 @@ const AdminSidebar = ({ activeSection, onSectionChange, isOpen, onClose }: Admin
       )}
 
       <aside
-        className={`fixed lg:static top-0 left-0 h-full z-50 w-[260px] flex-shrink-0 overflow-y-auto transition-transform duration-300 lg:translate-x-0 ${
+        className={`fixed lg:static top-0 left-0 h-full z-50 w-[260px] flex-shrink-0 overflow-y-auto transition-transform duration-300 lg:translate-x-0 flex flex-col bg-popover border-r border-border ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
-        style={{ background: "#0D0B08", borderRight: "1px solid rgba(201,168,76,0.1)" }}
       >
         {/* Mobile close */}
         <div className="flex items-center justify-between p-4 lg:hidden">
-          <span className="text-sm font-bold" style={{ color: "#C9A84C" }}>Navigation</span>
-          <button onClick={onClose} className="p-1 rounded hover:bg-white/5">
-            <X className="w-5 h-5" style={{ color: "#6B5E4E" }} />
+          <span className="text-sm font-bold text-primary">Navigation</span>
+          <button onClick={onClose} className="p-1 rounded hover:bg-foreground/5">
+            <X className="w-5 h-5 text-muted-foreground" />
           </button>
         </div>
 
-        <nav className="p-3 space-y-5">
+        <nav className="p-3 space-y-5 flex-1">
           {menuGroups.map((group) => (
             <div key={group.label}>
               <div className="flex items-center gap-2 px-3 mb-2">
                 <span className="text-xs">{group.emoji}</span>
-                <span className="text-[11px] font-semibold tracking-widest uppercase" style={{ color: "#6B5E4E" }}>
+                <span className="text-[11px] font-semibold tracking-widest uppercase text-muted-foreground">
                   {group.label}
                 </span>
               </div>
@@ -105,12 +109,11 @@ const AdminSidebar = ({ activeSection, onSectionChange, isOpen, onClose }: Admin
                     <button
                       key={item.id}
                       onClick={() => { onSectionChange(item.id); onClose(); }}
-                      className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200"
-                      style={{
-                        background: isActive ? "rgba(201,168,76,0.15)" : "transparent",
-                        color: isActive ? "#C9A84C" : "#6B5E4E",
-                        borderLeft: isActive ? "3px solid #C9A84C" : "3px solid transparent",
-                      }}
+                      className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
+                        isActive
+                          ? 'bg-primary/15 text-primary border-l-[3px] border-primary'
+                          : 'text-muted-foreground border-l-[3px] border-transparent hover:bg-foreground/5'
+                      }`}
                     >
                       <item.icon className="w-4 h-4 flex-shrink-0" />
                       <span>{item.label}</span>
@@ -121,6 +124,29 @@ const AdminSidebar = ({ activeSection, onSectionChange, isOpen, onClose }: Admin
             </div>
           ))}
         </nav>
+
+        {/* Theme toggle at bottom */}
+        <div className="border-t border-border px-4 py-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              {theme === 'light' ? <Sun className="w-4 h-4 text-primary" /> : <Moon className="w-4 h-4 text-primary" />}
+              <span>{theme === 'light' ? 'Light' : 'Dark'}</span>
+            </div>
+            <button
+              onClick={() => { triggerHaptic('selection'); toggleTheme(); }}
+              aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+              className={`relative w-[52px] h-7 rounded-full transition-colors duration-300 ${
+                theme === 'dark' ? 'bg-foreground/20' : 'bg-primary'
+              }`}
+            >
+              <motion.div
+                className="absolute top-[3px] w-[22px] h-[22px] rounded-full bg-white shadow-sm"
+                animate={{ left: theme === 'dark' ? 27 : 3 }}
+                transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+              />
+            </button>
+          </div>
+        </div>
       </aside>
     </>
   );

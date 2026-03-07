@@ -36,6 +36,12 @@ export default {
         body: ['Inter', 'system-ui', 'sans-serif'],
       },
       colors: {
+        porcelain: '#F2EDE8',
+        obsidian: '#0A0604',
+        charcoal: {
+          DEFAULT: '#1C1410',
+          soft: '#3C2F1F',
+        },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
