@@ -197,6 +197,7 @@ const TempleLabyrinthGame = ({ onClose, onKarmaEarned }: Props) => {
 
     // Check game over (prana depleted)
     if (newPrana <= 0) {
+      stopAllDrones();
       setPhase('gameOver');
       return;
     }
@@ -220,8 +221,17 @@ const TempleLabyrinthGame = ({ onClose, onKarmaEarned }: Props) => {
       setTotalKarma(prev => prev + levelKarma);
       onKarmaEarned(levelKarma);
       addKarma(levelKarma, 'game');
-      playTone(528, 0.5);
-      playTone(639, 0.5);
+
+      // Play harmonic resolution chord (richer at higher levels)
+      playTone(528, 0.6);
+      setTimeout(() => playTone(639, 0.5), 100);
+      if (level >= 2) setTimeout(() => playTone(432, 0.4), 200);
+      if (level >= 4) {
+        // Final level: play full harmonic chord + slowly fade drones
+        setTimeout(() => playTone(963, 0.8), 300);
+        setTimeout(() => playTone(136.1, 1.0), 400);
+        setTimeout(() => stopAllDrones(), 3000);
+      }
 
       if (level < 4) {
         setPhase('levelComplete');
@@ -229,7 +239,7 @@ const TempleLabyrinthGame = ({ onClose, onKarmaEarned }: Props) => {
         setPhase('gameComplete');
       }
     }
-  }, [phase, playerPos, maze, prana, level, moves, shortestPathLen, playTone, onKarmaEarned, addKarma]);
+  }, [phase, playerPos, maze, prana, level, moves, shortestPathLen, playTone, onKarmaEarned, addKarma, stopAllDrones]);
 
   // Keyboard controls
   useEffect(() => {
