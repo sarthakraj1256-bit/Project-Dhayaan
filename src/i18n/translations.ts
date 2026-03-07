@@ -421,6 +421,9 @@ export const translations = {
     'lakshya.settings': 'Settings',
     'lakshya.sessionStreakBonus': '🔥 Session streak bonus!',
     'lakshya.maxMultiplier': '⚡ Maximum multiplier achieved!',
+    'lakshya.templeLabyrinth': 'Temple Labyrinth',
+    'lakshya.templeLabyrinthDesc': 'Navigate a Vastu Mandala maze solving logic gates',
+    'lakshya.karmaPerLabyrinth': '+20-80 Karma per level',
 
     // Live Darshan
     'darshan.featuredLive': 'Featured Live',
