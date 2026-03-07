@@ -46,18 +46,85 @@ const TempleLabyrinthGame = ({ onClose, onKarmaEarned }: Props) => {
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [shortestPathLen, setShortestPathLen] = useState(0);
 
+  const [gatesSolved, setGatesSolved] = useState(0); // total gates solved across all levels
+
   const audioCtxRef = useRef<AudioContext | null>(null);
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
 
+  // Progressive soundscape layers
+  const droneNodesRef = useRef<{ osc: OscillatorNode; gain: GainNode }[]>([]);
+  const masterGainRef = useRef<GainNode | null>(null);
+
+  // Chant layer frequencies — each gate unlocks the next harmonic
+  const CHANT_LAYERS = [
+    { freq: 136.1, type: 'sine' as OscillatorType, name: 'Earth OM' },        // Gate 1 — root drone
+    { freq: 272.2, type: 'sine' as OscillatorType, name: 'Octave Harmonic' },  // Gate 2 — octave
+    { freq: 528,   type: 'sine' as OscillatorType, name: 'Heart Resonance' },  // Gate 3 — solfeggio
+    { freq: 639,   type: 'triangle' as OscillatorType, name: 'Connection' },   // Gate 4 — harmony
+    { freq: 963,   type: 'sine' as OscillatorType, name: 'Crown Awakening' },  // Gate 5 — transcendence
+    { freq: 432,   type: 'sine' as OscillatorType, name: 'Cosmic Tuning' },    // Bonus layers
+    { freq: 852,   type: 'triangle' as OscillatorType, name: 'Intuition' },
+  ];
+
   // Initialize audio context
   const getAudioCtx = useCallback(() => {
-    if (!audioCtxRef.current) {
+    if (!audioCtxRef.current || audioCtxRef.current.state === 'closed') {
       audioCtxRef.current = new AudioContext();
+      masterGainRef.current = audioCtxRef.current.createGain();
+      masterGainRef.current.gain.value = 0.06;
+      masterGainRef.current.connect(audioCtxRef.current.destination);
     }
     return audioCtxRef.current;
   }, []);
 
-  // Play element tone
+  // Add a new drone layer when a gate is solved
+  const addDroneLayer = useCallback((layerIndex: number) => {
+    if (!soundEnabled) return;
+    if (layerIndex >= CHANT_LAYERS.length) return;
+    try {
+      const ctx = getAudioCtx();
+      const master = masterGainRef.current;
+      if (!master) return;
+
+      const layer = CHANT_LAYERS[layerIndex];
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.type = layer.type;
+      osc.frequency.value = layer.freq;
+
+      // Fade in gently over 2 seconds
+      gain.gain.setValueAtTime(0, ctx.currentTime);
+      gain.gain.linearRampToValueAtTime(1, ctx.currentTime + 2);
+
+      osc.connect(gain).connect(master);
+      osc.start();
+
+      droneNodesRef.current.push({ osc, gain });
+
+      // As more layers stack, reduce master gain slightly to avoid clipping
+      const totalLayers = droneNodesRef.current.length;
+      master.gain.linearRampToValueAtTime(
+        Math.max(0.025, 0.06 / Math.sqrt(totalLayers)),
+        ctx.currentTime + 1
+      );
+    } catch {}
+  }, [soundEnabled, getAudioCtx]);
+
+  // Stop all drone layers (on game end / close)
+  const stopAllDrones = useCallback(() => {
+    const ctx = audioCtxRef.current;
+    if (!ctx) return;
+    droneNodesRef.current.forEach(({ osc, gain }) => {
+      try {
+        gain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.5);
+        osc.stop(ctx.currentTime + 0.6);
+      } catch {}
+    });
+    droneNodesRef.current = [];
+  }, []);
+
+  // Play element tone (short one-shot)
   const playTone = useCallback((freq: number, duration = 0.15, type: OscillatorType = 'sine') => {
     if (!soundEnabled) return;
     try {
