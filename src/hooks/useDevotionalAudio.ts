@@ -85,6 +85,16 @@ export const useDevotionalAudio = (temple: ImmersiveTemple | null) => {
           console.info('Audio generation edge function not deployed yet');
           return null;
         }
+        // Handle quota/payment errors gracefully
+        if (response.status === 402 || response.status === 429) {
+          console.info('Audio generation credits exhausted or rate limited');
+          return null;
+        }
+        const errorText = await response.text().catch(() => '');
+        if (errorText.includes('quota_exceeded') || errorText.includes('credits exhausted')) {
+          console.info('Audio generation credits exhausted');
+          return null;
+        }
         throw new Error(`Audio generation failed: ${response.status}`);
       }
 
