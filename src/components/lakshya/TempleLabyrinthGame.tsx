@@ -377,11 +377,11 @@ const TempleLabyrinthGame = ({ onClose, onKarmaEarned }: Props) => {
           </p>
           <p className="text-xs text-muted-foreground">Reached Level {level + 1} · {moves} moves · {totalKarma} Karma earned</p>
           <div className="flex gap-3 justify-center">
-            <motion.button whileTap={{ scale: 0.95 }} onClick={() => { setLevel(0); setTotalKarma(0); startLevel(0); }}
+            <motion.button whileTap={{ scale: 0.95 }} onClick={() => { stopAllDrones(); setLevel(0); setTotalKarma(0); setGatesSolved(0); startLevel(0); }}
               className="px-6 py-2 rounded-full bg-primary/20 border border-primary/50 text-primary text-sm hover:bg-primary/30 transition-colors">
               <RotateCcw className="w-4 h-4 inline mr-1" /> Retry
             </motion.button>
-            <motion.button whileTap={{ scale: 0.95 }} onClick={onClose}
+            <motion.button whileTap={{ scale: 0.95 }} onClick={handleClose}
               className="px-6 py-2 rounded-full bg-muted/50 border border-border text-muted-foreground text-sm hover:bg-muted transition-colors">
               Exit
             </motion.button>
