@@ -22,14 +22,12 @@ const JapProofApprovals = lazy(() => import("@/components/admin/JapProofApproval
 const AdminSettings = lazy(() => import("@/components/admin/AdminSettings"));
 const NotificationConfig = lazy(() => import("@/components/admin/NotificationConfig"));
 
-// Skeleton loader with gold shimmer
+// Skeleton loader with gold shimmer — theme-aware
 const SectionSkeleton = () => (
   <div className="space-y-4">
     {[1, 2, 3].map((i) => (
-      <div key={i} className="rounded-2xl h-32 animate-pulse"
-        style={{ background: "linear-gradient(90deg, #13110D 0%, rgba(201,168,76,0.08) 50%, #13110D 100%)", backgroundSize: "200% 100%", animation: "shimmer 1.5s infinite" }} />
+      <div key={i} className="rounded-2xl h-32 animate-pulse bg-card border border-border" />
     ))}
-    <style>{`@keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }`}</style>
   </div>
 );
 
@@ -63,7 +61,6 @@ const Admin = () => {
     toast({ title: `${icon} ${message}` });
   }, []);
 
-  // Realtime subscriptions
   useEffect(() => {
     const channel = supabase
       .channel("admin-realtime")
@@ -86,7 +83,7 @@ const Admin = () => {
   const ActiveComponent = sectionMap[activeSection];
 
   return (
-    <div className="min-h-screen flex flex-col" style={{ background: "#080604" }}>
+    <div className="min-h-screen flex flex-col bg-background">
       <AdminHeader
         onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
         notifications={notifications}
