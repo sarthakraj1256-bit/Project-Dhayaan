@@ -345,6 +345,32 @@ const Lakshya = () => {
                   </div>
                 </motion.button>
 
+                {/* Temple Labyrinth */}
+                <motion.button
+                  onClick={() => setActiveGame('temple-labyrinth')}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="group relative p-4 sm:p-5 md:p-6 rounded-xl bg-gradient-to-br from-amber-500/10 via-orange-500/10 to-red-500/10 border border-amber-500/20 hover:border-amber-500/40 transition-all text-left overflow-hidden"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-amber-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <div className="absolute top-3 right-3 px-2 py-0.5 rounded-full bg-gradient-to-r from-red-500 to-orange-500 text-white text-[10px] font-bold">
+                    {t('common.new')}
+                  </div>
+                  <div className="relative z-10">
+                    <div className="w-12 h-12 rounded-full bg-amber-500/20 flex items-center justify-center mb-4">
+                      <Landmark className="w-6 h-6 text-amber-400" />
+                    </div>
+                    <h3 className="font-display text-lg text-foreground mb-2">{t('lakshya.templeLabyrinth')}</h3>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      {t('lakshya.templeLabyrinthDesc')}
+                    </p>
+                    <div className="flex items-center gap-2 text-xs text-amber-400">
+                      <Star className="w-3 h-3" />
+                      <span>{t('lakshya.karmaPerLabyrinth')}</span>
+                    </div>
+                  </div>
+                </motion.button>
+
                 {/* Inner Calm Garden */}
                 <motion.button
                   onClick={() => setActiveGame('inner-garden')}
