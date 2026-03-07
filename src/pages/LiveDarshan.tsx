@@ -156,61 +156,64 @@ const LiveDarshan = () => {
               </div>
             ))
           )}
+          </section>
 
-          {/* ═══════ DIVIDER ═══════ */}
-          <div className="my-10 flex items-center gap-3">
+          {/* ═══════ SECTION DIVIDER ═══════ */}
+          <div className="py-8 flex items-center gap-3">
             <div className="flex-1 h-px bg-[#D39A2A]/20" />
             <span className="text-xs text-[#D39A2A] font-semibold tracking-wider uppercase">✦</span>
             <div className="flex-1 h-px bg-[#D39A2A]/20" />
           </div>
 
-          {/* ═══════ SECTION 2: DAILY AARATI ═══════ */}
-          <div className="flex items-center gap-2 mb-3">
-            <Zap className="w-5 h-5 text-[#D39A2A]" />
-            <h2 className="text-base font-bold text-[#3C2F1F] dark:text-[#E9E2D9]">Daily Aarati & Bhajans</h2>
-          </div>
-          <p className="text-sm text-[#9C8C7C] italic mb-4">
-            Recorded devotional content for your daily practice 🙏
-          </p>
-
-          {/* Aarti filter chips */}
-          <div className="flex gap-2 overflow-x-auto pb-3 scrollbar-hide -mx-1 px-1 mb-2">
-            {aartiFilters.map(f => {
-              const Icon = f.icon;
-              const active = aartiFilter === f.value;
-              return (
-                <button
-                  key={f.value}
-                  onClick={() => setAartiFilter(f.value)}
-                  className={`shrink-0 flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-medium transition-all ${
-                    active
-                      ? 'bg-[#D39A2A] text-white shadow-md'
-                      : 'bg-[#1C1917]/10 dark:bg-white/10 text-[#9C8C7C]'
-                  }`}
-                >
-                  <Icon className="w-3.5 h-3.5" />
-                  {f.label}
-                </button>
-              );
-            })}
-          </div>
-
-          <p className="text-xs text-[#9C8C7C] mb-4">
-            {filteredAarti.length} devotional {filteredAarti.length === 1 ? 'video' : 'videos'}
-          </p>
-
-          {/* Aarti grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-            {filteredAarti.map((item, index) => (
-              <AartiContentCard key={item.id} item={item} index={index} onPlay={handlePlay} />
-            ))}
-          </div>
-
-          {filteredAarti.length === 0 && (
-            <div className="text-center py-20">
-              <p className="text-[#9C8C7C]">No videos in this category yet.</p>
+          {/* ═══════ SECTION 2: DAILY AARATI & BHAJANS ═══════ */}
+          <section className="mb-6">
+            <div className="flex items-center gap-2 mb-3">
+              <Zap className="w-5 h-5 text-[#D39A2A]" />
+              <h2 className="text-base font-bold text-[#3C2F1F] dark:text-[#E9E2D9]">Daily Aarati & Bhajans</h2>
             </div>
-          )}
+            <p className="text-sm text-[#9C8C7C] italic mb-4">
+              Recorded devotional content for your daily practice 🙏
+            </p>
+
+            {/* Aarti filter chips */}
+            <div className="flex gap-2 overflow-x-auto pb-3 scrollbar-hide -mx-1 px-1 mb-2">
+              {aartiFilters.map(f => {
+                const Icon = f.icon;
+                const active = aartiFilter === f.value;
+                return (
+                  <button
+                    key={f.value}
+                    onClick={() => setAartiFilter(f.value)}
+                    className={`shrink-0 flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-medium transition-all ${
+                      active
+                        ? 'bg-[#D39A2A] text-white shadow-md'
+                        : 'bg-[#1C1917]/10 dark:bg-white/10 text-[#9C8C7C]'
+                    }`}
+                  >
+                    <Icon className="w-3.5 h-3.5" />
+                    {f.label}
+                  </button>
+                );
+              })}
+            </div>
+
+            <p className="text-xs text-[#9C8C7C] mb-4">
+              {filteredAarti.length} devotional {filteredAarti.length === 1 ? 'video' : 'videos'}
+            </p>
+
+            {/* Aarti grid */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+              {filteredAarti.map((item, index) => (
+                <AartiContentCard key={item.id} item={item} index={index} onPlay={handlePlay} />
+              ))}
+            </div>
+
+            {filteredAarti.length === 0 && (
+              <div className="text-center py-20">
+                <p className="text-[#9C8C7C]">No videos in this category yet.</p>
+              </div>
+            )}
+          </section>
         </main>
 
         {/* Video Player Modal */}
