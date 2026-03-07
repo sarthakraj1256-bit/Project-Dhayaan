@@ -1,4 +1,4 @@
-/* Dhyaan Design System — Premium Spiritual Light Theme */
+/* Dhyaan Design System — Dual Theme Architecture */
 /* Fonts are preloaded in index.html for faster initial render */
 
 @tailwind base;
@@ -7,173 +7,197 @@
 
 @layer base {
   :root {
-    /* Core Palette — Warm Light Spiritual */
-    --background: 36 33% 97%;
-    --foreground: 24 10% 15%;
+    /* Core Palette — Porcelain Light */
+    --background: 33 25% 93%;      /* #F2EDE8 */
+    --foreground: 18 22% 10%;      /* #1C1410 */
 
-    --card: 36 30% 95%;
-    --card-foreground: 24 10% 15%;
+    --card: 0 0% 100%;             /* #FFFFFF */
+    --card-foreground: 18 22% 10%;
 
-    --popover: 36 30% 96%;
-    --popover-foreground: 24 10% 15%;
+    --popover: 33 20% 95%;         /* #F5F0EA */
+    --popover-foreground: 18 22% 10%;
 
-    /* Soft Saffron / Golden Primary */
-    --primary: 35 80% 52%;
-    --primary-foreground: 36 33% 97%;
+    /* Saffron Gold Primary */
+    --primary: 40 52% 54%;         /* #C9A84C */
+    --primary-foreground: 0 0% 100%;
 
     /* Warm Beige Secondary */
-    --secondary: 36 20% 92%;
-    --secondary-foreground: 24 10% 30%;
+    --secondary: 33 18% 91%;       /* #E8E1D9 */
+    --secondary-foreground: 18 22% 20%;
 
-    --muted: 36 15% 93%;
-    --muted-foreground: 24 8% 50%;
+    --muted: 33 15% 91%;           /* #E8E1D9 */
+    --muted-foreground: 27 17% 38%; /* #6B5E4E */
 
-    /* Warm Golden Accent */
-    --accent: 35 75% 50%;
-    --accent-foreground: 36 33% 97%;
+    /* Gold Accent */
+    --accent: 40 52% 54%;          /* #C9A84C */
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 36 15% 88%;
-    --input: 36 15% 90%;
-    --ring: 35 80% 52%;
+    --border: 27 12% 85%;          /* rgba(92,81,69,0.15) equivalent */
+    --input: 33 15% 90%;           /* #EDE8E2 */
+    --ring: 40 52% 54%;
     --radius: 0.75rem;
 
-    /* Custom Tokens — warm light spiritual */
-    --gold: 35 80% 52%;
-    --gold-light: 40 70% 62%;
-    --gold-glow: 35 85% 58%;
-    --sandstone: 24 10% 25%;
-    --sandstone-muted: 24 8% 50%;
-    --void: 36 33% 97%;
-    --void-light: 36 30% 95%;
+    /* Custom Tokens */
+    --gold: 40 52% 54%;
+    --gold-light: 42 55% 62%;
+    --gold-glow: 40 60% 58%;
+    --gold-muted: 38 70% 31%;      /* #8B6914 */
+    --sandstone: 18 22% 15%;
+    --sandstone-muted: 27 17% 38%;
+    --void: 33 25% 93%;
+    --void-light: 33 20% 95%;
 
     /* Gradients */
-    --gradient-gold: linear-gradient(135deg, hsl(35 80% 52%), hsl(40 75% 58%));
-    --gradient-void: linear-gradient(180deg, hsl(36 33% 97%), hsl(36 30% 95%));
-    --gradient-radial-gold: radial-gradient(circle at center, hsl(35 80% 52% / 0.08), transparent 70%);
+    --gradient-gold: linear-gradient(135deg, hsl(40 52% 54%), hsl(42 55% 58%));
+    --gradient-void: linear-gradient(180deg, hsl(33 25% 93%), hsl(33 20% 95%));
+    --gradient-radial-gold: radial-gradient(circle at center, hsl(40 52% 54% / 0.08), transparent 70%);
 
     /* Shadows */
-    --shadow-gold: 0 4px 24px -4px hsl(35 80% 52% / 0.12);
-    --shadow-glow: 0 0 20px hsl(35 80% 52% / 0.08);
+    --shadow-gold: 0 4px 24px -4px hsl(40 52% 54% / 0.12);
+    --shadow-glow: 0 0 20px hsl(40 52% 54% / 0.08);
 
-    /* Glassmorphism — light mode */
-    --glass-bg: hsl(36 30% 95% / 0.8);
-    --glass-border: hsl(36 15% 85% / 0.6);
+    /* Glassmorphism */
+    --glass-bg: hsl(33 20% 95% / 0.8);
+    --glass-border: hsl(33 15% 85% / 0.6);
     --glass-blur: 16px;
 
-  /* Sidebar */
-    --sidebar-background: 36 30% 96%;
-    --sidebar-foreground: 24 10% 25%;
-    --sidebar-primary: 35 80% 52%;
-    --sidebar-primary-foreground: 36 33% 97%;
-    --sidebar-accent: 36 20% 92%;
-    --sidebar-accent-foreground: 24 10% 25%;
-    --sidebar-border: 36 15% 88%;
-    --sidebar-ring: 35 80% 52%;
+    /* Sidebar */
+    --sidebar-background: 33 20% 95%;
+    --sidebar-foreground: 18 22% 15%;
+    --sidebar-primary: 40 52% 54%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 33 18% 91%;
+    --sidebar-accent-foreground: 18 22% 15%;
+    --sidebar-border: 33 15% 88%;
+    --sidebar-ring: 40 52% 54%;
+
+    /* Admin-specific tokens */
+    --admin-bg: 33 22% 94%;        /* #F5F0EA */
+    --admin-sidebar: 33 15% 90%;   /* #EDE8E2 */
+    --admin-card: 0 0% 100%;
+    --admin-table-alt: 33 22% 94%;
+    --admin-table-border: 27 12% 75%;
+    --admin-chart-grid: rgba(92,81,69,0.15);
+    --admin-chart-axis: #9C8C7C;
+    --admin-tooltip-bg: #FFFFFF;
   }
 
   .dark {
-    --background: 24 10% 10%;
-    --foreground: 36 20% 90%;
+    /* Core Palette — Obsidian Dark */
+    --background: 20 20% 2%;       /* #0A0604 */
+    --foreground: 33 25% 93%;      /* #F2EDE8 */
 
-    --card: 24 10% 13%;
-    --card-foreground: 36 20% 90%;
+    --card: 24 15% 6%;             /* #13110D */
+    --card-foreground: 33 25% 93%;
 
-    --popover: 24 10% 12%;
-    --popover-foreground: 36 20% 90%;
+    --popover: 24 15% 5%;          /* #0D0B08 */
+    --popover-foreground: 33 25% 93%;
 
-    --primary: 35 80% 52%;
-    --primary-foreground: 24 10% 10%;
+    /* Gold Primary (same gold) */
+    --primary: 40 52% 54%;         /* #C9A84C */
+    --primary-foreground: 20 20% 2%;
 
-    --secondary: 24 10% 18%;
-    --secondary-foreground: 36 20% 85%;
+    --secondary: 24 10% 13%;
+    --secondary-foreground: 33 20% 85%;
 
-    --muted: 24 8% 18%;
-    --muted-foreground: 36 10% 55%;
+    --muted: 24 8% 13%;
+    --muted-foreground: 27 12% 48%; /* #9C8C7C mapped to lower HSL */
 
-    --accent: 35 75% 50%;
-    --accent-foreground: 24 10% 10%;
+    --accent: 40 52% 50%;
+    --accent-foreground: 20 20% 2%;
 
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 24 8% 20%;
-    --input: 24 8% 22%;
-    --ring: 35 80% 52%;
+    --border: 24 8% 15%;           /* rgba(201,168,76,0.15) equivalent */
+    --input: 24 8% 16%;            /* #1C1917 */
+    --ring: 40 52% 54%;
 
-    --gold: 35 80% 52%;
-    --gold-light: 40 70% 62%;
-    --gold-glow: 35 85% 58%;
-    --sandstone: 36 20% 85%;
-    --sandstone-muted: 36 10% 55%;
-    --void: 24 10% 10%;
-    --void-light: 24 10% 13%;
+    /* Custom Tokens */
+    --gold: 40 52% 54%;
+    --gold-light: 42 55% 62%;
+    --gold-glow: 40 60% 58%;
+    --gold-muted: 27 17% 38%;
+    --sandstone: 33 20% 85%;
+    --sandstone-muted: 33 10% 50%;
+    --void: 20 20% 2%;
+    --void-light: 24 15% 6%;
 
-    --gradient-gold: linear-gradient(135deg, hsl(35 80% 52%), hsl(40 75% 58%));
-    --gradient-void: linear-gradient(180deg, hsl(24 10% 10%), hsl(24 10% 13%));
-    --gradient-radial-gold: radial-gradient(circle at center, hsl(35 80% 52% / 0.12), transparent 70%);
+    --gradient-gold: linear-gradient(135deg, hsl(40 52% 54%), hsl(42 55% 58%));
+    --gradient-void: linear-gradient(180deg, hsl(20 20% 2%), hsl(24 15% 6%));
+    --gradient-radial-gold: radial-gradient(circle at center, hsl(40 52% 54% / 0.12), transparent 70%);
 
-    --shadow-gold: 0 4px 24px -4px hsl(35 80% 52% / 0.2);
-    --shadow-glow: 0 0 20px hsl(35 80% 52% / 0.15);
+    --shadow-gold: 0 4px 24px -4px hsl(40 52% 54% / 0.2);
+    --shadow-glow: 0 0 20px hsl(40 52% 54% / 0.15);
 
-    --glass-bg: hsl(24 10% 13% / 0.8);
-    --glass-border: hsl(24 8% 22% / 0.6);
+    --glass-bg: hsl(24 15% 6% / 0.8);
+    --glass-border: hsl(24 8% 15% / 0.6);
     --glass-blur: 16px;
 
-    --sidebar-background: 24 10% 12%;
-    --sidebar-foreground: 36 20% 85%;
-    --sidebar-primary: 35 80% 52%;
-    --sidebar-primary-foreground: 24 10% 10%;
-    --sidebar-accent: 24 10% 18%;
-    --sidebar-accent-foreground: 36 20% 85%;
-    --sidebar-border: 24 8% 20%;
-    --sidebar-ring: 35 80% 52%;
+    --sidebar-background: 24 15% 5%;
+    --sidebar-foreground: 33 20% 85%;
+    --sidebar-primary: 40 52% 54%;
+    --sidebar-primary-foreground: 20 20% 2%;
+    --sidebar-accent: 24 10% 13%;
+    --sidebar-accent-foreground: 33 20% 85%;
+    --sidebar-border: 24 8% 15%;
+    --sidebar-ring: 40 52% 54%;
+
+    /* Admin-specific tokens */
+    --admin-bg: 20 18% 2%;         /* #080604 */
+    --admin-sidebar: 24 15% 3%;    /* #0D0B08 */
+    --admin-card: 24 15% 6%;       /* #13110D */
+    --admin-table-alt: 24 15% 3%;
+    --admin-table-border: 40 52% 54%;
+    --admin-chart-grid: rgba(201,168,76,0.1);
+    --admin-chart-axis: #6B5E4E;
+    --admin-tooltip-bg: #13110D;
   }
 
-  /* Homepage — Warm Light Spiritual Theme */
+  /* Homepage variant (overrides for home page) */
   .homepage-theme {
-    --background: 36 33% 97%;
-    --foreground: 24 10% 15%;
-    --card: 36 25% 94%;
-    --card-foreground: 24 10% 15%;
-    --popover: 36 30% 96%;
-    --popover-foreground: 24 10% 15%;
-    --primary: 35 80% 52%;
-    --primary-foreground: 36 33% 97%;
+    --background: 33 25% 93%;
+    --foreground: 18 22% 10%;
+    --card: 33 20% 94%;
+    --card-foreground: 18 22% 10%;
+    --popover: 33 20% 95%;
+    --popover-foreground: 18 22% 10%;
+    --primary: 40 52% 54%;
+    --primary-foreground: 0 0% 100%;
     --secondary: 12 65% 68%;
-    --secondary-foreground: 24 10% 15%;
-    --muted: 36 15% 91%;
-    --muted-foreground: 24 8% 50%;
-    --accent: 35 80% 52%;
-    --accent-foreground: 36 33% 97%;
-    --border: 36 15% 88%;
-    --input: 36 15% 90%;
-    --ring: 35 80% 52%;
+    --secondary-foreground: 18 22% 10%;
+    --muted: 33 15% 91%;
+    --muted-foreground: 27 17% 38%;
+    --accent: 40 52% 54%;
+    --accent-foreground: 0 0% 100%;
+    --border: 33 15% 88%;
+    --input: 33 15% 90%;
+    --ring: 40 52% 54%;
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 98%;
   }
 
-  /* Homepage dark variant */
   .dark .homepage-theme {
-    --background: 24 10% 10%;
-    --foreground: 36 20% 90%;
-    --card: 24 10% 13%;
-    --card-foreground: 36 20% 90%;
-    --popover: 24 10% 12%;
-    --popover-foreground: 36 20% 90%;
-    --primary: 35 80% 52%;
-    --primary-foreground: 24 10% 10%;
-    --secondary: 24 10% 18%;
-    --secondary-foreground: 36 20% 85%;
-    --muted: 24 8% 18%;
-    --muted-foreground: 36 10% 55%;
-    --accent: 35 75% 50%;
-    --accent-foreground: 24 10% 10%;
-    --border: 24 8% 20%;
-    --input: 24 8% 22%;
-    --ring: 35 80% 52%;
+    --background: 20 20% 2%;
+    --foreground: 33 25% 93%;
+    --card: 24 15% 6%;
+    --card-foreground: 33 25% 93%;
+    --popover: 24 15% 5%;
+    --popover-foreground: 33 25% 93%;
+    --primary: 40 52% 54%;
+    --primary-foreground: 20 20% 2%;
+    --secondary: 24 10% 13%;
+    --secondary-foreground: 33 20% 85%;
+    --muted: 24 8% 13%;
+    --muted-foreground: 33 10% 50%;
+    --accent: 40 52% 50%;
+    --accent-foreground: 20 20% 2%;
+    --border: 24 8% 15%;
+    --input: 24 8% 16%;
+    --ring: 40 52% 54%;
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 98%;
   }
@@ -195,7 +219,21 @@
     font-family: 'Inter', 'system-ui', sans-serif;
     overscroll-behavior-y: none;
     -webkit-text-size-adjust: 100%;
-    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  /* Smooth theme transitions on all elements */
+  *,
+  *::before,
+  *::after {
+    transition-property: background-color, border-color, color, fill, stroke, box-shadow;
+    transition-duration: 200ms;
+    transition-timing-function: ease-in-out;
+  }
+
+  /* Exclude elements where transitions would feel wrong */
+  .no-theme-transition,
+  .no-theme-transition * {
+    transition: none !important;
   }
 
   /* Global touch-action: manipulation removes 300ms tap delay in Safari */
@@ -223,7 +261,7 @@
 }
 
 @layer components {
-  /* Glassmorphism Card — Light mode */
+  /* Glassmorphism Card */
   .glass-card {
     background: var(--glass-bg);
     -webkit-backdrop-filter: blur(var(--glass-blur));
@@ -240,7 +278,7 @@
     background-clip: text;
   }
 
-  /* Gold Glow Effect — subtle for light mode */
+  /* Gold Glow Effect */
   .gold-glow {
     text-shadow: 0 0 24px hsl(var(--gold-glow) / 0.25),
                  0 0 48px hsl(var(--gold-glow) / 0.12);
@@ -314,19 +352,32 @@
     animation: liquid-shimmer 2s ease-in-out;
   }
 
-  /* Light card style for homepage cards */
+  /* Light card style */
   .light-card {
     @apply bg-card/80 backdrop-blur-sm border border-border/60 rounded-2xl;
-    box-shadow: 0 1px 3px hsl(24 10% 15% / 0.04), 0 4px 12px hsl(24 10% 15% / 0.03);
+    box-shadow: 0 1px 3px hsl(var(--foreground) / 0.04), 0 4px 12px hsl(var(--foreground) / 0.03);
   }
 
   .light-card:hover {
-    box-shadow: 0 2px 8px hsl(24 10% 15% / 0.06), 0 8px 24px hsl(24 10% 15% / 0.05);
+    box-shadow: 0 2px 8px hsl(var(--foreground) / 0.06), 0 8px 24px hsl(var(--foreground) / 0.05);
+  }
+
+  /* Breath pulse animations */
+  @keyframes breathePulseDark {
+    0%   { box-shadow: 0 0 0 0 rgba(201,168,76,0.4); }
+    70%  { box-shadow: 0 0 0 40px rgba(201,168,76,0); }
+    100% { box-shadow: 0 0 0 0 rgba(201,168,76,0); }
+  }
+
+  @keyframes breathePulseLight {
+    0%   { box-shadow: 0 0 0 0 rgba(139,105,20,0.25); }
+    70%  { box-shadow: 0 0 0 30px rgba(139,105,20,0); }
+    100% { box-shadow: 0 0 0 0 rgba(139,105,20,0); }
   }
 }
 
 @layer utilities {
-  /* Custom scrollbar — light theme */
+  /* Custom scrollbar */
   ::-webkit-scrollbar {
     width: 8px;
   }
@@ -357,14 +408,13 @@
     touch-action: pan-x;
   }
 
-  /* Prevent text selection on touch */
   .select-touch-none {
     -webkit-user-select: none;
     user-select: none;
     -webkit-touch-callout: none;
   }
 
-  /* Safe area insets for notched devices */
+  /* Safe area insets */
   .safe-top {
     padding-top: env(safe-area-inset-top);
   }
@@ -388,7 +438,7 @@
     padding-right: env(safe-area-inset-right);
   }
 
-  /* Minimum touch target (44x44 per Apple HIG) */
+  /* Minimum touch target */
   .touch-target {
     min-width: 44px;
     min-height: 44px;
@@ -420,18 +470,15 @@
     overflow-y: auto;
   }
 
-  /* Hide mobile browser UI on scroll */
   .hide-browser-ui {
     overscroll-behavior: contain;
   }
 
-  /* Touch-friendly spacing for lists */
   .touch-list > * {
     padding-top: 0.75rem;
     padding-bottom: 0.75rem;
   }
 
-  /* Active/pressed state for touch devices */
   @media (hover: none) and (pointer: coarse) {
     .touch-highlight:active {
       background-color: hsl(var(--gold) / 0.08);
@@ -440,7 +487,6 @@
     }
   }
 
-  /* Reduce motion for users who prefer it */
   @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
@@ -452,7 +498,6 @@
     }
   }
 
-  /* Mobile-first responsive text */
   .text-responsive {
     font-size: clamp(1rem, 4vw, 1.25rem);
   }
@@ -469,13 +514,11 @@
     font-size: clamp(2rem, 8vw, 4rem);
   }
 
-  /* Mobile-friendly spacing */
   .px-safe {
     padding-left: max(1rem, env(safe-area-inset-left));
     padding-right: max(1rem, env(safe-area-inset-right));
   }
 
-  /* Tap highlight color */
   .tap-gold {
     -webkit-tap-highlight-color: hsl(var(--gold) / 0.15);
   }

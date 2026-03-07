@@ -52,11 +52,17 @@
     <!-- FOUC prevention: apply theme class before React renders -->
     <script>
       (function() {
-        var theme = localStorage.getItem('dhyaan-theme');
-        if (!theme) {
-          theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        try {
+          var stored = localStorage.getItem('dhyaan_theme');
+          if (stored === 'dark' || stored === 'light') {
+            document.documentElement.classList.add(stored);
+            return;
+          }
+          var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          document.documentElement.classList.add(prefersDark ? 'dark' : 'light');
+        } catch(e) {
+          document.documentElement.classList.add('dark');
         }
-        document.documentElement.classList.toggle('dark', theme === 'dark');
       })();
     </script>
     <style>
