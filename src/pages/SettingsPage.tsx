@@ -20,36 +20,57 @@ export default function SettingsPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
+  const [loginError, setLoginError] = useState('');
+
   const handleAdminLogin = async () => {
+    setLoginError('');
     if (!email || !password) {
+      setLoginError('Please enter email and password.');
       toast({ title: 'Please enter email and password', variant: 'destructive' });
       return;
     }
     setIsLoading(true);
     try {
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      // Sign out any existing session first to avoid conflicts
+      await supabase.auth.signOut();
+
+      const { data: signInData, error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
       if (error) {
+        setLoginError(error.message);
         toast({ title: 'Login failed', description: error.message, variant: 'destructive' });
-      } else {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (!user) throw new Error('No user');
-
-        const { data: roleData } = await supabase
-          .from('user_roles')
-          .select('role')
-          .eq('user_id', user.id)
-          .eq('role', 'admin')
-          .maybeSingle();
-
-        if (roleData) {
-          toast({ title: '🙏 Welcome, Admin' });
-          navigate('/admin');
-        } else {
-          toast({ title: 'Access denied', description: 'You do not have admin privileges.', variant: 'destructive' });
-        }
+        return;
       }
-    } catch {
-      toast({ title: 'Something went wrong', variant: 'destructive' });
+
+      const user = signInData?.user;
+      if (!user) {
+        setLoginError('Sign-in succeeded but no user returned.');
+        return;
+      }
+
+      const { data: roleData, error: roleError } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', user.id)
+        .eq('role', 'admin')
+        .maybeSingle();
+
+      if (roleError) {
+        setLoginError(`Role check failed: ${roleError.message}`);
+        toast({ title: 'Role check failed', description: roleError.message, variant: 'destructive' });
+        return;
+      }
+
+      if (roleData) {
+        toast({ title: '🙏 Welcome, Admin' });
+        navigate('/admin');
+      } else {
+        setLoginError('This account does not have admin privileges.');
+        toast({ title: 'Access denied', description: 'You do not have admin privileges.', variant: 'destructive' });
+      }
+    } catch (err: any) {
+      const msg = err?.message || 'Something went wrong';
+      setLoginError(msg);
+      toast({ title: msg, variant: 'destructive' });
     } finally {
       setIsLoading(false);
     }
@@ -143,6 +164,9 @@ export default function SettingsPage() {
               {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <LogIn className="w-4 h-4" />}
               {isLoading ? 'Signing in…' : 'Admin Login'}
             </button>
+            {loginError && (
+              <p className="text-xs text-destructive mt-1">{loginError}</p>
+            )}
           </div>
         </section>
       </div>
