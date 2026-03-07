@@ -174,6 +174,11 @@ const Lakshya = () => {
             onClose={() => setActiveGame(null)} 
             onKarmaEarned={handleKarmaEarned}
           />
+        ) : activeGame === 'temple-labyrinth' ? (
+          <TempleLabyrinthGame 
+            onClose={() => setActiveGame(null)} 
+            onKarmaEarned={handleKarmaEarned}
+          />
         ) : (
           <>
             {/* Progress Dashboard */}
