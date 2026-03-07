@@ -1303,6 +1303,9 @@ export const translations = {
     'lakshya.settings': 'सेटिंग्स',
     'lakshya.sessionStreakBonus': '🔥 सत्र लगातार बोनस!',
     'lakshya.maxMultiplier': '⚡ अधिकतम गुणक प्राप्त!',
+    'lakshya.templeLabyrinth': 'मंदिर भूलभुलैया',
+    'lakshya.templeLabyrinthDesc': 'वास्तु मंडल भूलभुलैया में तर्क द्वार हल करें',
+    'lakshya.karmaPerLabyrinth': '+20-80 कर्म प्रति स्तर',
 
     // Live Darshan
     'darshan.featuredLive': 'विशेष लाइव',
