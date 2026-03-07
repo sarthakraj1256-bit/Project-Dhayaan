@@ -300,8 +300,14 @@ const TempleLabyrinthGame = ({ onClose, onKarmaEarned }: Props) => {
 
   // Cleanup audio
   useEffect(() => {
-    return () => { audioCtxRef.current?.close(); };
-  }, []);
+    return () => { stopAllDrones(); audioCtxRef.current?.close(); };
+  }, [stopAllDrones]);
+
+  // Wrap onClose to stop drones
+  const handleClose = useCallback(() => {
+    stopAllDrones();
+    onClose();
+  }, [stopAllDrones, onClose]);
 
   const config = LEVEL_CONFIGS[level];
   const sutra = SUTRAS[level] || SUTRAS[0];
