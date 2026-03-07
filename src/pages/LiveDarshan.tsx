@@ -1,6 +1,6 @@
-import { useState, useMemo, useCallback, useRef } from 'react';
+import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Bell, Landmark, Tv, Play, Clock, User, Sparkles, Music, Zap, BookOpen, Video, X } from 'lucide-react';
+import { ArrowLeft, Bell, Landmark, Tv, Play, Clock, User, Sparkles, Music, Zap, BookOpen, Video, X, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LIVE_TEMPLES, getTemplesByRegion } from '@/data/liveDarshanTemples';
 import { spiritualContent, SpiritualContent } from '@/data/templeStreams';
@@ -10,6 +10,7 @@ import BottomNav from '@/components/BottomNav';
 import PageTransition from '@/components/PageTransition';
 import { useNetworkStatus } from '@/hooks/useNetworkStatus';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useInfiniteScroll } from '@/hooks/useLazyLoad';
 import type { TranslationKey } from '@/i18n/translations';
 
 type Filter = 'all' | 'live' | 'sacred';
@@ -66,6 +67,11 @@ const LiveDarshan = () => {
     if (aartiFilter === 'all') return spiritualContent;
     return spiritualContent.filter(c => c.type === aartiFilter);
   }, [aartiFilter]);
+
+  const { visibleItems: visibleAarti, hasMore, loadMoreRef, reset: resetInfinite } = useInfiniteScroll(filteredAarti, 8, 8);
+
+  // Reset infinite scroll when filter changes
+  useEffect(() => { resetInfinite(); }, [aartiFilter, resetInfinite]);
 
   const filters: { key: Filter; label: string }[] = [
     { key: 'all', label: `All ${totalCount}` },
@@ -203,10 +209,16 @@ const LiveDarshan = () => {
 
             {/* Aarti grid */}
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-              {filteredAarti.map((item, index) => (
+              {visibleAarti.map((item, index) => (
                 <AartiContentCard key={item.id} item={item} index={index} onPlay={handlePlay} />
               ))}
             </div>
+
+            {hasMore && (
+              <div ref={loadMoreRef} className="flex justify-center py-6">
+                <Loader2 className="w-5 h-5 animate-spin text-primary" />
+              </div>
+            )}
 
             {filteredAarti.length === 0 && (
               <div className="text-center py-20">
