@@ -45,6 +45,9 @@ const TempleLabyrinthGame = ({ onClose, onKarmaEarned }: Props) => {
   const [visitedCells, setVisitedCells] = useState<Set<string>>(new Set());
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [shortestPathLen, setShortestPathLen] = useState(0);
+  const [hintPath, setHintPath] = useState<Set<string>>(new Set());
+  const [hintVisible, setHintVisible] = useState(false);
+  const [pathHintsUsed, setPathHintsUsed] = useState(0);
 
   const [gatesSolved, setGatesSolved] = useState(0); // total gates solved across all levels
 
