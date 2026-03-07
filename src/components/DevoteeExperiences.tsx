@@ -42,12 +42,12 @@ const MOODS = [
 const STAR_LABELS = ['', "Didn't help", 'It was okay', 'Felt good 🙂', 'Loved it! 😊', 'Life changing! 🌟'];
 
 const MOOD_TO_INTENT: Record<string, IntentTag> = {
-  anxiety: 'stress_relief',
-  stress: 'stress_relief',
-  focus: 'mental_clarity',
-  sleep: 'sleep_aid',
+  anxiety: 'anxiety_relief',
+  stress: 'anxiety_relief',
+  focus: 'focus',
+  sleep: 'sleep',
   spiritual: 'spiritual_growth',
-  healing: 'inner_peace',
+  healing: 'anxiety_relief',
 };
 
 const slideIn = {
