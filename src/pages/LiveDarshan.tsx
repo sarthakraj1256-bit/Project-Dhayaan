@@ -248,6 +248,56 @@ const LiveDarshan = () => {
           </section>
         </main>
 
+        {/* Floating Mini-Player */}
+        <AnimatePresence>
+          {showMiniPlayer && (
+            <motion.div
+              initial={{ opacity: 0, y: 80 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 80 }}
+              transition={{ type: 'spring', damping: 24, stiffness: 300 }}
+              className="fixed bottom-20 md:bottom-6 left-3 right-3 z-[998] max-w-lg mx-auto"
+            >
+              <div
+                className="flex items-center gap-3 p-2 pr-3 rounded-2xl shadow-lg border border-border/60 bg-card/95 backdrop-blur-xl cursor-pointer"
+                onClick={handleResume}
+              >
+                {/* Thumbnail */}
+                <div className="w-14 h-14 rounded-xl overflow-hidden shrink-0 relative">
+                  <img
+                    src={lastPlayed.thumbnail}
+                    alt={lastPlayed.title}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+                    <Play className="w-5 h-5 text-white" fill="white" />
+                  </div>
+                </div>
+
+                {/* Info */}
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs font-semibold text-foreground line-clamp-1">
+                    {lastPlayed.title}
+                  </p>
+                  <p className="text-[10px] text-muted-foreground flex items-center gap-1 mt-0.5">
+                    <Music className="w-2.5 h-2.5" />
+                    Tap to resume • {lastPlayed.duration}
+                  </p>
+                </div>
+
+                {/* Dismiss */}
+                <button
+                  onClick={(e) => { e.stopPropagation(); handleDismissMini(); }}
+                  className="w-7 h-7 rounded-full flex items-center justify-center shrink-0 hover:bg-foreground/10 transition-colors"
+                  aria-label="Dismiss mini player"
+                >
+                  <X className="w-3.5 h-3.5 text-muted-foreground" />
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* Video Player Modal */}
         <AnimatePresence>
           {activeVideo && (
