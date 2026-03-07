@@ -492,6 +492,24 @@ const TempleLabyrinthGame = ({ onClose, onKarmaEarned }: Props) => {
         <span className="text-primary text-xs ml-auto">+{totalKarma} ✦</span>
       </div>
 
+      {/* Soundscape indicator */}
+      {gatesSolved > 0 && soundEnabled && (
+        <div className="flex items-center justify-center gap-1.5 text-[10px] text-muted-foreground">
+          <Volume2 className="w-3 h-3 text-primary/60" />
+          <span>{gatesSolved} harmonic {gatesSolved === 1 ? 'layer' : 'layers'} active</span>
+          <div className="flex gap-0.5">
+            {Array.from({ length: Math.min(gatesSolved, 7) }).map((_, i) => (
+              <motion.div
+                key={i}
+                animate={{ opacity: [0.4, 1, 0.4] }}
+                transition={{ duration: 1.5 + i * 0.3, repeat: Infinity }}
+                className="w-1 h-1 rounded-full bg-primary"
+              />
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Element legend */}
       <div className="flex gap-2 justify-center flex-wrap text-[10px]">
         {(['earth', 'water', 'fire', 'air', 'space'] as const).map(el => (
