@@ -621,8 +621,8 @@ const TempleLabyrinthGame = ({ onClose, onKarmaEarned }: Props) => {
         }))}
       </div>
 
-      {/* D-Pad for mobile */}
-      <div className="flex justify-center pt-2">
+      {/* D-Pad + Hint button */}
+      <div className="flex items-center justify-center gap-4 pt-2">
         <div className="grid grid-cols-3 gap-1 w-28">
           <div />
           <button onClick={() => movePlayer(-1, 0)} className="p-2 rounded-lg bg-muted/50 hover:bg-muted active:bg-primary/20 flex items-center justify-center">
