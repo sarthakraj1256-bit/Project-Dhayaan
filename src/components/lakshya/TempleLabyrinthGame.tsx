@@ -155,6 +155,8 @@ const TempleLabyrinthGame = ({ onClose, onKarmaEarned }: Props) => {
     setVisitedCells(new Set(['0,0']));
     setShowHint(false);
     setPhase('playing');
+    setHintPath(new Set());
+    setHintVisible(false);
 
     const path = findShortestPath(newMaze, [0, 0], [config.size - 1, config.size - 1]);
     setShortestPathLen(path.length);
