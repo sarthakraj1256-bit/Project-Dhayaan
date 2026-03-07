@@ -51,6 +51,8 @@ const LiveDarshan = () => {
   const [filter, setFilter] = useState<Filter>('all');
   const [aartiFilter, setAartiFilter] = useState('all');
   const [activeVideo, setActiveVideo] = useState<SpiritualContent | null>(null);
+  const [lastPlayed, setLastPlayed] = useState<SpiritualContent | null>(null);
+  const [miniPlayerDismissed, setMiniPlayerDismissed] = useState(false);
 
   const liveCount = LIVE_TEMPLES.filter(t => t.hasLive).length;
   const totalCount = LIVE_TEMPLES.length;
@@ -79,8 +81,26 @@ const LiveDarshan = () => {
     { key: 'sacred', label: `🛕 All Temples` },
   ];
 
-  const handlePlay = useCallback((item: SpiritualContent) => setActiveVideo(item), []);
+  const handlePlay = useCallback((item: SpiritualContent) => {
+    setActiveVideo(item);
+    setLastPlayed(item);
+    setMiniPlayerDismissed(false);
+  }, []);
+
   const handleClose = useCallback(() => setActiveVideo(null), []);
+
+  const handleResume = useCallback(() => {
+    if (lastPlayed) {
+      setActiveVideo(lastPlayed);
+    }
+  }, [lastPlayed]);
+
+  const handleDismissMini = useCallback(() => {
+    setMiniPlayerDismissed(true);
+    setLastPlayed(null);
+  }, []);
+
+  const showMiniPlayer = !activeVideo && lastPlayed && !miniPlayerDismissed;
 
   return (
     <PageTransition>
