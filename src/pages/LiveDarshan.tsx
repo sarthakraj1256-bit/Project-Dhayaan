@@ -209,10 +209,16 @@ const LiveDarshan = () => {
 
             {/* Aarti grid */}
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-              {filteredAarti.map((item, index) => (
+              {visibleAarti.map((item, index) => (
                 <AartiContentCard key={item.id} item={item} index={index} onPlay={handlePlay} />
               ))}
             </div>
+
+            {hasMore && (
+              <div ref={loadMoreRef} className="flex justify-center py-6">
+                <Loader2 className="w-5 h-5 animate-spin text-primary" />
+              </div>
+            )}
 
             {filteredAarti.length === 0 && (
               <div className="text-center py-20">
