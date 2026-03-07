@@ -246,7 +246,7 @@ const TempleLabyrinthGame = ({ onClose, onKarmaEarned }: Props) => {
         setPhase('gameComplete');
       }
     }
-  }, [phase, playerPos, maze, prana, level, moves, shortestPathLen, playTone, onKarmaEarned, addKarma, stopAllDrones]);
+  }, [phase, playerPos, maze, prana, level, moves, shortestPathLen, playTone, onKarmaEarned, addKarma, stopAllDrones, hintVisible]);
 
   // Keyboard controls
   useEffect(() => {
