@@ -644,6 +644,40 @@ const TempleLabyrinthGame = ({ onClose, onKarmaEarned }: Props) => {
           </button>
           <div />
         </div>
+
+        {/* Hint button */}
+        <button
+          onClick={() => {
+            if (hintVisible || prana <= 15) return;
+            const path = findShortestPath(
+              maze,
+              playerPos,
+              [maze.length - 1, maze.length - 1]
+            );
+            if (path.length > 0) {
+              const pathSet = new Set(path.map(([r, c]) => `${r},${c}`));
+              setHintPath(pathSet);
+              setHintVisible(true);
+              setPathHintsUsed(h => h + 1);
+              setPrana(p => Math.max(0, p - 15));
+              playTone(432, 0.2);
+              // Auto-hide after 2.5 seconds
+              setTimeout(() => {
+                setHintVisible(false);
+                setHintPath(new Set());
+              }, 2500);
+            }
+          }}
+          disabled={hintVisible || prana <= 15}
+          className={`flex flex-col items-center gap-1 p-2 rounded-xl border transition-colors ${
+            hintVisible || prana <= 15
+              ? 'bg-muted/20 border-border/30 opacity-40 cursor-not-allowed'
+              : 'bg-primary/10 border-primary/30 hover:bg-primary/20 active:bg-primary/30'
+          }`}
+        >
+          <Lightbulb className="w-5 h-5 text-primary" />
+          <span className="text-[9px] text-muted-foreground leading-tight">Path<br/>−15 ♥</span>
+        </button>
       </div>
 
       {/* Puzzle Modal */}
