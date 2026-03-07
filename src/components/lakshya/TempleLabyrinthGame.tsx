@@ -46,18 +46,85 @@ const TempleLabyrinthGame = ({ onClose, onKarmaEarned }: Props) => {
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [shortestPathLen, setShortestPathLen] = useState(0);
 
+  const [gatesSolved, setGatesSolved] = useState(0); // total gates solved across all levels
+
   const audioCtxRef = useRef<AudioContext | null>(null);
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
 
+  // Progressive soundscape layers
+  const droneNodesRef = useRef<{ osc: OscillatorNode; gain: GainNode }[]>([]);
+  const masterGainRef = useRef<GainNode | null>(null);
+
+  // Chant layer frequencies — each gate unlocks the next harmonic
+  const CHANT_LAYERS = [
+    { freq: 136.1, type: 'sine' as OscillatorType, name: 'Earth OM' },        // Gate 1 — root drone
+    { freq: 272.2, type: 'sine' as OscillatorType, name: 'Octave Harmonic' },  // Gate 2 — octave
+    { freq: 528,   type: 'sine' as OscillatorType, name: 'Heart Resonance' },  // Gate 3 — solfeggio
+    { freq: 639,   type: 'triangle' as OscillatorType, name: 'Connection' },   // Gate 4 — harmony
+    { freq: 963,   type: 'sine' as OscillatorType, name: 'Crown Awakening' },  // Gate 5 — transcendence
+    { freq: 432,   type: 'sine' as OscillatorType, name: 'Cosmic Tuning' },    // Bonus layers
+    { freq: 852,   type: 'triangle' as OscillatorType, name: 'Intuition' },
+  ];
+
   // Initialize audio context
   const getAudioCtx = useCallback(() => {
-    if (!audioCtxRef.current) {
+    if (!audioCtxRef.current || audioCtxRef.current.state === 'closed') {
       audioCtxRef.current = new AudioContext();
+      masterGainRef.current = audioCtxRef.current.createGain();
+      masterGainRef.current.gain.value = 0.06;
+      masterGainRef.current.connect(audioCtxRef.current.destination);
     }
     return audioCtxRef.current;
   }, []);
 
-  // Play element tone
+  // Add a new drone layer when a gate is solved
+  const addDroneLayer = useCallback((layerIndex: number) => {
+    if (!soundEnabled) return;
+    if (layerIndex >= CHANT_LAYERS.length) return;
+    try {
+      const ctx = getAudioCtx();
+      const master = masterGainRef.current;
+      if (!master) return;
+
+      const layer = CHANT_LAYERS[layerIndex];
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.type = layer.type;
+      osc.frequency.value = layer.freq;
+
+      // Fade in gently over 2 seconds
+      gain.gain.setValueAtTime(0, ctx.currentTime);
+      gain.gain.linearRampToValueAtTime(1, ctx.currentTime + 2);
+
+      osc.connect(gain).connect(master);
+      osc.start();
+
+      droneNodesRef.current.push({ osc, gain });
+
+      // As more layers stack, reduce master gain slightly to avoid clipping
+      const totalLayers = droneNodesRef.current.length;
+      master.gain.linearRampToValueAtTime(
+        Math.max(0.025, 0.06 / Math.sqrt(totalLayers)),
+        ctx.currentTime + 1
+      );
+    } catch {}
+  }, [soundEnabled, getAudioCtx]);
+
+  // Stop all drone layers (on game end / close)
+  const stopAllDrones = useCallback(() => {
+    const ctx = audioCtxRef.current;
+    if (!ctx) return;
+    droneNodesRef.current.forEach(({ osc, gain }) => {
+      try {
+        gain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.5);
+        osc.stop(ctx.currentTime + 0.6);
+      } catch {}
+    });
+    droneNodesRef.current = [];
+  }, []);
+
+  // Play element tone (short one-shot)
   const playTone = useCallback((freq: number, duration = 0.15, type: OscillatorType = 'sine') => {
     if (!soundEnabled) return;
     try {
@@ -130,6 +197,7 @@ const TempleLabyrinthGame = ({ onClose, onKarmaEarned }: Props) => {
 
     // Check game over (prana depleted)
     if (newPrana <= 0) {
+      stopAllDrones();
       setPhase('gameOver');
       return;
     }
@@ -153,8 +221,17 @@ const TempleLabyrinthGame = ({ onClose, onKarmaEarned }: Props) => {
       setTotalKarma(prev => prev + levelKarma);
       onKarmaEarned(levelKarma);
       addKarma(levelKarma, 'game');
-      playTone(528, 0.5);
-      playTone(639, 0.5);
+
+      // Play harmonic resolution chord (richer at higher levels)
+      playTone(528, 0.6);
+      setTimeout(() => playTone(639, 0.5), 100);
+      if (level >= 2) setTimeout(() => playTone(432, 0.4), 200);
+      if (level >= 4) {
+        // Final level: play full harmonic chord + slowly fade drones
+        setTimeout(() => playTone(963, 0.8), 300);
+        setTimeout(() => playTone(136.1, 1.0), 400);
+        setTimeout(() => stopAllDrones(), 3000);
+      }
 
       if (level < 4) {
         setPhase('levelComplete');
@@ -162,7 +239,7 @@ const TempleLabyrinthGame = ({ onClose, onKarmaEarned }: Props) => {
         setPhase('gameComplete');
       }
     }
-  }, [phase, playerPos, maze, prana, level, moves, shortestPathLen, playTone, onKarmaEarned, addKarma]);
+  }, [phase, playerPos, maze, prana, level, moves, shortestPathLen, playTone, onKarmaEarned, addKarma, stopAllDrones]);
 
   // Keyboard controls
   useEffect(() => {
@@ -206,11 +283,16 @@ const TempleLabyrinthGame = ({ onClose, onKarmaEarned }: Props) => {
     if (idx === currentPuzzle.correctIndex) {
       setAnswerResult('correct');
       playTone(528, 0.3);
+      
+      // Add progressive drone layer
+      const newGateCount = gatesSolved + 1;
+      setGatesSolved(newGateCount);
+      addDroneLayer(newGateCount - 1);
+      
       setTimeout(() => {
         setPhase('playing');
         setCurrentPuzzle(null);
         setAnswerResult(null);
-        // Remove gateway so it doesn't trigger again
         const [r, c] = playerPos;
         maze[r][c].isGateway = false;
       }, 1000);
@@ -224,12 +306,18 @@ const TempleLabyrinthGame = ({ onClose, onKarmaEarned }: Props) => {
         if (prana - 15 <= 0) setPhase('gameOver');
       }, 1200);
     }
-  }, [currentPuzzle, answerResult, playTone, playerPos, maze, prana]);
+  }, [currentPuzzle, answerResult, playTone, playerPos, maze, prana, gatesSolved, addDroneLayer]);
 
   // Cleanup audio
   useEffect(() => {
-    return () => { audioCtxRef.current?.close(); };
-  }, []);
+    return () => { stopAllDrones(); audioCtxRef.current?.close(); };
+  }, [stopAllDrones]);
+
+  // Wrap onClose to stop drones
+  const handleClose = useCallback(() => {
+    stopAllDrones();
+    onClose();
+  }, [stopAllDrones, onClose]);
 
   const config = LEVEL_CONFIGS[level];
   const sutra = SUTRAS[level] || SUTRAS[0];
@@ -240,7 +328,7 @@ const TempleLabyrinthGame = ({ onClose, onKarmaEarned }: Props) => {
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
         <div className="flex items-center justify-between">
           <h2 className="font-display text-xl text-foreground">🛕 Path to the Garbhagriha</h2>
-          <button onClick={onClose} className="p-2 rounded-full hover:bg-muted/50"><X className="w-5 h-5 text-muted-foreground" /></button>
+          <button onClick={handleClose} className="p-2 rounded-full hover:bg-muted/50"><X className="w-5 h-5 text-muted-foreground" /></button>
         </div>
 
         <div className="rounded-xl p-6 bg-gradient-to-br from-amber-500/10 via-orange-500/5 to-red-500/10 border border-amber-500/20 text-center space-y-4">
@@ -288,7 +376,7 @@ const TempleLabyrinthGame = ({ onClose, onKarmaEarned }: Props) => {
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
         <div className="flex items-center justify-between">
           <h2 className="font-display text-xl text-foreground">🛕 Prana Depleted</h2>
-          <button onClick={onClose} className="p-2 rounded-full hover:bg-muted/50"><X className="w-5 h-5 text-muted-foreground" /></button>
+          <button onClick={handleClose} className="p-2 rounded-full hover:bg-muted/50"><X className="w-5 h-5 text-muted-foreground" /></button>
         </div>
         <div className="rounded-xl p-6 bg-gradient-to-br from-red-500/10 to-orange-500/10 border border-red-500/20 text-center space-y-4">
           <div className="text-5xl">💫</div>
@@ -299,11 +387,11 @@ const TempleLabyrinthGame = ({ onClose, onKarmaEarned }: Props) => {
           </p>
           <p className="text-xs text-muted-foreground">Reached Level {level + 1} · {moves} moves · {totalKarma} Karma earned</p>
           <div className="flex gap-3 justify-center">
-            <motion.button whileTap={{ scale: 0.95 }} onClick={() => { setLevel(0); setTotalKarma(0); startLevel(0); }}
+            <motion.button whileTap={{ scale: 0.95 }} onClick={() => { stopAllDrones(); setLevel(0); setTotalKarma(0); setGatesSolved(0); startLevel(0); }}
               className="px-6 py-2 rounded-full bg-primary/20 border border-primary/50 text-primary text-sm hover:bg-primary/30 transition-colors">
               <RotateCcw className="w-4 h-4 inline mr-1" /> Retry
             </motion.button>
-            <motion.button whileTap={{ scale: 0.95 }} onClick={onClose}
+            <motion.button whileTap={{ scale: 0.95 }} onClick={handleClose}
               className="px-6 py-2 rounded-full bg-muted/50 border border-border text-muted-foreground text-sm hover:bg-muted transition-colors">
               Exit
             </motion.button>
@@ -319,7 +407,7 @@ const TempleLabyrinthGame = ({ onClose, onKarmaEarned }: Props) => {
       <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="space-y-6">
         <div className="flex items-center justify-between">
           <h2 className="font-display text-xl text-foreground">🛕 Garbhagriha Reached!</h2>
-          <button onClick={onClose} className="p-2 rounded-full hover:bg-muted/50"><X className="w-5 h-5 text-muted-foreground" /></button>
+          <button onClick={handleClose} className="p-2 rounded-full hover:bg-muted/50"><X className="w-5 h-5 text-muted-foreground" /></button>
         </div>
         <div className="rounded-xl p-6 bg-gradient-to-br from-amber-500/15 via-yellow-500/10 to-orange-500/15 border border-amber-500/30 text-center space-y-5">
           <motion.div animate={{ scale: [1, 1.1, 1] }} transition={{ duration: 2, repeat: Infinity }} className="text-6xl">🕉️</motion.div>
@@ -335,11 +423,11 @@ const TempleLabyrinthGame = ({ onClose, onKarmaEarned }: Props) => {
           <p className="text-xs text-muted-foreground">{moves} total moves across 5 levels · {hintsUsed} hints used</p>
 
           <div className="flex gap-3 justify-center">
-            <motion.button whileTap={{ scale: 0.95 }} onClick={() => { setLevel(0); setTotalKarma(0); startLevel(0); }}
+            <motion.button whileTap={{ scale: 0.95 }} onClick={() => { stopAllDrones(); setLevel(0); setTotalKarma(0); setGatesSolved(0); startLevel(0); }}
               className="px-6 py-2 rounded-full bg-primary/20 border border-primary/50 text-primary text-sm hover:bg-primary/30 transition-colors">
               Play Again
             </motion.button>
-            <motion.button whileTap={{ scale: 0.95 }} onClick={onClose}
+            <motion.button whileTap={{ scale: 0.95 }} onClick={handleClose}
               className="px-6 py-2 rounded-full bg-muted/50 border border-border text-muted-foreground text-sm hover:bg-muted transition-colors">
               Return
             </motion.button>
@@ -355,7 +443,7 @@ const TempleLabyrinthGame = ({ onClose, onKarmaEarned }: Props) => {
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
         <div className="flex items-center justify-between">
           <h2 className="font-display text-xl text-foreground">🛕 {config.prakara} Complete!</h2>
-          <button onClick={onClose} className="p-2 rounded-full hover:bg-muted/50"><X className="w-5 h-5 text-muted-foreground" /></button>
+          <button onClick={handleClose} className="p-2 rounded-full hover:bg-muted/50"><X className="w-5 h-5 text-muted-foreground" /></button>
         </div>
         <div className="rounded-xl p-6 bg-gradient-to-br from-emerald-500/10 to-teal-500/10 border border-emerald-500/20 text-center space-y-4">
           <div className="text-5xl">🏛️</div>
@@ -389,10 +477,14 @@ const TempleLabyrinthGame = ({ onClose, onKarmaEarned }: Props) => {
           </h2>
         </div>
         <div className="flex items-center gap-2">
-          <button onClick={() => setSoundEnabled(!soundEnabled)} className="p-1.5 rounded-full hover:bg-muted/50">
+          <button onClick={() => {
+            const next = !soundEnabled;
+            setSoundEnabled(next);
+            if (!next) stopAllDrones();
+          }} className="p-1.5 rounded-full hover:bg-muted/50">
             {soundEnabled ? <Volume2 className="w-4 h-4 text-muted-foreground" /> : <VolumeX className="w-4 h-4 text-muted-foreground" />}
           </button>
-          <button onClick={onClose} className="p-1.5 rounded-full hover:bg-muted/50">
+          <button onClick={handleClose} className="p-1.5 rounded-full hover:bg-muted/50">
             <X className="w-4 h-4 text-muted-foreground" />
           </button>
         </div>
@@ -413,6 +505,24 @@ const TempleLabyrinthGame = ({ onClose, onKarmaEarned }: Props) => {
         </span>
         <span className="text-primary text-xs ml-auto">+{totalKarma} ✦</span>
       </div>
+
+      {/* Soundscape indicator */}
+      {gatesSolved > 0 && soundEnabled && (
+        <div className="flex items-center justify-center gap-1.5 text-[10px] text-muted-foreground">
+          <Volume2 className="w-3 h-3 text-primary/60" />
+          <span>{gatesSolved} harmonic {gatesSolved === 1 ? 'layer' : 'layers'} active</span>
+          <div className="flex gap-0.5">
+            {Array.from({ length: Math.min(gatesSolved, 7) }).map((_, i) => (
+              <motion.div
+                key={i}
+                animate={{ opacity: [0.4, 1, 0.4] }}
+                transition={{ duration: 1.5 + i * 0.3, repeat: Infinity }}
+                className="w-1 h-1 rounded-full bg-primary"
+              />
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Element legend */}
       <div className="flex gap-2 justify-center flex-wrap text-[10px]">
