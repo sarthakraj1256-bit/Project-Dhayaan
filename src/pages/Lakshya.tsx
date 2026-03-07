@@ -3,7 +3,7 @@ import { useState, useCallback, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import BackButton from '@/components/BackButton';
-import { Sparkles, Wind, Gamepad2, Trophy, Star, Zap, Puzzle, Flower2, Grid3X3 } from 'lucide-react';
+import { Sparkles, Wind, Gamepad2, Trophy, Star, Zap, Puzzle, Flower2, Grid3X3, Landmark } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useSpiritualProgress, LEVEL_THRESHOLDS, getNextLevelThreshold, CHAKRA_THRESHOLDS, type SpiritualLevel } from '@/hooks/useSpiritualProgress';
 import { useKarmaMultiplier } from '@/hooks/useKarmaMultiplier';
@@ -11,6 +11,7 @@ import BreathFlowGame from '@/components/lakshya/BreathFlowGame';
 import ChakraAlignmentGame from '@/components/lakshya/ChakraAlignmentGame';
 import InnerCalmGarden from '@/components/lakshya/InnerCalmGarden';
 import DivineMatchGame from '@/components/lakshya/DivineMatchGame';
+import TempleLabyrinthGame from '@/components/lakshya/TempleLabyrinthGame';
 import KarmaDisplay from '@/components/lakshya/KarmaDisplay';
 import LiquidGoldProgressBar from '@/components/lakshya/LiquidGoldProgressBar';
 import ChakraProgress from '@/components/lakshya/ChakraProgress';
@@ -170,6 +171,11 @@ const Lakshya = () => {
           />
         ) : activeGame === 'divine-match' ? (
           <DivineMatchGame 
+            onClose={() => setActiveGame(null)} 
+            onKarmaEarned={handleKarmaEarned}
+          />
+        ) : activeGame === 'temple-labyrinth' ? (
+          <TempleLabyrinthGame 
             onClose={() => setActiveGame(null)} 
             onKarmaEarned={handleKarmaEarned}
           />
@@ -335,6 +341,32 @@ const Lakshya = () => {
                     <div className="flex items-center gap-2 text-xs text-purple-400">
                       <Star className="w-3 h-3" />
                       <span>{t('lakshya.karmaPerLevel')}</span>
+                    </div>
+                  </div>
+                </motion.button>
+
+                {/* Temple Labyrinth */}
+                <motion.button
+                  onClick={() => setActiveGame('temple-labyrinth')}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="group relative p-4 sm:p-5 md:p-6 rounded-xl bg-gradient-to-br from-amber-500/10 via-orange-500/10 to-red-500/10 border border-amber-500/20 hover:border-amber-500/40 transition-all text-left overflow-hidden"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-amber-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <div className="absolute top-3 right-3 px-2 py-0.5 rounded-full bg-gradient-to-r from-red-500 to-orange-500 text-white text-[10px] font-bold">
+                    {t('common.new')}
+                  </div>
+                  <div className="relative z-10">
+                    <div className="w-12 h-12 rounded-full bg-amber-500/20 flex items-center justify-center mb-4">
+                      <Landmark className="w-6 h-6 text-amber-400" />
+                    </div>
+                    <h3 className="font-display text-lg text-foreground mb-2">{t('lakshya.templeLabyrinth')}</h3>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      {t('lakshya.templeLabyrinthDesc')}
+                    </p>
+                    <div className="flex items-center gap-2 text-xs text-amber-400">
+                      <Star className="w-3 h-3" />
+                      <span>{t('lakshya.karmaPerLabyrinth')}</span>
                     </div>
                   </div>
                 </motion.button>
