@@ -397,7 +397,7 @@ const TempleLabyrinthGame = ({ onClose, onKarmaEarned }: Props) => {
       <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="space-y-6">
         <div className="flex items-center justify-between">
           <h2 className="font-display text-xl text-foreground">🛕 Garbhagriha Reached!</h2>
-          <button onClick={onClose} className="p-2 rounded-full hover:bg-muted/50"><X className="w-5 h-5 text-muted-foreground" /></button>
+          <button onClick={handleClose} className="p-2 rounded-full hover:bg-muted/50"><X className="w-5 h-5 text-muted-foreground" /></button>
         </div>
         <div className="rounded-xl p-6 bg-gradient-to-br from-amber-500/15 via-yellow-500/10 to-orange-500/15 border border-amber-500/30 text-center space-y-5">
           <motion.div animate={{ scale: [1, 1.1, 1] }} transition={{ duration: 2, repeat: Infinity }} className="text-6xl">🕉️</motion.div>
