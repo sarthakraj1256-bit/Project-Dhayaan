@@ -470,7 +470,7 @@ const TempleLabyrinthGame = ({ onClose, onKarmaEarned }: Props) => {
           <button onClick={() => setSoundEnabled(!soundEnabled)} className="p-1.5 rounded-full hover:bg-muted/50">
             {soundEnabled ? <Volume2 className="w-4 h-4 text-muted-foreground" /> : <VolumeX className="w-4 h-4 text-muted-foreground" />}
           </button>
-          <button onClick={onClose} className="p-1.5 rounded-full hover:bg-muted/50">
+          <button onClick={handleClose} className="p-1.5 rounded-full hover:bg-muted/50">
             <X className="w-4 h-4 text-muted-foreground" />
           </button>
         </div>
