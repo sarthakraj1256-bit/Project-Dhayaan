@@ -9,13 +9,12 @@ const buckets = [
 
 const StorageMonitor = () => (
   <div className="space-y-6">
-    <h2 className="text-lg font-semibold" style={{ color: "#C9A84C" }}>Storage Monitor</h2>
+    <h2 className="text-lg font-semibold text-primary">Storage Monitor</h2>
 
-    <div className="rounded-2xl p-5" style={{ background: "#13110D", border: "1px solid rgba(201,168,76,0.2)" }}>
-      {/* Header */}
-      <div className="grid grid-cols-4 gap-4 mb-4 pb-3 border-b" style={{ borderColor: "rgba(201,168,76,0.1)" }}>
+    <div className="rounded-2xl p-5 bg-card border border-border">
+      <div className="grid grid-cols-4 gap-4 mb-4 pb-3 border-b-2 border-border">
         {["Bucket", "Used", "Limit", "Status"].map((h) => (
-          <span key={h} className="text-[12px] font-medium uppercase tracking-wider" style={{ color: "#6B5E4E" }}>{h}</span>
+          <span key={h} className="text-[12px] font-medium uppercase tracking-wider text-muted-foreground">{h}</span>
         ))}
       </div>
 
@@ -26,16 +25,16 @@ const StorageMonitor = () => (
           return (
             <div key={b.name}>
               <div className="grid grid-cols-4 gap-4 mb-1.5">
-                <span className="text-sm font-medium" style={{ color: "#F5F0E8" }}>{b.name}</span>
-                <span className="text-sm" style={{ color: "#9C8C7C" }}>
+                <span className="text-sm font-medium text-foreground">{b.name}</span>
+                <span className="text-sm text-muted-foreground">
                   {b.used >= 1 ? `${b.used.toFixed(1)} ${b.unit}` : `${(b.used * 1000).toFixed(0)} MB`}
                 </span>
-                <span className="text-sm" style={{ color: "#9C8C7C" }}>{b.limit} {b.unit}</span>
+                <span className="text-sm text-muted-foreground">{b.limit} {b.unit}</span>
                 <span className="text-sm font-medium" style={{ color }}>
                   {pct >= 95 ? "❗" : pct >= 80 ? "⚠️" : "✅"} {pct.toFixed(0)}%
                 </span>
               </div>
-              <div className="h-2 rounded-full overflow-hidden" style={{ background: "rgba(201,168,76,0.1)" }}>
+              <div className="h-2 rounded-full overflow-hidden bg-primary/10">
                 <div className="h-full rounded-full transition-all duration-500" style={{ width: `${pct}%`, background: color }} />
               </div>
             </div>
