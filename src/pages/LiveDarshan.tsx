@@ -68,6 +68,11 @@ const LiveDarshan = () => {
     return spiritualContent.filter(c => c.type === aartiFilter);
   }, [aartiFilter]);
 
+  const { visibleItems: visibleAarti, hasMore, loadMoreRef, reset: resetInfinite } = useInfiniteScroll(filteredAarti, 8, 8);
+
+  // Reset infinite scroll when filter changes
+  useEffect(() => { resetInfinite(); }, [aartiFilter, resetInfinite]);
+
   const filters: { key: Filter; label: string }[] = [
     { key: 'all', label: `All ${totalCount}` },
     { key: 'live', label: `🔴 Live ${liveCount}` },
