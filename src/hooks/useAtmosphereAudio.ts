@@ -105,6 +105,10 @@ export const useAtmosphereAudio = () => {
 
           if (!response.ok) {
             const raw = await response.text().catch(() => '');
+            // Don't retry on quota/payment errors
+            if (response.status === 402 || raw.includes('quota_exceeded') || raw.includes('credits exhausted')) {
+              throw new Error('Sound credits exhausted — atmosphere sounds temporarily unavailable');
+            }
             throw new Error(raw || `HTTP ${response.status}`);
           }
 
