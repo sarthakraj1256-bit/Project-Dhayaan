@@ -273,11 +273,16 @@ const TempleLabyrinthGame = ({ onClose, onKarmaEarned }: Props) => {
     if (idx === currentPuzzle.correctIndex) {
       setAnswerResult('correct');
       playTone(528, 0.3);
+      
+      // Add progressive drone layer
+      const newGateCount = gatesSolved + 1;
+      setGatesSolved(newGateCount);
+      addDroneLayer(newGateCount - 1);
+      
       setTimeout(() => {
         setPhase('playing');
         setCurrentPuzzle(null);
         setAnswerResult(null);
-        // Remove gateway so it doesn't trigger again
         const [r, c] = playerPos;
         maze[r][c].isGateway = false;
       }, 1000);
@@ -291,7 +296,7 @@ const TempleLabyrinthGame = ({ onClose, onKarmaEarned }: Props) => {
         if (prana - 15 <= 0) setPhase('gameOver');
       }, 1200);
     }
-  }, [currentPuzzle, answerResult, playTone, playerPos, maze, prana]);
+  }, [currentPuzzle, answerResult, playTone, playerPos, maze, prana, gatesSolved, addDroneLayer]);
 
   // Cleanup audio
   useEffect(() => {
