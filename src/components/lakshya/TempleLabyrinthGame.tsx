@@ -165,6 +165,8 @@ const TempleLabyrinthGame = ({ onClose, onKarmaEarned }: Props) => {
   // Handle player movement
   const movePlayer = useCallback((dr: number, dc: number) => {
     if (phase !== 'playing') return;
+    // Clear hint path on movement
+    if (hintVisible) { setHintVisible(false); setHintPath(new Set()); }
 
     const [r, c] = playerPos;
     const nr = r + dr;
