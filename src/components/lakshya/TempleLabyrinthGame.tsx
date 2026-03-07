@@ -551,10 +551,12 @@ const TempleLabyrinthGame = ({ onClose, onKarmaEarned }: Props) => {
           const isVisited = visitedCells.has(`${r},${c}`);
           const elConfig = ELEMENT_CONFIG[cell.element];
 
+          const isHintCell = hintVisible && hintPath.has(`${r},${c}`);
+
           return (
             <div
               key={`${r}-${c}`}
-              className="absolute transition-colors duration-200"
+              className={`absolute transition-colors duration-200 ${isHintCell ? 'z-10' : ''}`}
               style={{
                 left: c * cellSize,
                 top: r * cellSize,
@@ -562,6 +564,8 @@ const TempleLabyrinthGame = ({ onClose, onKarmaEarned }: Props) => {
                 height: cellSize,
                 background: isPlayer
                   ? 'rgba(201,168,76,0.35)'
+                  : isHintCell
+                  ? 'hsl(var(--primary) / 0.25)'
                   : isVisited
                   ? `${elConfig.color}15`
                   : `${elConfig.color}08`,
@@ -569,6 +573,7 @@ const TempleLabyrinthGame = ({ onClose, onKarmaEarned }: Props) => {
                 borderRight: cell.walls.right ? '2px solid hsl(var(--border))' : '1px solid transparent',
                 borderBottom: cell.walls.bottom ? '2px solid hsl(var(--border))' : '1px solid transparent',
                 borderLeft: cell.walls.left ? '2px solid hsl(var(--border))' : '1px solid transparent',
+                boxShadow: isHintCell ? 'inset 0 0 8px hsl(var(--primary) / 0.3)' : 'none',
               }}
             >
               {/* Element indicator */}
