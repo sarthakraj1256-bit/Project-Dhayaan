@@ -59,7 +59,7 @@ export default function DarshanConfirmSheet({ temple, onClose }: Props) {
 
             <p className="text-2xl mb-0.5">🛕</p>
             <h3 className="text-lg font-bold text-[#3C2F1F] dark:text-[#E9E2D9]">{temple.name}</h3>
-            <p className="text-sm text-[#9C8C7C] mb-4">{temple.subtitle}</p>
+            <p className="text-sm text-[#9C8C7C] mb-4">{temple.location}</p>
 
             <p className="text-sm text-[#5C5145] dark:text-[#E9E2D9]/80 mb-5">
               You are about to join the live darshan. This will open YouTube.
