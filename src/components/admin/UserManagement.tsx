@@ -7,12 +7,8 @@ import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
 
 interface UserRow {
-  user_id: string;
-  display_name: string | null;
-  avatar_url: string | null;
-  karma_points: number;
-  last_activity_date: string | null;
-  created_at: string;
+  user_id: string; display_name: string | null; avatar_url: string | null;
+  karma_points: number; last_activity_date: string | null; created_at: string;
 }
 
 const UserManagement = () => {
@@ -36,56 +32,52 @@ const UserManagement = () => {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h2 className="text-lg font-semibold" style={{ color: "#C9A84C" }}>User Management</h2>
-        <Button variant="outline" size="sm" onClick={fetchUsers} disabled={loading}
-          style={{ borderColor: "rgba(201,168,76,0.3)", color: "#C9A84C" }}>
+        <h2 className="text-lg font-semibold text-primary">User Management</h2>
+        <Button variant="outline" size="sm" onClick={fetchUsers} disabled={loading}>
           <RefreshCw className={`w-4 h-4 mr-2 ${loading ? "animate-spin" : ""}`} /> Refresh
         </Button>
       </div>
 
-      {/* Search */}
       <div className="relative max-w-sm">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: "#6B5E4E" }} />
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
         <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search by name..."
-          className="pl-10 h-9 text-sm" style={{ background: "rgba(201,168,76,0.08)", borderColor: "rgba(201,168,76,0.2)", color: "#F5F0E8" }} />
+          className="pl-10 h-9 text-sm" />
       </div>
 
-      <div className="rounded-2xl overflow-hidden" style={{ background: "#13110D", border: "1px solid rgba(201,168,76,0.2)" }}>
-        <div className="grid grid-cols-4 gap-4 px-5 py-3 border-b" style={{ borderColor: "rgba(201,168,76,0.1)" }}>
+      <div className="rounded-2xl overflow-hidden bg-card border border-border">
+        <div className="grid grid-cols-4 gap-4 px-5 py-3 border-b-2 border-border bg-secondary/50">
           {["User", "Karma", "Last Active", "Joined"].map((h) => (
-            <span key={h} className="text-[12px] font-medium uppercase tracking-wider" style={{ color: "#6B5E4E" }}>{h}</span>
+            <span key={h} className="text-[12px] font-medium uppercase tracking-wider text-muted-foreground">{h}</span>
           ))}
         </div>
         {loading ? (
-          <div className="p-8 text-center"><RefreshCw className="w-6 h-6 animate-spin mx-auto" style={{ color: "#C9A84C" }} /></div>
+          <div className="p-8 text-center"><RefreshCw className="w-6 h-6 animate-spin mx-auto text-primary" /></div>
         ) : filtered.length === 0 ? (
-          <p className="p-8 text-center text-sm" style={{ color: "#6B5E4E" }}>No users found</p>
-        ) : filtered.map((u) => (
-          <div key={u.user_id} className="grid grid-cols-4 gap-4 px-5 py-3 border-b last:border-0 hover:bg-white/[0.02]"
-            style={{ borderColor: "rgba(201,168,76,0.05)" }}>
+          <p className="p-8 text-center text-sm text-muted-foreground">No users found</p>
+        ) : filtered.map((u, i) => (
+          <div key={u.user_id} className={`grid grid-cols-4 gap-4 px-5 py-3 border-b last:border-0 border-border/50 hover:bg-foreground/[0.03] ${i % 2 === 0 ? 'bg-popover' : 'bg-card'}`}>
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full flex items-center justify-center overflow-hidden"
-                style={{ background: "rgba(201,168,76,0.15)" }}>
+              <div className="w-8 h-8 rounded-full flex items-center justify-center overflow-hidden bg-primary/15">
                 {u.avatar_url ? <img src={u.avatar_url} alt="" className="w-full h-full object-cover" /> :
-                  <Users className="w-4 h-4" style={{ color: "#C9A84C" }} />}
+                  <Users className="w-4 h-4 text-primary" />}
               </div>
-              <span className="text-sm font-medium" style={{ color: "#F5F0E8" }}>{u.display_name || "Anonymous"}</span>
+              <span className="text-sm font-medium text-foreground">{u.display_name || "Anonymous"}</span>
             </div>
             <div className="flex items-center">
-              <Badge className="gap-1 text-xs" style={{ background: "rgba(201,168,76,0.15)", color: "#C9A84C", border: "none" }}>
+              <Badge className="gap-1 text-xs bg-primary/15 text-primary border-0">
                 <Award className="w-3 h-3" /> {u.karma_points}
               </Badge>
             </div>
-            <span className="text-sm self-center" style={{ color: "#9C8C7C" }}>
+            <span className="text-sm self-center text-muted-foreground">
               {u.last_activity_date ? format(new Date(u.last_activity_date), "MMM d, yyyy") : "Never"}
             </span>
-            <span className="text-sm self-center" style={{ color: "#9C8C7C" }}>
+            <span className="text-sm self-center text-muted-foreground">
               {format(new Date(u.created_at), "MMM d, yyyy")}
             </span>
           </div>
         ))}
       </div>
-      <p className="text-xs" style={{ color: "#6B5E4E" }}>Showing {filtered.length} of {users.length} users</p>
+      <p className="text-xs text-muted-foreground">Showing {filtered.length} of {users.length} users</p>
     </div>
   );
 };

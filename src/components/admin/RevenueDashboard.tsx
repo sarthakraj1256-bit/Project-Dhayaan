@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/backend/client";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, PieChart, Pie, Cell } from "recharts";
 import { RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useTheme } from "@/contexts/ThemeContext";
 
 const categoryColors: Record<string, string> = {
   subscription: "#C9A84C",
@@ -43,11 +44,20 @@ interface CategoryRevenue {
 }
 
 const RevenueDashboard = () => {
+  const { theme } = useTheme();
   const [summary, setSummary] = useState<RevenueSummary | null>(null);
   const [dailyData, setDailyData] = useState<DailyRevenue[]>([]);
   const [categoryData, setCategoryData] = useState<CategoryRevenue[]>([]);
   const [profitData, setProfitData] = useState<{ gross: number; infra: number; marketing: number; net: number }>({ gross: 0, infra: 0, marketing: 0, net: 0 });
   const [loading, setLoading] = useState(true);
+
+  const chartColors = {
+    grid: theme === 'dark' ? 'rgba(201,168,76,0.1)' : 'rgba(92,81,69,0.1)',
+    axis: theme === 'dark' ? '#6B5E4E' : '#9C8C7C',
+    tooltip_bg: theme === 'dark' ? '#13110D' : '#FFFFFF',
+    tooltip_border: '#C9A84C',
+    tooltip_text: theme === 'dark' ? '#F5F0E8' : '#1C1410',
+  };
 
   const fetchAll = async () => {
     setLoading(true);
@@ -104,42 +114,39 @@ const RevenueDashboard = () => {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-lg font-semibold" style={{ color: "#C9A84C" }}>Revenue Dashboard</h2>
-        <Button variant="outline" size="sm" onClick={fetchAll} disabled={loading}
-          style={{ borderColor: "rgba(201,168,76,0.3)", color: "#C9A84C" }}>
+        <h2 className="text-lg font-semibold text-primary">Revenue Dashboard</h2>
+        <Button variant="outline" size="sm" onClick={fetchAll} disabled={loading}>
           <RefreshCw className={`w-4 h-4 mr-2 ${loading ? "animate-spin" : ""}`} /> Refresh
         </Button>
       </div>
 
-      {/* KPI Row */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {[
           { label: "Today", value: fmt(summary?.today_revenue || 0), change: summary?.today_change ? `${summary.today_change > 0 ? "▲" : "▼"} ${Math.abs(summary.today_change)}% vs yesterday` : "No data yet" },
           { label: "This Month", value: fmt(summary?.month_revenue || 0), change: summary?.month_change ? `${summary.month_change > 0 ? "▲" : "▼"} ${Math.abs(summary.month_change)}% vs last month` : "No data yet" },
           { label: "Total Revenue", value: fmt(summary?.total_revenue || 0), change: "Since launch" },
         ].map((c) => (
-          <div key={c.label} className="rounded-2xl p-5" style={{ background: "#13110D", border: "1px solid rgba(201,168,76,0.2)" }}>
-            <span className="text-[13px]" style={{ color: "#6B5E4E" }}>{c.label}</span>
-            <p className="text-2xl font-bold mt-1" style={{ color: "#F5F0E8" }}>{c.value}</p>
-            <p className="text-xs mt-1" style={{ color: (summary?.today_change || 0) >= 0 ? "#22C55E" : "#EF4444" }}>{c.change}</p>
+          <div key={c.label} className="rounded-2xl p-5 bg-card border border-border">
+            <span className="text-[13px] text-muted-foreground">{c.label}</span>
+            <p className="text-2xl font-bold mt-1 text-foreground">{c.value}</p>
+            <p className={`text-xs mt-1 ${(summary?.today_change || 0) >= 0 ? "text-green-500" : "text-red-500"}`}>{c.change}</p>
           </div>
         ))}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        {/* Revenue Chart */}
-        <div className="lg:col-span-2 rounded-2xl p-5" style={{ background: "#13110D", border: "1px solid rgba(201,168,76,0.2)" }}>
-          <h3 className="text-sm font-semibold mb-4" style={{ color: "#C9A84C" }}>30-Day Revenue Trend</h3>
+        <div className="lg:col-span-2 rounded-2xl p-5 bg-card border border-border">
+          <h3 className="text-sm font-semibold mb-4 text-primary">30-Day Revenue Trend</h3>
           {dailyData.length === 0 ? (
-            <p className="text-center py-16 text-sm" style={{ color: "#6B5E4E" }}>No revenue data yet. Transactions will appear here.</p>
+            <p className="text-center py-16 text-sm text-muted-foreground">No revenue data yet. Transactions will appear here.</p>
           ) : (
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={dailyData}>
-                  <CartesianGrid stroke="rgba(201,168,76,0.1)" strokeDasharray="3 3" />
-                  <XAxis dataKey="day" stroke="#6B5E4E" fontSize={10} interval={4} />
-                  <YAxis stroke="#6B5E4E" fontSize={10} tickFormatter={(v) => `₹${(v / 1000).toFixed(0)}k`} />
-                  <Tooltip contentStyle={{ background: "#13110D", border: "1px solid rgba(201,168,76,0.3)", borderRadius: 12, color: "#F5F0E8" }}
+                  <CartesianGrid stroke={chartColors.grid} strokeDasharray="3 3" />
+                  <XAxis dataKey="day" stroke={chartColors.axis} fontSize={10} interval={4} />
+                  <YAxis stroke={chartColors.axis} fontSize={10} tickFormatter={(v) => `₹${(v / 1000).toFixed(0)}k`} />
+                  <Tooltip contentStyle={{ background: chartColors.tooltip_bg, border: `1px solid ${chartColors.tooltip_border}`, borderRadius: 12, color: chartColors.tooltip_text }}
                     formatter={(value: number) => [`₹${value.toLocaleString("en-IN")}`, "Revenue"]} />
                   <Line type="monotone" dataKey="revenue" stroke="#C9A84C" strokeWidth={2} dot={false} />
                 </LineChart>
@@ -148,11 +155,10 @@ const RevenueDashboard = () => {
           )}
         </div>
 
-        {/* Donut */}
-        <div className="rounded-2xl p-5" style={{ background: "#13110D", border: "1px solid rgba(201,168,76,0.2)" }}>
-          <h3 className="text-sm font-semibold mb-4" style={{ color: "#C9A84C" }}>Revenue by Category</h3>
+        <div className="rounded-2xl p-5 bg-card border border-border">
+          <h3 className="text-sm font-semibold mb-4 text-primary">Revenue by Category</h3>
           {pieData.length === 0 ? (
-            <p className="text-center py-16 text-sm" style={{ color: "#6B5E4E" }}>No category data yet</p>
+            <p className="text-center py-16 text-sm text-muted-foreground">No category data yet</p>
           ) : (
             <>
               <div className="h-48">
@@ -161,7 +167,7 @@ const RevenueDashboard = () => {
                     <Pie data={pieData} cx="50%" cy="50%" innerRadius={50} outerRadius={75} dataKey="value" paddingAngle={3}>
                       {pieData.map((d) => <Cell key={d.name} fill={d.color} />)}
                     </Pie>
-                    <Tooltip contentStyle={{ background: "#13110D", border: "1px solid rgba(201,168,76,0.3)", borderRadius: 12, color: "#F5F0E8" }} />
+                    <Tooltip contentStyle={{ background: chartColors.tooltip_bg, border: `1px solid ${chartColors.tooltip_border}`, borderRadius: 12, color: chartColors.tooltip_text }} />
                   </PieChart>
                 </ResponsiveContainer>
               </div>
@@ -169,7 +175,7 @@ const RevenueDashboard = () => {
                 {pieData.map((d) => (
                   <div key={d.name} className="flex items-center gap-2">
                     <div className="w-2.5 h-2.5 rounded-full" style={{ background: d.color }} />
-                    <span className="text-xs" style={{ color: "#9C8C7C" }}>{d.name} ({d.value}%)</span>
+                    <span className="text-xs text-muted-foreground">{d.name} ({d.value}%)</span>
                   </div>
                 ))}
               </div>
@@ -178,9 +184,8 @@ const RevenueDashboard = () => {
         </div>
       </div>
 
-      {/* Profit Panel */}
-      <div className="rounded-2xl p-5" style={{ background: "#13110D", border: "1px solid rgba(201,168,76,0.2)" }}>
-        <h3 className="text-sm font-semibold mb-4" style={{ color: "#C9A84C" }}>Monthly Profit Margin</h3>
+      <div className="rounded-2xl p-5 bg-card border border-border">
+        <h3 className="text-sm font-semibold mb-4 text-primary">Monthly Profit Margin</h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {[
             { label: "Gross Revenue", value: fmt(profitData.gross) },
@@ -189,15 +194,15 @@ const RevenueDashboard = () => {
             { label: "Net Profit", value: fmt(profitData.net) },
           ].map((item) => (
             <div key={item.label}>
-              <span className="text-[12px]" style={{ color: "#6B5E4E" }}>{item.label}</span>
-              <p className="text-lg font-bold" style={{ color: "#F5F0E8" }}>{item.value}</p>
+              <span className="text-[12px] text-muted-foreground">{item.label}</span>
+              <p className="text-lg font-bold text-foreground">{item.value}</p>
             </div>
           ))}
         </div>
         {profitData.gross > 0 && (
           <div className="mt-3 flex items-center gap-2">
-            <span className="text-sm" style={{ color: "#6B5E4E" }}>Profit Margin:</span>
-            <span className="text-sm font-bold" style={{ color: "#22C55E" }}>
+            <span className="text-sm text-muted-foreground">Profit Margin:</span>
+            <span className="text-sm font-bold text-green-500">
               {((profitData.net / profitData.gross) * 100).toFixed(1)}% ✅
             </span>
           </div>

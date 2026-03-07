@@ -13,28 +13,27 @@ const functions = [
 
 const EdgeFunctionMonitor = () => (
   <div className="space-y-6">
-    <h2 className="text-lg font-semibold" style={{ color: "#C9A84C" }}>Edge Function Status</h2>
+    <h2 className="text-lg font-semibold text-primary">Edge Function Status</h2>
 
-    <div className="rounded-2xl overflow-hidden" style={{ background: "#13110D", border: "1px solid rgba(201,168,76,0.2)" }}>
-      <div className="grid grid-cols-5 gap-4 px-5 py-3 border-b" style={{ borderColor: "rgba(201,168,76,0.1)" }}>
+    <div className="rounded-2xl overflow-hidden bg-card border border-border">
+      <div className="grid grid-cols-5 gap-4 px-5 py-3 border-b-2 border-border bg-secondary/50">
         {["Function", "Status", "Calls/hr", "Errors", "Last Run"].map((h) => (
-          <span key={h} className="text-[12px] font-medium uppercase tracking-wider" style={{ color: "#6B5E4E" }}>{h}</span>
+          <span key={h} className="text-[12px] font-medium uppercase tracking-wider text-muted-foreground">{h}</span>
         ))}
       </div>
-      {functions.map((f) => {
+      {functions.map((f, i) => {
         const errorRate = f.callsPerHr > 0 ? (f.errors / f.callsPerHr) * 100 : 0;
         const errorColor = errorRate > 5 ? "#EF4444" : errorRate > 1 ? "#F59E0B" : "#22C55E";
         return (
-          <div key={f.name} className="grid grid-cols-5 gap-4 px-5 py-3 border-b last:border-0 hover:bg-white/[0.02] transition-colors"
-            style={{ borderColor: "rgba(201,168,76,0.05)" }}>
-            <span className="text-sm font-mono" style={{ color: "#F5F0E8" }}>{f.name}</span>
+          <div key={f.name} className={`grid grid-cols-5 gap-4 px-5 py-3 border-b last:border-0 border-border/50 hover:bg-foreground/[0.03] transition-colors ${i % 2 === 0 ? 'bg-popover' : 'bg-card'}`}>
+            <span className="text-sm font-mono text-foreground">{f.name}</span>
             <div className="flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full" style={{ background: "#22C55E" }} />
-              <span className="text-sm" style={{ color: "#22C55E" }}>Active</span>
+              <div className="w-2 h-2 rounded-full bg-green-500" />
+              <span className="text-sm text-green-500">Active</span>
             </div>
-            <span className="text-sm" style={{ color: "#9C8C7C" }}>{f.callsPerHr.toLocaleString()}</span>
+            <span className="text-sm text-muted-foreground">{f.callsPerHr.toLocaleString()}</span>
             <span className="text-sm font-medium" style={{ color: errorColor }}>{f.errors}</span>
-            <span className="text-sm" style={{ color: "#6B5E4E" }}>{f.lastExec}</span>
+            <span className="text-sm text-muted-foreground">{f.lastExec}</span>
           </div>
         );
       })}
