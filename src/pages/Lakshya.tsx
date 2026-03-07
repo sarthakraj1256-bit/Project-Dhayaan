@@ -3,7 +3,7 @@ import { useState, useCallback, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import BackButton from '@/components/BackButton';
-import { Sparkles, Wind, Gamepad2, Trophy, Star, Zap, Puzzle, Flower2, Grid3X3 } from 'lucide-react';
+import { Sparkles, Wind, Gamepad2, Trophy, Star, Zap, Puzzle, Flower2, Grid3X3, Landmark } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useSpiritualProgress, LEVEL_THRESHOLDS, getNextLevelThreshold, CHAKRA_THRESHOLDS, type SpiritualLevel } from '@/hooks/useSpiritualProgress';
 import { useKarmaMultiplier } from '@/hooks/useKarmaMultiplier';
