@@ -1,6 +1,6 @@
-import { useState, useMemo, useCallback, useRef } from 'react';
+import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Bell, Landmark, Tv, Play, Clock, User, Sparkles, Music, Zap, BookOpen, Video, X } from 'lucide-react';
+import { ArrowLeft, Bell, Landmark, Tv, Play, Clock, User, Sparkles, Music, Zap, BookOpen, Video, X, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LIVE_TEMPLES, getTemplesByRegion } from '@/data/liveDarshanTemples';
 import { spiritualContent, SpiritualContent } from '@/data/templeStreams';
@@ -10,6 +10,7 @@ import BottomNav from '@/components/BottomNav';
 import PageTransition from '@/components/PageTransition';
 import { useNetworkStatus } from '@/hooks/useNetworkStatus';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useInfiniteScroll } from '@/hooks/useLazyLoad';
 import type { TranslationKey } from '@/i18n/translations';
 
 type Filter = 'all' | 'live' | 'sacred';
