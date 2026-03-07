@@ -422,34 +422,26 @@ export default function DevoteeExperiences() {
           </div>
         )}
 
-        {/* Footer Credits */}
-        <div className="mt-20 pt-12 border-t border-border/20 text-center space-y-8">
-          <div className="temple-divider mb-8">
-            <svg className="w-8 h-8 text-primary" viewBox="0 0 32 32" fill="currentColor">
-              <polygon points="16,4 4,28 28,28" fillOpacity="0.3" />
-              <polygon points="16,8 8,24 24,24" fillOpacity="0.5" />
-              <polygon points="16,12 12,20 20,20" fillOpacity="0.8" />
-            </svg>
+        {/* Footer */}
+        <div className="mt-20 pt-7 border-t border-primary/15 text-center space-y-2">
+          <h3 className="font-display text-[22px] text-primary tracking-[4px]">DHYAAN</h3>
+          <p className="font-display text-[15px] text-muted-foreground tracking-wide">ध्यान</p>
+          <div className="w-10 h-px bg-primary/30 mx-auto my-1.5" />
+          <p className="text-[12.5px] text-muted-foreground/70 leading-relaxed">
+            {t('footer.craftedBy')}{' '}
+            <span className="text-primary font-medium">Team Dhyaan</span>
+            <span className="text-primary/50 mx-1.5">·</span>
+            {t('footer.guidanceOf')}{' '}
+            <span className="text-primary font-medium">Manish Sir &amp; Shashank Sir</span>
+          </p>
+          <div className="flex items-center justify-center gap-1.5 pt-1 text-[11px] text-muted-foreground/50">
+            <span>© 2026 Project Dhyaan</span>
+            <span className="text-primary/50">·</span>
+            <span className="bg-primary/10 border border-primary/20 rounded-md px-1.5 py-px text-[10px] text-primary">
+              {getVersionString()}
+            </span>
           </div>
-          <h3 className="font-display text-3xl text-gold-gradient gold-glow tracking-wider">DHYAAN</h3>
-          <p className="font-display text-lg text-muted-foreground tracking-widest">ध्यान</p>
-          <p className="font-body text-sm text-muted-foreground max-w-md mx-auto">{t('footer.exploringIntersection')}</p>
-          <div className="pt-8 border-t border-border/10 mt-8 space-y-4">
-            <p className="font-display text-sm tracking-widest text-muted-foreground uppercase">{t('footer.craftedBy')}</p>
-            <p className="font-display text-xl text-gold-gradient tracking-wider">Team Dhyaan</p>
-            <div className="pt-4 mt-2">
-              <p className="font-display text-xs tracking-widest text-muted-foreground uppercase mb-2">{t('footer.guidanceOf')}</p>
-              <p className="font-display text-sm text-foreground tracking-wider">Manish Sir & Shashank Sir</p>
-            </div>
-            <div className="flex items-center justify-center gap-3 pt-4">
-              <p className="font-display text-sm text-foreground tracking-wider">© 2026 Project Dhyaan</p>
-              <span className="text-muted-foreground/30">•</span>
-              <span className="font-mono text-xs text-muted-foreground/60 px-2 py-0.5 rounded bg-muted/20 border border-border/20" title="App version">
-                {getVersionString()}
-              </span>
-            </div>
-          </div>
-          <p className="text-xs text-muted-foreground/50 pt-4 tracking-wide">{t('footer.allBrahman')}</p>
+          <p className="text-xs text-muted-foreground/40 pt-2 tracking-wide">{t('footer.allBrahman')}</p>
         </div>
       </div>
     </section>
