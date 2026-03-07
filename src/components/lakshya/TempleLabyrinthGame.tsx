@@ -45,6 +45,9 @@ const TempleLabyrinthGame = ({ onClose, onKarmaEarned }: Props) => {
   const [visitedCells, setVisitedCells] = useState<Set<string>>(new Set());
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [shortestPathLen, setShortestPathLen] = useState(0);
+  const [hintPath, setHintPath] = useState<Set<string>>(new Set());
+  const [hintVisible, setHintVisible] = useState(false);
+  const [pathHintsUsed, setPathHintsUsed] = useState(0);
 
   const [gatesSolved, setGatesSolved] = useState(0); // total gates solved across all levels
 
@@ -152,6 +155,8 @@ const TempleLabyrinthGame = ({ onClose, onKarmaEarned }: Props) => {
     setVisitedCells(new Set(['0,0']));
     setShowHint(false);
     setPhase('playing');
+    setHintPath(new Set());
+    setHintVisible(false);
 
     const path = findShortestPath(newMaze, [0, 0], [config.size - 1, config.size - 1]);
     setShortestPathLen(path.length);
@@ -160,6 +165,8 @@ const TempleLabyrinthGame = ({ onClose, onKarmaEarned }: Props) => {
   // Handle player movement
   const movePlayer = useCallback((dr: number, dc: number) => {
     if (phase !== 'playing') return;
+    // Clear hint path on movement
+    if (hintVisible) { setHintVisible(false); setHintPath(new Set()); }
 
     const [r, c] = playerPos;
     const nr = r + dr;
@@ -239,7 +246,7 @@ const TempleLabyrinthGame = ({ onClose, onKarmaEarned }: Props) => {
         setPhase('gameComplete');
       }
     }
-  }, [phase, playerPos, maze, prana, level, moves, shortestPathLen, playTone, onKarmaEarned, addKarma, stopAllDrones]);
+  }, [phase, playerPos, maze, prana, level, moves, shortestPathLen, playTone, onKarmaEarned, addKarma, stopAllDrones, hintVisible]);
 
   // Keyboard controls
   useEffect(() => {
@@ -546,10 +553,12 @@ const TempleLabyrinthGame = ({ onClose, onKarmaEarned }: Props) => {
           const isVisited = visitedCells.has(`${r},${c}`);
           const elConfig = ELEMENT_CONFIG[cell.element];
 
+          const isHintCell = hintVisible && hintPath.has(`${r},${c}`);
+
           return (
             <div
               key={`${r}-${c}`}
-              className="absolute transition-colors duration-200"
+              className={`absolute transition-colors duration-200 ${isHintCell ? 'z-10' : ''}`}
               style={{
                 left: c * cellSize,
                 top: r * cellSize,
@@ -557,6 +566,8 @@ const TempleLabyrinthGame = ({ onClose, onKarmaEarned }: Props) => {
                 height: cellSize,
                 background: isPlayer
                   ? 'rgba(201,168,76,0.35)'
+                  : isHintCell
+                  ? 'hsl(var(--primary) / 0.25)'
                   : isVisited
                   ? `${elConfig.color}15`
                   : `${elConfig.color}08`,
@@ -564,6 +575,7 @@ const TempleLabyrinthGame = ({ onClose, onKarmaEarned }: Props) => {
                 borderRight: cell.walls.right ? '2px solid hsl(var(--border))' : '1px solid transparent',
                 borderBottom: cell.walls.bottom ? '2px solid hsl(var(--border))' : '1px solid transparent',
                 borderLeft: cell.walls.left ? '2px solid hsl(var(--border))' : '1px solid transparent',
+                boxShadow: isHintCell ? 'inset 0 0 8px hsl(var(--primary) / 0.3)' : 'none',
               }}
             >
               {/* Element indicator */}
@@ -611,8 +623,8 @@ const TempleLabyrinthGame = ({ onClose, onKarmaEarned }: Props) => {
         }))}
       </div>
 
-      {/* D-Pad for mobile */}
-      <div className="flex justify-center pt-2">
+      {/* D-Pad + Hint button */}
+      <div className="flex items-center justify-center gap-4 pt-2">
         <div className="grid grid-cols-3 gap-1 w-28">
           <div />
           <button onClick={() => movePlayer(-1, 0)} className="p-2 rounded-lg bg-muted/50 hover:bg-muted active:bg-primary/20 flex items-center justify-center">
@@ -634,6 +646,40 @@ const TempleLabyrinthGame = ({ onClose, onKarmaEarned }: Props) => {
           </button>
           <div />
         </div>
+
+        {/* Hint button */}
+        <button
+          onClick={() => {
+            if (hintVisible || prana <= 15) return;
+            const path = findShortestPath(
+              maze,
+              playerPos,
+              [maze.length - 1, maze.length - 1]
+            );
+            if (path.length > 0) {
+              const pathSet = new Set(path.map(([r, c]) => `${r},${c}`));
+              setHintPath(pathSet);
+              setHintVisible(true);
+              setPathHintsUsed(h => h + 1);
+              setPrana(p => Math.max(0, p - 15));
+              playTone(432, 0.2);
+              // Auto-hide after 2.5 seconds
+              setTimeout(() => {
+                setHintVisible(false);
+                setHintPath(new Set());
+              }, 2500);
+            }
+          }}
+          disabled={hintVisible || prana <= 15}
+          className={`flex flex-col items-center gap-1 p-2 rounded-xl border transition-colors ${
+            hintVisible || prana <= 15
+              ? 'bg-muted/20 border-border/30 opacity-40 cursor-not-allowed'
+              : 'bg-primary/10 border-primary/30 hover:bg-primary/20 active:bg-primary/30'
+          }`}
+        >
+          <Lightbulb className="w-5 h-5 text-primary" />
+          <span className="text-[9px] text-muted-foreground leading-tight">Path<br/>−15 ♥</span>
+        </button>
       </div>
 
       {/* Puzzle Modal */}
