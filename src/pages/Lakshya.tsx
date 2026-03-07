@@ -11,6 +11,7 @@ import BreathFlowGame from '@/components/lakshya/BreathFlowGame';
 import ChakraAlignmentGame from '@/components/lakshya/ChakraAlignmentGame';
 import InnerCalmGarden from '@/components/lakshya/InnerCalmGarden';
 import DivineMatchGame from '@/components/lakshya/DivineMatchGame';
+import TempleLabyrinthGame from '@/components/lakshya/TempleLabyrinthGame';
 import KarmaDisplay from '@/components/lakshya/KarmaDisplay';
 import LiquidGoldProgressBar from '@/components/lakshya/LiquidGoldProgressBar';
 import ChakraProgress from '@/components/lakshya/ChakraProgress';
