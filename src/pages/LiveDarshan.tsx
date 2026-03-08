@@ -4,7 +4,9 @@ import { ArrowLeft, Bell, Landmark, Tv, Play, Clock, User, Sparkles, Music, Zap,
 import { motion, AnimatePresence } from 'framer-motion';
 import { LIVE_TEMPLES, getTemplesByRegion } from '@/data/liveDarshanTemples';
 import { spiritualContent, SpiritualContent } from '@/data/templeStreams';
+import { GURUDWARAS } from '@/data/gurudwaraStreams';
 import LiveTempleCard from '@/components/live-darshan/LiveTempleCard';
+import GurudwaraCard from '@/components/live-darshan/GurudwaraCard';
 import { Badge } from '@/components/ui/badge';
 import BottomNav from '@/components/BottomNav';
 import PageTransition from '@/components/PageTransition';
