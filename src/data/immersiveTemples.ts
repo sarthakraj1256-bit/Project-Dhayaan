@@ -809,7 +809,7 @@ export const heritageTemples: ImmersiveTemple[] = [
     category: 'heritage',
     deity: 'Lord Narasimha',
     description: 'A massive monolithic sculpture of Ugra Narasimha in the ruins of Vijayanagara Empire.',
-    thumbnail: 'https://images.unsplash.com/photo-1600112356903-ef54b2b85f9e?w=400',
+    thumbnail: '/heritage/ugra-narasimha.jpg',
     zones: createDefaultZones('ugra_narasimha'),
     defaultZoneId: 'ugra_narasimha_entrance',
     audio: { aartiTrack: '', kirtanTrack: '', bellSound: '', ambienceTrack: '', chantingTrack: '' },
