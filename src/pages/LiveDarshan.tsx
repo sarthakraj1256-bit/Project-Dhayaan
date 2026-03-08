@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { LIVE_TEMPLES, getTemplesByRegion } from '@/data/liveDarshanTemples';
 import { spiritualContent, SpiritualContent } from '@/data/templeStreams';
 import { GURUDWARAS } from '@/data/gurudwaraStreams';
+import { useGurudwaraLiveStatus } from '@/hooks/useGurudwaraLiveStatus';
 import LiveTempleCard from '@/components/live-darshan/LiveTempleCard';
 import GurudwaraCard from '@/components/live-darshan/GurudwaraCard';
 import { Badge } from '@/components/ui/badge';
