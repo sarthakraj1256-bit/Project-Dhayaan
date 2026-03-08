@@ -51,40 +51,36 @@ export interface ImmersiveTemple {
   category: TempleCategory;
   deity: string;
   description: string;
-  // Placeholder thumbnail
   thumbnail: string;
-  // Temple zones for 360° navigation
   zones: TempleZone[];
   defaultZoneId: string;
-  // Audio configuration
   audio: {
-    aartiTrack: string; // Audio prompt for ElevenLabs
+    aartiTrack: string;
     kirtanTrack: string;
     bellSound: string;
     ambienceTrack: string;
     chantingTrack: string;
   };
-  // Time-based themes
   themes: {
     morning: { lightColor: string; intensity: number };
     afternoon: { lightColor: string; intensity: number };
     evening: { lightColor: string; intensity: number };
     night: { lightColor: string; intensity: number };
   };
-  // Features available
   features: {
     hasLiveStream: boolean;
     hasMeditation: boolean;
     hasRituals: boolean;
     hasGuidedTour: boolean;
   };
-  // Festival modes
   festivals?: {
     name: string;
     startDate: string;
     endDate: string;
     specialDecoration: boolean;
   }[];
+  /** If set, clicking opens this external virtual tour URL instead of the internal 360° viewer */
+  virtualTourUrl?: string;
 }
 
 // Temple-specific panorama image mappings for variety
