@@ -6,7 +6,8 @@ export type TempleCategory =
   | 'shakti_peeth' 
   | 'vishnu' 
   | 'sikh' 
-  | 'international';
+  | 'international'
+  | 'heritage';
 
 export type TimeOfDay = 'morning' | 'afternoon' | 'evening' | 'night';
 
@@ -50,40 +51,36 @@ export interface ImmersiveTemple {
   category: TempleCategory;
   deity: string;
   description: string;
-  // Placeholder thumbnail
   thumbnail: string;
-  // Temple zones for 360° navigation
   zones: TempleZone[];
   defaultZoneId: string;
-  // Audio configuration
   audio: {
-    aartiTrack: string; // Audio prompt for ElevenLabs
+    aartiTrack: string;
     kirtanTrack: string;
     bellSound: string;
     ambienceTrack: string;
     chantingTrack: string;
   };
-  // Time-based themes
   themes: {
     morning: { lightColor: string; intensity: number };
     afternoon: { lightColor: string; intensity: number };
     evening: { lightColor: string; intensity: number };
     night: { lightColor: string; intensity: number };
   };
-  // Features available
   features: {
     hasLiveStream: boolean;
     hasMeditation: boolean;
     hasRituals: boolean;
     hasGuidedTour: boolean;
   };
-  // Festival modes
   festivals?: {
     name: string;
     startDate: string;
     endDate: string;
     specialDecoration: boolean;
   }[];
+  /** If set, clicking opens this external virtual tour URL instead of the internal 360° viewer */
+  virtualTourUrl?: string;
 }
 
 // Temple-specific panorama image mappings for variety
@@ -770,6 +767,138 @@ export const internationalTemples: ImmersiveTemple[] = [
   }
 ];
 
+// Virtual Heritage Sites (external Google Arts & Culture tours)
+export const heritageTemples: ImmersiveTemple[] = [
+  {
+    id: 'shore_temple',
+    name: 'The Shore Temple',
+    nameHindi: 'शोर मंदिर',
+    location: 'Mahabalipuram, Tamil Nadu',
+    category: 'heritage',
+    deity: 'Lord Shiva & Vishnu',
+    description: 'A UNESCO World Heritage structural temple from the 8th century, overlooking the Bay of Bengal.',
+    thumbnail: 'https://images.unsplash.com/photo-1621427167052-f1592f0498d9?w=400',
+    zones: createDefaultZones('shore_temple'),
+    defaultZoneId: 'shore_temple_entrance',
+    audio: { aartiTrack: '', kirtanTrack: '', bellSound: '', ambienceTrack: '', chantingTrack: '' },
+    themes: { morning: { lightColor: '#FFE4B5', intensity: 0.8 }, afternoon: { lightColor: '#FFF8DC', intensity: 1.0 }, evening: { lightColor: '#FFD700', intensity: 0.7 }, night: { lightColor: '#4A4A6A', intensity: 0.3 } },
+    features: { hasLiveStream: false, hasMeditation: false, hasRituals: false, hasGuidedTour: true },
+    virtualTourUrl: 'https://artsandculture.google.com/streetview/the-shore-temple-mahabalipuram/OgGy1o29AAfiVg',
+  },
+  {
+    id: 'ganesha_ratha',
+    name: 'Rock Cut Ganesha Temple',
+    nameHindi: 'गणेश रथ मंदिर',
+    location: 'Mahabalipuram, Tamil Nadu',
+    category: 'heritage',
+    deity: 'Lord Ganesha',
+    description: 'An ancient rock-cut Ganesha ratha temple from the Pallava dynasty era.',
+    thumbnail: 'https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?w=400',
+    zones: createDefaultZones('ganesha_ratha'),
+    defaultZoneId: 'ganesha_ratha_entrance',
+    audio: { aartiTrack: '', kirtanTrack: '', bellSound: '', ambienceTrack: '', chantingTrack: '' },
+    themes: { morning: { lightColor: '#FFE4B5', intensity: 0.8 }, afternoon: { lightColor: '#FFF8DC', intensity: 1.0 }, evening: { lightColor: '#FFD700', intensity: 0.7 }, night: { lightColor: '#4A4A6A', intensity: 0.3 } },
+    features: { hasLiveStream: false, hasMeditation: false, hasRituals: false, hasGuidedTour: true },
+    virtualTourUrl: 'https://artsandculture.google.com/streetview/rock-cut-ganesha-temple-mahabalipuram/kgFS8RWJ4XrbBg',
+  },
+  {
+    id: 'ugra_narasimha',
+    name: 'Narasimha Shrine (Ugra Narasimha)',
+    nameHindi: 'उग्र नरसिंह मंदिर',
+    location: 'Hampi, Karnataka',
+    category: 'heritage',
+    deity: 'Lord Narasimha',
+    description: 'A massive monolithic sculpture of Ugra Narasimha in the ruins of Vijayanagara Empire.',
+    thumbnail: 'https://images.unsplash.com/photo-1600112356903-ef54b2b85f9e?w=400',
+    zones: createDefaultZones('ugra_narasimha'),
+    defaultZoneId: 'ugra_narasimha_entrance',
+    audio: { aartiTrack: '', kirtanTrack: '', bellSound: '', ambienceTrack: '', chantingTrack: '' },
+    themes: { morning: { lightColor: '#FFE4B5', intensity: 0.8 }, afternoon: { lightColor: '#FFF8DC', intensity: 1.0 }, evening: { lightColor: '#FFD700', intensity: 0.7 }, night: { lightColor: '#4A4A6A', intensity: 0.3 } },
+    features: { hasLiveStream: false, hasMeditation: false, hasRituals: false, hasGuidedTour: true },
+    virtualTourUrl: 'https://artsandculture.google.com/streetview/narasimha-shrine-ugra-narasimha-hampi/HQHlOrjY-3SbHQ',
+  },
+  {
+    id: 'krishna_temple_hampi',
+    name: 'Krishna Temple',
+    nameHindi: 'कृष्ण मंदिर, हम्पी',
+    location: 'Hampi, Karnataka',
+    category: 'heritage',
+    deity: 'Lord Krishna',
+    description: 'A 16th-century temple built by Krishnadevaraya of the Vijayanagara Empire.',
+    thumbnail: 'https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?w=400',
+    zones: createDefaultZones('krishna_temple_hampi'),
+    defaultZoneId: 'krishna_temple_hampi_entrance',
+    audio: { aartiTrack: '', kirtanTrack: '', bellSound: '', ambienceTrack: '', chantingTrack: '' },
+    themes: { morning: { lightColor: '#FFE4B5', intensity: 0.8 }, afternoon: { lightColor: '#FFF8DC', intensity: 1.0 }, evening: { lightColor: '#FFD700', intensity: 0.7 }, night: { lightColor: '#4A4A6A', intensity: 0.3 } },
+    features: { hasLiveStream: false, hasMeditation: false, hasRituals: false, hasGuidedTour: true },
+    virtualTourUrl: 'https://artsandculture.google.com/streetview/krishna-temple-hampi/0wHDXs-LZqK7Gw',
+  },
+  {
+    id: 'konark_sun_temple',
+    name: 'Konark Sun Temple',
+    nameHindi: 'कोणार्क सूर्य मंदिर',
+    location: 'Konark, Odisha',
+    category: 'heritage',
+    deity: 'Surya (Sun God)',
+    description: 'A 13th-century UNESCO World Heritage Site shaped as a giant chariot with 24 wheels.',
+    thumbnail: 'https://images.unsplash.com/photo-1625046643650-030d4283ce4d?w=400',
+    zones: createDefaultZones('konark_sun_temple'),
+    defaultZoneId: 'konark_sun_temple_entrance',
+    audio: { aartiTrack: '', kirtanTrack: '', bellSound: '', ambienceTrack: '', chantingTrack: '' },
+    themes: { morning: { lightColor: '#FFE4B5', intensity: 0.8 }, afternoon: { lightColor: '#FFF8DC', intensity: 1.0 }, evening: { lightColor: '#FFD700', intensity: 0.7 }, night: { lightColor: '#4A4A6A', intensity: 0.3 } },
+    features: { hasLiveStream: false, hasMeditation: false, hasRituals: false, hasGuidedTour: true },
+    virtualTourUrl: 'https://artsandculture.google.com/streetview/konark-sun-temple/vwGtkelwxcvTdQ',
+  },
+  {
+    id: 'dharmaraja_ratha',
+    name: "Dharmaraja's Ratha",
+    nameHindi: 'धर्मराज रथ',
+    location: 'Mahabalipuram, Tamil Nadu',
+    category: 'heritage',
+    deity: 'Lord Shiva',
+    description: 'The tallest of the Pancha Rathas, a monolithic rock-cut temple from the 7th century.',
+    thumbnail: 'https://images.unsplash.com/photo-1621427167052-f1592f0498d9?w=400',
+    zones: createDefaultZones('dharmaraja_ratha'),
+    defaultZoneId: 'dharmaraja_ratha_entrance',
+    audio: { aartiTrack: '', kirtanTrack: '', bellSound: '', ambienceTrack: '', chantingTrack: '' },
+    themes: { morning: { lightColor: '#FFE4B5', intensity: 0.8 }, afternoon: { lightColor: '#FFF8DC', intensity: 1.0 }, evening: { lightColor: '#FFD700', intensity: 0.7 }, night: { lightColor: '#4A4A6A', intensity: 0.3 } },
+    features: { hasLiveStream: false, hasMeditation: false, hasRituals: false, hasGuidedTour: true },
+    virtualTourUrl: 'https://artsandculture.google.com/streetview/dharmaraja-s-ratha-mahabalipuram/ZgGuPLf4Xvxrdw',
+  },
+  {
+    id: 'buland_darwaza',
+    name: 'Fatehpur Sikri – Buland Darwaza',
+    nameHindi: 'बुलंद दरवाज़ा, फ़तेहपुर सीकरी',
+    location: 'Fatehpur Sikri, Uttar Pradesh',
+    category: 'heritage',
+    deity: 'Heritage Monument',
+    description: 'The 54-metre high Victory Gate, one of the highest gateways in the world, built by Akbar.',
+    thumbnail: 'https://images.unsplash.com/photo-1548013146-72479768bada?w=400',
+    zones: createDefaultZones('buland_darwaza'),
+    defaultZoneId: 'buland_darwaza_entrance',
+    audio: { aartiTrack: '', kirtanTrack: '', bellSound: '', ambienceTrack: '', chantingTrack: '' },
+    themes: { morning: { lightColor: '#FFE4B5', intensity: 0.8 }, afternoon: { lightColor: '#FFF8DC', intensity: 1.0 }, evening: { lightColor: '#FFD700', intensity: 0.7 }, night: { lightColor: '#4A4A6A', intensity: 0.3 } },
+    features: { hasLiveStream: false, hasMeditation: false, hasRituals: false, hasGuidedTour: true },
+    virtualTourUrl: 'https://artsandculture.google.com/streetview/fatehpur-sikri-buland-darwaza/BAE-z_40AwGqkQ',
+  },
+  {
+    id: 'karen_ghar',
+    name: 'Karen Ghar – Ahom Raja Palace',
+    nameHindi: 'करेंग घर – आहोम राजा महल',
+    location: 'Sivasagar, Assam',
+    category: 'heritage',
+    deity: 'Heritage Palace',
+    description: 'The royal palace of the Ahom kings, a masterpiece of Ahom architecture in Assam.',
+    thumbnail: 'https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=400',
+    zones: createDefaultZones('karen_ghar'),
+    defaultZoneId: 'karen_ghar_entrance',
+    audio: { aartiTrack: '', kirtanTrack: '', bellSound: '', ambienceTrack: '', chantingTrack: '' },
+    themes: { morning: { lightColor: '#FFE4B5', intensity: 0.8 }, afternoon: { lightColor: '#FFF8DC', intensity: 1.0 }, evening: { lightColor: '#FFD700', intensity: 0.7 }, night: { lightColor: '#4A4A6A', intensity: 0.3 } },
+    features: { hasLiveStream: false, hasMeditation: false, hasRituals: false, hasGuidedTour: true },
+    virtualTourUrl: 'https://artsandculture.google.com/streetview/karen-ghar-the-ahom-raja-s-palace/HQGLzZgYhslEVw',
+  },
+];
+
 // Combined export
 export const allImmersiveTemples: ImmersiveTemple[] = [
   ...iskconTemples,
@@ -777,7 +906,8 @@ export const allImmersiveTemples: ImmersiveTemple[] = [
   ...shaktiPeethTemples,
   ...vishnuTemples,
   ...sikhTemples,
-  ...internationalTemples
+  ...internationalTemples,
+  ...heritageTemples
 ];
 
 // Get temple by ID
@@ -797,5 +927,6 @@ export const categoryLabels: Record<TempleCategory, string> = {
   shakti_peeth: '🌺 Shakti Peeth',
   vishnu: '🙏 Vishnu Pilgrimage',
   sikh: '☬ Sikh Gurudwara',
-  international: '🌍 International'
+  international: '🌍 International',
+  heritage: '🏛️ Virtual Heritage'
 };
