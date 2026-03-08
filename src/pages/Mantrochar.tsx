@@ -1,5 +1,5 @@
 import PageTransition from '@/components/PageTransition';
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import BackButton from '@/components/BackButton';
@@ -11,8 +11,6 @@ import MantraLesson from '@/components/mantrochar/MantraLesson';
 import { toast } from 'sonner';
 import { useMantraProgress } from '@/hooks/useMantraProgress';
 import BottomNav from '@/components/BottomNav';
-import { useInfiniteScroll } from '@/hooks/useLazyLoad';
-import { CardSkeleton } from '@/components/LazyCard';
 import { TranslationKey } from '@/i18n/translations';
 
 const difficultyOrder = ['beginner', 'intermediate', 'advanced', 'mastery'] as const;
