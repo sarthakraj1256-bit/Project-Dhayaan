@@ -68,8 +68,6 @@ const Index = () => {
        {/* Mobile Bottom Navigation */}
        <BottomNav />
 
-       {/* Gyani AI Guide - Homepage Only */}
-       <GyaniChat />
      </div>
    );
  };
