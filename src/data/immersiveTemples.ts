@@ -841,7 +841,7 @@ export const heritageTemples: ImmersiveTemple[] = [
     category: 'heritage',
     deity: 'Surya (Sun God)',
     description: 'A 13th-century UNESCO World Heritage Site shaped as a giant chariot with 24 wheels.',
-    thumbnail: 'https://images.unsplash.com/photo-1625046643650-030d4283ce4d?w=400',
+    thumbnail: '/heritage/konark-sun-temple.jpg',
     zones: createDefaultZones('konark_sun_temple'),
     defaultZoneId: 'konark_sun_temple_entrance',
     audio: { aartiTrack: '', kirtanTrack: '', bellSound: '', ambienceTrack: '', chantingTrack: '' },
