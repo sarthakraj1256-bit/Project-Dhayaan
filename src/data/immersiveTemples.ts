@@ -889,7 +889,7 @@ export const heritageTemples: ImmersiveTemple[] = [
     category: 'heritage',
     deity: 'Heritage Palace',
     description: 'The royal palace of the Ahom kings, a masterpiece of Ahom architecture in Assam.',
-    thumbnail: 'https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=400',
+    thumbnail: '/heritage/karen-ghar.jpg',
     zones: createDefaultZones('karen_ghar'),
     defaultZoneId: 'karen_ghar_entrance',
     audio: { aartiTrack: '', kirtanTrack: '', bellSound: '', ambienceTrack: '', chantingTrack: '' },
