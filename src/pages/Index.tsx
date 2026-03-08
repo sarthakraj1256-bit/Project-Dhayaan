@@ -12,6 +12,7 @@ import { HeroSection, QuickStartSection } from '@/components/home';
 import SectionNav from '@/components/home/SectionNav';
 import SideDrawer from '@/components/home/SideDrawer';
 import WavyBackground from '@/components/home/WavyBackground';
+import KrishnaAICard from '@/components/home/KrishnaAICard';
 
 // Below-fold sections — lazy loaded
 const RelaxationSection = lazy(() => import('@/components/home/RelaxationSection'));
