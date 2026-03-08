@@ -461,6 +461,100 @@ const MyKrishna = () => {
   );
 };
 
+/* ═══ Share Menu ═══ */
+function ShareMenu({ exchange, cardRef }: { exchange: Exchange; cardRef: React.RefObject<HTMLDivElement> }) {
+  const [open, setOpen] = useState(false);
+  const [capturing, setCapturing] = useState(false);
+
+  const shareText = `🪷 Krishna's Wisdom\n\n"${exchange.response.guidance}"\n\n📖 Bhagavad Gita · Chapter ${exchange.response.verse.chapter}, Verse ${exchange.response.verse.number}\n"${exchange.response.verse.translation}"\n\n${exchange.response.closing}\n\n— via Dhyaan`;
+  const shareUrl = typeof window !== 'undefined' ? `${window.location.origin}/my-krishna` : '';
+
+  const shareWhatsApp = () => {
+    window.open(`https://wa.me/?text=${encodeURIComponent(shareText + '\n\n' + shareUrl)}`, '_blank');
+    setOpen(false);
+  };
+
+  const shareNative = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: "Krishna's Guidance — Dhyaan", text: shareText, url: shareUrl });
+        setOpen(false);
+      } catch (err) {
+        if ((err as Error).name !== 'AbortError') {
+          navigator.clipboard.writeText(shareText);
+          toast({ title: 'Copied to clipboard 📋' });
+        }
+      }
+    } else {
+      navigator.clipboard.writeText(shareText + '\n\n' + shareUrl);
+      toast({ title: 'Copied to clipboard 📋' });
+      setOpen(false);
+    }
+  };
+
+  const downloadImage = async () => {
+    if (!cardRef.current) return;
+    setCapturing(true);
+    try {
+      const html2canvas = (await import('html2canvas')).default;
+      const canvas = await html2canvas(cardRef.current, {
+        backgroundColor: '#0D1B3E',
+        scale: 2,
+        useCORS: true,
+        logging: false,
+      });
+      const link = document.createElement('a');
+      link.download = `krishna-guidance-${Date.now()}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      toast({ title: 'Image saved 📸' });
+    } catch {
+      toast({ title: 'Could not capture image', variant: 'destructive' });
+    } finally {
+      setCapturing(false);
+      setOpen(false);
+    }
+  };
+
+  return (
+    <div className="relative">
+      <button
+        onClick={() => setOpen(!open)}
+        className="flex items-center gap-1.5 px-3.5 py-2 rounded-full text-[12px] transition-all hover:border-[rgba(245,200,66,0.5)]"
+        style={{ border: '1px solid rgba(245,200,66,0.25)', color: '#93B4E8' }}
+      >
+        <Share2 className="w-3.5 h-3.5" /> Share
+      </button>
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9, y: 8 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9, y: 8 }}
+            className="absolute bottom-full mb-2 right-0 z-50 rounded-xl p-2 w-48 shadow-xl"
+            style={{ background: 'linear-gradient(160deg, #0D1B3E, #1A2F5A)', border: '1px solid rgba(245,200,66,0.3)' }}
+          >
+            <button onClick={() => setOpen(false)} className="absolute top-1.5 right-1.5 p-1 rounded-full hover:bg-white/10">
+              <X className="w-3 h-3" style={{ color: '#5A7A9C' }} />
+            </button>
+            <p className="text-[10px] uppercase tracking-wider px-2 py-1 mb-1" style={{ color: '#F5C842' }}>Share via</p>
+            <button onClick={shareWhatsApp} className="w-full flex items-center gap-2.5 px-2.5 py-2 rounded-lg hover:bg-white/5 transition-colors text-[12px]" style={{ color: '#E8DCC8' }}>
+              <MessageCircle className="w-4 h-4 text-[#25D366]" /> WhatsApp
+            </button>
+            <button onClick={shareNative} className="w-full flex items-center gap-2.5 px-2.5 py-2 rounded-lg hover:bg-white/5 transition-colors text-[12px]" style={{ color: '#E8DCC8' }}>
+              <Share2 className="w-4 h-4" style={{ color: '#93B4E8' }} /> More...
+            </button>
+            <div className="my-1" style={{ borderTop: '1px solid rgba(245,200,66,0.15)' }} />
+            <button onClick={downloadImage} disabled={capturing} className="w-full flex items-center gap-2.5 px-2.5 py-2 rounded-lg hover:bg-white/5 transition-colors text-[12px]" style={{ color: '#E8DCC8' }}>
+              <Download className="w-4 h-4" style={{ color: '#F5C842' }} /> {capturing ? 'Capturing...' : 'Save as Image'}
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
 /* ═══ Response Card ═══ */
 function ResponseCard({
   exchange,
@@ -477,6 +571,7 @@ function ResponseCard({
 }) {
   const { response } = exchange;
   const pad = compact ? 'p-3 mt-3' : 'p-6';
+  const cardRef = useRef<HTMLDivElement>(null);
 
   return (
     <motion.div
@@ -485,6 +580,7 @@ function ResponseCard({
       transition={{ duration: 0.5 }}
       role="article"
       aria-label="Krishna's guidance"
+      ref={cardRef}
       className={`rounded-[20px] ${pad}`}
       style={{
         background: 'linear-gradient(160deg, rgba(13,27,62,0.95) 0%, rgba(26,47,90,0.95) 100%)',
@@ -492,7 +588,6 @@ function ResponseCard({
         boxShadow: compact ? 'none' : '0 8px 40px rgba(0,0,0,0.4), 0 0 60px rgba(245,200,66,0.05)',
       }}
     >
-      {/* Title */}
       {!compact && (
         <div className="flex items-center gap-2 mb-4">
           <span className="text-lg">🪷</span>
@@ -500,41 +595,31 @@ function ResponseCard({
         </div>
       )}
 
-      {/* Greeting */}
       <p className="text-[13px] italic mb-3" style={{ color: '#93B4E8' }}>{response.greeting}</p>
-
-      {/* Guidance */}
       <p className="text-[15px] leading-[1.8] mb-5" style={{ color: '#E8DCC8' }}>{response.guidance}</p>
 
-      {/* Divider */}
       <div className="mb-4" style={{ borderTop: '1px solid rgba(245,200,66,0.15)' }} />
 
-      {/* Verse */}
       <div className="mb-5">
         <p className="text-[11px] uppercase tracking-[1.5px] mb-3 font-semibold" style={{ color: '#F5C842' }}>
           📖 Bhagavad Gita · Chapter {response.verse.chapter}, Verse {response.verse.number}
         </p>
-
         {response.verse.sanskrit && (
           <div className="rounded-r-lg mb-3 py-2.5 px-3.5" style={{ background: 'rgba(245,200,66,0.04)', borderLeft: '3px solid #F5C842' }}>
             <p className="text-[14px] italic" style={{ color: '#D4B483' }}>❝ {response.verse.sanskrit} ❞</p>
           </div>
         )}
-
         <p className="text-[14px] leading-[1.7] mb-2" style={{ color: '#B8C8D8' }}>{response.verse.translation}</p>
-
         {response.verse.meaning && (
           <p className="text-[13px] italic leading-relaxed" style={{ color: '#7A9CC4' }}>{response.verse.meaning}</p>
         )}
       </div>
 
-      {/* Closing */}
       <div className="text-center pt-4" style={{ borderTop: '1px solid rgba(245,200,66,0.1)' }}>
         <p className="text-[14px] italic" style={{ color: '#F5C842' }}>✨ {response.closing}</p>
       </div>
 
-      {/* Actions */}
-      <div className="flex gap-2 mt-5 justify-center">
+      <div className="flex gap-2 mt-5 justify-center flex-wrap">
         {onAskAnother && (
           <button
             onClick={onAskAnother}
@@ -558,6 +643,7 @@ function ResponseCard({
         >
           <Bookmark className="w-3.5 h-3.5" /> Save
         </button>
+        <ShareMenu exchange={exchange} cardRef={cardRef} />
       </div>
     </motion.div>
   );
