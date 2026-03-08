@@ -793,7 +793,7 @@ export const heritageTemples: ImmersiveTemple[] = [
     category: 'heritage',
     deity: 'Lord Ganesha',
     description: 'An ancient rock-cut Ganesha ratha temple from the Pallava dynasty era.',
-    thumbnail: 'https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?w=400',
+    thumbnail: '/heritage/ganesha-ratha.jpg',
     zones: createDefaultZones('ganesha_ratha'),
     defaultZoneId: 'ganesha_ratha_entrance',
     audio: { aartiTrack: '', kirtanTrack: '', bellSound: '', ambienceTrack: '', chantingTrack: '' },
