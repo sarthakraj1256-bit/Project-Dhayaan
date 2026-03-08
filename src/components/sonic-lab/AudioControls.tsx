@@ -47,6 +47,16 @@ const atmosphereNameKeys: Record<string, string> = {
   bells: 'sound.atm.bells',
   forest: 'sound.atm.forest',
   chimes: 'sound.atm.chimes',
+  ocean: 'sound.atm.ocean',
+  thunder: 'sound.atm.thunder',
+  crickets: 'sound.atm.crickets',
+  wind: 'sound.atm.wind',
+  om: 'sound.atm.om',
+  bowl: 'sound.atm.bowl',
+  flute: 'sound.atm.flute',
+  mantra: 'sound.atm.mantra',
+  waterfall: 'sound.atm.waterfall',
+  fireplace: 'sound.atm.fireplace',
 };
 
 /* ── Expanded controls (shared between mobile sheet & desktop panel) ── */
