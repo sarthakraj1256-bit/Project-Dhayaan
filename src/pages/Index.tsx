@@ -18,6 +18,7 @@ import KrishnaAICard from '@/components/home/KrishnaAICard';
 // Below-fold sections — lazy loaded
 const RelaxationSection = lazy(() => import('@/components/home/RelaxationSection'));
 const DarshanSection = lazy(() => import('@/components/home/DarshanSection'));
+const TrendingSection = lazy(() => import('@/components/home/TrendingSection'));
 const SpiritualHubSection = lazy(() => import('@/components/home/SpiritualHubSection'));
 const ChildrenCartoonsSection = lazy(() => import('@/components/home/ChildrenCartoonsSection'));
 const DailyHighlightsSection = lazy(() => import('@/components/home/DailyHighlightsSection'));
@@ -57,6 +58,7 @@ const Index = () => {
         <Suspense fallback={null}>
           <div id="relaxation"><RelaxationSection /></div>
           <div id="darshan"><DarshanSection /></div>
+          <div id="trending"><TrendingSection /></div>
           <div id="daily-aarti"><SpiritualHubSection /></div>
           <div id="cartoons"><ChildrenCartoonsSection /></div>
           <div id="highlights"><DailyHighlightsSection /></div>
