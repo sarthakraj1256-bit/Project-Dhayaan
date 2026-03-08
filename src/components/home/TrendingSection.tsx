@@ -106,7 +106,7 @@ export default function TrendingSection() {
       {/* Trending Content - Compact list */}
       <div className="space-y-2">
         <p className="text-[10px] font-semibold text-foreground/30 uppercase tracking-widest">
-          Popular Content
+          {t('section.popularContent')}
         </p>
         {trendingContent.map((item, index) => (
           <motion.div
