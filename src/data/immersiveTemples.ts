@@ -857,7 +857,7 @@ export const heritageTemples: ImmersiveTemple[] = [
     category: 'heritage',
     deity: 'Lord Shiva',
     description: 'The tallest of the Pancha Rathas, a monolithic rock-cut temple from the 7th century.',
-    thumbnail: 'https://images.unsplash.com/photo-1621427167052-f1592f0498d9?w=400',
+    thumbnail: '/heritage/dharmaraja-ratha.jpg',
     zones: createDefaultZones('dharmaraja_ratha'),
     defaultZoneId: 'dharmaraja_ratha_entrance',
     audio: { aartiTrack: '', kirtanTrack: '', bellSound: '', ambienceTrack: '', chantingTrack: '' },
