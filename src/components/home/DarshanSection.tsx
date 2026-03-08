@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom';
-import { ArrowRight, Play, Music } from 'lucide-react';
+import { ArrowRight, Play } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { temples, spiritualContent } from '@/data/templeStreams';
+import { temples } from '@/data/templeStreams';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 export default function DarshanSection() {
