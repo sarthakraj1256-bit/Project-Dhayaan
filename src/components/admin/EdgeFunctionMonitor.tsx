@@ -1,5 +1,5 @@
 const functions = [
-  { name: "gyani-chat", status: "active", callsPerHr: 1247, errors: 2, lastExec: "2 min ago" },
+  { name: "krishna-ai", status: "active", callsPerHr: 1247, errors: 2, lastExec: "2 min ago" },
   { name: "notify-admin", status: "active", callsPerHr: 89, errors: 0, lastExec: "15 min ago" },
   { name: "elevenlabs-sfx", status: "active", callsPerHr: 156, errors: 1, lastExec: "5 min ago" },
   { name: "elevenlabs-tts", status: "active", callsPerHr: 234, errors: 0, lastExec: "3 min ago" },
