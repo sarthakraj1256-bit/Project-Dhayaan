@@ -1,4 +1,6 @@
 // Lovable Cloud environment initialized
+// Import PWA install hook early to capture beforeinstallprompt
+import "./hooks/usePWAInstall";
 import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
