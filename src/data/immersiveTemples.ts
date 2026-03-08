@@ -6,7 +6,8 @@ export type TempleCategory =
   | 'shakti_peeth' 
   | 'vishnu' 
   | 'sikh' 
-  | 'international';
+  | 'international'
+  | 'heritage';
 
 export type TimeOfDay = 'morning' | 'afternoon' | 'evening' | 'night';
 
