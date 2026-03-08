@@ -18,6 +18,8 @@ export const translations = {
     'section.cartoons': 'Spiritual Cartoons for Children',
     'section.highlights': 'Highlights',
     'section.philosophy': 'Philosophy',
+    'section.trending': 'Trending Now',
+    'section.popularContent': 'Popular Content',
 
     // Section links
     'link.seeAll': 'See all',
