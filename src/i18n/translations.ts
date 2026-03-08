@@ -1758,19 +1758,6 @@ export const translations = {
     'freq.sleep.741.name': 'मौन',
     'freq.sleep.741.purpose': 'मानसिक मौन',
 
-    // Gyani AI assistant
-    'gyani.name': 'ज्ञानी',
-    'gyani.subtitle': 'आपका ध्यान मार्गदर्शक 🙏',
-    'gyani.placeholder': 'ज्ञानी से कुछ भी पूछें... 🙏',
-    'gyani.welcome': 'नमस्ते 🙏 मैं ज्ञानी हूँ, ध्यान ऐप में आपका व्यक्तिगत मार्गदर्शक। मैं आपको ध्यान, उपचारात्मक ध्वनियाँ, मंदिर दर्शन, खेल और किसी भी प्रश्न में सहायता कर सकता हूँ। आज क्या खोजें? ✨',
-    'gyani.reflecting': 'ज्ञानी चिंतन कर रहे हैं...',
-    'gyani.voiceSoon': 'वॉइस जल्द आ रहा है 🎙️',
-    'gyani.chip.meditate': 'ध्यान कैसे करें?',
-    'gyani.chip.frequencies': 'उपचारात्मक ध्वनियाँ क्या हैं?',
-    'gyani.chip.darshan': 'मंदिर दर्शन दिखाएँ',
-    'gyani.chip.games': 'कौन से खेल उपलब्ध हैं?',
-    'gyani.chip.sleep': 'नींद में मदद करें',
-    'gyani.chip.support': 'मुझे सहायता चाहिए',
   },
 } as const;
 
