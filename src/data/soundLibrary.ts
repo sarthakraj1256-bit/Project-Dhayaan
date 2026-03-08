@@ -16,7 +16,8 @@ export type FrequencyCategory =
   | 'stress'
   | 'meditation'
   | 'sleep'
-  | 'celestial';
+  | 'celestial'
+  | 'twin';
  
  export interface CategoryInfo {
    id: FrequencyCategory;
