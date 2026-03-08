@@ -899,6 +899,8 @@ export const translations = {
     'section.cartoons': 'बच्चों के लिए आध्यात्मिक कार्टून',
     'section.highlights': 'मुख्य आकर्षण',
     'section.philosophy': 'दर्शन',
+    'section.trending': 'अभी ट्रेंडिंग',
+    'section.popularContent': 'लोकप्रिय सामग्री',
 
     // Section links
     'link.seeAll': 'सभी देखें',
