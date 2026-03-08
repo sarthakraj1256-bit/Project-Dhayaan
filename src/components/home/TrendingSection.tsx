@@ -30,7 +30,7 @@ export default function TrendingSection() {
             <Flame className="w-3.5 h-3.5 text-destructive" />
           </div>
           <h2 className="text-xs font-semibold text-foreground/40 uppercase tracking-widest">
-            Trending Now
+            {t('section.trending')}
           </h2>
         </div>
         <Link to="/live-darshan" className="text-xs text-primary font-medium flex items-center gap-1 hover:underline">
@@ -106,7 +106,7 @@ export default function TrendingSection() {
       {/* Trending Content - Compact list */}
       <div className="space-y-2">
         <p className="text-[10px] font-semibold text-foreground/30 uppercase tracking-widest">
-          Popular Content
+          {t('section.popularContent')}
         </p>
         {trendingContent.map((item, index) => (
           <motion.div

@@ -18,6 +18,8 @@ export const translations = {
     'section.cartoons': 'Spiritual Cartoons for Children',
     'section.highlights': 'Highlights',
     'section.philosophy': 'Philosophy',
+    'section.trending': 'Trending Now',
+    'section.popularContent': 'Popular Content',
 
     // Section links
     'link.seeAll': 'See all',
@@ -897,6 +899,8 @@ export const translations = {
     'section.cartoons': 'बच्चों के लिए आध्यात्मिक कार्टून',
     'section.highlights': 'मुख्य आकर्षण',
     'section.philosophy': 'दर्शन',
+    'section.trending': 'अभी ट्रेंडिंग',
+    'section.popularContent': 'लोकप्रिय सामग्री',
 
     // Section links
     'link.seeAll': 'सभी देखें',
