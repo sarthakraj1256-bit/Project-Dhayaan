@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { Play } from 'lucide-react';
 import type { Gurudwara } from '@/data/gurudwaraStreams';
+import type { LiveStatus } from '@/hooks/useGurudwaraLiveStatus';
 
 interface Props {
   gurudwara: Gurudwara;
+  liveStatus?: LiveStatus;
 }
 
 const openGurudwara = (url: string) => {
@@ -19,8 +21,11 @@ const openGurudwara = (url: string) => {
   }
 };
 
-export default function GurudwaraCard({ gurudwara }: Props) {
+export default function GurudwaraCard({ gurudwara, liveStatus }: Props) {
   const [imgError, setImgError] = useState(false);
+
+  const isLive = liveStatus?.isLive ?? false;
+  const hasBeenChecked = liveStatus && liveStatus.lastChecked > 0;
 
   return (
     <a
@@ -37,8 +42,10 @@ export default function GurudwaraCard({ gurudwara }: Props) {
         className="rounded-2xl overflow-hidden border cursor-pointer transition-all duration-250 hover:-translate-y-1.5 hover:shadow-[0_12px_32px_rgba(0,0,0,0.35)] hover:border-[rgba(201,168,76,0.4)] active:scale-[0.97]"
         style={{
           background: 'var(--darshan-card-bg)',
-          borderColor: 'rgba(201,168,76,0.15)',
-          boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
+          borderColor: isLive ? 'rgba(220,38,38,0.35)' : 'rgba(201,168,76,0.15)',
+          boxShadow: isLive
+            ? '0 4px 20px rgba(220,38,38,0.15)'
+            : '0 4px 20px rgba(0,0,0,0.2)',
         }}
       >
         {/* Image area */}
@@ -65,11 +72,26 @@ export default function GurudwaraCard({ gurudwara }: Props) {
           {/* Gradient overlay */}
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/70 pointer-events-none" />
 
-          {/* LIVE badge */}
-          <span className="absolute top-2.5 left-2.5 inline-flex items-center gap-1.5 px-2.5 py-[3px] rounded-full text-[11px] font-bold text-white bg-[rgba(220,38,38,0.92)]">
-            <span className="w-2 h-2 rounded-full bg-white animate-[livePulse_1.8s_infinite]" />
-            LIVE
-          </span>
+          {/* LIVE / OFFLINE badge */}
+          {hasBeenChecked ? (
+            isLive ? (
+              <span className="absolute top-2.5 left-2.5 inline-flex items-center gap-1.5 px-2.5 py-[3px] rounded-full text-[11px] font-bold text-white bg-[rgba(220,38,38,0.92)]">
+                <span className="w-2 h-2 rounded-full bg-white animate-[livePulse_1.8s_infinite]" />
+                LIVE
+              </span>
+            ) : (
+              <span className="absolute top-2.5 left-2.5 inline-flex items-center gap-1.5 px-2.5 py-[3px] rounded-full text-[11px] font-bold text-white/80 bg-[rgba(100,100,100,0.75)]">
+                <span className="w-2 h-2 rounded-full bg-white/50" />
+                OFFLINE
+              </span>
+            )
+          ) : (
+            /* Show pulsing badge while first check is pending */
+            <span className="absolute top-2.5 left-2.5 inline-flex items-center gap-1.5 px-2.5 py-[3px] rounded-full text-[11px] font-bold text-white bg-[rgba(220,38,38,0.92)]">
+              <span className="w-2 h-2 rounded-full bg-white animate-[livePulse_1.8s_infinite]" />
+              LIVE
+            </span>
+          )}
 
           {/* Play button */}
           <div className="absolute inset-0 flex items-center justify-center">
@@ -85,7 +107,9 @@ export default function GurudwaraCard({ gurudwara }: Props) {
             {gurudwara.name}
           </h3>
           <p className="text-[11px] text-[#9C8C7C] mt-0.5 truncate">{gurudwara.location}</p>
-          <p className="text-[11px] text-[#D39A2A] mt-1.5">Opens in YouTube →</p>
+          <p className={`text-[11px] mt-1.5 ${isLive ? 'text-red-500 font-semibold' : 'text-[#D39A2A]'}`}>
+            {isLive ? '🔴 Live Now → Watch' : 'Opens in YouTube →'}
+          </p>
         </div>
       </div>
     </a>
