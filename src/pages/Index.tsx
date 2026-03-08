@@ -72,8 +72,6 @@ const Index = () => {
        {/* Krishna AI Floating Chat */}
        <KrishnaFloatingChat />
 
-       {/* Gyani AI Guide - Homepage Only */}
-       <GyaniChat />
      </div>
    );
  };
