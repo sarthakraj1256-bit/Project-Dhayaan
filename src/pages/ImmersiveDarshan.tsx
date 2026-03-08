@@ -206,9 +206,9 @@ const ImmersiveDarshan = () => {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                   
                   {/* 360 Badge */}
-                  <Badge className="absolute top-3 left-3 bg-primary/90">
-                    360°
-                  </Badge>
+                   <Badge className="absolute top-3 left-3 bg-primary/90">
+                     {temple.virtualTourUrl ? '360° Virtual Tour' : '360°'}
+                   </Badge>
 
                   {/* Play button */}
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
