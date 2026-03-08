@@ -1,4 +1,4 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useState, useCallback } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -11,6 +11,8 @@ import { OfflineIndicator } from "./components/pwa/OfflineIndicator";
 import { LanguageProvider } from "./contexts/LanguageContext";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { PWAInstallPrompt } from "./components/pwa/PWAInstallPrompt";
+import { SessionRestoreGate } from "./components/SessionRestoreGate";
+import { RouteMemoryTracker } from "./components/RouteMemoryTracker";
 
 // Critical routes - loaded immediately
 import Index from "./pages/Index";
