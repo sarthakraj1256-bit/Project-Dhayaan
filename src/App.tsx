@@ -63,68 +63,75 @@ const queryClient = new QueryClient({
   },
 });
 
-const App = () => (
-  <ThemeProvider>
-  <LanguageProvider>
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <BrowserRouter>
-        <PWASplashScreen minDisplayTime={2500} />
-        <OfflineIndicator />
-        <Toaster />
-        <Sonner />
-        <EnvHealthCheck />
-        <PWAInstallPrompt />
-        
-        <Suspense fallback={<PageSkeleton />}>
-          <Routes>
-            {/* Critical routes - no lazy loading */}
-            <Route path="/" element={<Index />} />
-            <Route path="/auth" element={<Auth />} />
-            <Route path="/auth/callback" element={<AuthCallback />} />
-            
-            {/* Protected routes - lazy loaded */}
-            <Route path="/dashboard" element={
-              <Suspense fallback={<PageSkeleton />}>
-                <ProtectedRoute><Dashboard /></ProtectedRoute>
-              </Suspense>
-            } />
-            <Route path="/profile" element={
-              <Suspense fallback={<PageSkeleton />}>
-                <ProtectedRoute><Profile /></ProtectedRoute>
-              </Suspense>
-            } />
-            
-            {/* Feature routes - lazy loaded */}
-            <Route path="/sonic-lab" element={<SonicLab />} />
-            <Route path="/mantrochar" element={<Mantrochar />} />
-            <Route path="/lakshya" element={<Lakshya />} />
-            <Route path="/live-darshan" element={<LiveDarshan />} />
-            <Route path="/aarti-schedule" element={<AartiSchedule />} />
-            <Route path="/daily-aarati" element={<DailyAarati />} />
-            <Route path="/immersive-darshan" element={<ImmersiveDarshan />} />
-            <Route path="/garden/:id" element={<SharedGarden />} />
-            <Route path="/jap-bank" element={<JapBank />} />
-            <Route path="/children-cartoons" element={<ChildrenCartoons />} />
-            <Route path="/install" element={<Install />} />
-            <Route path="/help" element={<Help />} />
-            <Route path="/bhakti-shorts" element={<BhaktiShorts />} />
-            <Route path="/settings" element={<SettingsPage />} />
-            <Route path="/admin" element={
-              <Suspense fallback={<PageSkeleton />}>
-                <AdminRoute><Admin /></AdminRoute>
-              </Suspense>
-            } />
-            
-            {/* Catch-all */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Suspense>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
-  </LanguageProvider>
-  </ThemeProvider>
-);
+const App = () => {
+  const [splashDone, setSplashDone] = useState(false);
+  const handleSplashComplete = useCallback(() => setSplashDone(true), []);
+
+  return (
+    <ThemeProvider>
+    <LanguageProvider>
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <BrowserRouter>
+          <PWASplashScreen minDisplayTime={2500} onComplete={handleSplashComplete} />
+          <OfflineIndicator />
+          <Toaster />
+          <Sonner />
+          <EnvHealthCheck />
+          <PWAInstallPrompt />
+          <RouteMemoryTracker />
+          <SessionRestoreGate splashDone={splashDone} />
+          
+          <Suspense fallback={<PageSkeleton />}>
+            <Routes>
+              {/* Critical routes - no lazy loading */}
+              <Route path="/" element={<Index />} />
+              <Route path="/auth" element={<Auth />} />
+              <Route path="/auth/callback" element={<AuthCallback />} />
+              
+              {/* Protected routes - lazy loaded */}
+              <Route path="/dashboard" element={
+                <Suspense fallback={<PageSkeleton />}>
+                  <ProtectedRoute><Dashboard /></ProtectedRoute>
+                </Suspense>
+              } />
+              <Route path="/profile" element={
+                <Suspense fallback={<PageSkeleton />}>
+                  <ProtectedRoute><Profile /></ProtectedRoute>
+                </Suspense>
+              } />
+              
+              {/* Feature routes - lazy loaded */}
+              <Route path="/sonic-lab" element={<SonicLab />} />
+              <Route path="/mantrochar" element={<Mantrochar />} />
+              <Route path="/lakshya" element={<Lakshya />} />
+              <Route path="/live-darshan" element={<LiveDarshan />} />
+              <Route path="/aarti-schedule" element={<AartiSchedule />} />
+              <Route path="/daily-aarati" element={<DailyAarati />} />
+              <Route path="/immersive-darshan" element={<ImmersiveDarshan />} />
+              <Route path="/garden/:id" element={<SharedGarden />} />
+              <Route path="/jap-bank" element={<JapBank />} />
+              <Route path="/children-cartoons" element={<ChildrenCartoons />} />
+              <Route path="/install" element={<Install />} />
+              <Route path="/help" element={<Help />} />
+              <Route path="/bhakti-shorts" element={<BhaktiShorts />} />
+              <Route path="/settings" element={<SettingsPage />} />
+              <Route path="/admin" element={
+                <Suspense fallback={<PageSkeleton />}>
+                  <AdminRoute><Admin /></AdminRoute>
+                </Suspense>
+              } />
+              
+              {/* Catch-all */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Suspense>
+        </BrowserRouter>
+      </TooltipProvider>
+    </QueryClientProvider>
+    </LanguageProvider>
+    </ThemeProvider>
+  );
+};
 
 export default App;
