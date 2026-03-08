@@ -5,7 +5,7 @@ import { supabase } from '@/integrations/backend/client';
 import { User } from '@supabase/supabase-js';
 import BottomNav from '@/components/BottomNav';
 import KrishnaFloatingChat from '@/components/krishna/KrishnaFloatingChat';
-import GyaniChat from '@/components/gyani/GyaniChat';
+
 
 import { useLanguage } from '@/contexts/LanguageContext';
 // Only hero + quick-start are above the fold — load eagerly
@@ -72,8 +72,6 @@ const Index = () => {
        {/* Krishna AI Floating Chat */}
        <KrishnaFloatingChat />
 
-       {/* Gyani AI Guide - Homepage Only */}
-       <GyaniChat />
      </div>
    );
  };
