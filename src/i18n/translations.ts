@@ -299,6 +299,16 @@ export const translations = {
     'sound.atm.bells': 'Temple Bells',
     'sound.atm.forest': 'Forest Ambience',
     'sound.atm.chimes': 'Wind Chimes',
+    'sound.atm.ocean': 'Ocean Waves',
+    'sound.atm.thunder': 'Thunderstorm',
+    'sound.atm.crickets': 'Night Crickets',
+    'sound.atm.wind': 'Himalayan Wind',
+    'sound.atm.om': 'Meditation Om',
+    'sound.atm.bowl': 'Singing Bowl',
+    'sound.atm.flute': 'Krishna Flute',
+    'sound.atm.mantra': 'Sacred Mantra',
+    'sound.atm.waterfall': 'Waterfall',
+    'sound.atm.fireplace': 'Fireplace',
 
     // Temple Filters
     'temple.live': 'LIVE',
@@ -1181,6 +1191,16 @@ export const translations = {
     'sound.atm.bells': 'मंदिर की घंटियाँ',
     'sound.atm.forest': 'वन वातावरण',
     'sound.atm.chimes': 'पवन झंकार',
+    'sound.atm.ocean': 'समुद्र लहरें',
+    'sound.atm.thunder': 'तूफान',
+    'sound.atm.crickets': 'रात के झींगुर',
+    'sound.atm.wind': 'हिमालयी हवा',
+    'sound.atm.om': 'ओम जाप',
+    'sound.atm.bowl': 'गायन कटोरा',
+    'sound.atm.flute': 'कृष्ण बाँसुरी',
+    'sound.atm.mantra': 'पवित्र मंत्र',
+    'sound.atm.waterfall': 'झरना',
+    'sound.atm.fireplace': 'अलाव',
 
     // Temple Filters
     'temple.live': 'लाइव',

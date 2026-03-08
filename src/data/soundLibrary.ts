@@ -166,21 +166,31 @@ export const soundLibrary: FrequencyItem[] = [
   { freq: '963 + 432Hz', value: 963, name: 'Cosmic Ground', purpose: 'Pineal activation grounded in natural harmony', category: 'twin' },
 ];
  
- export interface AtmosphereItem {
-   id: string;
-   name: string;
-   icon: string;
- }
- 
- export const atmospheres: AtmosphereItem[] = [
-   { id: 'none', name: 'No Atmosphere', icon: '🔇' },
-   { id: 'rain', name: 'Gentle Rain', icon: '🌧️' },
-   { id: 'river', name: 'River Flow', icon: '🏞️' },
-   { id: 'bells', name: 'Temple Bells', icon: '🔔' },
-   { id: 'forest', name: 'Forest Ambience', icon: '🌲' },
-   { id: 'chimes', name: 'Wind Chimes', icon: '🎐' },
- ];
- 
- export const getFrequenciesByCategory = (category: FrequencyCategory): FrequencyItem[] => {
-   return soundLibrary.filter((item) => item.category === category);
- };
+export interface AtmosphereItem {
+  id: string;
+  name: string;
+  icon: string;
+}
+
+export const atmospheres: AtmosphereItem[] = [
+  { id: 'none', name: 'No Atmosphere', icon: '🔇' },
+  { id: 'rain', name: 'Gentle Rain', icon: '🌧️' },
+  { id: 'river', name: 'River Flow', icon: '🏞️' },
+  { id: 'bells', name: 'Temple Bells', icon: '🔔' },
+  { id: 'forest', name: 'Forest Ambience', icon: '🌲' },
+  { id: 'chimes', name: 'Wind Chimes', icon: '🎐' },
+  { id: 'ocean', name: 'Ocean Waves', icon: '🌊' },
+  { id: 'thunder', name: 'Thunderstorm', icon: '⛈️' },
+  { id: 'crickets', name: 'Night Crickets', icon: '🦗' },
+  { id: 'wind', name: 'Himalayan Wind', icon: '🏔️' },
+  { id: 'om', name: 'Meditation Om Chant', icon: '🕉️' },
+  { id: 'bowl', name: 'Tibetan Singing Bowl', icon: '🔔' },
+  { id: 'flute', name: 'Krishna Flute', icon: '🪈' },
+  { id: 'mantra', name: 'Sacred Mantra', icon: '📿' },
+  { id: 'waterfall', name: 'Waterfall', icon: '💧' },
+  { id: 'fireplace', name: 'Fireplace', icon: '🔥' },
+];
+
+export const getFrequenciesByCategory = (category: FrequencyCategory): FrequencyItem[] => {
+  return soundLibrary.filter((item) => item.category === category);
+};
