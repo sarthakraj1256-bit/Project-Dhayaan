@@ -7,7 +7,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 
 export default function DarshanSection() {
   const previewTemples = temples.slice(0, 4);
-  const previewAarati = spiritualContent.slice(0, 4);
+  const { t } = useLanguage();
   const { t } = useLanguage();
 
   return (
