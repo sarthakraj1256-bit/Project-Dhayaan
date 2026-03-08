@@ -299,6 +299,16 @@ export const translations = {
     'sound.atm.bells': 'Temple Bells',
     'sound.atm.forest': 'Forest Ambience',
     'sound.atm.chimes': 'Wind Chimes',
+    'sound.atm.ocean': 'Ocean Waves',
+    'sound.atm.thunder': 'Thunderstorm',
+    'sound.atm.crickets': 'Night Crickets',
+    'sound.atm.wind': 'Himalayan Wind',
+    'sound.atm.om': 'Meditation Om',
+    'sound.atm.bowl': 'Singing Bowl',
+    'sound.atm.flute': 'Krishna Flute',
+    'sound.atm.mantra': 'Sacred Mantra',
+    'sound.atm.waterfall': 'Waterfall',
+    'sound.atm.fireplace': 'Fireplace',
 
     // Temple Filters
     'temple.live': 'LIVE',
