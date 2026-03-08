@@ -35,6 +35,8 @@ const ALL_TEMPLES: LiveTemple[] = [
   { id: 22, name: "Guruvayur Temple", location: "Guruvayur, Kerala", deity: "Lord Krishna", color: "#F9A825", imageUrl: "/temples/guruvayur.jpg", liveUrl: "https://www.youtube.com/@guruvayurdevaswomofficial/live", hasLive: true, region: "south" },
   { id: 23, name: "Gangotri Temple", location: "Uttarkashi, Uttarakhand", deity: "Goddess Ganga", color: "#0277BD", imageUrl: "/temples/gangotri.jpg", liveUrl: null, hasLive: false, region: "north" },
   { id: 24, name: "Yamunotri Temple", location: "Uttarkashi, Uttarakhand", deity: "Goddess Yamuna", color: "#00838F", imageUrl: "/temples/yamunotri.jpg", liveUrl: null, hasLive: false, region: "north" },
+  { id: 25, name: "Kashi Vishwanath Dham", location: "Varanasi, Uttar Pradesh", deity: "Lord Shiva", color: "#D4A017", imageUrl: "/temples/kashi-vishwanath.jpg", liveUrl: "https://youtube.com/@ddastro/live", hasLive: true, region: "north" },
+  { id: 26, name: "Tirupati Balaji", location: "Tirumala, Andhra Pradesh", deity: "Lord Venkateswara", color: "#8B0000", imageUrl: "/temples/tirupati-balaji.jpg", liveUrl: "https://youtube.com/@svbcbroadcast/live", hasLive: true, region: "south" },
 ];
 
 export const LIVE_TEMPLES = ALL_TEMPLES;
