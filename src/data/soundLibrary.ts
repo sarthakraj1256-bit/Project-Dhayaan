@@ -77,6 +77,13 @@ export type FrequencyCategory =
     icon: '✨',
     color: 'gold',
   },
+  {
+    id: 'twin',
+    name: 'Twin Frequencies',
+    description: 'Combined dual-frequency resonance for amplified effect',
+    icon: '🔗',
+    color: 'rose',
+  },
 ];
 
 export const soundLibrary: FrequencyItem[] = [
