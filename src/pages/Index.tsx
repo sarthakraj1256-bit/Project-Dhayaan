@@ -12,6 +12,7 @@ import { HeroSection, QuickStartSection } from '@/components/home';
 import SectionNav from '@/components/home/SectionNav';
 import SideDrawer from '@/components/home/SideDrawer';
 import WavyBackground from '@/components/home/WavyBackground';
+import KrishnaAICard from '@/components/home/KrishnaAICard';
 
 // Below-fold sections — lazy loaded
 const RelaxationSection = lazy(() => import('@/components/home/RelaxationSection'));
@@ -51,6 +52,7 @@ const Index = () => {
       <main className="relative z-[1] pb-24 md:pb-0 pt-16 md:pt-[72px]">
         <div id="hero"><HeroSection user={user} /></div>
         <div id="explore"><QuickStartSection /></div>
+        <KrishnaAICard />
         <Suspense fallback={null}>
           <div id="relaxation"><RelaxationSection /></div>
           <div id="darshan"><DarshanSection /></div>
