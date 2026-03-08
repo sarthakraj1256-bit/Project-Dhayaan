@@ -556,6 +556,51 @@ export type Database = {
         }
         Relationships: []
       }
+      saved_krishna_guidance: {
+        Row: {
+          closing: string | null
+          created_at: string
+          greeting: string | null
+          guidance: string
+          id: string
+          question: string
+          user_id: string
+          verse_chapter: number | null
+          verse_meaning: string | null
+          verse_number: number | null
+          verse_sanskrit: string | null
+          verse_translation: string | null
+        }
+        Insert: {
+          closing?: string | null
+          created_at?: string
+          greeting?: string | null
+          guidance: string
+          id?: string
+          question: string
+          user_id: string
+          verse_chapter?: number | null
+          verse_meaning?: string | null
+          verse_number?: number | null
+          verse_sanskrit?: string | null
+          verse_translation?: string | null
+        }
+        Update: {
+          closing?: string | null
+          created_at?: string
+          greeting?: string | null
+          guidance?: string
+          id?: string
+          question?: string
+          user_id?: string
+          verse_chapter?: number | null
+          verse_meaning?: string | null
+          verse_number?: number | null
+          verse_sanskrit?: string | null
+          verse_translation?: string | null
+        }
+        Relationships: []
+      }
       session_favorites: {
         Row: {
           atmosphere_id: string
