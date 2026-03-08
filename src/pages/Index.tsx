@@ -4,7 +4,7 @@ import { LogIn } from 'lucide-react';
 import { supabase } from '@/integrations/backend/client';
 import { User } from '@supabase/supabase-js';
 import BottomNav from '@/components/BottomNav';
-import GyaniChat from '@/components/gyani/GyaniChat';
+
 
 import { useLanguage } from '@/contexts/LanguageContext';
 // Only hero + quick-start are above the fold — load eagerly
