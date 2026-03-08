@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Copy, Bookmark, RotateCcw, ChevronDown, ChevronUp, Trash2 } from 'lucide-react';
+import { ArrowLeft, Copy, Bookmark, RotateCcw, ChevronDown, ChevronUp, Trash2, Share2, MessageCircle, Download, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '@/integrations/backend/client';
 import { toast } from '@/hooks/use-toast';
