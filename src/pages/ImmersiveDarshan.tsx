@@ -58,6 +58,11 @@ const ImmersiveDarshan = () => {
 
   // Handle entering a temple
   const handleEnterTemple = (temple: ImmersiveTemple) => {
+    // If temple has an external virtual tour URL, open it in a new tab
+    if (temple.virtualTourUrl) {
+      window.open(temple.virtualTourUrl, '_blank', 'noopener,noreferrer');
+      return;
+    }
     setSelectedTemple(temple);
     setCurrentZoneId(temple.defaultZoneId);
   };
