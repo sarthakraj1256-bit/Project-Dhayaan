@@ -58,6 +58,7 @@ const Index = () => {
         <Suspense fallback={null}>
           <div id="relaxation"><RelaxationSection /></div>
           <div id="darshan"><DarshanSection /></div>
+          <div id="trending"><TrendingSection /></div>
           <div id="daily-aarti"><SpiritualHubSection /></div>
           <div id="cartoons"><ChildrenCartoonsSection /></div>
           <div id="highlights"><DailyHighlightsSection /></div>
