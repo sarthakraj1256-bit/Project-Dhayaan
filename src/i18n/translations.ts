@@ -1191,6 +1191,16 @@ export const translations = {
     'sound.atm.bells': 'मंदिर की घंटियाँ',
     'sound.atm.forest': 'वन वातावरण',
     'sound.atm.chimes': 'पवन झंकार',
+    'sound.atm.ocean': 'समुद्र लहरें',
+    'sound.atm.thunder': 'तूफान',
+    'sound.atm.crickets': 'रात के झींगुर',
+    'sound.atm.wind': 'हिमालयी हवा',
+    'sound.atm.om': 'ओम जाप',
+    'sound.atm.bowl': 'गायन कटोरा',
+    'sound.atm.flute': 'कृष्ण बाँसुरी',
+    'sound.atm.mantra': 'पवित्र मंत्र',
+    'sound.atm.waterfall': 'झरना',
+    'sound.atm.fireplace': 'अलाव',
 
     // Temple Filters
     'temple.live': 'लाइव',
