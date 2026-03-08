@@ -51,6 +51,7 @@ const LiveDarshan = () => {
   const navigate = useNavigate();
   const { isOnline } = useNetworkStatus();
   const { t } = useLanguage();
+  const { getStatus: getGurudwaraStatus, isChecking: isCheckingLive } = useGurudwaraLiveStatus();
   const [filter, setFilter] = useState<Filter>('all');
   const [aartiFilter, setAartiFilter] = useState('all');
   const [activeVideo, setActiveVideo] = useState<SpiritualContent | null>(null);
