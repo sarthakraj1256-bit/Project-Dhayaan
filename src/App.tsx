@@ -38,6 +38,7 @@ const Admin = lazy(() => import("./pages/Admin"));
 const BhaktiShorts = lazy(() => import("./pages/BhaktiShorts"));
 const SettingsPage = lazy(() => import("./pages/SettingsPage"));
 const DailyAarati = lazy(() => import("./pages/DailyAarati"));
+const MyKrishna = lazy(() => import("./pages/MyKrishna"));
 
 // Lazy-loaded protected route wrappers
 const ProtectedRoute = lazy(() => import("./components/auth/ProtectedRoute"));
