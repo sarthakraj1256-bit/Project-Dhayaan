@@ -205,9 +205,17 @@ const LiveDarshan = () => {
               Seek blessings from sacred Gurudwaras 🙏
             </p>
 
+            {/* Live status indicator */}
+            {isCheckingLive && (
+              <p className="text-[10px] text-[#9C8C7C] mb-3 flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#D39A2A] animate-pulse" />
+                Checking live status…
+              </p>
+            )}
+
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
               {GURUDWARAS.map(g => (
-                <GurudwaraCard key={g.id} gurudwara={g} />
+                <GurudwaraCard key={g.id} gurudwara={g} liveStatus={getGurudwaraStatus(g.liveUrl)} />
               ))}
             </div>
           </section>
