@@ -825,7 +825,7 @@ export const heritageTemples: ImmersiveTemple[] = [
     category: 'heritage',
     deity: 'Lord Krishna',
     description: 'A 16th-century temple built by Krishnadevaraya of the Vijayanagara Empire.',
-    thumbnail: 'https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?w=400',
+    thumbnail: '/heritage/krishna-temple-hampi.jpg',
     zones: createDefaultZones('krishna_temple_hampi'),
     defaultZoneId: 'krishna_temple_hampi_entrance',
     audio: { aartiTrack: '', kirtanTrack: '', bellSound: '', ambienceTrack: '', chantingTrack: '' },
