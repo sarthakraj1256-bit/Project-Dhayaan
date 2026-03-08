@@ -873,7 +873,7 @@ export const heritageTemples: ImmersiveTemple[] = [
     category: 'heritage',
     deity: 'Heritage Monument',
     description: 'The 54-metre high Victory Gate, one of the highest gateways in the world, built by Akbar.',
-    thumbnail: 'https://images.unsplash.com/photo-1548013146-72479768bada?w=400',
+    thumbnail: '/heritage/buland-darwaza.jpg',
     zones: createDefaultZones('buland_darwaza'),
     defaultZoneId: 'buland_darwaza_entrance',
     audio: { aartiTrack: '', kirtanTrack: '', bellSound: '', ambienceTrack: '', chantingTrack: '' },
