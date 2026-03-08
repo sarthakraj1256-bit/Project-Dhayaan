@@ -149,6 +149,21 @@ export const soundLibrary: FrequencyItem[] = [
   { freq: '144.72Hz', value: 144.72, name: "Mars's Will", purpose: 'Courage, determination, and inner fire', category: 'celestial' },
   { freq: '126.22Hz', value: 126.22, name: "Sun's Vitality", purpose: 'Life force, confidence, and radiant energy', category: 'celestial' },
   { freq: '210.42Hz', value: 210.42, name: "Moon's Serenity", purpose: 'Emotional balance, intuition, and calm reflection', category: 'celestial' },
+
+  // Twin Frequencies
+  { freq: '528 + 174Hz', value: 528, name: 'Healing Foundation', purpose: 'Deep healing grounded in physical safety', category: 'twin' },
+  { freq: '444 + 528Hz', value: 444, name: 'Stable Miracle', purpose: 'Emotional stability with transformative energy', category: 'twin' },
+  { freq: '174 + 528Hz', value: 174, name: 'Grounded Healing', purpose: 'Physical grounding amplified by DNA repair', category: 'twin' },
+  { freq: '963 + 528Hz', value: 963, name: 'Divine Repair', purpose: 'Higher consciousness meets deep restoration', category: 'twin' },
+  { freq: '528 + 963Hz', value: 528, name: 'Miracle Ascension', purpose: 'Healing energy rising to crown activation', category: 'twin' },
+  { freq: '417 + 528Hz', value: 417, name: 'Reset & Heal', purpose: 'Clear negativity then restore with love frequency', category: 'twin' },
+  { freq: '528 + 417Hz', value: 528, name: 'Heal & Purify', purpose: 'Heart healing followed by energetic cleansing', category: 'twin' },
+  { freq: '528 + 396Hz', value: 528, name: 'Heal & Liberate', purpose: 'DNA repair combined with guilt and fear release', category: 'twin' },
+  { freq: '777 + 528Hz', value: 777, name: 'Angel Healing', purpose: 'Angelic frequency amplified by miracle tone', category: 'twin' },
+  { freq: '528 + 639Hz', value: 528, name: 'Love Bridge', purpose: 'Heart healing bridged to relationship harmony', category: 'twin' },
+  { freq: '639 + 432Hz', value: 639, name: 'Harmonic Bond', purpose: 'Interpersonal connection with natural calm', category: 'twin' },
+  { freq: '432 + 963Hz', value: 432, name: 'Nature Crown', purpose: 'Earth frequency ascending to cosmic awareness', category: 'twin' },
+  { freq: '963 + 432Hz', value: 963, name: 'Cosmic Ground', purpose: 'Pineal activation grounded in natural harmony', category: 'twin' },
 ];
  
  export interface AtmosphereItem {
