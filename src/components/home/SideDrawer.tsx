@@ -157,6 +157,7 @@ export default function SideDrawer({ open, onClose }: SideDrawerProps) {
               {menuItems.map((item) => {
                 const isActive = location.pathname === item.path;
                 const Icon = item.icon;
+                const color = item.activeColor;
                 return (
                   <button
                     key={item.path}
@@ -164,12 +165,19 @@ export default function SideDrawer({ open, onClose }: SideDrawerProps) {
                     className={cn(
                       'w-full flex items-center gap-3.5 h-[52px] px-4 rounded-xl text-[15px] font-medium transition-colors duration-200 touch-target',
                       isActive
-                        ? 'bg-primary/15 text-primary border-l-[3px] border-primary'
+                        ? color
+                          ? `border-l-[3px]`
+                          : 'bg-primary/15 text-primary border-l-[3px] border-primary'
                         : 'text-foreground/70 hover:bg-foreground/[0.06]'
                     )}
+                    style={isActive && color ? { background: `${color}20`, color, borderLeftColor: color } : undefined}
                   >
-                    <Icon className={cn('w-5 h-5 shrink-0', isActive ? 'text-primary' : 'text-foreground/50')} />
-                    {t(item.labelKey)}
+                    {item.emoji ? (
+                      <span className="text-[18px] shrink-0">{item.emoji}</span>
+                    ) : Icon ? (
+                      <Icon className={cn('w-5 h-5 shrink-0', isActive && !color ? 'text-primary' : 'text-foreground/50')} style={isActive && color ? { color } : undefined} />
+                    ) : null}
+                    {item.labelKey ? t(item.labelKey) : item.label}
                   </button>
                 );
               })}
