@@ -1,11 +1,13 @@
-import { useState, useRef, useEffect, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useRef, useEffect, useCallback, useMemo } from "react";
+import { motion } from "framer-motion";
 import { Plus, ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useShorts } from "@/hooks/useShorts";
 import ShortCard from "./ShortCard";
+import YouTubeShortCard from "./YouTubeShortCard";
 import UploadModal from "./UploadModal";
 import TagFilter from "./TagFilter";
+import { curatedShorts, type CuratedShort } from "@/data/bhaktiShortsData";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 
@@ -16,6 +18,19 @@ const ShortsFeed = () => {
   const [showUpload, setShowUpload] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+
+  // Filter curated shorts by tag
+  const filteredCurated = useMemo(() => {
+    if (!activeTag) return curatedShorts;
+    return curatedShorts.filter((s) => s.tags.includes(activeTag));
+  }, [activeTag]);
+
+  // Build combined feed: DB shorts first, then curated YouTube shorts
+  const combinedFeed = useMemo(() => {
+    const dbItems = shorts.map((s) => ({ type: "db" as const, data: s }));
+    const ytItems = filteredCurated.map((s) => ({ type: "yt" as const, data: s }));
+    return [...dbItems, ...ytItems];
+  }, [shorts, filteredCurated]);
 
   // Reset scroll position when tag changes
   useEffect(() => {
@@ -35,6 +50,7 @@ const ShortsFeed = () => {
             const idx = Number(entry.target.getAttribute("data-index"));
             if (!isNaN(idx)) {
               setActiveIndex(idx);
+              // Load more DB shorts if nearing end of DB items
               if (idx >= shorts.length - 3 && hasMore) {
                 loadMore();
               }
@@ -49,7 +65,7 @@ const ShortsFeed = () => {
     items.forEach((el) => observer.observe(el));
 
     return () => observer.disconnect();
-  }, [shorts.length, hasMore, loadMore]);
+  }, [combinedFeed.length, shorts.length, hasMore, loadMore]);
 
   const handleUploadClick = useCallback(async () => {
     try {
@@ -72,55 +88,13 @@ const ShortsFeed = () => {
     }
   }, [navigate]);
 
-  if (loading && shorts.length === 0) {
+  if (loading && shorts.length === 0 && filteredCurated.length === 0) {
     return (
       <div className="h-[100dvh] flex items-center justify-center" style={{ background: "#0A0604" }}>
         <div className="text-center space-y-3">
           <div className="w-14 h-14 mx-auto rounded-full animate-pulse" style={{ background: "rgba(201,168,76,0.2)" }} />
           <p className="text-sm text-[#E8C97A]/60">Loading Bhakti Shorts...</p>
         </div>
-      </div>
-    );
-  }
-
-  if (shorts.length === 0) {
-    return (
-      <div className="h-[100dvh] flex flex-col items-center justify-center px-6" style={{ background: "#0A0604" }}>
-        {/* Tag filter even on empty */}
-        <div className="fixed top-0 left-0 right-0 z-30 pt-4 safe-top">
-          <div className="flex items-center gap-3 px-4 mb-3">
-            <button
-              onClick={() => navigate(-1)}
-              className="w-10 h-10 rounded-full flex items-center justify-center touch-target flex-shrink-0"
-              style={{
-                background: "rgba(15,10,5,0.45)",
-                backdropFilter: "blur(18px)",
-                border: "1px solid rgba(201,168,76,0.25)",
-              }}
-              aria-label="Go back"
-            >
-              <ArrowLeft className="w-5 h-5 text-[#E8C97A]" />
-            </button>
-            <TagFilter activeTag={activeTag} onTagChange={setActiveTag} />
-          </div>
-        </div>
-
-        <p className="text-lg font-semibold text-[#E8C97A] mb-2">
-          {activeTag ? `No "${activeTag}" shorts yet` : "No Shorts Yet"}
-        </p>
-        <p className="text-sm text-[#F2EDE8]/50 text-center mb-6">
-          {activeTag
-            ? "Try another category or be the first to upload! 🙏"
-            : "Be the first to share a devotional moment with the community 🙏"}
-        </p>
-        <button
-          onClick={handleUploadClick}
-          className="px-6 py-3 rounded-xl text-sm font-semibold text-[#0A0604]"
-          style={{ background: "linear-gradient(135deg, #C9A84C, #E8C97A)" }}
-        >
-          Upload First Short
-        </button>
-        <UploadModal open={showUpload} onClose={() => setShowUpload(false)} onUploaded={refetch} />
       </div>
     );
   }
@@ -152,13 +126,20 @@ const ShortsFeed = () => {
         className="h-[100dvh] overflow-y-scroll scrollbar-hide"
         style={{ scrollSnapType: "y mandatory" }}
       >
-        {shorts.map((short, idx) => (
-          <div key={short.id} data-index={idx}>
-            <ShortCard
-              short={short}
-              isActive={Math.abs(idx - activeIndex) <= 1 && idx === activeIndex}
-              onRemove={removeShort}
-            />
+        {combinedFeed.map((item, idx) => (
+          <div key={item.type === "db" ? item.data.id : (item.data as CuratedShort).id} data-index={idx}>
+            {item.type === "db" ? (
+              <ShortCard
+                short={item.data as any}
+                isActive={idx === activeIndex}
+                onRemove={removeShort}
+              />
+            ) : (
+              <YouTubeShortCard
+                short={item.data as CuratedShort}
+                isActive={idx === activeIndex}
+              />
+            )}
           </div>
         ))}
       </div>
