@@ -4,6 +4,7 @@ import { LogIn } from 'lucide-react';
 import { supabase } from '@/integrations/backend/client';
 import { User } from '@supabase/supabase-js';
 import BottomNav from '@/components/BottomNav';
+import KrishnaFloatingChat from '@/components/krishna/KrishnaFloatingChat';
 import GyaniChat from '@/components/gyani/GyaniChat';
 
 import { useLanguage } from '@/contexts/LanguageContext';
