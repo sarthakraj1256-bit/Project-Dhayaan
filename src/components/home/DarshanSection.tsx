@@ -1,18 +1,15 @@
 import { Link } from 'react-router-dom';
-import { ArrowRight, Play } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { temples } from '@/data/templeStreams';
-import { useLanguage } from '@/contexts/LanguageContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 export default function DarshanSection() {
   const previewTemples = temples.slice(0, 4);
   const { t } = useLanguage();
-  const { t } = useLanguage();
 
   return (
     <section className="px-6 py-5 space-y-6">
-      {/* Live Darshan */}
       <div>
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-xs font-semibold text-foreground/40 uppercase tracking-widest">
@@ -62,6 +59,7 @@ export default function DarshanSection() {
               </Link>
             </motion.div>
           ))}
+        </div>
       </div>
     </section>
   );
