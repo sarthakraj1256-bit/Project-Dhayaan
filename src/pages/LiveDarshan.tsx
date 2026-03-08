@@ -189,6 +189,30 @@ const LiveDarshan = () => {
           {/* ═══════ SECTION DIVIDER ═══════ */}
           <div className="py-8 flex items-center gap-3">
             <div className="flex-1 h-px bg-[#D39A2A]/20" />
+            <span className="text-xs text-[#D39A2A] font-semibold tracking-wider uppercase">☬</span>
+            <div className="flex-1 h-px bg-[#D39A2A]/20" />
+          </div>
+
+          {/* ═══════ SECTION: GURUDWARA LIVE DARSHAN ═══════ */}
+          <section className="mb-12">
+            <div className="flex items-center gap-2 mb-3">
+              <span className="text-xl">🪯</span>
+              <h2 className="text-base font-bold text-[#3C2F1F] dark:text-[#E9E2D9]">Gurudwara Live Darshan</h2>
+            </div>
+            <p className="text-sm text-[#9C8C7C] italic mb-4">
+              Seek blessings from sacred Gurudwaras 🙏
+            </p>
+
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+              {GURUDWARAS.map(g => (
+                <GurudwaraCard key={g.id} gurudwara={g} />
+              ))}
+            </div>
+          </section>
+
+          {/* ═══════ SECTION DIVIDER ═══════ */}
+          <div className="py-8 flex items-center gap-3">
+            <div className="flex-1 h-px bg-[#D39A2A]/20" />
             <span className="text-xs text-[#D39A2A] font-semibold tracking-wider uppercase">✦</span>
             <div className="flex-1 h-px bg-[#D39A2A]/20" />
           </div>
