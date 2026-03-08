@@ -777,7 +777,7 @@ export const heritageTemples: ImmersiveTemple[] = [
     category: 'heritage',
     deity: 'Lord Shiva & Vishnu',
     description: 'A UNESCO World Heritage structural temple from the 8th century, overlooking the Bay of Bengal.',
-    thumbnail: 'https://images.unsplash.com/photo-1621427167052-f1592f0498d9?w=400',
+    thumbnail: '/heritage/shore-temple.jpg',
     zones: createDefaultZones('shore_temple'),
     defaultZoneId: 'shore_temple_entrance',
     audio: { aartiTrack: '', kirtanTrack: '', bellSound: '', ambienceTrack: '', chantingTrack: '' },
