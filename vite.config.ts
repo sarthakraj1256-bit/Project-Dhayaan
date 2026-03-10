@@ -18,9 +18,9 @@ export default defineConfig(({ mode }) => ({
     rollupOptions: {
       output: {
         manualChunks: {
-          // Core vendor chunks
+          // Core vendor chunks - keep React and Radix UI together to avoid duplicate React instances
           'vendor-react': ['react', 'react-dom', 'react-router-dom'],
-          'vendor-ui': ['framer-motion', '@radix-ui/react-dialog', '@radix-ui/react-tooltip'],
+          'vendor-ui': ['framer-motion'],
           'vendor-query': ['@tanstack/react-query'],
           // Heavy feature chunks - loaded on demand
           'feature-3d': ['three', '@react-three/fiber', '@react-three/drei'],
