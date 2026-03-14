@@ -175,10 +175,10 @@ const LiveDarshan = () => {
           {!isOnline ? (
             <div className="text-center py-20">
               <p className="text-3xl mb-3">🛕</p>
-              <p className="text-base font-medium text-[#3C2F1F] dark:text-[#E9E2D9]">No connection</p>
-              <p className="text-sm text-[#9C8C7C] mt-1 mb-5">Please check your internet to join live darshan.</p>
+              <p className="text-base font-medium text-[#3C2F1F] dark:text-[#E9E2D9]">{t('darshan.noConnection')}</p>
+              <p className="text-sm text-[#9C8C7C] mt-1 mb-5">{t('darshan.checkInternet')}</p>
               <button onClick={() => window.location.reload()} className="px-5 py-2.5 rounded-xl text-sm font-medium text-white bg-gradient-to-r from-[#C68A1A] to-[#D9A832]">
-                Retry
+                {t('darshan.retry')}
               </button>
             </div>
           ) : (
