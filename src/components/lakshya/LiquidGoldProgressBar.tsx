@@ -1,6 +1,8 @@
 import { memo, useEffect, useState } from 'react';
 import { motion, useAnimation, AnimatePresence } from 'framer-motion';
 import { LEVEL_THRESHOLDS, getNextLevelThreshold, type SpiritualProgress, type SpiritualLevel } from '@/hooks/useSpiritualProgress';
+import { useLanguage } from '@/contexts/LanguageContext';
+import type { TranslationKey } from '@/i18n/translations';
 
 interface LiquidGoldProgressBarProps {
   progress: SpiritualProgress;
