@@ -1,4 +1,35 @@
-export type Language = 'en' | 'hi';
+export type Language = 'en' | 'hi' | 'bn' | 'te' | 'mr' | 'ta' | 'gu' | 'kn' | 'ml' | 'pa' | 'or' | 'as' | 'ur' | 'sa' | 'mai';
+
+export interface LanguageMeta {
+  code: Language;
+  name: string;
+  nativeName: string;
+  script: string;
+  fontFamily: string;
+  isRTL: boolean;
+  isPopular: boolean;
+}
+
+export const supportedLanguages: LanguageMeta[] = [
+  { code: 'hi', name: 'Hindi', nativeName: 'हिन्दी', script: 'Devanagari', fontFamily: 'Noto Sans Devanagari', isRTL: false, isPopular: true },
+  { code: 'en', name: 'English', nativeName: 'English', script: 'Latin', fontFamily: 'Inter', isRTL: false, isPopular: true },
+  { code: 'bn', name: 'Bengali', nativeName: 'বাংলা', script: 'Bengali', fontFamily: 'Noto Sans Bengali', isRTL: false, isPopular: true },
+  { code: 'mr', name: 'Marathi', nativeName: 'मराठी', script: 'Devanagari', fontFamily: 'Noto Sans Devanagari', isRTL: false, isPopular: true },
+  { code: 'ta', name: 'Tamil', nativeName: 'தமிழ்', script: 'Tamil', fontFamily: 'Noto Sans Tamil', isRTL: false, isPopular: true },
+  { code: 'te', name: 'Telugu', nativeName: 'తెలుగు', script: 'Telugu', fontFamily: 'Noto Sans Telugu', isRTL: false, isPopular: false },
+  { code: 'gu', name: 'Gujarati', nativeName: 'ગુજરાતી', script: 'Gujarati', fontFamily: 'Noto Sans Gujarati', isRTL: false, isPopular: false },
+  { code: 'kn', name: 'Kannada', nativeName: 'ಕನ್ನಡ', script: 'Kannada', fontFamily: 'Noto Sans Kannada', isRTL: false, isPopular: false },
+  { code: 'ml', name: 'Malayalam', nativeName: 'മലയാളം', script: 'Malayalam', fontFamily: 'Noto Sans Malayalam', isRTL: false, isPopular: false },
+  { code: 'pa', name: 'Punjabi', nativeName: 'ਪੰਜਾਬੀ', script: 'Gurmukhi', fontFamily: 'Noto Sans Gurmukhi', isRTL: false, isPopular: false },
+  { code: 'or', name: 'Odia', nativeName: 'ଓଡ଼ିଆ', script: 'Odia', fontFamily: 'Noto Sans Oriya', isRTL: false, isPopular: false },
+  { code: 'as', name: 'Assamese', nativeName: 'অসমীয়া', script: 'Bengali-Assamese', fontFamily: 'Noto Sans Bengali', isRTL: false, isPopular: false },
+  { code: 'ur', name: 'Urdu', nativeName: 'اردو', script: 'Nastaliq', fontFamily: 'Noto Nastaliq Urdu', isRTL: true, isPopular: false },
+  { code: 'sa', name: 'Sanskrit', nativeName: 'संस्कृतम्', script: 'Devanagari', fontFamily: 'Noto Sans Devanagari', isRTL: false, isPopular: false },
+  { code: 'mai', name: 'Maithili', nativeName: 'मैथिली', script: 'Devanagari', fontFamily: 'Noto Sans Devanagari', isRTL: false, isPopular: false },
+];
+
+export const getLanguageMeta = (code: Language): LanguageMeta =>
+  supportedLanguages.find(l => l.code === code) || supportedLanguages[0];
 
 export const translations = {
   en: {
