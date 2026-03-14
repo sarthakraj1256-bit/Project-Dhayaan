@@ -41,6 +41,7 @@ const LiquidGoldProgressBar = memo(function LiquidGoldProgressBar({
   progress, 
   showShimmer = false 
 }: LiquidGoldProgressBarProps) {
+  const { t } = useLanguage();
   const [isShimmering, setIsShimmering] = useState(showShimmer);
   const [prevKarma, setPrevKarma] = useState(progress.karma_points);
   const shimmerControls = useAnimation();
@@ -54,7 +55,8 @@ const LiquidGoldProgressBar = memo(function LiquidGoldProgressBar({
   const percentage = Math.min((pointsInLevel / pointsNeeded) * 100, 100);
   
   const isMaxLevel = currentLevel === 'enlightened';
-  const levelInfo = LEVEL_INFO[currentLevel];
+  const levelIcon = LEVEL_ICONS[currentLevel];
+  const levelName = t(LEVEL_KEY_MAP[currentLevel]);
   const colors = LEVEL_COLORS[currentLevel];
 
   // Detect karma gain and trigger shimmer
