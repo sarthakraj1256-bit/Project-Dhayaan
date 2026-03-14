@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { Play, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const ROUTE_LABELS: Record<string, string> = {
   '/sonic-lab': 'Sonic Lab',
@@ -15,7 +16,8 @@ interface Props {
 }
 
 export const ResumeSessionPrompt = ({ open, routePath, onResume, onDecline }: Props) => {
-  const label = ROUTE_LABELS[routePath] || 'your session';
+  const { t } = useLanguage();
+  const label = ROUTE_LABELS[routePath] || t('resume.defaultLabel');
 
   return (
     <AnimatePresence>
@@ -40,11 +42,10 @@ export const ResumeSessionPrompt = ({ open, routePath, onResume, onDecline }: Pr
 
             {/* Copy */}
             <h2 className="text-center font-display text-lg text-foreground">
-              Resume session?
+              {t('resume.title')}
             </h2>
             <p className="mt-2 text-center text-sm text-muted-foreground leading-relaxed">
-              You were in <span className="font-medium text-foreground">{label}</span> last time.
-              Would you like to continue where you left off?
+              {t('resume.description').replace('{label}', label)}
             </p>
 
             {/* Buttons */}
@@ -55,14 +56,14 @@ export const ResumeSessionPrompt = ({ open, routePath, onResume, onDecline }: Pr
                 onClick={onDecline}
               >
                 <X className="mr-1.5 h-4 w-4" />
-                Start fresh
+                {t('resume.startFresh')}
               </Button>
               <Button
                 className="flex-1"
                 onClick={onResume}
               >
                 <Play className="mr-1.5 h-4 w-4" />
-                Resume
+                {t('resume.resume')}
               </Button>
             </div>
           </motion.div>
