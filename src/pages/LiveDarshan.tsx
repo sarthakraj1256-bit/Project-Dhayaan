@@ -269,7 +269,7 @@ const LiveDarshan = () => {
             </div>
 
             <p className="text-xs text-[#9C8C7C] mb-4">
-              {filteredAarti.length} devotional {filteredAarti.length === 1 ? 'video' : 'videos'}
+              {filteredAarti.length} {filteredAarti.length === 1 ? t('darshan.devotionalVideo') : t('darshan.devotionalVideos')}
             </p>
 
             {/* Aarti grid */}
