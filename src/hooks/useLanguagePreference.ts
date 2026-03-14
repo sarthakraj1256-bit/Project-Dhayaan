@@ -11,7 +11,7 @@ export function saveLanguagePreference(lang: Language) {
   supabase.auth.getSession().then(({ data }) => {
     if (data.session?.user) {
       supabase
-        .from('user_preferences')
+        .from('user_preferences' as any)
         .upsert(
           { user_id: data.session.user.id, language_code: lang, updated_at: new Date().toISOString() },
           { onConflict: 'user_id' }
@@ -23,14 +23,13 @@ export function saveLanguagePreference(lang: Language) {
 
 export function useLanguageSync(setLanguage: (lang: Language) => void) {
   useEffect(() => {
-    // On auth state change, fetch persisted language
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (event === 'SIGNED_IN' && session?.user) {
-        const { data } = await supabase
-          .from('user_preferences')
+        const { data } = await (supabase
+          .from('user_preferences' as any)
           .select('language_code')
           .eq('user_id', session.user.id)
-          .maybeSingle();
+          .maybeSingle() as any);
         
         if (data?.language_code) {
           setLanguage(data.language_code as Language);

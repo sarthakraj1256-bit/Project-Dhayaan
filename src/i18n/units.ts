@@ -1,6 +1,6 @@
 import type { Language } from './translations';
 
-const unitMap: Record<string, Record<Language, string>> = {
+const unitMap: Record<string, Partial<Record<Language, string>>> = {
   min: { en: 'min', hi: 'मिनट' },
   mins: { en: 'mins', hi: 'मिनट' },
   minutes: { en: 'minutes', hi: 'मिनट' },
@@ -25,19 +25,18 @@ const unitMap: Record<string, Record<Language, string>> = {
 
 /**
  * Localize a unit string. Numbers are preserved, only the unit word is translated.
- * Usage: localizeUnit(5, 'mins', language) → "5 मिनट"
+ * Falls back to English if the language doesn't have a translation.
  */
 export function localizeUnit(value: number | string, unit: string, language: Language): string {
-  const localizedUnit = unitMap[unit]?.[language] || unit;
+  const localizedUnit = unitMap[unit]?.[language] || unitMap[unit]?.en || unit;
   return `${value} ${localizedUnit}`;
 }
 
 /**
  * Get just the localized unit word without value.
- * Usage: getLocalizedUnit('days', 'hi') → "दिन"
  */
 export function getLocalizedUnit(unit: string, language: Language): string {
-  return unitMap[unit]?.[language] || unit;
+  return unitMap[unit]?.[language] || unitMap[unit]?.en || unit;
 }
 
 /**
@@ -45,7 +44,12 @@ export function getLocalizedUnit(unit: string, language: Language): string {
  */
 export function localizeDate(date: Date | string, language: Language, options?: Intl.DateTimeFormatOptions): string {
   const d = typeof date === 'string' ? new Date(date) : date;
-  const locale = language === 'hi' ? 'hi-IN' : 'en-IN';
+  const localeMap: Partial<Record<Language, string>> = {
+    hi: 'hi-IN', en: 'en-IN', bn: 'bn-IN', te: 'te-IN', mr: 'mr-IN',
+    ta: 'ta-IN', gu: 'gu-IN', kn: 'kn-IN', ml: 'ml-IN', pa: 'pa-IN',
+    or: 'or-IN', as: 'as-IN', ur: 'ur-IN', sa: 'sa-IN', mai: 'hi-IN',
+  };
+  const locale = localeMap[language] || 'en-IN';
   const defaultOptions: Intl.DateTimeFormatOptions = {
     day: 'numeric',
     month: 'short',
