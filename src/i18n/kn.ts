@@ -154,6 +154,7 @@ export const kn = {
   'karma.level.yogi': 'ಯೋಗಿ',
   'karma.level.sage': 'ಋಷಿ',
   'karma.level.enlightened': 'ಜ್ಞಾನಿ',
+  'karma.nextLevel': 'ಮುಂದಿನ ಹಂತ', 'karma.pointsToNext': 'ಮುಂದಿನ ಹಂತಕ್ಕೆ ಅಂಕಗಳು', 'karma.maxLevel': 'ಗರಿಷ್ಠ ಹಂತ ತಲುಪಿದೆ',
   'common.loading': 'ಲೋಡ್ ಆಗುತ್ತಿದೆ...',
   'common.save': 'ಉಳಿಸಿ',
   'common.cancel': 'ರದ್ದುಮಾಡಿ',

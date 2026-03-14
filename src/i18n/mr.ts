@@ -336,6 +336,7 @@ export const mr = {
   'karma.level.yogi': 'योगी',
   'karma.level.sage': 'ऋषी',
   'karma.level.enlightened': 'ज्ञानी',
+  'karma.nextLevel': 'पुढील स्तर', 'karma.pointsToNext': 'पुढील स्तरापर्यंत गुण', 'karma.maxLevel': 'कमाल स्तर गाठला',
   'lakshya.dharmicGrowth': 'धार्मिक विकास मार्ग',
   'lakshya.yourJourney': 'तुमचा आध्यात्मिक प्रवास',
   'lakshya.meditationMins': 'ध्यान मिनिटे',

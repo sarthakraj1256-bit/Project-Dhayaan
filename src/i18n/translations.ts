@@ -446,6 +446,9 @@ export const translations = {
     'karma.level.yogi': 'Yogi',
     'karma.level.sage': 'Sage',
     'karma.level.enlightened': 'Enlightened',
+    'karma.nextLevel': 'Next Level',
+    'karma.pointsToNext': 'points to next level',
+    'karma.maxLevel': 'Maximum level reached',
 
     // Lakshya
     'lakshya.dharmicGrowth': 'Dharmic Growth Path',
@@ -1362,6 +1365,9 @@ export const translations = {
     'karma.level.yogi': 'योगी',
     'karma.level.sage': 'ऋषि',
     'karma.level.enlightened': 'बुद्ध',
+    'karma.nextLevel': 'अगला स्तर',
+    'karma.pointsToNext': 'अगले स्तर तक अंक',
+    'karma.maxLevel': 'अधिकतम स्तर प्राप्त',
 
     // Lakshya
     'lakshya.dharmicGrowth': 'धार्मिक विकास पथ',

@@ -399,6 +399,7 @@ export const bn = {
   'karma.level.yogi': 'যোগী',
   'karma.level.sage': 'ঋষি',
   'karma.level.enlightened': 'আলোকিত',
+  'karma.nextLevel': 'পরবর্তী স্তর', 'karma.pointsToNext': 'পরবর্তী স্তরে পয়েন্ট', 'karma.maxLevel': 'সর্বোচ্চ স্তর অর্জিত',
 
   // Lakshya
   'lakshya.dharmicGrowth': 'ধর্মীয় বিকাশ পথ',

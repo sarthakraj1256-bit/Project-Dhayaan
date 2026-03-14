@@ -425,6 +425,7 @@ export const ta = {
   'karma.level.yogi': 'யோகி',
   'karma.level.sage': 'ரிஷி',
   'karma.level.enlightened': 'ஞானம் பெற்றவர்',
+  'karma.nextLevel': 'அடுத்த நிலை', 'karma.pointsToNext': 'அடுத்த நிலைக்கு புள்ளிகள்', 'karma.maxLevel': 'அதிகபட்ச நிலை அடைந்தது',
 
   // Lakshya
   'lakshya.dharmicGrowth': 'தர்ம வளர்ச்சி பாதை',

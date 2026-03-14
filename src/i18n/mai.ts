@@ -154,6 +154,7 @@ export const mai = {
   'karma.level.yogi': 'योगी',
   'karma.level.sage': 'ऋषि',
   'karma.level.enlightened': 'ज्ञानी',
+  'karma.nextLevel': 'अगला स्तर', 'karma.pointsToNext': 'अगला स्तर तक अंक', 'karma.maxLevel': 'अधिकतम स्तर प्राप्त',
   'common.loading': 'लोड भ रहल अछि...',
   'common.save': 'बचाउ',
   'common.cancel': 'रद्द करू',

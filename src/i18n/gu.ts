@@ -425,6 +425,7 @@ export const gu = {
   'karma.level.yogi': 'યોગી',
   'karma.level.sage': 'ઋષિ',
   'karma.level.enlightened': 'જ્ઞાની',
+  'karma.nextLevel': 'આગળનું સ્તર', 'karma.pointsToNext': 'આગળના સ્તર સુધી પોઈન્ટ', 'karma.maxLevel': 'મહત્તમ સ્તર પ્રાપ્ત',
 
   // Lakshya
   'lakshya.dharmicGrowth': 'ધાર્મિક વિકાસ માર્ગ',

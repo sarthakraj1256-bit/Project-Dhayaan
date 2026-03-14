@@ -154,6 +154,7 @@ export const or = {
   'karma.level.yogi': 'ଯୋଗୀ',
   'karma.level.sage': 'ଋଷି',
   'karma.level.enlightened': 'ଜ୍ଞାନୀ',
+  'karma.nextLevel': 'ପରବର୍ତ୍ତୀ ସ୍ତର', 'karma.pointsToNext': 'ପରବର୍ତ୍ତୀ ସ୍ତରକୁ ଅଙ୍କ', 'karma.maxLevel': 'ସର୍ବୋଚ୍ଚ ସ୍ତର ପ୍ରାପ୍ତ',
   'common.loading': 'ଲୋଡ ହେଉଛି...',
   'common.save': 'ସଂରକ୍ଷଣ',
   'common.cancel': 'ବାତିଲ',

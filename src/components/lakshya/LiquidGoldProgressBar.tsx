@@ -1,6 +1,8 @@
 import { memo, useEffect, useState } from 'react';
 import { motion, useAnimation, AnimatePresence } from 'framer-motion';
 import { LEVEL_THRESHOLDS, getNextLevelThreshold, type SpiritualProgress, type SpiritualLevel } from '@/hooks/useSpiritualProgress';
+import { useLanguage } from '@/contexts/LanguageContext';
+import type { TranslationKey } from '@/i18n/translations';
 
 interface LiquidGoldProgressBarProps {
   progress: SpiritualProgress;
@@ -15,12 +17,20 @@ const LEVEL_COLORS: Record<SpiritualLevel, { from: string; to: string; glow: str
   enlightened: { from: '#c084fc', to: '#a855f7', glow: 'rgba(192, 132, 252, 0.6)' },
 };
 
-const LEVEL_INFO: Record<SpiritualLevel, { icon: string; name: string }> = {
-  novice: { icon: '🌱', name: 'Novice' },
-  seeker: { icon: '🔍', name: 'Seeker' },
-  yogi: { icon: '🧘', name: 'Yogi' },
-  sage: { icon: '📿', name: 'Sage' },
-  enlightened: { icon: '✨', name: 'Enlightened' },
+const LEVEL_ICONS: Record<SpiritualLevel, string> = {
+  novice: '🌱',
+  seeker: '🔍',
+  yogi: '🧘',
+  sage: '📿',
+  enlightened: '✨',
+};
+
+const LEVEL_KEY_MAP: Record<SpiritualLevel, TranslationKey> = {
+  novice: 'karma.level.novice',
+  seeker: 'karma.level.seeker',
+  yogi: 'karma.level.yogi',
+  sage: 'karma.level.sage',
+  enlightened: 'karma.level.enlightened',
 };
 
 /**
@@ -31,6 +41,7 @@ const LiquidGoldProgressBar = memo(function LiquidGoldProgressBar({
   progress, 
   showShimmer = false 
 }: LiquidGoldProgressBarProps) {
+  const { t } = useLanguage();
   const [isShimmering, setIsShimmering] = useState(showShimmer);
   const [prevKarma, setPrevKarma] = useState(progress.karma_points);
   const shimmerControls = useAnimation();
@@ -44,7 +55,8 @@ const LiquidGoldProgressBar = memo(function LiquidGoldProgressBar({
   const percentage = Math.min((pointsInLevel / pointsNeeded) * 100, 100);
   
   const isMaxLevel = currentLevel === 'enlightened';
-  const levelInfo = LEVEL_INFO[currentLevel];
+  const levelIcon = LEVEL_ICONS[currentLevel];
+  const levelName = t(LEVEL_KEY_MAP[currentLevel]);
   const colors = LEVEL_COLORS[currentLevel];
 
   // Detect karma gain and trigger shimmer
@@ -72,21 +84,21 @@ const LiquidGoldProgressBar = memo(function LiquidGoldProgressBar({
             animate={isShimmering ? { scale: [1, 1.2, 1] } : {}}
             transition={{ duration: 0.5 }}
           >
-            {levelInfo.icon}
+            {levelIcon}
           </motion.span>
           <div>
-            <h3 className="font-display text-xl text-foreground">{levelInfo.name}</h3>
+            <h3 className="font-display text-xl text-foreground">{levelName}</h3>
             <p className="text-xs text-muted-foreground">
-              {isMaxLevel ? 'Maximum level reached' : `${pointsNeeded - pointsInLevel} points to next level`}
+              {isMaxLevel ? t('karma.maxLevel') : `${pointsNeeded - pointsInLevel} ${t('karma.pointsToNext')}`}
             </p>
           </div>
         </div>
         
         {!isMaxLevel && (
           <div className="text-right">
-            <p className="text-sm text-muted-foreground">Next Level</p>
+            <p className="text-sm text-muted-foreground">{t('karma.nextLevel')}</p>
             <p className="font-display text-foreground">
-              {LEVEL_INFO[Object.keys(LEVEL_THRESHOLDS)[Object.keys(LEVEL_THRESHOLDS).indexOf(currentLevel) + 1] as SpiritualLevel]?.name}
+              {t(LEVEL_KEY_MAP[Object.keys(LEVEL_THRESHOLDS)[Object.keys(LEVEL_THRESHOLDS).indexOf(currentLevel) + 1] as SpiritualLevel])}
             </p>
           </div>
         )}
@@ -203,8 +215,8 @@ const LiquidGoldProgressBar = memo(function LiquidGoldProgressBar({
 
       {/* Level milestones */}
       <div className="flex justify-between text-xs text-muted-foreground">
-        {Object.entries(LEVEL_INFO).map(([level, info]) => {
-          const threshold = LEVEL_THRESHOLDS[level as SpiritualLevel];
+        {(Object.keys(LEVEL_ICONS) as SpiritualLevel[]).map((level) => {
+          const threshold = LEVEL_THRESHOLDS[level];
           const isUnlocked = progress.karma_points >= threshold;
           const isCurrent = level === currentLevel;
           
@@ -217,7 +229,7 @@ const LiquidGoldProgressBar = memo(function LiquidGoldProgressBar({
               animate={isCurrent && isShimmering ? { scale: [1, 1.1, 1] } : {}}
               transition={{ duration: 0.3 }}
             >
-              <span className={`text-lg ${!isUnlocked && 'grayscale opacity-50'}`}>{info.icon}</span>
+              <span className={`text-lg ${!isUnlocked && 'grayscale opacity-50'}`}>{LEVEL_ICONS[level]}</span>
               <span className="hidden sm:block">{threshold.toLocaleString()}</span>
             </motion.div>
           );

@@ -154,6 +154,7 @@ export const ur = {
   'karma.level.yogi': 'یوگی',
   'karma.level.sage': 'رشی',
   'karma.level.enlightened': 'عارف',
+  'karma.nextLevel': 'اگلا درجہ', 'karma.pointsToNext': 'اگلے درجے تک پوائنٹس', 'karma.maxLevel': 'زیادہ سے زیادہ درجہ حاصل',
   'common.loading': 'لوڈ ہو رہا ہے...',
   'common.save': 'محفوظ کریں',
   'common.cancel': 'منسوخ',
