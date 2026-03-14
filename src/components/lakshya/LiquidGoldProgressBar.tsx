@@ -215,8 +215,8 @@ const LiquidGoldProgressBar = memo(function LiquidGoldProgressBar({
 
       {/* Level milestones */}
       <div className="flex justify-between text-xs text-muted-foreground">
-        {Object.entries(LEVEL_INFO).map(([level, info]) => {
-          const threshold = LEVEL_THRESHOLDS[level as SpiritualLevel];
+        {(Object.keys(LEVEL_ICONS) as SpiritualLevel[]).map((level) => {
+          const threshold = LEVEL_THRESHOLDS[level];
           const isUnlocked = progress.karma_points >= threshold;
           const isCurrent = level === currentLevel;
           
@@ -229,7 +229,7 @@ const LiquidGoldProgressBar = memo(function LiquidGoldProgressBar({
               animate={isCurrent && isShimmering ? { scale: [1, 1.1, 1] } : {}}
               transition={{ duration: 0.3 }}
             >
-              <span className={`text-lg ${!isUnlocked && 'grayscale opacity-50'}`}>{info.icon}</span>
+              <span className={`text-lg ${!isUnlocked && 'grayscale opacity-50'}`}>{LEVEL_ICONS[level]}</span>
               <span className="hidden sm:block">{threshold.toLocaleString()}</span>
             </motion.div>
           );
