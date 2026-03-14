@@ -1800,6 +1800,11 @@ export const translations = {
     'freq.sleep.741.purpose': 'मानसिक मौन',
 
   },
+  bn: bnTranslations,
+  te: teTranslations,
+  mr: mrTranslations,
+  ta: taTranslations,
+  gu: guTranslations,
 } as const;
 
 export type TranslationKey = keyof typeof translations.en;
