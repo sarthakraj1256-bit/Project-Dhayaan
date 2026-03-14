@@ -1376,6 +1376,13 @@ export const translations = {
     'karma.pointsToNext': 'अगले स्तर तक अंक',
     'karma.maxLevel': 'अधिकतम स्तर प्राप्त',
 
+    // Resume Session
+    'resume.title': 'सत्र जारी रखें?',
+    'resume.description': 'आप पिछली बार {label} में थे। क्या आप वहीं से जारी रखना चाहेंगे?',
+    'resume.resume': 'जारी रखें',
+    'resume.startFresh': 'नया शुरू करें',
+    'resume.defaultLabel': 'आपका सत्र',
+
     // Lakshya
     'lakshya.dharmicGrowth': 'धार्मिक विकास पथ',
     'lakshya.yourJourney': 'आपकी आध्यात्मिक यात्रा',
