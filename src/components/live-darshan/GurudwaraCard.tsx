@@ -23,6 +23,7 @@ const openGurudwara = (url: string) => {
 };
 
 export default function GurudwaraCard({ gurudwara, liveStatus }: Props) {
+  const { t } = useLanguage();
   const [imgError, setImgError] = useState(false);
 
   const isLive = liveStatus?.isLive ?? false;
