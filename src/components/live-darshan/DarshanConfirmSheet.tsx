@@ -82,7 +82,7 @@ export default function DarshanConfirmSheet({ temple, onClose }: Props) {
                 onClick={onClose}
                 className="flex-1 h-12 rounded-xl text-sm font-medium text-[#5C5145] dark:text-[#9C8C7C] bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 transition-colors"
               >
-                Cancel
+                {t('darshan.cancel')}
               </button>
               <button
                 onClick={handleJoin}
