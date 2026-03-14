@@ -240,10 +240,10 @@ const LiveDarshan = () => {
           <section className="mb-6">
             <div className="flex items-center gap-2 mb-3">
               <Zap className="w-5 h-5 text-[#D39A2A]" />
-              <h2 className="text-base font-bold text-[#3C2F1F] dark:text-[#E9E2D9]">Daily Aarati & Bhajans</h2>
+              <h2 className="text-base font-bold text-[#3C2F1F] dark:text-[#E9E2D9]">{t('darshan.dailyAartiSection')}</h2>
             </div>
             <p className="text-sm text-[#9C8C7C] italic mb-4">
-              Recorded devotional content for your daily practice 🙏
+              {t('darshan.recordedContent')}
             </p>
 
             {/* Aarti filter chips */}
