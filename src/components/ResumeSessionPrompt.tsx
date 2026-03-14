@@ -16,7 +16,8 @@ interface Props {
 }
 
 export const ResumeSessionPrompt = ({ open, routePath, onResume, onDecline }: Props) => {
-  const label = ROUTE_LABELS[routePath] || 'your session';
+  const { t } = useLanguage();
+  const label = ROUTE_LABELS[routePath] || t('resume.defaultLabel');
 
   return (
     <AnimatePresence>
@@ -41,11 +42,10 @@ export const ResumeSessionPrompt = ({ open, routePath, onResume, onDecline }: Pr
 
             {/* Copy */}
             <h2 className="text-center font-display text-lg text-foreground">
-              Resume session?
+              {t('resume.title')}
             </h2>
             <p className="mt-2 text-center text-sm text-muted-foreground leading-relaxed">
-              You were in <span className="font-medium text-foreground">{label}</span> last time.
-              Would you like to continue where you left off?
+              {t('resume.description').replace('{label}', label)}
             </p>
 
             {/* Buttons */}
