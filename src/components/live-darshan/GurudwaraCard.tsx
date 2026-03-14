@@ -84,7 +84,7 @@ export default function GurudwaraCard({ gurudwara, liveStatus }: Props) {
             ) : (
               <span className="absolute top-2.5 left-2.5 inline-flex items-center gap-1.5 px-2.5 py-[3px] rounded-full text-[11px] font-bold text-white/80 bg-[rgba(100,100,100,0.75)]">
                 <span className="w-2 h-2 rounded-full bg-white/50" />
-                OFFLINE
+                {t('darshan.offline')}
               </span>
             )
           ) : (
