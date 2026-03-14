@@ -22,6 +22,7 @@ const openDarshan = (temple: LiveTemple) => {
 
 export default function LiveTempleCard({ temple }: Props) {
   const [imgError, setImgError] = useState(false);
+  const { t } = useLanguage();
 
   const isLive = temple.hasLive && temple.liveUrl;
 
