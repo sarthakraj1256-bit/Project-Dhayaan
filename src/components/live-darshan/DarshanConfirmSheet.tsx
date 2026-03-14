@@ -74,7 +74,7 @@ export default function DarshanConfirmSheet({ temple, onClose }: Props) {
                 onChange={(e) => setDontShow(e.target.checked)}
                 className="rounded accent-[hsl(38_60%_55%)]"
               />
-              Don't show this again
+              {t('darshan.dontShowAgain')}
             </label>
 
             <div className="flex gap-3">
