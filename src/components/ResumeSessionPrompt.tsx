@@ -56,14 +56,14 @@ export const ResumeSessionPrompt = ({ open, routePath, onResume, onDecline }: Pr
                 onClick={onDecline}
               >
                 <X className="mr-1.5 h-4 w-4" />
-                Start fresh
+                {t('resume.startFresh')}
               </Button>
               <Button
                 className="flex-1"
                 onClick={onResume}
               >
                 <Play className="mr-1.5 h-4 w-4" />
-                Resume
+                {t('resume.resume')}
               </Button>
             </div>
           </motion.div>
