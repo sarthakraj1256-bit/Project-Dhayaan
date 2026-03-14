@@ -185,7 +185,7 @@ const LiveDarshan = () => {
             regions.map(region => (
               <div key={region.key}>
                 <h2 className="text-[13px] uppercase tracking-[2px] text-[#D39A2A] border-b border-[rgba(211,154,42,0.2)] mt-6 mb-3 pb-1.5 font-semibold">
-                  {region.label}
+                  {t(region.labelKey)}
                 </h2>
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
                   {region.temples.map(temple => (
