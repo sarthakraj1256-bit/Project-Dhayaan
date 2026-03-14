@@ -326,7 +326,7 @@ const LiveDarshan = () => {
                   </p>
                   <p className="text-[10px] text-muted-foreground flex items-center gap-1 mt-0.5">
                     <Music className="w-2.5 h-2.5" />
-                    Tap to resume • {lastPlayed.duration}
+                    {t('darshan.tapToResume')} • {lastPlayed.duration}
                   </p>
                 </div>
 
