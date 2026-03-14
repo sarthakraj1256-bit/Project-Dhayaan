@@ -450,6 +450,13 @@ export const translations = {
     'karma.pointsToNext': 'points to next level',
     'karma.maxLevel': 'Maximum level reached',
 
+    // Resume Session
+    'resume.title': 'Resume session?',
+    'resume.description': 'You were in {label} last time. Would you like to continue where you left off?',
+    'resume.resume': 'Resume',
+    'resume.startFresh': 'Start fresh',
+    'resume.defaultLabel': 'your session',
+
     // Lakshya
     'lakshya.dharmicGrowth': 'Dharmic Growth Path',
     'lakshya.yourJourney': 'Your spiritual journey',
