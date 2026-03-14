@@ -89,7 +89,7 @@ export default function DarshanConfirmSheet({ temple, onClose }: Props) {
                 className="flex-1 h-12 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-[hsl(38_60%_48%)] to-[hsl(38_70%_58%)] hover:brightness-110 transition-all flex items-center justify-center gap-2"
               >
                 <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-                Join Live Darshan
+                {t('darshan.joinLive')}
               </button>
             </div>
           </motion.div>

@@ -110,7 +110,7 @@ export default function GurudwaraCard({ gurudwara, liveStatus }: Props) {
           </h3>
           <p className="text-[11px] text-[#9C8C7C] mt-0.5 truncate">{gurudwara.location}</p>
           <p className={`text-[11px] mt-1.5 ${isLive ? 'text-red-500 font-semibold' : 'text-[#D39A2A]'}`}>
-            {isLive ? '🔴 Live Now → Watch' : 'Opens in YouTube →'}
+            {isLive ? t('darshan.liveNowWatch') : t('darshan.opensInYouTube')}
           </p>
         </div>
       </div>
