@@ -455,8 +455,15 @@ export const bn = {
   'darshan.contentDiscourses': '📖 প্রবচন',
   'darshan.contentMeditation': '🧘 ধ্যান',
   'darshan.contentShorts': '📱 শর্টস',
+  'darshan.pageTitle': 'দর্শন ও ভক্তি', 'darshan.liveDarshan': 'লাইভ দর্শন', 'darshan.seekBlessingsTemples': 'পবিত্র মন্দির থেকে আশীর্বাদ নিন 🙏', 'darshan.liveStreams': 'লাইভ স্ট্রিম', 'darshan.tapToJoin': 'দর্শনের জন্য যেকোনো LIVE মন্দিরে ট্যাপ করুন',
+  'darshan.filterAll': 'সব', 'darshan.filterLive': '🔴 লাইভ', 'darshan.filterSacred': '🛕 সব মন্দির', 'darshan.noConnection': 'সংযোগ নেই', 'darshan.checkInternet': 'লাইভ দর্শনের জন্য অনুগ্রহ করে ইন্টারনেট পরীক্ষা করুন.', 'darshan.retry': 'পুনরায় চেষ্টা',
+  'darshan.gurudwaraLive': 'গুরুদ্বারা লাইভ দর্শন', 'darshan.seekBlessingsGurudwaras': 'পবিত্র গুরুদ্বার থেকে আশীর্বাদ নিন 🙏', 'darshan.checkingLive': 'লাইভ স্থিতি পরীক্ষা হচ্ছে…',
+  'darshan.dailyAartiSection': 'দৈনিক আরতি ও ভজন', 'darshan.recordedContent': 'আপনার দৈনিক সাধনার জন্য রেকর্ড ভক্তি বিষয় 🙏',
+  'darshan.devotionalVideos': 'ভক্তি ভিডিও', 'darshan.devotionalVideo': 'ভক্তি ভিডিও', 'darshan.noVideos': 'এই বিভাগে এখনও কোনো ভিডিও নেই.', 'darshan.tapToResume': 'আবার চালাতে ট্যাপ',
+  'darshan.sacredSite': 'পবিত্র স্থান', 'darshan.opensInYouTube': 'YouTube-এ খুলবে →', 'darshan.sacredViewing': 'পবিত্র দর্শন', 'darshan.liveNowWatch': '🔴 এখন লাইভ → দেখুন',
+  'darshan.offline': 'অফলাইন', 'darshan.joinLive': 'লাইভ দর্শনে যোগ দিন', 'darshan.confirmJoinMsg': 'আপনি লাইভ দর্শনে যোগ দিতে যাচ্ছেন. এটি YouTube খুলবে.', 'darshan.dontShowAgain': 'আর দেখাবেন না', 'darshan.cancel': 'বাতিল',
+  'darshan.regionNorth': '📍 উত্তর ভারত ও হিমালয়', 'darshan.regionWest': '📍 পশ্চিম ভারত', 'darshan.regionSouth': '📍 দক্ষিণ ভারত', 'darshan.regionEast': '📍 পূর্ব ভারত ও নেপাল', 'darshan.regionPilgrimages': '📍 উত্তর ভারত তীর্থযাত্রা', 'darshan.regionInternational': '📍 আন্তর্জাতিক',
 
-  // Mantrochar
   'mantrochar.learnToChant': 'সঠিকভাবে জপ করতে শিখুন',
   'mantrochar.learnWord': 'শিখুন',
   'mantrochar.chantWord': 'জপ',
