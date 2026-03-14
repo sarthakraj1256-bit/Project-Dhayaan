@@ -74,7 +74,7 @@ export default function LiveTempleCard({ temple }: Props) {
         {/* Sacred Site badge */}
         {!isLive && (
           <span className="absolute top-2.5 right-2.5 inline-flex items-center gap-1 px-2 py-[3px] rounded-xl text-[10px] text-[#E9E2D9] bg-black/50">
-            🛕 Sacred Site
+            🛕 {t('darshan.sacredSite')}
           </span>
         )}
 
