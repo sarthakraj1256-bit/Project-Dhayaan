@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
 import type { LiveTemple } from '@/data/liveDarshanTemples';
 import { openLiveDarshan } from '@/lib/openLiveDarshan';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface Props {
   temple: LiveTemple | null;
