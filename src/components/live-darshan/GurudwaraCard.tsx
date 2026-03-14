@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Play } from 'lucide-react';
 import type { Gurudwara } from '@/data/gurudwaraStreams';
 import type { LiveStatus } from '@/hooks/useGurudwaraLiveStatus';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface Props {
   gurudwara: Gurudwara;
