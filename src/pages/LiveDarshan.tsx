@@ -38,13 +38,22 @@ const typeColors: Record<string, string> = {
   short: 'bg-pink-600',
 };
 
+const aartiFilterKeys: Record<string, TranslationKey> = {
+  all: 'darshan.contentAll',
+  bhajan: 'darshan.contentBhajans',
+  aarti: 'darshan.contentAarti',
+  mantra: 'darshan.contentMantras',
+  pravachan: 'darshan.contentPravachan',
+  short: 'darshan.contentShorts',
+};
+
 const aartiFilters = [
-  { value: 'all', label: 'All', icon: Sparkles },
-  { value: 'bhajan', label: 'Bhajans', icon: Music },
-  { value: 'aarti', label: 'Aarati', icon: Zap },
-  { value: 'mantra', label: 'Mantras', icon: Sparkles },
-  { value: 'pravachan', label: 'Pravachan', icon: BookOpen },
-  { value: 'short', label: 'Shorts', icon: Video },
+  { value: 'all', icon: Sparkles },
+  { value: 'bhajan', icon: Music },
+  { value: 'aarti', icon: Zap },
+  { value: 'mantra', icon: Sparkles },
+  { value: 'pravachan', icon: BookOpen },
+  { value: 'short', icon: Video },
 ];
 
 const LiveDarshan = () => {
@@ -79,10 +88,10 @@ const LiveDarshan = () => {
   // Reset infinite scroll when filter changes
   useEffect(() => { resetInfinite(); }, [aartiFilter, resetInfinite]);
 
-  const filters: { key: Filter; label: string }[] = [
-    { key: 'all', label: `All ${totalCount}` },
-    { key: 'live', label: `🔴 Live ${liveCount}` },
-    { key: 'sacred', label: `🛕 All Temples` },
+  const filters: { key: Filter; labelKey: TranslationKey; prefix?: string }[] = [
+    { key: 'all', labelKey: 'darshan.filterAll' },
+    { key: 'live', labelKey: 'darshan.filterLive' },
+    { key: 'sacred', labelKey: 'darshan.filterSacred' },
   ];
 
   const handlePlay = useCallback((item: SpiritualContent) => {
@@ -114,7 +123,7 @@ const LiveDarshan = () => {
           <button onClick={() => navigate('/')} className="w-11 h-11 flex items-center justify-center rounded-full hover:bg-[#5C5145]/10 dark:hover:bg-[#E9E2D9]/10 transition-colors">
             <ArrowLeft className="w-5 h-5 text-[#5C5145] dark:text-[#E9E2D9]" />
           </button>
-          <h1 className="text-lg font-bold text-[#3C2F1F] dark:text-[#E9E2D9] tracking-wide">Darshan & Devotion</h1>
+          <h1 className="text-lg font-bold text-[#3C2F1F] dark:text-[#E9E2D9] tracking-wide">{t('darshan.pageTitle')}</h1>
           <button className="w-11 h-11 flex items-center justify-center rounded-full hover:bg-[#5C5145]/10 dark:hover:bg-[#E9E2D9]/10 transition-colors">
             <Bell className="w-5 h-5 text-[#5C5145] dark:text-[#E9E2D9]" />
           </button>
@@ -126,10 +135,10 @@ const LiveDarshan = () => {
           <section className="mb-12">
             <div className="flex items-center gap-2 mb-3">
             <Tv className="w-5 h-5 text-[#D39A2A]" />
-            <h2 className="text-base font-bold text-[#3C2F1F] dark:text-[#E9E2D9]">Live Darshan</h2>
+            <h2 className="text-base font-bold text-[#3C2F1F] dark:text-[#E9E2D9]">{t('darshan.liveDarshan')}</h2>
           </div>
           <p className="text-sm text-[#9C8C7C] italic mb-4">
-            Seek blessings from sacred temples 🙏
+            {t('darshan.seekBlessingsTemples')}
           </p>
 
           {/* Stats banner */}
@@ -137,11 +146,11 @@ const LiveDarshan = () => {
             <Landmark className="w-5 h-5 text-[#D39A2A] shrink-0" />
             <div className="flex-1">
               <p className="text-sm font-medium text-[#3C2F1F] dark:text-[#E9E2D9] flex items-center gap-2">
-                🛕 {totalCount} Temples
+                🛕 {totalCount} {t('darshan.temples')}
                 <span className="text-[#9C8C7C]">|</span>
-                <Tv className="w-3.5 h-3.5 text-[#D39A2A]" /> {liveCount} Live Streams
+                <Tv className="w-3.5 h-3.5 text-[#D39A2A]" /> {liveCount} {t('darshan.liveStreams')}
               </p>
-              <p className="text-xs text-[#9C8C7C]">Tap any LIVE temple to join darshan</p>
+              <p className="text-xs text-[#9C8C7C]">{t('darshan.tapToJoin')}</p>
             </div>
           </div>
 
@@ -157,7 +166,7 @@ const LiveDarshan = () => {
                     : 'bg-[#1C1917]/10 dark:bg-white/10 text-[#9C8C7C]'
                 }`}
               >
-                {f.label}
+                {f.key === 'all' ? `${t(f.labelKey)} ${totalCount}` : f.key === 'live' ? `${t(f.labelKey)} ${liveCount}` : t(f.labelKey)}
               </button>
             ))}
           </div>
@@ -166,17 +175,17 @@ const LiveDarshan = () => {
           {!isOnline ? (
             <div className="text-center py-20">
               <p className="text-3xl mb-3">🛕</p>
-              <p className="text-base font-medium text-[#3C2F1F] dark:text-[#E9E2D9]">No connection</p>
-              <p className="text-sm text-[#9C8C7C] mt-1 mb-5">Please check your internet to join live darshan.</p>
+              <p className="text-base font-medium text-[#3C2F1F] dark:text-[#E9E2D9]">{t('darshan.noConnection')}</p>
+              <p className="text-sm text-[#9C8C7C] mt-1 mb-5">{t('darshan.checkInternet')}</p>
               <button onClick={() => window.location.reload()} className="px-5 py-2.5 rounded-xl text-sm font-medium text-white bg-gradient-to-r from-[#C68A1A] to-[#D9A832]">
-                Retry
+                {t('darshan.retry')}
               </button>
             </div>
           ) : (
             regions.map(region => (
               <div key={region.key}>
                 <h2 className="text-[13px] uppercase tracking-[2px] text-[#D39A2A] border-b border-[rgba(211,154,42,0.2)] mt-6 mb-3 pb-1.5 font-semibold">
-                  {region.label}
+                  {t(region.labelKey)}
                 </h2>
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
                   {region.temples.map(temple => (
@@ -199,17 +208,17 @@ const LiveDarshan = () => {
           <section className="mb-12">
             <div className="flex items-center gap-2 mb-3">
               <span className="text-xl">🪯</span>
-              <h2 className="text-base font-bold text-[#3C2F1F] dark:text-[#E9E2D9]">Gurudwara Live Darshan</h2>
+              <h2 className="text-base font-bold text-[#3C2F1F] dark:text-[#E9E2D9]">{t('darshan.gurudwaraLive')}</h2>
             </div>
             <p className="text-sm text-[#9C8C7C] italic mb-4">
-              Seek blessings from sacred Gurudwaras 🙏
+              {t('darshan.seekBlessingsGurudwaras')}
             </p>
 
             {/* Live status indicator */}
             {isCheckingLive && (
               <p className="text-[10px] text-[#9C8C7C] mb-3 flex items-center gap-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#D39A2A] animate-pulse" />
-                Checking live status…
+                {t('darshan.checkingLive')}
               </p>
             )}
 
@@ -231,10 +240,10 @@ const LiveDarshan = () => {
           <section className="mb-6">
             <div className="flex items-center gap-2 mb-3">
               <Zap className="w-5 h-5 text-[#D39A2A]" />
-              <h2 className="text-base font-bold text-[#3C2F1F] dark:text-[#E9E2D9]">Daily Aarati & Bhajans</h2>
+              <h2 className="text-base font-bold text-[#3C2F1F] dark:text-[#E9E2D9]">{t('darshan.dailyAartiSection')}</h2>
             </div>
             <p className="text-sm text-[#9C8C7C] italic mb-4">
-              Recorded devotional content for your daily practice 🙏
+              {t('darshan.recordedContent')}
             </p>
 
             {/* Aarti filter chips */}
@@ -253,14 +262,14 @@ const LiveDarshan = () => {
                     }`}
                   >
                     <Icon className="w-3.5 h-3.5" />
-                    {f.label}
+                    {t(aartiFilterKeys[f.value])}
                   </button>
                 );
               })}
             </div>
 
             <p className="text-xs text-[#9C8C7C] mb-4">
-              {filteredAarti.length} devotional {filteredAarti.length === 1 ? 'video' : 'videos'}
+              {filteredAarti.length} {filteredAarti.length === 1 ? t('darshan.devotionalVideo') : t('darshan.devotionalVideos')}
             </p>
 
             {/* Aarti grid */}
@@ -278,7 +287,7 @@ const LiveDarshan = () => {
 
             {filteredAarti.length === 0 && (
               <div className="text-center py-20">
-                <p className="text-[#9C8C7C]">No videos in this category yet.</p>
+                <p className="text-[#9C8C7C]">{t('darshan.noVideos')}</p>
               </div>
             )}
           </section>
@@ -317,7 +326,7 @@ const LiveDarshan = () => {
                   </p>
                   <p className="text-[10px] text-muted-foreground flex items-center gap-1 mt-0.5">
                     <Music className="w-2.5 h-2.5" />
-                    Tap to resume • {lastPlayed.duration}
+                    {t('darshan.tapToResume')} • {lastPlayed.duration}
                   </p>
                 </div>
 

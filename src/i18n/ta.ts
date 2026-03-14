@@ -69,8 +69,15 @@ export const ta = {
   'darshan.contentDiscourses': '📖 சொற்பொழிவு',
   'darshan.contentMeditation': '🧘 தியானம்',
   'darshan.contentShorts': '📱 ஷார்ட்ஸ்',
+  'darshan.pageTitle': 'தரிசனம் மற்றும் பக்தி', 'darshan.liveDarshan': 'நேரடி தரிசனம்', 'darshan.seekBlessingsTemples': 'புனித கோயில்களிலிருந்து ஆசீர்வாதம் பெறுங்கள் 🙏', 'darshan.liveStreams': 'நேரடி ஸ்ட்ரீம்', 'darshan.tapToJoin': 'தரிசனத்திற்கு ஏதேனும் LIVE கோயிலை டேப் செய்யுங்கள்',
+  'darshan.filterAll': 'அனைத்தும்', 'darshan.filterLive': '🔴 நேரடி', 'darshan.filterSacred': '🛕 அனைத்து கோயில்கள்', 'darshan.noConnection': 'இணைப்பு இல்லை', 'darshan.checkInternet': 'நேரடி தரிசனத்திற்கு இணையத்தை சரிபாருங்கள்.', 'darshan.retry': 'மீண்டும் முயற்சி',
+  'darshan.gurudwaraLive': 'குருத்வாரா நேரடி தரிசனம்', 'darshan.seekBlessingsGurudwaras': 'புனித குருத்வாராக்களிலிருந்து ஆசீர்வாதம் பெறுங்கள் 🙏', 'darshan.checkingLive': 'நேரடி நிலை சரிபார்க்கப்படுகிறது…',
+  'darshan.dailyAartiSection': 'தினசரி ஆரத்தி மற்றும் பஜனை', 'darshan.recordedContent': 'உங்கள் தினசரி சாதனைக்கு பதிவு செய்யப்பட்ட பக்தி உள்ளடக்கம் 🙏',
+  'darshan.devotionalVideos': 'பக்தி வீடியோக்கள்', 'darshan.devotionalVideo': 'பக்தி வீடியோ', 'darshan.noVideos': 'இந்த வகையில் இன்னும் வீடியோக்கள் இல்லை.', 'darshan.tapToResume': 'மீண்டும் இயக்க டேப்',
+  'darshan.sacredSite': 'புனித இடம்', 'darshan.opensInYouTube': 'YouTube-ல் திறக்கும் →', 'darshan.sacredViewing': 'புனித தரிசனம்', 'darshan.liveNowWatch': '🔴 இப்போது நேரடி → பாருங்கள்',
+  'darshan.offline': 'ஆஃப்லைன்', 'darshan.joinLive': 'நேரடி தரிசனத்தில் சேருங்கள்', 'darshan.confirmJoinMsg': 'நீங்கள் நேரடி தரிசனத்தில் சேரப்போகிறீர்கள். இது YouTube-ஐ திறக்கும்.', 'darshan.dontShowAgain': 'மீண்டும் காட்டாதீர்கள்', 'darshan.cancel': 'ரத்து',
+  'darshan.regionNorth': '📍 வட இந்தியா மற்றும் இமயமலை', 'darshan.regionWest': '📍 மேற்கு இந்தியா', 'darshan.regionSouth': '📍 தென் இந்தியா', 'darshan.regionEast': '📍 கிழக்கு இந்தியா மற்றும் நேபாளம்', 'darshan.regionPilgrimages': '📍 வட இந்திய புனிதப்பயணம்', 'darshan.regionInternational': '📍 சர்வதேசம்',
 
-  // Highlights
   'highlights.todaysPick': 'இன்றைய தேர்வு',
   'highlights.recommended': 'பரிந்துரைக்கப்பட்டது',
   'highlights.featuredTemple': 'சிறப்பு கோயில்',

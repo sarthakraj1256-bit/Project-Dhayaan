@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
 import type { LiveTemple } from '@/data/liveDarshanTemples';
 import { openLiveDarshan } from '@/lib/openLiveDarshan';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface Props {
   temple: LiveTemple | null;
@@ -16,6 +17,7 @@ export function shouldSkipConfirm() {
 }
 
 export default function DarshanConfirmSheet({ temple, onClose }: Props) {
+  const { t } = useLanguage();
   const [dontShow, setDontShow] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout>>();
 
@@ -62,7 +64,7 @@ export default function DarshanConfirmSheet({ temple, onClose }: Props) {
             <p className="text-sm text-[#9C8C7C] mb-4">{temple.location}</p>
 
             <p className="text-sm text-[#5C5145] dark:text-[#E9E2D9]/80 mb-5">
-              You are about to join the live darshan. This will open YouTube.
+              {t('darshan.confirmJoinMsg')}
             </p>
 
             <label className="flex items-center gap-2 mb-5 cursor-pointer text-xs text-[#9C8C7C]">
@@ -72,7 +74,7 @@ export default function DarshanConfirmSheet({ temple, onClose }: Props) {
                 onChange={(e) => setDontShow(e.target.checked)}
                 className="rounded accent-[hsl(38_60%_55%)]"
               />
-              Don't show this again
+              {t('darshan.dontShowAgain')}
             </label>
 
             <div className="flex gap-3">
@@ -80,14 +82,14 @@ export default function DarshanConfirmSheet({ temple, onClose }: Props) {
                 onClick={onClose}
                 className="flex-1 h-12 rounded-xl text-sm font-medium text-[#5C5145] dark:text-[#9C8C7C] bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 transition-colors"
               >
-                Cancel
+                {t('darshan.cancel')}
               </button>
               <button
                 onClick={handleJoin}
                 className="flex-1 h-12 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-[hsl(38_60%_48%)] to-[hsl(38_70%_58%)] hover:brightness-110 transition-all flex items-center justify-center gap-2"
               >
                 <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-                Join Live Darshan
+                {t('darshan.joinLive')}
               </button>
             </div>
           </motion.div>

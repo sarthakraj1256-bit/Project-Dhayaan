@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Play } from 'lucide-react';
 import type { Gurudwara } from '@/data/gurudwaraStreams';
 import type { LiveStatus } from '@/hooks/useGurudwaraLiveStatus';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface Props {
   gurudwara: Gurudwara;
@@ -22,6 +23,7 @@ const openGurudwara = (url: string) => {
 };
 
 export default function GurudwaraCard({ gurudwara, liveStatus }: Props) {
+  const { t } = useLanguage();
   const [imgError, setImgError] = useState(false);
 
   const isLive = liveStatus?.isLive ?? false;
@@ -82,7 +84,7 @@ export default function GurudwaraCard({ gurudwara, liveStatus }: Props) {
             ) : (
               <span className="absolute top-2.5 left-2.5 inline-flex items-center gap-1.5 px-2.5 py-[3px] rounded-full text-[11px] font-bold text-white/80 bg-[rgba(100,100,100,0.75)]">
                 <span className="w-2 h-2 rounded-full bg-white/50" />
-                OFFLINE
+                {t('darshan.offline')}
               </span>
             )
           ) : (
@@ -108,7 +110,7 @@ export default function GurudwaraCard({ gurudwara, liveStatus }: Props) {
           </h3>
           <p className="text-[11px] text-[#9C8C7C] mt-0.5 truncate">{gurudwara.location}</p>
           <p className={`text-[11px] mt-1.5 ${isLive ? 'text-red-500 font-semibold' : 'text-[#D39A2A]'}`}>
-            {isLive ? '🔴 Live Now → Watch' : 'Opens in YouTube →'}
+            {isLive ? t('darshan.liveNowWatch') : t('darshan.opensInYouTube')}
           </p>
         </div>
       </div>

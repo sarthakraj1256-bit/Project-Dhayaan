@@ -69,8 +69,15 @@ export const gu = {
   'darshan.contentDiscourses': '📖 પ્રવચન',
   'darshan.contentMeditation': '🧘 ધ્યાન',
   'darshan.contentShorts': '📱 શૉર્ટ્સ',
+  'darshan.pageTitle': 'દર્શન અને ભક્તિ', 'darshan.liveDarshan': 'લાઇવ દર્શન', 'darshan.seekBlessingsTemples': 'પવિત્ર મંદિરોમાંથી આશીર્વાદ મેળવો 🙏', 'darshan.liveStreams': 'લાઇવ સ્ટ્રીમ', 'darshan.tapToJoin': 'દર્શન માટે કોઈપણ LIVE મંદિર ટેપ કરો',
+  'darshan.filterAll': 'બધા', 'darshan.filterLive': '🔴 લાઇવ', 'darshan.filterSacred': '🛕 બધા મંદિર', 'darshan.noConnection': 'કનેક્શન નથી', 'darshan.checkInternet': 'લાઇવ દર્શન માટે કૃપા કરીને ઇન્ટરનેટ તપાસો.', 'darshan.retry': 'ફરી પ્રયાસ',
+  'darshan.gurudwaraLive': 'ગુરુદ્વારા લાઇવ દર્શન', 'darshan.seekBlessingsGurudwaras': 'પવિત્ર ગુરુદ્વારાઓમાંથી આશીર્વાદ મેળવો 🙏', 'darshan.checkingLive': 'લાઇવ સ્થિતિ તપાસ થઈ રહી છે…',
+  'darshan.dailyAartiSection': 'દૈનિક આરતી અને ભજન', 'darshan.recordedContent': 'તમારી દૈનિક સાધના માટે રેકોર્ડ ભક્તિ વિષય 🙏',
+  'darshan.devotionalVideos': 'ભક્તિ વિડીયો', 'darshan.devotionalVideo': 'ભક્તિ વિડીયો', 'darshan.noVideos': 'આ વિભાગમાં હજી વિડીયો નથી.', 'darshan.tapToResume': 'ફરી ચલાવવા ટેપ',
+  'darshan.sacredSite': 'પવિત્ર સ્થળ', 'darshan.opensInYouTube': 'YouTube માં ખુલશે →', 'darshan.sacredViewing': 'પવિત્ર દર્શન', 'darshan.liveNowWatch': '🔴 હવે લાઇવ → જુઓ',
+  'darshan.offline': 'ઓફલાઇન', 'darshan.joinLive': 'લાઇવ દર્શનમાં જોડાઓ', 'darshan.confirmJoinMsg': 'તમે લાઇવ દર્શનમાં જોડાવાના છો. આ YouTube ખોલશે.', 'darshan.dontShowAgain': 'ફરી ન બતાવો', 'darshan.cancel': 'રદ કરો',
+  'darshan.regionNorth': '📍 ઉત્તર ભારત અને હિમાલય', 'darshan.regionWest': '📍 પશ્ચિમ ભારત', 'darshan.regionSouth': '📍 દક્ષિણ ભારત', 'darshan.regionEast': '📍 પૂર્વ ભારત અને નેપાળ', 'darshan.regionPilgrimages': '📍 ઉત્તર ભારત તીર્થયાત્રા', 'darshan.regionInternational': '📍 આંતરરાષ્ટ્રીય',
 
-  // Highlights
   'highlights.todaysPick': 'આજની પસંદ',
   'highlights.recommended': 'ભલામણ કરેલ',
   'highlights.featuredTemple': 'વિશેષ મંદિર',

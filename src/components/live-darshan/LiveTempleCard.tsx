@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Play, Sparkles } from 'lucide-react';
 import type { LiveTemple } from '@/data/liveDarshanTemples';
-
+import { useLanguage } from '@/contexts/LanguageContext';
 interface Props {
   temple: LiveTemple;
 }
@@ -22,6 +22,7 @@ const openDarshan = (temple: LiveTemple) => {
 
 export default function LiveTempleCard({ temple }: Props) {
   const [imgError, setImgError] = useState(false);
+  const { t } = useLanguage();
 
   const isLive = temple.hasLive && temple.liveUrl;
 
@@ -73,7 +74,7 @@ export default function LiveTempleCard({ temple }: Props) {
         {/* Sacred Site badge */}
         {!isLive && (
           <span className="absolute top-2.5 right-2.5 inline-flex items-center gap-1 px-2 py-[3px] rounded-xl text-[10px] text-[#E9E2D9] bg-black/50">
-            🛕 Sacred Site
+            🛕 {t('darshan.sacredSite')}
           </span>
         )}
 
@@ -97,7 +98,7 @@ export default function LiveTempleCard({ temple }: Props) {
           <Sparkles className="w-3 h-3" /> {temple.deity}
         </p>
         <p className={`text-[11px] mt-1.5 ${isLive ? 'text-[#D39A2A]' : 'text-[#6B5E4E]'}`}>
-          {isLive ? 'Opens in YouTube →' : 'Sacred Viewing'}
+          {isLive ? t('darshan.opensInYouTube') : t('darshan.sacredViewing')}
         </p>
       </div>
     </div>

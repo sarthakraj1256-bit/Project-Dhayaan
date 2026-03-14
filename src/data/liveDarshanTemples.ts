@@ -42,12 +42,12 @@ const ALL_TEMPLES: LiveTemple[] = [
 export const LIVE_TEMPLES = ALL_TEMPLES;
 
 export const REGION_ORDER = [
-  { key: 'north', label: '📍 North India & Himalayas' },
-  { key: 'west', label: '📍 West India' },
-  { key: 'south', label: '📍 South India' },
-  { key: 'east', label: '📍 East India & Nepal' },
-  { key: 'pilgrimages', label: '📍 North India Pilgrimages' },
-  { key: 'international', label: '📍 International' },
+  { key: 'north', labelKey: 'darshan.regionNorth' as const },
+  { key: 'west', labelKey: 'darshan.regionWest' as const },
+  { key: 'south', labelKey: 'darshan.regionSouth' as const },
+  { key: 'east', labelKey: 'darshan.regionEast' as const },
+  { key: 'pilgrimages', labelKey: 'darshan.regionPilgrimages' as const },
+  { key: 'international', labelKey: 'darshan.regionInternational' as const },
 ] as const;
 
 export function getTemplesByRegion(temples: LiveTemple[]) {
