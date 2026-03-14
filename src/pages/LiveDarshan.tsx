@@ -166,7 +166,7 @@ const LiveDarshan = () => {
                     : 'bg-[#1C1917]/10 dark:bg-white/10 text-[#9C8C7C]'
                 }`}
               >
-                {f.label}
+                {f.key === 'all' ? `${t(f.labelKey)} ${totalCount}` : f.key === 'live' ? `${t(f.labelKey)} ${liveCount}` : t(f.labelKey)}
               </button>
             ))}
           </div>
