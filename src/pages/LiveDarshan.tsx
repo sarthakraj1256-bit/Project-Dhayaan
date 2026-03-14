@@ -287,7 +287,7 @@ const LiveDarshan = () => {
 
             {filteredAarti.length === 0 && (
               <div className="text-center py-20">
-                <p className="text-[#9C8C7C]">No videos in this category yet.</p>
+                <p className="text-[#9C8C7C]">{t('darshan.noVideos')}</p>
               </div>
             )}
           </section>
