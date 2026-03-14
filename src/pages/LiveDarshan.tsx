@@ -88,10 +88,10 @@ const LiveDarshan = () => {
   // Reset infinite scroll when filter changes
   useEffect(() => { resetInfinite(); }, [aartiFilter, resetInfinite]);
 
-  const filters: { key: Filter; label: string }[] = [
-    { key: 'all', label: `All ${totalCount}` },
-    { key: 'live', label: `🔴 Live ${liveCount}` },
-    { key: 'sacred', label: `🛕 All Temples` },
+  const filters: { key: Filter; labelKey: TranslationKey; prefix?: string }[] = [
+    { key: 'all', labelKey: 'darshan.filterAll' },
+    { key: 'live', labelKey: 'darshan.filterLive' },
+    { key: 'sacred', labelKey: 'darshan.filterSacred' },
   ];
 
   const handlePlay = useCallback((item: SpiritualContent) => {
