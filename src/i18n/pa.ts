@@ -154,6 +154,7 @@ export const pa = {
   'karma.level.yogi': 'ਯੋਗੀ',
   'karma.level.sage': 'ਰਿਸ਼ੀ',
   'karma.level.enlightened': 'ਗਿਆਨੀ',
+  'karma.nextLevel': 'ਅਗਲਾ ਪੱਧਰ', 'karma.pointsToNext': 'ਅਗਲੇ ਪੱਧਰ ਤੱਕ ਅੰਕ', 'karma.maxLevel': 'ਵੱਧ ਤੋਂ ਵੱਧ ਪੱਧਰ ਪ੍ਰਾਪਤ',
   'common.loading': 'ਲੋਡ ਹੋ ਰਿਹਾ ਹੈ...',
   'common.save': 'ਸੰਭਾਲੋ',
   'common.cancel': 'ਰੱਦ ਕਰੋ',

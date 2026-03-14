@@ -336,6 +336,7 @@ export const te = {
   'karma.level.yogi': 'యోగి',
   'karma.level.sage': 'ఋషి',
   'karma.level.enlightened': 'జ్ఞానోదయం',
+  'karma.nextLevel': 'తదుపరి స్థాయి', 'karma.pointsToNext': 'తదుపరి స్థాయికి పాయింట్లు', 'karma.maxLevel': 'గరిష్ట స్థాయి చేరుకుంది',
   'lakshya.dharmicGrowth': 'ధార్మిక వృద్ధి మార్గం',
   'lakshya.yourJourney': 'మీ ఆధ్యాత్మిక ప్రయాణం',
   'lakshya.meditationMins': 'ధ్యాన నిమిషాలు',

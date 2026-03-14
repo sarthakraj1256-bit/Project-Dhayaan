@@ -154,6 +154,7 @@ export const sa = {
   'karma.level.yogi': 'योगी',
   'karma.level.sage': 'ऋषिः',
   'karma.level.enlightened': 'बुद्धः',
+  'karma.nextLevel': 'अग्रिमं स्तरम्', 'karma.pointsToNext': 'अग्रिम स्तरं प्रति अङ्काः', 'karma.maxLevel': 'अधिकतम स्तरः प्राप्तः',
   'common.loading': 'लोड् भवति...',
   'common.save': 'संरक्षणम्',
   'common.cancel': 'निरसनम्',

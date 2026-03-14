@@ -154,6 +154,7 @@ export const ml = {
   'karma.level.yogi': 'യോഗി',
   'karma.level.sage': 'ഋഷി',
   'karma.level.enlightened': 'ജ്ഞാനി',
+  'karma.nextLevel': 'അടുത്ത ഘട്ടം', 'karma.pointsToNext': 'അടുത്ത ഘട്ടത്തിലേക്ക് പോയിന്റ്', 'karma.maxLevel': 'പരമാവധി ഘട്ടം കൈവരിച്ചു',
   'common.loading': 'ലോഡ് ചെയ്യുന്നു...',
   'common.save': 'സേവ്',
   'common.cancel': 'റദ്ദാക്കുക',
