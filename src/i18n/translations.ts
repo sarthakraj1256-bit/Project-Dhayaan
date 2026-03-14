@@ -36,6 +36,14 @@ import { te as teTranslations } from './te';
 import { mr as mrTranslations } from './mr';
 import { ta as taTranslations } from './ta';
 import { gu as guTranslations } from './gu';
+import { kn as knTranslations } from './kn';
+import { ml as mlTranslations } from './ml';
+import { pa as paTranslations } from './pa';
+import { or as orTranslations } from './or';
+import { as as asTranslations } from './as';
+import { ur as urTranslations } from './ur';
+import { sa as saTranslations } from './sa';
+import { mai as maiTranslations } from './mai';
 
 export const translations = {
   en: {
