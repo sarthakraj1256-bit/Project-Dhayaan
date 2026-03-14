@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Play, Sparkles } from 'lucide-react';
 import type { LiveTemple } from '@/data/liveDarshanTemples';
-
+import { useLanguage } from '@/contexts/LanguageContext';
 interface Props {
   temple: LiveTemple;
 }
