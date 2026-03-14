@@ -1813,6 +1813,14 @@ export const translations = {
   mr: mrTranslations,
   ta: taTranslations,
   gu: guTranslations,
+  kn: knTranslations,
+  ml: mlTranslations,
+  pa: paTranslations,
+  or: orTranslations,
+  as: asTranslations,
+  ur: urTranslations,
+  sa: saTranslations,
+  mai: maiTranslations,
 } as const;
 
 export type TranslationKey = keyof typeof translations.en;
