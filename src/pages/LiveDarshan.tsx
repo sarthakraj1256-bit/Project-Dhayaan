@@ -262,7 +262,7 @@ const LiveDarshan = () => {
                     }`}
                   >
                     <Icon className="w-3.5 h-3.5" />
-                    {f.label}
+                    {t(aartiFilterKeys[f.value])}
                   </button>
                 );
               })}
