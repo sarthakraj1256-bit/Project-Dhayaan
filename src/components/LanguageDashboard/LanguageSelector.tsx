@@ -1,4 +1,5 @@
 import { useState, useMemo, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Search, Check, Globe } from 'lucide-react';
 import { cn } from '@/lib/utils';
