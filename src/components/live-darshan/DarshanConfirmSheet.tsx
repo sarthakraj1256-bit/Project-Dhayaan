@@ -17,6 +17,7 @@ export function shouldSkipConfirm() {
 }
 
 export default function DarshanConfirmSheet({ temple, onClose }: Props) {
+  const { t } = useLanguage();
   const [dontShow, setDontShow] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout>>();
 
