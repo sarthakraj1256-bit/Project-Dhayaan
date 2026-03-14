@@ -38,13 +38,22 @@ const typeColors: Record<string, string> = {
   short: 'bg-pink-600',
 };
 
+const aartiFilterKeys: Record<string, TranslationKey> = {
+  all: 'darshan.contentAll',
+  bhajan: 'darshan.contentBhajans',
+  aarti: 'darshan.contentAarti',
+  mantra: 'darshan.contentMantras',
+  pravachan: 'darshan.contentPravachan',
+  short: 'darshan.contentShorts',
+};
+
 const aartiFilters = [
-  { value: 'all', label: 'All', icon: Sparkles },
-  { value: 'bhajan', label: 'Bhajans', icon: Music },
-  { value: 'aarti', label: 'Aarati', icon: Zap },
-  { value: 'mantra', label: 'Mantras', icon: Sparkles },
-  { value: 'pravachan', label: 'Pravachan', icon: BookOpen },
-  { value: 'short', label: 'Shorts', icon: Video },
+  { value: 'all', icon: Sparkles },
+  { value: 'bhajan', icon: Music },
+  { value: 'aarti', icon: Zap },
+  { value: 'mantra', icon: Sparkles },
+  { value: 'pravachan', icon: BookOpen },
+  { value: 'short', icon: Video },
 ];
 
 const LiveDarshan = () => {
