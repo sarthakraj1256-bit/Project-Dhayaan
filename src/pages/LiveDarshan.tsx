@@ -123,7 +123,7 @@ const LiveDarshan = () => {
           <button onClick={() => navigate('/')} className="w-11 h-11 flex items-center justify-center rounded-full hover:bg-[#5C5145]/10 dark:hover:bg-[#E9E2D9]/10 transition-colors">
             <ArrowLeft className="w-5 h-5 text-[#5C5145] dark:text-[#E9E2D9]" />
           </button>
-          <h1 className="text-lg font-bold text-[#3C2F1F] dark:text-[#E9E2D9] tracking-wide">Darshan & Devotion</h1>
+          <h1 className="text-lg font-bold text-[#3C2F1F] dark:text-[#E9E2D9] tracking-wide">{t('darshan.pageTitle')}</h1>
           <button className="w-11 h-11 flex items-center justify-center rounded-full hover:bg-[#5C5145]/10 dark:hover:bg-[#E9E2D9]/10 transition-colors">
             <Bell className="w-5 h-5 text-[#5C5145] dark:text-[#E9E2D9]" />
           </button>
