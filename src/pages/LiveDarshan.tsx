@@ -135,10 +135,10 @@ const LiveDarshan = () => {
           <section className="mb-12">
             <div className="flex items-center gap-2 mb-3">
             <Tv className="w-5 h-5 text-[#D39A2A]" />
-            <h2 className="text-base font-bold text-[#3C2F1F] dark:text-[#E9E2D9]">Live Darshan</h2>
+            <h2 className="text-base font-bold text-[#3C2F1F] dark:text-[#E9E2D9]">{t('darshan.liveDarshan')}</h2>
           </div>
           <p className="text-sm text-[#9C8C7C] italic mb-4">
-            Seek blessings from sacred temples 🙏
+            {t('darshan.seekBlessingsTemples')}
           </p>
 
           {/* Stats banner */}
