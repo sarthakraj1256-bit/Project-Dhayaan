@@ -60,7 +60,7 @@ export default function HeroSection({ user }: HeroSectionProps) {
 
         {/* Brand title */}
         <div className="mt-4">
-          <h1 className="relative inline-block overflow-hidden">
+          <h1 className="relative inline-block overflow-hidden" dir="ltr">
             {"Dhyaan".split("").map((char, i) => (
               <motion.span
                 key={i}
