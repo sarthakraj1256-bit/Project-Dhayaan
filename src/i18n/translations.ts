@@ -31,6 +31,12 @@ export const supportedLanguages: LanguageMeta[] = [
 export const getLanguageMeta = (code: Language): LanguageMeta =>
   supportedLanguages.find(l => l.code === code) || supportedLanguages[0];
 
+import { bn as bnTranslations } from './bn';
+import { te as teTranslations } from './te';
+import { mr as mrTranslations } from './mr';
+import { ta as taTranslations } from './ta';
+import { gu as guTranslations } from './gu';
+
 export const translations = {
   en: {
     // Greetings
@@ -1794,6 +1800,11 @@ export const translations = {
     'freq.sleep.741.purpose': 'मानसिक मौन',
 
   },
+  bn: bnTranslations,
+  te: teTranslations,
+  mr: mrTranslations,
+  ta: taTranslations,
+  gu: guTranslations,
 } as const;
 
 export type TranslationKey = keyof typeof translations.en;
