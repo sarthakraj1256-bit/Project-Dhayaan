@@ -84,21 +84,21 @@ const LiquidGoldProgressBar = memo(function LiquidGoldProgressBar({
             animate={isShimmering ? { scale: [1, 1.2, 1] } : {}}
             transition={{ duration: 0.5 }}
           >
-            {levelInfo.icon}
+            {levelIcon}
           </motion.span>
           <div>
-            <h3 className="font-display text-xl text-foreground">{levelInfo.name}</h3>
+            <h3 className="font-display text-xl text-foreground">{levelName}</h3>
             <p className="text-xs text-muted-foreground">
-              {isMaxLevel ? 'Maximum level reached' : `${pointsNeeded - pointsInLevel} points to next level`}
+              {isMaxLevel ? t('karma.maxLevel') : `${pointsNeeded - pointsInLevel} ${t('karma.pointsToNext')}`}
             </p>
           </div>
         </div>
         
         {!isMaxLevel && (
           <div className="text-right">
-            <p className="text-sm text-muted-foreground">Next Level</p>
+            <p className="text-sm text-muted-foreground">{t('karma.nextLevel')}</p>
             <p className="font-display text-foreground">
-              {LEVEL_INFO[Object.keys(LEVEL_THRESHOLDS)[Object.keys(LEVEL_THRESHOLDS).indexOf(currentLevel) + 1] as SpiritualLevel]?.name}
+              {t(LEVEL_KEY_MAP[Object.keys(LEVEL_THRESHOLDS)[Object.keys(LEVEL_THRESHOLDS).indexOf(currentLevel) + 1] as SpiritualLevel])}
             </p>
           </div>
         )}
