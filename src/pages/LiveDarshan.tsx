@@ -218,7 +218,7 @@ const LiveDarshan = () => {
             {isCheckingLive && (
               <p className="text-[10px] text-[#9C8C7C] mb-3 flex items-center gap-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#D39A2A] animate-pulse" />
-                Checking live status…
+                {t('darshan.checkingLive')}
               </p>
             )}
 
