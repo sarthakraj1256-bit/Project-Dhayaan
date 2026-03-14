@@ -64,7 +64,7 @@ export default function DarshanConfirmSheet({ temple, onClose }: Props) {
             <p className="text-sm text-[#9C8C7C] mb-4">{temple.location}</p>
 
             <p className="text-sm text-[#5C5145] dark:text-[#E9E2D9]/80 mb-5">
-              You are about to join the live darshan. This will open YouTube.
+              {t('darshan.confirmJoinMsg')}
             </p>
 
             <label className="flex items-center gap-2 mb-5 cursor-pointer text-xs text-[#9C8C7C]">
