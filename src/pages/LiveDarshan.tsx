@@ -146,11 +146,11 @@ const LiveDarshan = () => {
             <Landmark className="w-5 h-5 text-[#D39A2A] shrink-0" />
             <div className="flex-1">
               <p className="text-sm font-medium text-[#3C2F1F] dark:text-[#E9E2D9] flex items-center gap-2">
-                🛕 {totalCount} Temples
+                🛕 {totalCount} {t('darshan.temples')}
                 <span className="text-[#9C8C7C]">|</span>
-                <Tv className="w-3.5 h-3.5 text-[#D39A2A]" /> {liveCount} Live Streams
+                <Tv className="w-3.5 h-3.5 text-[#D39A2A]" /> {liveCount} {t('darshan.liveStreams')}
               </p>
-              <p className="text-xs text-[#9C8C7C]">Tap any LIVE temple to join darshan</p>
+              <p className="text-xs text-[#9C8C7C]">{t('darshan.tapToJoin')}</p>
             </div>
           </div>
 
