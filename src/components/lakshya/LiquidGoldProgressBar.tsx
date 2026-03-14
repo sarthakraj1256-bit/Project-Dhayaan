@@ -17,12 +17,20 @@ const LEVEL_COLORS: Record<SpiritualLevel, { from: string; to: string; glow: str
   enlightened: { from: '#c084fc', to: '#a855f7', glow: 'rgba(192, 132, 252, 0.6)' },
 };
 
-const LEVEL_INFO: Record<SpiritualLevel, { icon: string; name: string }> = {
-  novice: { icon: '🌱', name: 'Novice' },
-  seeker: { icon: '🔍', name: 'Seeker' },
-  yogi: { icon: '🧘', name: 'Yogi' },
-  sage: { icon: '📿', name: 'Sage' },
-  enlightened: { icon: '✨', name: 'Enlightened' },
+const LEVEL_ICONS: Record<SpiritualLevel, string> = {
+  novice: '🌱',
+  seeker: '🔍',
+  yogi: '🧘',
+  sage: '📿',
+  enlightened: '✨',
+};
+
+const LEVEL_KEY_MAP: Record<SpiritualLevel, TranslationKey> = {
+  novice: 'karma.level.novice',
+  seeker: 'karma.level.seeker',
+  yogi: 'karma.level.yogi',
+  sage: 'karma.level.sage',
+  enlightened: 'karma.level.enlightened',
 };
 
 /**
