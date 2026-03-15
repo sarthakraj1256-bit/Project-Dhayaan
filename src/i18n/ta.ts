@@ -426,6 +426,11 @@ export const ta = {
   'karma.level.sage': 'ரிஷி',
   'karma.level.enlightened': 'ஞானம் பெற்றவர்',
   'karma.nextLevel': 'அடுத்த நிலை', 'karma.pointsToNext': 'அடுத்த நிலைக்கு புள்ளிகள்', 'karma.maxLevel': 'அதிகபட்ச நிலை அடைந்தது',
+  'resume.title': 'அமர்வை மீண்டும் தொடங்கவா?',
+  'resume.description': 'நீங்கள் கடந்த முறை {label}-ல் இருந்தீர்கள். அங்கிருந்து தொடர விரும்புகிறீர்களா?',
+  'resume.resume': 'தொடரவும்',
+  'resume.startFresh': 'புதிதாக தொடங்கவும்',
+  'resume.defaultLabel': 'உங்கள் அமர்வு',
 
   // Lakshya
   'lakshya.dharmicGrowth': 'தர்ம வளர்ச்சி பாதை',

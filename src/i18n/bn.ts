@@ -400,6 +400,11 @@ export const bn = {
   'karma.level.sage': 'ঋষি',
   'karma.level.enlightened': 'আলোকিত',
   'karma.nextLevel': 'পরবর্তী স্তর', 'karma.pointsToNext': 'পরবর্তী স্তরে পয়েন্ট', 'karma.maxLevel': 'সর্বোচ্চ স্তর অর্জিত',
+  'resume.title': 'সেশন পুনরায় শুরু করবেন?',
+  'resume.description': 'আপনি গত বার {label}-এ ছিলেন। আপনি কি সেখান থেকে চালিয়ে যেতে চান?',
+  'resume.resume': 'পুনরায় শুরু',
+  'resume.startFresh': 'নতুন করে শুরু',
+  'resume.defaultLabel': 'আপনার সেশন',
 
   // Lakshya
   'lakshya.dharmicGrowth': 'ধর্মীয় বিকাশ পথ',
