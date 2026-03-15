@@ -426,6 +426,11 @@ export const gu = {
   'karma.level.sage': 'ઋષિ',
   'karma.level.enlightened': 'જ્ઞાની',
   'karma.nextLevel': 'આગળનું સ્તર', 'karma.pointsToNext': 'આગળના સ્તર સુધી પોઈન્ટ', 'karma.maxLevel': 'મહત્તમ સ્તર પ્રાપ્ત',
+  'resume.title': 'સત્ર ફરી શરૂ કરશો?',
+  'resume.description': 'તમે છેલ્લી વખત {label}માં હતા. શું તમે ત્યાંથી ચાલુ રાખવા માંગો છો?',
+  'resume.resume': 'ચાલુ રાખો',
+  'resume.startFresh': 'નવેસરથી શરૂ કરો',
+  'resume.defaultLabel': 'તમારું સત્ર',
 
   // Lakshya
   'lakshya.dharmicGrowth': 'ધાર્મિક વિકાસ માર્ગ',
