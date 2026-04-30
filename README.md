@@ -60,3 +60,9 @@ npm run dev
 👨‍💻 Author
 Sarthak Raj
 B.Tech Computer Science and Engineering Student
+
+
+<img width="1917" height="1064" alt="image" src="https://github.com/user-attachments/assets/47028cae-f719-4762-9797-7e95e6867389" />
+<img width="1913" height="1130" alt="image" src="https://github.com/user-attachments/assets/c0924632-6d6c-409c-98b3-9320e0cf646a" />
+<img width="1911" height="1139" alt="image" src="https://github.com/user-attachments/assets/e73ed586-b5d7-401c-b11b-444ba5d16868" />
+
