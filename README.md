@@ -1,73 +1,62 @@
-# Welcome to your Lovable project
+Dhyaan: The Spiritual & Aural Sanctuary 🕉️✨
+Dhyaan is a high-performance, gamified spiritual wellness platform designed to bridge ancient Sanatan Dharma wisdom with modern software engineering. It features a data-driven e-reader, a global music sanctuary, and an automated engagement engine.
 
-## Project info
+🚀 Core Modules
+1. Vidya Sanctuary (The E-Reader)
+A technical solution for hosting massive texts like the Bhagavad Gita and Ramayana without device lag.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+Chapter-on-Demand Architecture: Utilizing a custom useChapterFetcher.ts hook to retrieve Markdown content from Supabase Storage asynchronously.
 
-## How can I edit this code?
+Advanced Caching: Implements React Query with a 30-minute stale time to ensure instant chapter transitions on revisit.
 
-There are several ways of editing your application.
+Adaptive UI Themes: Supports "Parchment" (Warm), "White" (Clean), and "Obsidian" (Dark Mode) to minimize eye strain during deep study.
 
-**Use Lovable**
+2. Music Sanctuary (The Soundscape)
+A global music streaming interface inspired by Spotify, designed for focus and meditation.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+Global Music Search: Integrated with third-party APIs to allow users to search for music worldwide.
 
-Changes made via Lovable will be committed automatically to this repo.
+Relational Playlists: Users can curate personal soundscapes stored in a relational PostgreSQL schema involving playlists and playlist_songs.
 
-**Use your preferred IDE**
+Secure Access: Implements Supabase RLS (Row Level Security) to ensure users can only manage their own private collections.
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+3. Karma Engine (Gamification)
+A behavioral incentive layer that tracks spiritual self-study (Svadhyaya).
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+Progress Tracking: Monitors active reading time and scroll depth via the user_reading_progress table.
 
-Follow these steps:
+Engagement Celebration: Triggers KarmaAnimation.tsx upon chapter completion, awarding +10 Karma Points with a gold-themed celebration.
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+🛠️ Tech Stack & Architecture
+Frontend: Next.js (App Router), TypeScript, Tailwind CSS, Framer Motion.
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+Backend: Supabase (PostgreSQL Database, Auth, Cloud Storage).
 
-# Step 3: Install the necessary dependencies.
-npm i
+State Management: React Query (TanStack).
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+Data Pipelines: Idempotent Python seeder scripts for bulk Markdown file generation and content indexing.
+
+🎨 Design Philosophy
+The project follows an Ultra-Minimal, Apple Keynote-inspired aesthetic:
+
+Primary Gold (#C9A84C): For high-value interactions and "Karma" rewards.
+
+Porcelain (#F2EDE8): Used as a base background to create a "Sober" and calm atmosphere.
+
+Glassmorphism: Applied to UI elements like the Global Audio Player for a premium, modern feel.
+
+🔧 Local Setup & Deployment
+Prerequisites
+Node.js & npm installed.
+
+## 📦 Installation
+
+```bash
+git clone https://github.com/sarthakraj1256-bit/Project-Dhayaan
+cd Project-Dhayaan
+npm install
 npm run dev
-```
 
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+👨‍💻 Author
+Sarthak Raj
+B.Tech Computer Science and Engineering Student
